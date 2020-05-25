@@ -1,0 +1,32 @@
+Package: aae.pop
+Type: Package
+Title: Flexible Simulation of Multispecies Population Dynamics 
+Version: 0.0.0.9000
+Date: 2020-04-30
+Author: c(
+  person(given = "Jian",
+         family = "Yen",
+         role = c("aut", "cre"),
+         email = "jdl.yen@gmail.com"),
+  person(given = "Arthur Rylah Institute for Environmental Research",
+         role = c("cph", "fnd"))
+  )
+Maintainer: Jian Yen <jdl.yen@gmail.com>
+Description: Simulate multispecies population dynamics when vital rates
+    are influenced by time-varying covariates, such as environmental
+    conditions or the abundances of other species.
+License: file [LICENSE]
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 3.0)
+Imports:
+    stats
+Suggests:
+    knitr,
+    DiagrammeR,
+    testthat,
+    covr,
+    rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 7.1.0
