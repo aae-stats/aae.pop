@@ -1,0 +1,33 @@
+sudo: required
+language: r
+warnings_are_errors: false
+dist: trusty
+env:
+  global:
+    - LINTR_COMMENT_BOT=true
+
+r_packages:
+- stats
+- httr
+- jsonlite
+- lubridate
+- tidyr
+- dplyr
+- testthat
+- covr
+- knitr
+- rmarkdown
+- lintr
+
+cache:
+  packages: true
+  directories:
+  - "$HOME/.cache/pip"
+
+after_success:
+- Rscript -e "covr::codecov(type = 'all')"
+- Rscript -e "lintr::lint_package()"
+
+email:
+  on_success: change
+  on_failure: change
