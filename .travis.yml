@@ -8,11 +8,6 @@ env:
 
 r_packages:
 - stats
-- httr
-- jsonlite
-- lubridate
-- tidyr
-- dplyr
 - testthat
 - covr
 - knitr
