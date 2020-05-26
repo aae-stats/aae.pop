@@ -9,10 +9,22 @@ NULL
 #'
 #' @export
 #'
-#' @param matrix df
-#' @param \dots fd
+#' @param matrix a matrix of vital rates specifying transitions between
+#'   ages or stages. Specified in the format $n_{t+1} = A %*% n_t$, where
+#'   $A$ is the matrix, so that values in a given column and row denote a
+#'   transition from that column to that row
+#' @param \dots additional objects used to define population dynamics.
+#'   Must be one or more of \code{\link{covariates}},
+#'   \code{\link{environmental_stochasticity}},
+#'   \code{\link{demographic_stochasticity}},
+#'   \code{\link{density_dependence}}, or
+#'   \code{\link{density_dependence_n}}
 #'
-#' @details
+#' @details A call to \code{dynamics} defines an object of class
+#'   \code{dynamics}, which can be used to simulate population
+#'   trajectories with the \code{\link{simulate}} function. The \code{plot}
+#'   function is supported and will generate a general life-cycle
+#'   diagram based on the defined population dynamics.
 #'
 #' @examples
 #' # add
@@ -84,7 +96,7 @@ dynamics <- function(matrix, ...) {
 #' @export
 #'
 #' @param x an object of class \code{dynamics}
-#' @param y not supported
+#' @param y ignored
 #' @param \dots ignored
 plot.dynamics <- function(x, y, ...) {
 
@@ -108,6 +120,11 @@ plot.dynamics <- function(x, y, ...) {
   # pull out process type
   type <- ifelse(any(diag(mat) > 0), "Stage", "Age")
 
+  # add tweak for age-structured with final collecting stage
+  if (all(diag(mat)[-nrow(mat)]) == 0)
+    type <- "Age"
+
+  # nolint
   gr <- DiagrammeR::from_adj_matrix(mat,
                                     mode = "directed",
                                     use_diag = TRUE)
@@ -156,7 +173,9 @@ plot.dynamics <- function(x, y, ...) {
     node_labels[from[to == from]] <- paste0(node_labels[from[to == from]], "+")
 
   edge_style <- rep("solid", length(to))
-  edge_style[from %in% which(node_type == "reprod") & !(to %in% which(node_type == "reprod")) & !(to %in% which(node_type == "post_reprod"))] <- "dashed"
+  edge_style[from %in% which(node_type == "reprod") &
+               !(to %in% which(node_type == "reprod")) &
+               !(to %in% which(node_type == "post_reprod"))] <- "dashed"
 
   font_colour <- rep(col_pal[2], n_nodes)
   font_colour[node_type == "reprod"] <- col_pal[3]

@@ -56,9 +56,13 @@ simulate <- function(obj, init = NULL, options = list()) {
   for (i in seq_len(opt$ntime)) {
 
     if (obj$nspecies > 1) {
-      pop[, , , i + 1] <- simulate_once_multispecies(obj, pop[, , , i], tidy_abundances = opt$tidy_abundances)
+      pop[, , , i + 1] <- simulate_once_multispecies(
+        obj, pop[, , , i], tidy_abundances = opt$tidy_abundances
+      )
     } else {
-      pop[, , i + 1] <- simulate_once(obj, pop[, , i], tidy_abundances = opt$tidy_abundances)
+      pop[, , i + 1] <- simulate_once(
+        obj, pop[, , i], tidy_abundances = opt$tidy_abundances
+      )
     }
 
   }

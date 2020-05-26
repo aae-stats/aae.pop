@@ -17,8 +17,8 @@
 covariates <- function(x, fun) {
 
   # don't precalculate this step -- means same modifier can be used for
-  #    several matrices with different dimensions (assuming fun is general enough for this, e.g.,
-  #    defined with masks not explicit dims)
+  #    several matrices with different dimensions (assuming fun is
+  #    general enough for this, e.g., defined with masks not explicit dims)
 
   # convert all x to matrix with time slices in columns
   if (!is.matrix(x))
@@ -33,4 +33,3 @@ covariates <- function(x, fun) {
 as_covariates <- function(x) {
   as_class(x, name = "covariates", type = "list")
 }
-

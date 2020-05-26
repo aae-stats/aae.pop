@@ -1,9 +1,9 @@
 #' @name masks
 #' @title Isolate elements of population dynamics models
-#' @description Helper functions to isolate particular components of a population
-#'   dynamics model, such as the reproduction terms, transition/growth terms, or
-#'   particular life stages from an abundance vector, such as pre- or post-reproductive
-#'   stages.
+#' @description Helper functions to isolate particular components
+#'   of a population dynamics model, such as the reproduction terms,
+#'   transition/growth terms, or particular life stages from an
+#'   abundance vector, such as pre- or post-reproductive stages.
 NULL
 
 #' @rdname masks
@@ -48,6 +48,13 @@ transition <- function(matrix, dims = NULL) {
 
   row(matrix) == (col(matrix) + 1) & col(matrix) %in% dims
 
+}
+
+#' @rdname masks
+#'
+#' @export
+all_cells <- function(matrix) {
+  matrix(TRUE, nrow = nrow(matrix), ncol = ncol(matrix))
 }
 
 #' @rdname masks
