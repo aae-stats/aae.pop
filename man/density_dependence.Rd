@@ -3,27 +3,46 @@
 \name{density_dependence}
 \alias{density_dependence}
 \alias{density_dependence_n}
+\alias{ricker}
+\alias{beverton_holt}
 \title{Specify density dependence in models of population dynamics}
 \usage{
 density_dependence(masks, funs)
 
 density_dependence_n(masks, funs)
+
+ricker(masks)
+
+beverton_holt(masks, params)
 }
 \arguments{
 \item{masks}{s}
 
 \item{funs}{dfd}
+
+\item{params}{K}
 }
 \description{
-Specify density dependence in vital rates (\code{density_dependence})
-  and in total abundances (\code{density_dependence_n}).
+Specify density dependence in vital rates
+  (\code{density_dependence}) and in total abundances
+  (\code{density_dependence_n}).
 }
 \details{
 something
 
 something
+
+Additional functions are provided to define common
+  forms of density dependence, such as the Ricker model and
+  the Beverton-Holt model.
+
+Additional functions are provided to define common
+  forms of density dependence, such as the Ricker model and
+  the Beverton-Holt model.
 }
 \examples{
+# add
+# add
 # add
 # add
 }

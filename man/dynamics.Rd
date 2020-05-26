@@ -10,13 +10,16 @@ dynamics(matrix, ...)
 \method{plot}{dynamics}(x, y, ...)
 }
 \arguments{
-\item{matrix}{df}
+\item{matrix}{a matrix of vital rates specifying transitions between
+ages or stages. Specified in the format $n_{t+1} = A %*% n_t$, where
+$A$ is the matrix, so that values in a given column and row denote a
+transition from that column to that row}
 
 \item{\dots}{ignored}
 
 \item{x}{an object of class \code{dynamics}}
 
-\item{y}{not supported}
+\item{y}{ignored}
 }
 \description{
 Define population dynamics from a matrix and additional
@@ -24,7 +27,11 @@ Define population dynamics from a matrix and additional
   forms of stochasticity.
 }
 \details{
-
+A call to \code{dynamics} defines an object of class
+  \code{dynamics}, which can be used to simulate population
+  trajectories with the \code{\link{simulate}} function. The \code{plot}
+  function is supported and will generate a general life-cycle
+  diagram based on the defined population dynamics.
 }
 \examples{
 # add

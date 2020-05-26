@@ -5,6 +5,7 @@
 \alias{reproduction}
 \alias{survival}
 \alias{transition}
+\alias{all_cells}
 \alias{all_stages}
 \alias{combine_masks}
 \title{Isolate elements of population dynamics models}
@@ -14,6 +15,8 @@ reproduction(matrix, dims = NULL)
 survival(matrix, dims = NULL)
 
 transition(matrix, dims = NULL)
+
+all_cells(matrix)
 
 all_stages(matrix, dims = NULL)
 
@@ -25,10 +28,10 @@ combine_masks(...)
 \item{dims}{dfd}
 }
 \description{
-Helper functions to isolate particular components of a population
-  dynamics model, such as the reproduction terms, transition/growth terms, or
-  particular life stages from an abundance vector, such as pre- or post-reproductive
-  stages.
+Helper functions to isolate particular components
+  of a population dynamics model, such as the reproduction terms,
+  transition/growth terms, or particular life stages from an
+  abundance vector, such as pre- or post-reproductive stages.
 }
 \details{
 something

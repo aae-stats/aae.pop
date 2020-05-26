@@ -4,7 +4,8 @@
 \alias{stochasticity}
 \alias{environmental_stochasticity}
 \alias{demographic_stochasticity}
-\title{Specify environmental and demographic stochasticity in models of population dynamics}
+\title{Specify environmental and demographic stochasticity in models of
+  population dynamics}
 \usage{
 environmental_stochasticity(masks, funs)
 
@@ -16,8 +17,9 @@ demographic_stochasticity(masks, funs)
 \item{funs}{d}
 }
 \description{
-Specify environmental stochasticity (random variation in vital rates)
-  and demographic stochasticity (random variation in population outcomes).
+Specify environmental stochasticity (random variation
+  in vital rates) and demographic stochasticity (random variation
+  in population outcomes).
 }
 \details{
 something
