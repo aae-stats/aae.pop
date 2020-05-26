@@ -21,4 +21,3 @@ metapopulation <- function(dispersal, ...) {
   )
 
 }
-

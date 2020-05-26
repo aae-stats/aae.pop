@@ -21,4 +21,3 @@ multispecies <- function(interactions, ...) {
   )
 
 }
-
