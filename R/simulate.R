@@ -151,7 +151,11 @@ simulate_once <- function(iter, obj, pop_t, tidy_abundances) {
 }
 
 # internal function: update a single time step with interacting species
-simulate_once_multispecies <- function(iter, obj, pop_t, nspecies, tidy_abundances) {
+simulate_once_multispecies <- function(iter,
+                                       obj,
+                                       pop_t,
+                                       nspecies,
+                                       tidy_abundances) {
 
   # calculate density effects of other species
   #   according to something save in obj (interaction matrix with fns?)

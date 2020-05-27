@@ -61,10 +61,12 @@ get_template <- function(sp, x = NULL, ...) {
   # remove covariate_function from all_parameters in all cases
   all_parameters$covariate_function <- NULL
 
-  # unpack dots and replace defaults with any provided objects
+  # unpack dots and replace defaults if any objects provided
   arg_list <- list(...)
-  arg_types <- sapply(arg_list, function(x) class(x)[1])
-  all_parameters[arg_types] <- arg_list
+  if (length(arg_list) > 0) {
+    arg_types <- sapply(arg_list, function(x) class(x)[1])
+    all_parameters[arg_types] <- arg_list
+  }
 
   # return collated dynamics object
   do.call(dynamics, all_parameters)
