@@ -216,7 +216,7 @@ plot.dynamics <- function(x, y, ...) {
                                       value = "LR",
                                       attr_type = "graph"))
 
-  grViz <- DiagrammeR::render_graph(gr)
+  grViz <- DiagrammeR::render_graph(gr)  # nolint
   attr(grViz, "dgr_graph") <- gr
   grViz
 

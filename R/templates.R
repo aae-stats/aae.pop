@@ -112,10 +112,11 @@ template_murraycod <- function() {
 
   # work out more complex, biomass-based density dependence
   #  (clustered if/else statements)
-  # mask is survival, function is ifelse(K < summed_abunds, K / summed_abunds, 1)
+  # mask is survival, function is
+  # ifelse(K < summed_abunds, K / summed_abunds, 1)
   # Variation is in class clusters, e.g. 3+4, 5-7, 8-10, 11-14, 15-25. Clusters
-  #   affect all things younger but nothing older. (e.g. 3+4 = sum(abunds[3:nstage]),
-  #   8-10 = sum(abunds[8:nstage]))
+  #   affect all things younger but nothing older
+  #   (e.g. 3+4 = sum(abunds[3:nstage], 8-10 = sum(abunds[8:nstage]))
 
   # basic single variable covariate function
   covs <- function(mat, x) {
@@ -318,7 +319,7 @@ parse_species <- function(sp) {
   if (sp_clean %in% names(sp_list)) {
     sp <- sp_list[sp_clean]
   } else {
-    if(!exists(paste0("template_", sp))) {
+    if (!exists(paste0("template_", sp))) {
       stop(sp, " does not have a matching template function",
            call. = FALSE)
     }

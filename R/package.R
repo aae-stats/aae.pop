@@ -25,7 +25,6 @@ NULL
 
   # set default options for simulations
   options(aae.pop_ntime = 50,
-          aae.pop_replicates = 1000,
           aae.pop_keep_slices = TRUE,
           aae.pop_tidy_abundances = identity)
 
