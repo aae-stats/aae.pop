@@ -14,6 +14,8 @@ NULL
 #' @param x a vector or matrix of covariates used to define
 #'   time-varying vital rates according to a pre-defined
 #'   functional response
+#' @param params a named list of parameters passed to specific
+#'   templates (e.g. carrying capacity \code{K} for Murray cod)
 #' @param \dots additional objects passed to \code{\link{dynamics}},
 #'   overwriting the default, pre-defined values for these classes.
 #'   Must be one or more of \code{\link{covariates}},
@@ -46,11 +48,11 @@ NULL
 #'
 #' @examples
 #' # add
-get_template <- function(sp, x = NULL, ...) {
+get_template <- function(sp, x = NULL, params = list(), ...) {
 
   # draw up relevant parameters based on corrected species name
   sp <- parse_species(sp)
-  all_parameters <- get(paste0("template_", sp))()
+  all_parameters <- do.call(get(paste0("template_", sp)), params)
 
   # optional: add covariates
   if (!is.null(x)) {
@@ -76,12 +78,12 @@ get_template <- function(sp, x = NULL, ...) {
 #' @rdname templates
 #'
 #' @export
-murraycod <- function(x = NULL, ...) {
-  get_template(sp = "murraycod", x = x, ...)
+murraycod <- function(x = NULL, params = list(), ...) {
+  get_template(sp = "murraycod", x = x, params, ...)
 }
 
 # internal function: define species defaults
-template_murraycod <- function() {
+template_murraycod <- function(K = 20000) {
 
   # how many stages are we going to work with?
   nstage <- 25
@@ -129,14 +131,7 @@ template_murraycod <- function() {
     list(all_stages(mat, dims = c(5:nstage))),
     biomass_mask_list
   )
-
-  # work out more complex, biomass-based density dependence
-  #  (clustered if/else statements)
-  # mask is survival, function is
-  # ifelse(K < summed_abunds, K / summed_abunds, 1)
-  # Variation is in class clusters, e.g. 3+4, 5-7, 8-10, 11-14, 15-25. Clusters
-  #   affect all things younger but nothing older
-  #   (e.g. 3+4 = sum(abunds[3:nstage], 8-10 = sum(abunds[8:nstage]))
+  dd <- density_dependence(dd_masks, dd_fns)
 
   # basic single variable covariate function
   covs <- function(mat, x) {
