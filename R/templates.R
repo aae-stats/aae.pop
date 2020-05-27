@@ -109,10 +109,10 @@ template_murraycod <- function(K = 20000) {
     )
 
   # define basic BH density dependence
-  biomass_dd <- function(K, dims) {
+  biomass_dd <- function(k, dims) {
     function(x, n) {
       sum_n <- sum(n[min(dims):length(n)])
-      ifelse(sum_n > K, K / sum_n, 1)
+      ifelse(sum_n > k, k / sum_n, 1)
     }
   }
   dd_stages <- list(
@@ -122,10 +122,10 @@ template_murraycod <- function(K = 20000) {
     c(11:14),
     c(15:25)
   )
-  biomass_dd_list <- lapply(dd_stages, biomass_dd, K = 20000)
+  biomass_dd_list <- lapply(dd_stages, biomass_dd, k = 20000)
   biomass_mask_list <- lapply(dd_stages, all_stages, mat = mat)
   dd_fns <- c(
-    list(beverton_holt(K = 20000)), biomass_dd_list
+    list(beverton_holt(k = 20000)), biomass_dd_list
   )
   dd_masks <- c(
     list(all_stages(mat, dims = c(5:nstage))),
@@ -140,6 +140,7 @@ template_murraycod <- function(K = 20000) {
 
   # define environmental stochasticity based on known standard deviations of
   #   parameters
+
   # survival
   survival_env <- function(x) {
 

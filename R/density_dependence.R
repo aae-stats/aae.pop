@@ -66,7 +66,7 @@ density_dependence_n <- function(masks, funs) {
 #'
 #' @export
 #'
-#' @param K carrying capacity used to define models of
+#' @param k carrying capacity used to define models of
 #'   density dependence. See details for details of
 #'   currently implemented models and their parameters.
 #'
@@ -77,10 +77,10 @@ density_dependence_n <- function(masks, funs) {
 #'
 #' @examples
 #' # add
-beverton_holt <- function(K) {
+beverton_holt <- function(k) {
 
   function(x, n) {
-    x / (1 + x * sum(n) / params$K)
+    x / (1 + x * sum(n) / k)
   }
 
 }
@@ -91,7 +91,7 @@ beverton_holt <- function(K) {
 #'
 #' @examples
 #' # add
-ricker <- function(K) {
+ricker <- function(k) {
   NULL
 }
 
