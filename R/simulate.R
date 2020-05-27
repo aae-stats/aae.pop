@@ -5,20 +5,20 @@
 #' @export
 #'
 #' @param object a \code{dynamics} object created with
-#'   \code{\link{define_dynamics}} or from a subsequent call to
-#'   \code{\link{combine_species}} or \code{\link{expand_spatially}}
+#'   \code{\link{dynamics}} or from a subsequent call to
+#'   \code{\link{multispecies}} or \code{\link{metapopulation}}
 #' @param nsim the number of replicate simulations (default = 1)
 #' @param seed optional seed used prior to initialisation and simulation to
 #'   give reproducible results
 #' @param init an array of initial conditions with one row per replicate and one
 #'   column per population stage. Additionally requires one slice per species if
-#'   \code{obj} has been created with \code{\link{combine_species}}. Defaults
+#'   \code{obj} has been created with \code{\link{multispecies}}. Defaults
 #'   to \code{NULL}, in which case initial conditions are generated randomly
-#'   from a Poisson distribution
+#'   according to \code{options()$aae.pop_initialisation}
 #' @param options a named \code{list} of simulation options. Currently accepted
 #'   values are:
 #'   - \code{ntime} the number of time steps to simulate, ignored if \code{obj}
-#'       includes a \code{\link{modifier}} (default = 50)
+#'       includes a \code{\link{covariates}} (default = 50)
 #'   - \code{keep_slices} \code{logical} defining whether to keep intermediate
 #'       population abundances or (if \code{FALSE}) to return only the final
 #'       time slice

@@ -124,8 +124,9 @@ template_murraycod <- function(k = 20000) {
   )
   biomass_dd_list <- lapply(dd_stages, biomass_dd, k = 20000)
   biomass_mask_list <- lapply(
-    dd_stages, transition_with_end_stage, mat = mat
+    dd_stages, transition, mat = mat
   )
+  biomass_mask_list[[length(biomass_mask_list)]][nstage, nstage] <- TRUE
   dd_fns <- c(
     list(beverton_holt(k = 20000)), biomass_dd_list
   )
