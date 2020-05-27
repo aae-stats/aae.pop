@@ -41,6 +41,18 @@ The \code{get_template} function and associated
   (*Macquaria ambigua*), silver perch (*Bidyanus bidyanus*),
   Macquarie perch (*Macquaria australasica*), Australian smelt
   (*Retropinna semonia*), and common galaxias (*Galaxias maculatus*).
+
+  The \code{get_template} function can be used with user-defined
+  templates. Templates must be functions with a name defined by
+  \code{template_} followed by a species name or identifier (e.g.
+  \code{template_my_species}). These templates must return a named
+  list with at least a population matrix model (\code{matrix}), and
+  other arguments to pass to \code{\link{dynamics}}. Terms
+  specifying \code{covariates} would typically be defined
+  in a template with the function only (\code{covariate_function}),
+  so that templates can be used with different covariate sets.
+  If defined in this way, \code{get_template("my_species")} will
+  return a compiled dynamics object for my_species.
 }
 \examples{
 # add
