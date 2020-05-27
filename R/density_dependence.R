@@ -66,50 +66,33 @@ density_dependence_n <- function(masks, funs) {
 #'
 #' @export
 #'
+#' @param K carrying capacity used to define models of
+#'   density dependence. See details for details of
+#'   currently implemented models and their parameters.
+#'
 #' @details Additional functions are provided to define common
-#'   forms of density dependence, such as the Ricker model and
-#'   the Beverton-Holt model.
+#'   forms of density dependence. Currently implemented models
+#'   are the Ricker model and Beverton-Holt model, both with
+#'   a single parameter K.
 #'
 #' @examples
 #' # add
-ricker <- function(masks) {
-  density_dependence(masks, lapply(masks, ricker_dd))
+beverton_holt <- function(K) {
+
+  function(x, n) {
+    x / (1 + x * sum(n) / params$K)
+  }
+
 }
 
 #' @rdname density_dependence
 #'
 #' @export
 #'
-#' @param params K
-#'
-#' @details Additional functions are provided to define common
-#'   forms of density dependence, such as the Ricker model and
-#'   the Beverton-Holt model.
-#'
 #' @examples
 #' # add
-beverton_holt <- function(masks, params) {
-
-  if (is.list(masks)) {
-    out <- density_dependence(masks, lapply(masks, function() bh_dd(params)))
-  } else {
-    out <- density_dependence(masks, bh_dd(params))
-  }
-
-  out
-
-}
-
-# internal function: define ricker density dependence
-ricker_dd <- function(x) {
+ricker <- function(K) {
   NULL
-}
-
-# internal function: define Beverton-Holt density dependence
-bh_dd <- function(params) {
-  function(x, n) {
-    x / (1 + x * sum(n) / params$K)
-  }
 }
 
 # internal function: set density_dependence class

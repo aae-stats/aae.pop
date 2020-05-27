@@ -107,9 +107,27 @@ template_murraycod <- function() {
     )
 
   # define basic BH density dependence
-  dd <- beverton_holt(
-    masks = reproduction(mat, dims = c(5:nstage)),
-    params = list(K = 20000)
+  biomass_dd <- function(K, dims) {
+    function(x, n) {
+      sum_n <- sum(n[min(dims):length(n)])
+      ifelse(sum_n > K, K / sum_n, 1)
+    }
+  }
+  dd_stages <- list(
+    c(3:4),
+    c(5:7),
+    c(8:10),
+    c(11:14),
+    c(15:25)
+  )
+  biomass_dd_list <- lapply(dd_stages, biomass_dd, K = 20000)
+  biomass_mask_list <- lapply(dd_stages, all_stages, mat = mat)
+  dd_fns <- c(
+    list(beverton_holt(K = 20000)), biomass_dd_list
+  )
+  dd_masks <- c(
+    list(all_stages(mat, dims = c(5:nstage))),
+    biomass_mask_list
   )
 
   # work out more complex, biomass-based density dependence
