@@ -124,8 +124,7 @@ plot.dynamics <- function(x, y, ...) {
   if (all(diag(mat)[-nrow(mat)]) == 0)
     type <- "Age"
 
-  # nolint
-  gr <- DiagrammeR::from_adj_matrix(mat,
+  gr <- DiagrammeR::from_adj_matrix(mat,    # nolint
                                     mode = "directed",
                                     use_diag = TRUE)
 

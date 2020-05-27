@@ -14,7 +14,11 @@ clean_paste <- function(x, final_sep = "and") {
 }
 
 # set an object class
-as_class <- function (object, name, type = c("function", "list", "matrix", "array")) {
+as_class <- function(
+  object,
+  name,
+  type = c("function", "list", "matrix", "array")
+) {
 
   type <- match.arg(type)
   stopifnot(inherits(object, type))

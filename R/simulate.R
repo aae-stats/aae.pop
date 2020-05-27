@@ -2,7 +2,7 @@
 #'
 #' @name simulate
 #'
-#' @importFrom stats rpois
+#' @importFrom stats rpois rbinom
 #'
 #' @export
 #'
@@ -25,8 +25,12 @@
 #'   - \code{tidy_abundances} a function to handle predicted abundance data
 #'       that may be non-integer. Defaults to \code{identity}; suggested
 #'       alternatives are \code{floor}, \code{round}, or \code{ceiling}
-#'   - \code{lambda_init} lambda defining a Poisson distribution, used to
-#'       generate rando initial conditions if \code{init = NULL}
+#'   - \code{initialise_args} a list of arguments passed to the function
+#'       used to initialise abundance trajectories. Only used if
+#'       \code{init = NULL}. Defaults to \code{options()$aae.pop_lambda},
+#'       which specifies lambda for Poisson random draws. The default
+#'       initialisation function is defined by
+#'       \code{options()$aae.pop_initialisation}.
 #'
 #' @details
 #'
@@ -40,11 +44,11 @@
 simulate <- function(obj, init = NULL, options = list()) {
 
   opt <- list(
-    ntime = 50,
-    replicates = 1000,
-    keep_slices = TRUE,
-    tidy_abundances = identity,
-    lambda_init = 10
+    ntime = options()$aae.pop_ntime,
+    replicates = options()$aae.pop_replicates,
+    keep_slices = options()$aae.pop_keep_slices,
+    tidy_abundances = options()$aae.pop_tidy_abundances,
+    initialise_args = list(options()$aae.pop_lambda)
   )
   opt[names(options)] <- options
 
@@ -78,26 +82,35 @@ simulate <- function(obj, init = NULL, options = list()) {
 # internal function: update a single time step for one species
 simulate_once <- function(obj, pop_t, tidy_abundances) {
 
+  # matrix will be a list if expanded over covariates
   if (!is.null(obj$covariates)) {
     mat <- obj$matrix[[i]]
   } else {
     mat <- obj$matrix
   }
 
+  # draw stochastic matrix values if env stoch included
   if (!is.null(obj$environmental_stochasticity))
     mat <- obj$environmental_stochasticity(mat)
 
+  # tweak matrix to account for density effects on vital rates
   if (!is.null(obj$density_dependence))
     mat <- obj$density_dependence(mat, pop_t)
 
-  pop_tp1 <- tcrossprod(pop_t, mat)
+  # single-step update of abundances
+  pop_tp1 <- options()$aae.pop_update(pop_t, mat)
 
+  # tweak abundances to add stochastic variation in demographic
+  #   outcomes
   if (!is.null(obj$demographic_stochasticity))
     pop_tp1 <- t(apply(pop_tp1, 1, obj$demographic_stochasticity))
 
+  # final hit to abundances if they are rescaled based on biomass
+  #   constraints or similar
   if (!is.null(obj$density_dependence_n))
     pop_tp1 <- t(apply(pop_tp1, 1, obj$density_dependence_n))
 
+  # return tidied abundances (e.g. rounded or floored values)
   tidy_abundances(pop_tp1)
 
 }
@@ -114,7 +127,9 @@ simulate_once_multispecies <- function(obj, pop_t, nspecies, tidy_abundances) {
   # loop through species, updating one-by-one
   for (i in seq_along(obj$nspecies)) {
 
-    # apply density rescaling (don't recalculate dnesities here because will change)
+    # apply density rescaling
+    #  (don't recalculate dnesities here because will change
+    #   with each species update)
 
     if (!is.null(obj$covariates)) {
       mat <- obj$matrix[, , i]
@@ -130,15 +145,49 @@ simulate_once_multispecies <- function(obj, pop_t, nspecies, tidy_abundances) {
 
     pop_tp1[, , i] <- tcrossprod(pop_t[, , i], mat)
 
-    if (!is.null(obj$demographic_stochasticity))
-      pop_tp1[, , i] <- t(apply(pop_tp1[, , i], 1, obj$demographic_stochasticity))
+    if (!is.null(obj$demographic_stochasticity)) {
+      pop_tp1[, , i] <-
+        t(apply(pop_tp1[, , i], 1, obj$demographic_stochasticity))
+    }
 
-    if (!is.null(obj$density_dependence_n))
-      pop_tp1[, , i] <- t(apply(pop_tp1[, , i], 1, obj$density_dependence_n))
+    if (!is.null(obj$density_dependence_n)) {
+      pop_tp1[, , i] <-
+        t(apply(pop_tp1[, , i], 1, obj$density_dependence_n))
+    }
 
   }
 
   tidy_abundances(pop_tp1)
+
+}
+
+# internal function: update abundances for one time step
+update_crossprod <- function(pop, mat) {
+  tcrossprod(pop, mat)
+}
+
+# internal function: update abundances with a direct RNG draw
+#   that combines update with demographic stochasticity
+update_binomial <- function(pop, mat) {
+
+  stop("update_binomial is not implemented", call. = FALSE)
+
+  # check that counts are round values, otherwise can't work with size of rbinom
+  # perhaps just check options()$tidy_abundances and error/warn if needed?
+
+  # counts needs to be numbers in classes 1:(nstage-1), with nstage count added to last one
+  #  not quite -- needs to be counts in classes aligned with rows??
+
+  # surv_vec needs to be survival summed over all ways to get into a class
+
+  # update survival steps with rbinom
+  pop_next[, 2:nstage] <- rbinom(length(counts), size = counts, p = surv_vec)
+
+  # update fecundity steps with rpois
+  pop_next[, 1] <- rpois(length(fec_vec), lambda = fec_vec)
+
+  # return
+  pop_next
 
 }
 
@@ -154,7 +203,9 @@ initialise <- function(obj, opt, init) {
 
   if (is.null(init)) {
     init <- array(
-      rpois(prod(dims[-ndim]), lambda = opt$lambda_init),
+      options()$aae.pop_initialisation(
+        prod(dims[-ndim]), opt$initialise_args
+      ),
       dim = dims[-ndim]
     )
   }
@@ -164,6 +215,11 @@ initialise <- function(obj, opt, init) {
 
   pop
 
+}
+
+# internal function: initialise simulations with Poisson random draws
+initialise_poisson <- function(n, args) {
+  do.call(rpois, c(list(n), args))
 }
 
 # internal function: set simulation class
