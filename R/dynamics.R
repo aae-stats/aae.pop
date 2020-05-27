@@ -50,8 +50,13 @@ dynamics <- function(matrix, ...) {
     "density_dependence_n"
   )
 
-  # and work out which of these have been supplied
+  # collapse processes into a list
   processes <- list(...)
+
+  # remove any named NULL processes
+  processes <- processes[!is.null(processes)]
+
+  # and work out which have been supplied
   processes_supplied <- sapply(processes, function(x) class(x)[1])
   names(processes) <- processes_supplied
 
