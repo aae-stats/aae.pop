@@ -89,11 +89,17 @@ simulate.dynamics <- function(object,
     # split based on multispecies or single species
     if (object$nspecies > 1) {
       pop[, , , i + 1] <- simulate_once_multispecies(
-        object, pop[, , , i], tidy_abundances = opt$tidy_abundances
+        iter = i,
+        object,
+        pop[, , , i],
+        tidy_abundances = opt$tidy_abundances
       )
     } else {
       pop[, , i + 1] <- simulate_once(
-        object, pop[, , i], tidy_abundances = opt$tidy_abundances
+        iter = i,
+        object,
+        pop[, , i],
+        tidy_abundances = opt$tidy_abundances
       )
     }
 
@@ -109,11 +115,11 @@ simulate.dynamics <- function(object,
 }
 
 # internal function: update a single time step for one species
-simulate_once <- function(obj, pop_t, tidy_abundances) {
+simulate_once <- function(iter, obj, pop_t, tidy_abundances) {
 
   # matrix will be a list if expanded over covariates
   if (!is.null(obj$covariates)) {
-    mat <- obj$matrix[[i]]
+    mat <- obj$matrix[[iter]]
   } else {
     mat <- obj$matrix
   }
@@ -145,7 +151,7 @@ simulate_once <- function(obj, pop_t, tidy_abundances) {
 }
 
 # internal function: update a single time step with interacting species
-simulate_once_multispecies <- function(obj, pop_t, nspecies, tidy_abundances) {
+simulate_once_multispecies <- function(iter, obj, pop_t, nspecies, tidy_abundances) {
 
   # calculate density effects of other species
   #   according to something save in obj (interaction matrix with fns?)
@@ -154,14 +160,14 @@ simulate_once_multispecies <- function(obj, pop_t, nspecies, tidy_abundances) {
   pop_tp1 <- array(NA, dim = dim(pop_t))
 
   # loop through species, updating one-by-one
-  for (i in seq_along(obj$nspecies)) {
+  for (j in seq_along(obj$nspecies)) {
 
     # apply density rescaling
     #  (don't recalculate dnesities here because will change
     #   with each species update)
 
     if (!is.null(obj$covariates)) {
-      mat <- obj$matrix[, , i]
+      mat <- obj$matrix[[iter]]
     } else {
       mat <- obj$matrix
     }
@@ -170,18 +176,18 @@ simulate_once_multispecies <- function(obj, pop_t, nspecies, tidy_abundances) {
       mat <- obj$environmental_stochasticity(mat)
 
     if (!is.null(obj$density_dependence))
-      mat <- obj$density_dependence(mat, pop_t[, , i])
+      mat <- obj$density_dependence(mat, pop_t[, , j])
 
-    pop_tp1[, , i] <- tcrossprod(pop_t[, , i], mat)
+    pop_tp1[, , j] <- tcrossprod(pop_t[, , j], mat)
 
     if (!is.null(obj$demographic_stochasticity)) {
-      pop_tp1[, , i] <-
-        t(apply(pop_tp1[, , i], 1, obj$demographic_stochasticity))
+      pop_tp1[, , j] <-
+        t(apply(pop_tp1[, , j], 1, obj$demographic_stochasticity))
     }
 
     if (!is.null(obj$density_dependence_n)) {
-      pop_tp1[, , i] <-
-        t(apply(pop_tp1[, , i], 1, obj$density_dependence_n))
+      pop_tp1[, , j] <-
+        t(apply(pop_tp1[, , j], 1, obj$density_dependence_n))
     }
 
   }
