@@ -121,7 +121,7 @@ plot.dynamics <- function(x, y, ...) {
   type <- ifelse(any(diag(mat) > 0), "Stage", "Age")
 
   # add tweak for age-structured with final collecting stage
-  if (all(diag(mat)[-nrow(mat)]) == 0)
+  if (all(diag(mat)[-nrow(mat)] == 0))
     type <- "Age"
 
   gr <- DiagrammeR::from_adj_matrix(mat,    # nolint

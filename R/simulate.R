@@ -1,7 +1,5 @@
 #' @title Simulate single or multispecies population dynamics in R
 #'
-#' @name simulate
-#'
 #' @importFrom stats rpois rbinom simulate
 #'
 #' @export
@@ -43,11 +41,13 @@
 #' # define a dynamics objet
 #'
 #' # simulate from this
+# nolint start
 simulate.dynamics <- function(object,
                               nsim = 1,
                               seed = NULL,
                               init = NULL,
                               options = list()) {
+  # nolint end
 
   # set default options for simulation
   opt <- list(
