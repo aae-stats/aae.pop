@@ -163,7 +163,7 @@ template_murraycod <- function() {
     )
 
     # simulate normal random variates
-    rnorm(length(x), mean = x, sd = sd_tmp)
+    out <- rnorm(length(x), mean = x, sd = sd_tmp)
 
     # check none are negative (but can be > 1)
     out <- ifelse(out < 0, 0, out)
