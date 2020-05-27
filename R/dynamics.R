@@ -54,7 +54,7 @@ dynamics <- function(matrix, ...) {
   processes <- list(...)
 
   # remove any named NULL processes
-  processes <- processes[!is.null(processes)]
+  processes <- processes[!sapply(processes, is.null)]
 
   # and work out which have been supplied
   processes_supplied <- sapply(processes, function(x) class(x)[1])
