@@ -50,7 +50,7 @@ get_template <- function(sp, x = NULL, ...) {
 
   # draw up relevant parameters based on corrected species name
   sp <- parse_species(sp)
-  all_parameters <- get(paste0("template_", sp))
+  all_parameters <- get(paste0("template_", sp))()
 
   # optional: add covariates
   if (!is.null(x)) {
@@ -106,7 +106,7 @@ template_murraycod <- function() {
 
   # define basic BH density dependence
   dd <- beverton_holt(
-    masks = reproduction(mc_matrix, dims = c(5:nstage)),
+    masks = reproduction(mat, dims = c(5:nstage)),
     params = list(K = 20000)
   )
 
