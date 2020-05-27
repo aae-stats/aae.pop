@@ -2,13 +2,16 @@
 #'
 #' @name simulate
 #'
-#' @importFrom stats rpois rbinom
+#' @importFrom stats rpois rbinom simulate
 #'
 #' @export
 #'
-#' @param obj a \code{dynamics} object created with
+#' @param object a \code{dynamics} object created with
 #'   \code{\link{define_dynamics}} or from a subsequent call to
 #'   \code{\link{combine_species}} or \code{\link{expand_spatially}}
+#' @param nsim the number of replicate simulations (default = 1)
+#' @param seed optional seed used prior to initialisation and simulation to
+#'   give reproducible results
 #' @param init an array of initial conditions with one row per replicate and one
 #'   column per population stage. Additionally requires one slice per species if
 #'   \code{obj} has been created with \code{\link{combine_species}}. Defaults
@@ -18,7 +21,6 @@
 #'   values are:
 #'   - \code{ntime} the number of time steps to simulate, ignored if \code{obj}
 #'       includes a \code{\link{modifier}} (default = 50)
-#'   - \code{replicates} the number of replicate simulations (default = 1000)
 #'   - \code{keep_slices} \code{logical} defining whether to keep intermediate
 #'       population abundances or (if \code{FALSE}) to return only the final
 #'       time slice
@@ -41,36 +43,63 @@
 #' # define a dynamics objet
 #'
 #' # simulate from this
-simulate <- function(obj, init = NULL, options = list()) {
+simulate.dynamics <- function(object,
+                              nsim = 1,
+                              seed = NULL,
+                              init = NULL,
+                              options = list()) {
 
+  # set default options for simulation
   opt <- list(
     ntime = options()$aae.pop_ntime,
-    replicates = options()$aae.pop_replicates,
     keep_slices = options()$aae.pop_keep_slices,
     tidy_abundances = options()$aae.pop_tidy_abundances,
     initialise_args = list(options()$aae.pop_lambda)
   )
   opt[names(options)] <- options
 
-  if (!is.null(obj$covariates))
-    opt$ntime <- obj$ntime
+  # add nsim into options
+  opt$replicates <- nsim
 
-  pop <- initialise(obj, opt, init)
+  # use the number of covariate values instead of fixed ntime if
+  #   covariates are provided
+  if (!is.null(object$covariates))
+    opt$ntime <- object$ntime
 
+  # if seed is provided, use it but reset random seed afterwards
+  if (!is.null(seed)) {
+
+    if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
+      runif(1)
+    }
+
+    r_seed <- get(".Random.seed", envir = .GlobalEnv)
+    on.exit(assign(".Random.seed", r_seed, envir = .GlobalEnv))
+    set.seed(seed)
+
+  }
+
+  # initalise the population with init if provided, following
+  #   options()$aae.pop_initialisation otherwise
+  pop <- initialise(object, opt, init)
+
+  # loop through timesteps, updating population at each timestep
   for (i in seq_len(opt$ntime)) {
 
-    if (obj$nspecies > 1) {
+    # split based on multispecies or single species
+    if (object$nspecies > 1) {
       pop[, , , i + 1] <- simulate_once_multispecies(
-        obj, pop[, , , i], tidy_abundances = opt$tidy_abundances
+        object, pop[, , , i], tidy_abundances = opt$tidy_abundances
       )
     } else {
       pop[, , i + 1] <- simulate_once(
-        obj, pop[, , i], tidy_abundances = opt$tidy_abundances
+        object, pop[, , i], tidy_abundances = opt$tidy_abundances
       )
     }
 
   }
 
+  # do we want to keep intermediate abundances or just the final step?
   if (!opt$keep_slices)
     pop <- pop[, , opt$ntime + 1]
 
@@ -175,7 +204,8 @@ update_binomial <- function(pop, mat) {
   # check that counts are round values, otherwise can't work with size of rbinom
   # perhaps just check options()$tidy_abundances and error/warn if needed?
 
-  # counts needs to be numbers in classes 1:(nstage-1), with nstage count added to last one
+  # counts needs to be numbers in classes 1:(nstage-1),
+  #  with nstage count added to last one
   #  not quite -- needs to be counts in classes aligned with rows??
 
   # surv_vec needs to be survival summed over all ways to get into a class
