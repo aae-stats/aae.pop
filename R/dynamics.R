@@ -111,10 +111,12 @@ plot.dynamics <- function(x, y, ...) {
          call. = FALSE)
   }
 
+  # pull out the population matrix
+  mat <- x$matrix
+
   # only need matrix structure, so just use first element if it's a list
-  if (is.list(x$matrix)) {
-    mat <- x$matrix[[1]]
-  }
+  if (is.list(mat))
+    mat <- mat[[1]]
 
   # work out the matrix structure (binary)
   mat <- ifelse(mat > 0, 1, 0)
