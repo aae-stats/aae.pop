@@ -83,7 +83,7 @@ murraycod <- function(x = NULL, params = list(), ...) {
 }
 
 # internal function: define species defaults
-template_murraycod <- function(K = 20000) {
+template_murraycod <- function(k = 20000) {
 
   # how many stages are we going to work with?
   nstage <- 25
@@ -123,12 +123,14 @@ template_murraycod <- function(K = 20000) {
     c(15:25)
   )
   biomass_dd_list <- lapply(dd_stages, biomass_dd, k = 20000)
-  biomass_mask_list <- lapply(dd_stages, all_stages, mat = mat)
+  biomass_mask_list <- lapply(
+    dd_stages, transition_with_end_stage, mat = mat
+  )
   dd_fns <- c(
     list(beverton_holt(k = 20000)), biomass_dd_list
   )
   dd_masks <- c(
-    list(all_stages(mat, dims = c(5:nstage))),
+    list(reproduction(mat, dims = c(5:nstage))),
     biomass_mask_list
   )
   dd <- density_dependence(dd_masks, dd_fns)

@@ -53,6 +53,18 @@ transition <- function(matrix, dims = NULL) {
 #' @rdname masks
 #'
 #' @export
+transition_with_end_stage <- function(matrix, dims = NULL) {
+
+  if (is.null(dims))
+    dims <- seq_len(ncol(matrix) - 1)
+
+  (row(matrix) == (col(matrix) + 1) & col(matrix) %in% dims) |
+      (col(matrix) == row(matrix) & col(matrix) == ncol(matrix))
+}
+
+#' @rdname masks
+#'
+#' @export
 all_cells <- function(matrix) {
   matrix(TRUE, nrow = nrow(matrix), ncol = ncol(matrix))
 }
