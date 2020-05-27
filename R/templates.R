@@ -112,7 +112,7 @@ template_murraycod <- function(k = 20000) {
   biomass_dd <- function(k, dims) {
     function(x, n) {
       sum_n <- sum(n[min(dims):length(n)])
-      ifelse(sum_n > k, k / sum_n, 1)
+      x * ifelse(sum_n > k, k / sum_n, 1)
     }
   }
   dd_stages <- list(
