@@ -3,24 +3,29 @@
 \name{density_dependence}
 \alias{density_dependence}
 \alias{density_dependence_n}
-\alias{ricker}
 \alias{beverton_holt}
+\alias{ricker}
 \title{Specify density dependence in models of population dynamics}
 \usage{
 density_dependence(masks, funs)
 
 density_dependence_n(masks, funs)
 
-ricker(masks)
+beverton_holt(k)
 
-beverton_holt(masks, params)
+ricker(k)
 }
 \arguments{
-\item{masks}{s}
+\item{masks}{a logical matrix or list of logical matrices
+defining cells affected by \code{funs}. See Details and
+\code{\link{masks}}}
 
-\item{funs}{dfd}
+\item{funs}{a function or list of functions with one element
+for each element of \code{masks}. See Details}
 
-\item{params}{K}
+\item{k}{carrying capacity used to define models of
+density dependence. See details for details of
+currently implemented models and their parameters.}
 }
 \description{
 Specify density dependence in vital rates
@@ -28,17 +33,22 @@ Specify density dependence in vital rates
   (\code{density_dependence_n}).
 }
 \details{
-something
+Masks must be of the same dimension as the population
+  dynamics matrix and specify cells influenced by density
+  dependence according to \code{funs}. Functions must take two
+  arguments, a matrix \code{x} and a vector \code{n}, which
+  represent the population dynamics matrix and the population
+  abundances. Functions must return a matrix with
+  the same dimensions as \code{x}, modified to reflect the
+  effects of current abundances by class (\code{n}) on
+  vital rates
 
 something
 
 Additional functions are provided to define common
-  forms of density dependence, such as the Ricker model and
-  the Beverton-Holt model.
-
-Additional functions are provided to define common
-  forms of density dependence, such as the Ricker model and
-  the Beverton-Holt model.
+  forms of density dependence. Currently implemented models
+  are the Ricker model and Beverton-Holt model, both with
+  a single parameter K.
 }
 \examples{
 # add

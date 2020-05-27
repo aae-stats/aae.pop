@@ -142,7 +142,6 @@ template_murraycod <- function(k = 20000) {
 
   # define environmental stochasticity based on known standard deviations of
   #   parameters
-
   # survival
   survival_env <- function(x) {
 
@@ -165,7 +164,6 @@ template_murraycod <- function(k = 20000) {
     out
 
   }
-
   # reproduction
   reproduction_env <- function(x) {
 
@@ -188,7 +186,6 @@ template_murraycod <- function(k = 20000) {
     out
 
   }
-
   # collate into a enviro stochasticity object
   envstoch <- environmental_stochasticity(
     masks = list(survival_mask, reproduction_mask),

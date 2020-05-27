@@ -9,10 +9,21 @@ NULL
 #'
 #' @export
 #'
-#' @param masks s
-#' @param funs dfd
+#' @param masks a logical matrix or list of logical matrices
+#'   defining cells affected by \code{funs}. See Details and
+#'   \code{\link{masks}}
+#' @param funs a function or list of functions with one element
+#'   for each element of \code{masks}. See Details
 #'
-#' @details something
+#' @details Masks must be of the same dimension as the population
+#'   dynamics matrix and specify cells influenced by density
+#'   dependence according to \code{funs}. Functions must take two
+#'   arguments, a matrix \code{x} and a vector \code{n}, which
+#'   represent the population dynamics matrix and the population
+#'   abundances. Functions must return a matrix with
+#'   the same dimensions as \code{x}, modified to reflect the
+#'   effects of current abundances by class (\code{n}) on
+#'   vital rates
 #'
 #' @examples
 #' # add

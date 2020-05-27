@@ -5,6 +5,7 @@
 \alias{reproduction}
 \alias{survival}
 \alias{transition}
+\alias{transition_with_end_stage}
 \alias{all_cells}
 \alias{all_stages}
 \alias{combine_masks}
@@ -15,6 +16,8 @@ reproduction(matrix, dims = NULL)
 survival(matrix, dims = NULL)
 
 transition(matrix, dims = NULL)
+
+transition_with_end_stage(matrix, dims = NULL)
 
 all_cells(matrix)
 
