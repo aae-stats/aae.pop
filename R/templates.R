@@ -90,15 +90,14 @@ template_murraycod <- function(k = 20000) {
 
   # define base matrix
   mat <- matrix(0, nrow = nstage, ncol = nstage)
-  survival_mask <- combine_masks(
-    transition(mat), col(mat) == row(mat) & col(mat) == nstage
+  survival_mask <- combine(
+    transition(mat), survival(mat, dims = nstage)
   )
   mat[survival_mask] <- c(
     0.4790, 0.5846, 0.6552, 0.7054, 0.7431, 0.7722, 0.7954, 0.8144, 0.8301,
     0.8434, 0.8547, 0.8646, 0.8731, 0.8807, 0.8874, 0.8934, 0.8988, 0.9037,
     0.9081, 0.9121, 0.9158, 0.9192, 0.9224, 0.9253, 0.9375
   )
-  mat[nstage, nstage] <- 0.9375
   yoy_surv <- 0.5 * 0.0122 * 0.1225
   reproduction_mask <- reproduction(mat, dims = c(5:nstage))
   mat[reproduction_mask] <- yoy_surv * c(
