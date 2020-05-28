@@ -100,9 +100,54 @@ dynamics <- function(matrix, ...) {
 #'
 #' @export
 #'
+#' @param object a \code{dynamics} object
+#'
+#' @details A compiled \code{dynamics} object can be
+#'   updated to change any of the included processes with
+#'   the \code{update} function. It is possible to replace
+#'   most processes directly (e.g.
+#'   \code{dynamics$density_dependence <- new_density_dependence})
+#'   but this will break in some cases, notably if updating
+#'   the \code{\link{covariates}} process, which requires
+#'   recalculation of the population matrix.
+update.dynamics <- function(object, ...) {
+
+  # collate dots into a list
+  processes_updated <- list(...)
+
+  # remove any named NULL processes
+  processes_updated <-
+    processes_updated[!sapply(processes_updated, is.null)]
+
+  # and work out which have been supplied
+  processes_supplied <-
+    sapply(processes_updated, function(x) class(x)[1])
+
+  # pull out existing processes
+  processes_supported <- c(
+    "covariates",
+    "environmental_stochasticity",
+    "demographic_stochasticity",
+    "density_dependence",
+    "density_dependence_n"
+  )
+  processes_existing <- lapply(processes_supported, function(x) object[[x]])
+
+  # update with new processes
+  processes_existing[processes_supplied] <-
+    processes_updated
+
+  # recreate and return dynamics object with new processes
+  dynamics(object$matrix, process_list)
+
+}
+
+#' @rdname dynamics
+#'
+#' @export
+#'
 #' @param x an object of class \code{dynamics}
 #' @param y ignored
-#' @param \dots ignored
 plot.dynamics <- function(x, y, ...) {
 
   if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
