@@ -69,7 +69,9 @@ all_stages <- function(matrix, dims = NULL) {
   if (is.null(dims))
     dims <- seq_len(nstage)
 
-  as_mask(seq_len(nstage) %in% dims)
+  as_mask(
+    matrix(seq_len(nstage) %in% dims, ncol = 1)
+  )
 
 }
 
