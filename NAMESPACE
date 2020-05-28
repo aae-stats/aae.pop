@@ -2,7 +2,7 @@
 
 S3method(combine,"function")
 S3method(combine,default)
-S3method(combine,masks)
+S3method(combine,mask)
 S3method(plot,dynamics)
 S3method(simulate,dynamics)
 S3method(update,dynamics)

@@ -8,7 +8,7 @@
 \alias{all_cells}
 \alias{all_stages}
 \alias{combine}
-\alias{combine.masks}
+\alias{combine.mask}
 \alias{combine.function}
 \alias{combine.default}
 \title{Isolate elements of population dynamics models}
@@ -25,7 +25,7 @@ all_stages(matrix, dims = NULL)
 
 combine(...)
 
-\method{combine}{masks}(...)
+\method{combine}{mask}(...)
 
 \method{combine}{`function`}(...)
 

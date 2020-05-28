@@ -90,7 +90,7 @@ combine <- function(...) {
 #'
 #' @examples
 #' # add
-combine.masks <- function(...) {
+combine.mask <- function(...) {
   dots <- list(...)
   masks <- abind::abind(dots, along = 3)
   apply(masks, c(1, 2), any)
@@ -102,7 +102,10 @@ combine.masks <- function(...) {
 combine.function <- function(...) {
   dots <- list(...)
   function(matrix, dims = NULL) {
-    combine(lapply(dots, matrix, dims))
+    out <- list()
+    for (i in seq_along(dots))
+      out[[i]] <- dots[[i]](matrix, dims)
+    combine(out)
   }
 }
 
