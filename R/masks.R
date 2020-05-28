@@ -105,7 +105,7 @@ combine.function <- function(...) {
     out <- list()
     for (i in seq_along(dots))
       out[[i]] <- dots[[i]](matrix, dims)
-    combine(out)
+    do.call(combine, out)
   }
 }
 
