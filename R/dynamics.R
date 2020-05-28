@@ -133,12 +133,16 @@ update.dynamics <- function(object, ...) {
   )
   processes_existing <- lapply(processes_supported, function(x) object[[x]])
 
+  # remove NULL (missing) processes
+  processes_existing <-
+    processes_existing[!sapply(processes_existing, is.null)]
+
   # update with new processes
   processes_existing[processes_supplied] <-
     processes_updated
 
   # recreate and return dynamics object with new processes
-  dynamics(object$matrix, process_list)
+  dynamics(object$matrix, processes_existing)
 
 }
 
