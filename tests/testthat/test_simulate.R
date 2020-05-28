@@ -7,9 +7,6 @@ mat[reproduction(mat, dims = 4:5)] <- rpois(2, 20)
 mat[survival(mat)] <- plogis(rnorm(nstage))
 mat[transition(mat)] <- plogis(rnorm(nstage - 1))
 
-# summary stats
-lambda <- eigen(mat)$values[1]
-
 # add covariate effects
 ntime <- 35
 xsim <- rnorm(ntime)
@@ -73,5 +70,18 @@ test_that("simulate returns correct abundances with different processes", {
   )
   class(target) <- c("simulation", "array")
   expect_equal(target, value)
+
+  # are lambdas roughly equal to leading eigenvalue?
+  lambda_approx_manual <-
+    mean(apply(target[, , ntime], 1, sum) /
+         apply(target[, , ntime - 1], 1, sum))
+  lambda_approx_value <-
+    mean(apply(value[, , ntime], 1, sum) /
+           apply(value[, , ntime - 1], 1, sum))
+  lambda <- eigen(mat)$values[1]
+  expect_equal(round(Re(lambda), 4),
+               round(lambda_approx_manual, 4))
+  expect_equal(round(Re(lambda), 4),
+               round(lambda_approx_value, 4))
 
 })
