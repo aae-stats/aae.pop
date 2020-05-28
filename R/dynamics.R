@@ -71,6 +71,9 @@ dynamics <- function(matrix, ...) {
   process_list <- processes[processes_supported]
   names(process_list) <- processes_supported
 
+  # store the original matrix so we can recover it if needed
+  base_matrix <- matrix
+
   # use covariates to expand matrix over time steps
   if ("covariates" %in% processes_supplied) {
     covars <- process_list[["covariates"]]
@@ -88,6 +91,7 @@ dynamics <- function(matrix, ...) {
         ntime = defaults$ntime,
         nclass = defaults$nclass,
         nspecies = defaults$nspecies,
+        base_matrix = base_matrix,
         matrix = matrix
       ),
       process_list
@@ -122,6 +126,7 @@ update.dynamics <- function(object, ...) {
   # and work out which have been supplied
   processes_supplied <-
     sapply(processes_updated, function(x) class(x)[1])
+  names(processes_updated) <- processes_supplied
 
   # pull out existing processes
   processes_supported <- c(
@@ -132,6 +137,7 @@ update.dynamics <- function(object, ...) {
     "density_dependence_n"
   )
   processes_existing <- lapply(processes_supported, function(x) object[[x]])
+  names(processes_existing) <- processes_supported
 
   # remove NULL (missing) processes
   processes_existing <-
@@ -142,7 +148,7 @@ update.dynamics <- function(object, ...) {
     processes_updated
 
   # recreate and return dynamics object with new processes
-  dynamics(object$matrix, processes_existing)
+  do.call(dynamics, c(list(object$base_matrix), processes_existing))
 
 }
 
