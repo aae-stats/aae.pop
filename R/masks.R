@@ -22,7 +22,7 @@ reproduction <- function(matrix, dims = NULL) {
   if (is.null(dims))
     dims <- seq_len(ncol(matrix))
 
-  row(matrix) == 1 & col(matrix) != 1 & col(matrix) %in% dims
+  as_mask(row(matrix) == 1 & col(matrix) != 1 & col(matrix) %in% dims)
 
 }
 
@@ -34,7 +34,7 @@ survival <- function(matrix, dims = NULL) {
   if (is.null(dims))
     dims <- seq_len(ncol(matrix))
 
-  row(matrix) == col(matrix) & col(matrix) %in% dims
+  as_mask(row(matrix) == col(matrix) & col(matrix) %in% dims)
 
 }
 
@@ -46,27 +46,17 @@ transition <- function(matrix, dims = NULL) {
   if (is.null(dims))
     dims <- seq_len(ncol(matrix) - 1)
 
-  row(matrix) == (col(matrix) + 1) & col(matrix) %in% dims
+  as_mask(
+    row(matrix) == (col(matrix) + 1) & col(matrix) %in% dims
+  )
 
 }
 
 #' @rdname masks
 #'
 #' @export
-transition_with_end_stage <- function(matrix, dims = NULL) {
-
-  if (is.null(dims))
-    dims <- seq_len(ncol(matrix) - 1)
-
-  (row(matrix) == (col(matrix) + 1) & col(matrix) %in% dims) |
-      (col(matrix) == row(matrix) & col(matrix) == ncol(matrix))
-}
-
-#' @rdname masks
-#'
-#' @export
-all_cells <- function(matrix) {
-  matrix(TRUE, nrow = nrow(matrix), ncol = ncol(matrix))
+all_cells <- function(matrix, dims = NULL) {
+  as_mask(matrix(TRUE, nrow = nrow(matrix), ncol = ncol(matrix)))
 }
 
 #' @rdname masks
@@ -79,8 +69,17 @@ all_stages <- function(matrix, dims = NULL) {
   if (is.null(dims))
     dims <- seq_len(nstage)
 
-  seq_len(nstage) %in% dims
+  as_mask(seq_len(nstage) %in% dims)
 
+}
+
+#' @rdname masks
+#'
+#' @export
+#'
+#' @param \dots sj
+combine <- function(...) {
+  UseMethod("combine")
 }
 
 #' @rdname masks
@@ -91,10 +90,31 @@ all_stages <- function(matrix, dims = NULL) {
 #'
 #' @examples
 #' # add
-combine_masks <- function(...) {
+combine.masks <- function(...) {
   dots <- list(...)
   masks <- abind::abind(dots, along = 3)
   apply(masks, c(1, 2), any)
+}
+
+#' @rdname masks
+#'
+#' @export
+combine.function <- function(...) {
+  dots <- list(...)
+  function(matrix, dims = NULL) {
+    combine(lapply(dots, matrix, dims))
+  }
+}
+
+#' @rdname masks
+#'
+#' @export
+combine.default <- function(...) {
+  dots <- list(...)
+  classes <- sapply(dots, class)
+  stop("combine is not defined for objects of class",
+       clean_paste(classes),
+       call. = FALSE)
 }
 
 # internal function: set mask class
