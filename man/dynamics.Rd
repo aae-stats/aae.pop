@@ -2,10 +2,13 @@
 % Please edit documentation in R/dynamics.R
 \name{dynamics}
 \alias{dynamics}
+\alias{update.dynamics}
 \alias{plot.dynamics}
 \title{Create a population dynamics object}
 \usage{
 dynamics(matrix, ...)
+
+\method{update}{dynamics}(object, ...)
 
 \method{plot}{dynamics}(x, y, ...)
 }
@@ -15,7 +18,14 @@ ages or stages. Specified in the format $n_{t+1} = A %*% n_t$, where
 $A$ is the matrix, so that values in a given column and row denote a
 transition from that column to that row}
 
-\item{\dots}{ignored}
+\item{\dots}{additional objects used to define population dynamics.
+Must be one or more of \code{\link{covariates}},
+\code{\link{environmental_stochasticity}},
+\code{\link{demographic_stochasticity}},
+\code{\link{density_dependence}}, or
+\code{\link{density_dependence_n}}}
+
+\item{object}{a \code{dynamics} object}
 
 \item{x}{an object of class \code{dynamics}}
 
@@ -32,6 +42,15 @@ A call to \code{dynamics} defines an object of class
   trajectories with the \code{\link{simulate}} function. The \code{plot}
   function is supported and will generate a general life-cycle
   diagram based on the defined population dynamics.
+
+A compiled \code{dynamics} object can be
+  updated to change any of the included processes with
+  the \code{update} function. It is possible to replace
+  most processes directly (e.g.
+  \code{dynamics$density_dependence <- new_density_dependence})
+  but this will break in some cases, notably if updating
+  the \code{\link{covariates}} process, which requires
+  recalculation of the population matrix.
 }
 \examples{
 # add

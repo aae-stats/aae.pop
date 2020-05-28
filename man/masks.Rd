@@ -5,10 +5,12 @@
 \alias{reproduction}
 \alias{survival}
 \alias{transition}
-\alias{transition_with_end_stage}
 \alias{all_cells}
 \alias{all_stages}
-\alias{combine_masks}
+\alias{combine}
+\alias{combine.masks}
+\alias{combine.function}
+\alias{combine.default}
 \title{Isolate elements of population dynamics models}
 \usage{
 reproduction(matrix, dims = NULL)
@@ -17,18 +19,24 @@ survival(matrix, dims = NULL)
 
 transition(matrix, dims = NULL)
 
-transition_with_end_stage(matrix, dims = NULL)
-
-all_cells(matrix)
+all_cells(matrix, dims = NULL)
 
 all_stages(matrix, dims = NULL)
 
-combine_masks(...)
+combine(...)
+
+\method{combine}{masks}(...)
+
+\method{combine}{`function`}(...)
+
+\method{combine}{default}(...)
 }
 \arguments{
 \item{matrix}{s}
 
 \item{dims}{dfd}
+
+\item{\dots}{sj}
 }
 \description{
 Helper functions to isolate particular components

@@ -138,7 +138,8 @@ template_murraycod <- function(k = 20000) {
 
   # basic single variable covariate function
   covs <- function(mat, x) {
-    mat[transition(mat)] <- mat[transition(mat)] * (1 / (1 + exp(-0.5 * x)))
+    mat[transition(mat)] <-
+      mat[transition(mat)] * (1 / (1 + exp(-0.5 * (x + 10))))
     mat
   }
 
