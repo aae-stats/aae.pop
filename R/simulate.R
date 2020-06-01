@@ -1,6 +1,6 @@
 #' @title Simulate single or multispecies population dynamics in R
 #'
-#' @importFrom stats rpois rbinom simulate
+#' @importFrom stats rpois rbinom runif simulate
 #'
 #' @export
 #'
@@ -141,9 +141,10 @@ simulate_once <- function(iter, obj, pop_t, opt) {
 
   # single-step update of abundances
   if (is_expanded) {
-    pop_tp1 <- t(sapply(
-      seq_len(opt$replicates),
-      function(i) options()$aae.pop_update(pop_t[i, ], mat_list[[i]])
+    pop_tp1 <- t(mapply(
+      options()$aae.pop_update,
+      lapply(seq_len(opt$replicates), function(i) pop_t[i, ]),
+      mat_list
     ))
   } else {
     pop_tp1 <- options()$aae.pop_update(pop_t, mat)
@@ -212,9 +213,12 @@ update_binomial <- function(pop, mat) {
   #  not quite -- needs to be counts in classes aligned with rows??
 
   # surv_vec needs to be survival summed over all ways to get into a class
+  surv_vec <- NULL
+  fec_vec <- NULL
+  counts <- NULL
 
   # update survival steps with rbinom
-  pop_next[, 2:nstage] <- rbinom(length(counts), size = counts, p = surv_vec)
+  pop_next[, 2:nstage] <- rbinom(length(counts), size = counts, prob = surv_vec)
 
   # update fecundity steps with rpois
   pop_next[, 1] <- rpois(length(fec_vec), lambda = fec_vec)
