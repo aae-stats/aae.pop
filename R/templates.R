@@ -78,6 +78,8 @@ get_template <- function(sp, x = NULL, params = list(), ...) {
 #' @rdname templates
 #'
 #' @export
+#'
+#' @importFrom stats rnorm
 murraycod <- function(x = NULL, params = list(), ...) {
   get_template(sp = "murraycod", x = x, params, ...)
 }
