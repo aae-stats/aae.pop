@@ -67,6 +67,16 @@ dynamics <- function(matrix, ...) {
          call. = FALSE)
   }
 
+  # error if multiple of the same process supplied
+  nproc <- table(processes_supplied)
+  if (any(nproc > 1)) {
+    duplicate_process <- names(nproc)[nproc > 1]
+    stop("Multiple objects provided for the following processes: ",
+         clean_paste(duplicate_process, final_sep = "and"), ".\n",
+         " A dynamics object can include up to one of each process type",
+         call. = FALSE)
+  }
+
   # make a list of supplied processes, NULL if missing
   process_list <- processes[processes_supported]
   names(process_list) <- processes_supported
@@ -91,6 +101,7 @@ dynamics <- function(matrix, ...) {
         ntime = defaults$ntime,
         nclass = defaults$nclass,
         nspecies = defaults$nspecies,
+        hex = hex_id(),
         base_matrix = base_matrix,
         matrix = matrix
       ),
