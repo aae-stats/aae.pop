@@ -124,6 +124,10 @@ simulate_once <- function(iter, obj, pop_t, opt) {
     mat <- obj$matrix
   }
 
+  # keep pop_t as a matrix if replicates == 1
+  if (opt$replicates == 1)
+    pop_t <- matrix(pop_t, nrow = 1)
+
   # draw stochastic matrix values if env stoch included
   if (!is.null(obj$environmental_stochasticity))
     mat <- obj$environmental_stochasticity(mat)
