@@ -4,14 +4,29 @@ clean_paste <- function(x, final_sep = "and") {
   # want number of terms so we can separate the final term
   nterm <- length(x)
 
-  # create two parts, comma separated and `final_sep` separated
-  first_part <- paste0(x[-nterm], collapse = ", ")
-  second_part <- x[nterm]
+  # only clean if x has length > 1
+  if (nterm > 1) {
+
+    # create two parts, comma separated and `final_sep` separated
+    first_part <- paste0(x[-nterm], collapse = ", ")
+    second_part <- x[nterm]
+
+    # return clean list
+    x <- paste0(first_part, ", ", final_sep, " ", second_part)
+
+  }
 
   # return clean list
-  paste0(first_part, ", ", final_sep, " ", second_part)
+  x
 
 }
+
+# generate a unique ID for an object based on hex code
+# function adapted from: https://github.com/greta-dev/greta
+hex_id <- function() {
+  paste(as.raw(sample.int(256L, 4, TRUE) - 1L), collapse = "")
+}
+
 
 # set an object class
 as_class <- function(

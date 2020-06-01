@@ -92,14 +92,14 @@ simulate.dynamics <- function(object,
         iter = i,
         object,
         pop[, , , i],
-        tidy_abundances = opt$tidy_abundances
+        opt = opt
       )
     } else {
       pop[, , i + 1] <- simulate_once(
         iter = i,
         object,
         pop[, , i],
-        tidy_abundances = opt$tidy_abundances
+        opt = opt
       )
     }
 
@@ -115,7 +115,7 @@ simulate.dynamics <- function(object,
 }
 
 # internal function: update a single time step for one species
-simulate_once <- function(iter, obj, pop_t, tidy_abundances) {
+simulate_once <- function(iter, obj, pop_t, opt) {
 
   # matrix will be a list if expanded over covariates
   if (!is.null(obj$covariates)) {
@@ -129,11 +129,20 @@ simulate_once <- function(iter, obj, pop_t, tidy_abundances) {
     mat <- obj$environmental_stochasticity(mat)
 
   # tweak matrix to account for density effects on vital rates
-  if (!is.null(obj$density_dependence))
-    mat <- obj$density_dependence(mat, pop_t)
+  if (!is.null(obj$density_dependence)) {
+    mat_list <- lapply(
+      seq_len(opt$replicates),
+      function(i) obj$density_dependence(mat, pop_t[i, ])
+    )
+  }
 
   # single-step update of abundances
-  pop_tp1 <- options()$aae.pop_update(pop_t, mat)
+  pop_tp1 <- t(
+    sapply(
+      seq_len(opt$replicates),
+      function(i) options()$aae.pop_update(pop_t[i, ], mat[[i]])
+    )
+  )
 
   # tweak abundances to add stochastic variation in demographic
   #   outcomes
@@ -146,7 +155,7 @@ simulate_once <- function(iter, obj, pop_t, tidy_abundances) {
     pop_tp1 <- t(apply(pop_tp1, 1, obj$density_dependence_n))
 
   # return tidied abundances (e.g. rounded or floored values)
-  tidy_abundances(pop_tp1)
+  opt$tidy_abundances(pop_tp1)
 
 }
 
@@ -155,7 +164,7 @@ simulate_once_multispecies <- function(iter,
                                        obj,
                                        pop_t,
                                        nspecies,
-                                       tidy_abundances) {
+                                       opt) {
 
   # calculate density effects of other species
   #   according to something save in obj (interaction matrix with fns?)
@@ -170,33 +179,12 @@ simulate_once_multispecies <- function(iter,
     #  (don't recalculate dnesities here because will change
     #   with each species update)
 
-    if (!is.null(obj$covariates)) {
-      mat <- obj$matrix[[iter]]
-    } else {
-      mat <- obj$matrix
-    }
+    # update as above, accounting for DIMS of pop_t carefully
 
-    if (!is.null(obj$environmental_stochasticity))
-      mat <- obj$environmental_stochasticity(mat)
-
-    if (!is.null(obj$density_dependence))
-      mat <- obj$density_dependence(mat, pop_t[, , j])
-
-    pop_tp1[, , j] <- tcrossprod(pop_t[, , j], mat)
-
-    if (!is.null(obj$demographic_stochasticity)) {
-      pop_tp1[, , j] <-
-        t(apply(pop_tp1[, , j], 1, obj$demographic_stochasticity))
-    }
-
-    if (!is.null(obj$density_dependence_n)) {
-      pop_tp1[, , j] <-
-        t(apply(pop_tp1[, , j], 1, obj$density_dependence_n))
-    }
 
   }
 
-  tidy_abundances(pop_tp1)
+  opt$tidy_abundances(pop_tp1)
 
 }
 
@@ -241,13 +229,45 @@ initialise <- function(obj, opt, init) {
   }
   ndim <- length(dims)
 
+  # generate initial conditions if not provided
   if (is.null(init)) {
+
     init <- array(
       options()$aae.pop_initialisation(
         prod(dims[-ndim]), opt$initialise_args
       ),
       dim = dims[-ndim]
     )
+
+  } else {  # check initial values if provided
+
+    # create an error message for re-use
+    expected_dims <- dims[1:(ndim - 1)]
+    dims_error_msg <- paste0(
+      "init has ",
+      length(init),
+      " elements but must have dimensions (",
+      paste0(expected_dims, collapse = ","),
+      ") or (",
+      paste0(expected_dims[-1], collapse = ","),
+      ")"
+    )
+
+    # must be a numeric vector or array
+    if (!is.numeric(init))
+      stop(dims_error_msg, call. = FALSE)
+
+    # if numeric, are the dimensions ok?
+    dims_ok <- check_dims(init, expected_dims)
+
+    # error if dims not OK
+    if (dims_ok$error)
+      stop(dims_error_msg, call. = FALSE)
+
+    # do we need to expand init over replicates?
+    if (dims_ok$expand)
+      init <- expand_dims(init, expected_dims[1])
+
   }
 
   pop <- array(NA, dim = dims)
@@ -257,7 +277,61 @@ initialise <- function(obj, opt, init) {
 
 }
 
+# internal function: check dimensions of initial conditions
+check_dims <- function(init, expected_dims) {
+
+  # assume not OK unless inits meet criteria below
+  is_ok <- FALSE
+
+  # assume not expanding unless set otherwise
+  expand <- FALSE
+
+  # if it's a numeric vector, must have nclass elements
+  if (is.null(dim(init))) {
+
+    # are we good?
+    if (length(init) == prod(expected_dims[-1]))
+      expand <- TRUE; is_ok <- TRUE
+
+  } else {
+
+    # are replicates included in init?
+    if (length(dim(init)) == length(expected_dims)) {
+
+      if (all.equal(dim(init), expected_dims))
+        is_ok <- TRUE
+
+    } else {
+
+      if (length(dim(init)) == (length(expected_dims) - 1)) {
+        if (all.equal(dim(init), expected_dims[-1]))
+          expand <- TRUE; is_ok <- TRUE
+      }
+
+    }
+
+  }
+
+  list(error = !is_ok, expand = expand)
+
+}
+
+# internal function: expand initial values
+#
+#' @importFrom abind abind
+expand_dims <- function(init, replicates) {
+
+  # expand over replicates if only one value for each class
+  abind::abind(
+    lapply(seq_len(replicates), function(x) init),
+    along = 0
+  )
+
+}
+
 # internal function: initialise simulations with Poisson random draws
+#
+#' @importFrom stats rpois
 initialise_poisson <- function(n, args) {
   do.call(rpois, c(list(n), args))
 }
