@@ -1,4 +1,12 @@
-# expand dynamics into a metapop
+#' @name metapopulation
+#' @title Create a population dynamics object with multiple populations
+#' @description Define population dynamics for multiple populations of
+#'   a single species linked by dispersal.
+NULL
+
+#' @rdname metapopulation
+#'
+#' @export
 metapopulation <- function(structure, dynamics, dispersal, ...) {
 
   # structure should be a matrix with nothing on diagonal and 0/1 T/F elsewhere
@@ -19,19 +27,12 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
 
   # set outputs from input dynamics objects
   #  - decide how to handle conflicting settings for input pops
-  list(
-    ntime = defaults$ntime,
-    nclass = defaults$nclass,
-    nspecies = defaults$nspecies,
-    matrix = matrix,
-    stochasticity = stochasticity,
-    density = density,
-    rescale = rescale,
-    is_modified = defaults$is_modified,
-    is_stochastic = defaults$is_stochastic,
-    is_density = defaults$is_density,
-    is_rescaled = defaults$is_rescaled,
-    is_multispecies = FALSE
-  )
+  out <- NULL
+  as_metapopulation(out)
 
+}
+
+# internal function: set metapopulation class
+as_metapopulation <- function(x) {
+  as_class(x, name = "metapopulation", type = "list")
 }
