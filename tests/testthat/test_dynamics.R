@@ -42,10 +42,6 @@ rescale_mask <- all_stages(mat)
 rescale_fn <- function(x) 200 * (x / sum(x))
 resc <- density_dependence_n(rescale_mask, rescale_fn)
 
-# define simulation settings
-nsim <- 10
-ntime <- 50
-
 test_that("dynamics object returns correct processes for different combinations of processes", {
 
   # test basic dynamics object with no additional processes
@@ -129,7 +125,54 @@ test_that("dynamics object returns correct processes for different combinations 
 })
 
 
+test_that("dynamics objects can be updated", {
+
+  # create basic object
+  dyn_obj <- dynamics(mat)
+
+  # update by adding covariates
+  dyn_new <- update(dyn_obj, cov_eff)
+  expect_null(dyn_obj$covariates)
+  expect_equal(dyn_new$covariates, cov_eff)
+
+  # update by adding density dependence
+  dyn_new <- update(dyn_obj, dd)
+  expect_null(dyn_obj$density_dependence)
+  expect_equal(dyn_new$density_dependence, dd)
+
+  # update by adding demographic stochasticity
+  dyn_new <- update(dyn_obj, demostoch)
+  expect_null(dyn_obj$demographic_stochasticity)
+  expect_equal(dyn_new$demographic_stochasticity, demostoch)
+
+  # update by adding environmental stochasticity
+  dyn_new <- update(dyn_obj, envstoch)
+  expect_null(dyn_obj$environmental_stochasticity)
+  expect_equal(dyn_new$environmental_stochasticity, envstoch)
+
+  # update by adding rescale density depdencen
+  dyn_new <- update(dyn_obj, resc)
+  expect_null(dyn_obj$density_dependence_n)
+  expect_equal(dyn_new$density_dependence_n, resc)
+
+  # update by changing covariates
+  dyn_new <- update(dyn_obj, cov_eff)
+  expect_equivalent(dyn_new$covariates$x, xsim)
+  xnew <- rnorm(length(xsim))
+  dyn_new <- update(dyn_new, covariates(x = xnew, fun = cov_fn))
+  expect_equivalent(dyn_new$covariates$x, xnew)
+
+})
+
 test_that("dynamics object errors informatively with unsuitable processes", {
+
+  # no matrix passed to dynamics
+  expect_error(dynamics(),
+               "matrix must be provided")
+
+  # a non-matrix passed as first argument
+  expect_error(dynamics(dd),
+               "matrix must be a two-dimensional array or matrix")
 
   # non-process passed to dynamics
   expect_error(
@@ -148,5 +191,15 @@ test_that("dynamics object errors informatively with unsuitable processes", {
     dynamics(mat, dd, dd, demostoch, demostoch),
     "Multiple objects provided for the following processes: demographic_stochasticity, and density_dependence"
   )
+
+})
+
+test_that("dynamics objects can be plotted", {
+
+  # create basic object
+  dyn_obj <- dynamics(mat)
+
+  # plot it
+  expect_silent(plot(dyn_obj))
 
 })

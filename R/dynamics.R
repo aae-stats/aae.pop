@@ -34,6 +34,13 @@ dynamics <- function(matrix, ...) {
   if (missing(matrix))
     stop("matrix must be provided when creating dynamics object")
 
+  # is matrix actually a matrix?
+  if (length(dim(matrix)) != 2) {
+    stop("matrix must be a two-dimensional array or matrix ",
+         "defining a population dynamics model",
+         call. = FALSE)
+  }
+
   # initialise
   defaults <- list(
     ntime = 1,
