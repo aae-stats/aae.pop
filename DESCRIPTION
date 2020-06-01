@@ -21,7 +21,8 @@ LazyData: true
 Depends:
     R (>= 3.0)
 Imports:
-    stats
+    stats,
+    abind
 Suggests:
     knitr,
     DiagrammeR,
