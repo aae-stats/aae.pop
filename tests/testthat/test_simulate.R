@@ -72,16 +72,16 @@ test_that("simulate returns correct abundances with different processes", {
   expect_equal(target, value)
 
   # are lambdas roughly equal to leading eigenvalue?
-  lambda_approx_manual <-
+  lambda_manual <-
     mean(apply(target[, , ntime], 1, sum) /
          apply(target[, , ntime - 1], 1, sum))
-  lambda_approx_value <-
+  lambda_value <-
     mean(apply(value[, , ntime], 1, sum) /
            apply(value[, , ntime - 1], 1, sum))
-  lambda <- eigen(mat)$values[1]
-  expect_equal(round(Re(lambda), 4),
-               round(lambda_approx_manual, 4))
-  expect_equal(round(Re(lambda), 4),
-               round(lambda_approx_value, 4))
+  lambda_real <- eigen(mat)$values[1]
+  expect_equal(round(Re(lambda_real), 4),
+               round(lambda_manual, 4))
+  expect_equal(round(Re(lambda_real), 4),
+               round(lambda_value, 4))
 
 })

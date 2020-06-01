@@ -128,21 +128,26 @@ simulate_once <- function(iter, obj, pop_t, opt) {
   if (!is.null(obj$environmental_stochasticity))
     mat <- obj$environmental_stochasticity(mat)
 
-  # tweak matrix to account for density effects on vital rates
+  # tweak matrix to account for density effects on vital rates,
+  #   setting a flag to change update step accordingly
+  is_expanded <- FALSE
   if (!is.null(obj$density_dependence)) {
     mat_list <- lapply(
       seq_len(opt$replicates),
       function(i) obj$density_dependence(mat, pop_t[i, ])
     )
+    is_expanded <- TRUE
   }
 
   # single-step update of abundances
-  pop_tp1 <- t(
-    sapply(
+  if (is_expanded) {
+    pop_tp1 <- t(sapply(
       seq_len(opt$replicates),
-      function(i) options()$aae.pop_update(pop_t[i, ], mat[[i]])
-    )
-  )
+      function(i) options()$aae.pop_update(pop_t[i, ], mat_list[[i]])
+    ))
+  } else {
+    pop_tp1 <- options()$aae.pop_update(pop_t, mat)
+  }
 
   # tweak abundances to add stochastic variation in demographic
   #   outcomes
@@ -290,8 +295,10 @@ check_dims <- function(init, expected_dims) {
   if (is.null(dim(init))) {
 
     # are we good?
-    if (length(init) == prod(expected_dims[-1]))
-      expand <- TRUE; is_ok <- TRUE
+    if (length(init) == prod(expected_dims[-1])) {
+      expand <- TRUE
+      is_ok <- TRUE
+    }
 
   } else {
 
@@ -304,8 +311,10 @@ check_dims <- function(init, expected_dims) {
     } else {
 
       if (length(dim(init)) == (length(expected_dims) - 1)) {
-        if (all.equal(dim(init), expected_dims[-1]))
-          expand <- TRUE; is_ok <- TRUE
+        if (all.equal(dim(init), expected_dims[-1])) {
+          expand <- TRUE
+          is_ok <- TRUE
+        }
       }
 
     }
