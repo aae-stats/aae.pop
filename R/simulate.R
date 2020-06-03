@@ -128,19 +128,34 @@ simulate_once <- function(iter, obj, pop_t, opt) {
   if (opt$replicates == 1)
     pop_t <- matrix(pop_t, nrow = 1)
 
-  # draw stochastic matrix values if env stoch included
-  if (!is.null(obj$environmental_stochasticity))
-    mat <- obj$environmental_stochasticity(mat)
-
-  # tweak matrix to account for density effects on vital rates,
+  # draw stochastic matrix values if env stoch included,
   #   setting a flag to change update step accordingly
   is_expanded <- FALSE
-  if (!is.null(obj$density_dependence)) {
+  if (!is.null(obj$environmental_stochasticity)) {
     mat_list <- lapply(
       seq_len(opt$replicates),
-      function(i) obj$density_dependence(mat, pop_t[i, ])
+      function(i) obj$environmental_stochasticity(mat)
     )
     is_expanded <- TRUE
+  }
+
+  # tweak matrix to account for density effects on vital rates,
+  #   accounting for previously expanded matrix
+  if (!is.null(obj$density_dependence)) {
+    if (is_expanded) {
+      mat_list <- mapply(
+        obj$density_dependence,
+        mat_list,
+        lapply(seq_len(opt$replicates), function(i) pop_t[i, ]),
+        SIMPLIFY = FALSE
+      )
+    } else {
+      mat_list <- lapply(
+        seq_len(opt$replicates),
+        function(i) obj$density_dependence(mat, pop_t[i, ])
+      )
+      is_expanded <- TRUE
+    }
   }
 
   # single-step update of abundances
