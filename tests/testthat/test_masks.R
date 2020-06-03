@@ -121,6 +121,12 @@ test_that("combining masks errors informatively for inappropriate classes", {
     "combine is not defined for objects of class matrix"
   )
 
+  # errors if given non-mask/function
+  expect_error(
+    combine(matrix(1:10), reproduction),
+    "combine is not defined for objects of class matrix"
+  )
+
   # errors if given combo including non-mask/function
   expect_error(
     combine(reproduction(mat), matrix(1:10)),
