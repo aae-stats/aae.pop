@@ -98,7 +98,7 @@ combine.mask <- function(...) {
   dots <- list(...)
 
   # check classes of all dots
-  classes <- sapply(dots, class)
+  classes <- sapply(dots, function(x) class(x)[1])
 
   # error if classes not OK
   if (!all(classes == "mask"))
@@ -119,7 +119,7 @@ combine.function <- function(...) {
   dots <- list(...)
 
   # check classes of all dots
-  classes <- sapply(dots, class)
+  classes <- sapply(dots, function(x) class(x)[1])
 
   # error if classes not OK
   if (!all(classes == "function"))
@@ -144,10 +144,10 @@ combine.default <- function(...) {
   dots <- list(...)
 
   # check classes of all dots
-  classes <- sapply(dots, class)
+  classes <- sapply(dots, function(x) class(x)[1])
 
   stop("combine is not defined for objects of class ",
-       clean_paste(classes[classes %in% c("mask", "function")]),
+       clean_paste(classes[!(classes %in% c("mask", "function"))]),
        call. = FALSE)
 }
 
