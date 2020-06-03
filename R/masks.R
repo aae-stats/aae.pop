@@ -93,32 +93,61 @@ combine <- function(...) {
 #' @examples
 #' # add
 combine.mask <- function(...) {
+
+  # turn dots into a list
   dots <- list(...)
+
+  # check classes of all dots
+  classes <- sapply(dots, class)
+
+  # error if classes not OK
+  if (!all(classes == "mask"))
+    combine(dots[classes != "mask"])
+
+  # return combined mask if all OK
   masks <- abind::abind(dots, along = 3)
-  apply(masks, c(1, 2), any)
+  as_mask(apply(masks, c(1, 2), any))
+
 }
 
 #' @rdname masks
 #'
 #' @export
 combine.function <- function(...) {
+
+  # turn dots into a list
   dots <- list(...)
+
+  # check classes of all dots
+  classes <- sapply(dots, class)
+
+  # error if classes not OK
+  if (!all(classes == "function"))
+    combine(dots[classes != "function"])
+
+  # return function if all OK
   function(matrix, dims = NULL) {
     out <- list()
     for (i in seq_along(dots))
       out[[i]] <- dots[[i]](matrix, dims)
     do.call(combine, out)
   }
+
 }
 
 #' @rdname masks
 #'
 #' @export
 combine.default <- function(...) {
+
+  # turn dots into a list
   dots <- list(...)
+
+  # check classes of all dots
   classes <- sapply(dots, class)
-  stop("combine is not defined for objects of class",
-       clean_paste(classes),
+
+  stop("combine is not defined for objects of class ",
+       clean_paste(classes[classes %in% c("mask", "function")]),
        call. = FALSE)
 }
 
