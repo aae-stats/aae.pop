@@ -274,8 +274,51 @@ test_that("simulate returns correct abundances with density dependence and envst
 
 })
 
+test_that("simulate returns reproducible outputs when seed is set", {
+
+  # update environmental stochasticity to actually be stochastic
+  mask_list_stoch <- list(reproduction(mat, dims = 4:5), survival(mat))
+  fn_list_stoch <- list(
+    function(x) rpois(length(x), lambda = x),
+    function(x) rnorm(length(x), mean = x, sd = 0.01)
+  )
+  envstoch_stoch <- environmental_stochasticity(
+    masks = mask_list_stoch, funs = fn_list_stoch
+  )
+
+  # simulate two trajectories with noise but same seed
+  dyn <- dynamics(mat, cov_eff, dd, envstoch_stoch)
+  init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+  value <- simulate(
+    dyn,
+    nsim = nsim,
+    seed = 123,
+    init = init_set,
+    options = list(ntime = ntime, tidy_abundances = floor)
+  )
+  target <- simulate(
+    dyn,
+    nsim = nsim,
+    seed = 123,
+    init = init_set,
+    options = list(ntime = ntime, tidy_abundances = floor)
+  )
+  expect_equal(target, value)
+
+  # and now with a different seed
+  target <- simulate(
+    dyn,
+    nsim = nsim,
+    seed = 124,
+    init = init_set,
+    options = list(ntime = ntime, tidy_abundances = floor)
+  )
+  expect_false(all(target == value))
+
+})
 
 test_that("simulate errors informatively when initial values have unsuitable dims", {
+
 
   # simulate trajectories with no uncertainty but with covariates
   dyn <- dynamics(mat, dd, envstoch)
