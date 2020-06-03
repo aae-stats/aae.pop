@@ -31,6 +31,8 @@
 #'       which specifies lambda for Poisson random draws. The default
 #'       initialisation function is defined by
 #'       \code{options()$aae.pop_initialisation}.
+#' @param \dots currently ignored, included for consistency with simulate
+#'   generic
 #'
 #' @details
 #'
@@ -46,7 +48,8 @@ simulate.dynamics <- function(object,
                               nsim = 1,
                               seed = NULL,
                               init = NULL,
-                              options = list()) {
+                              options = list(),
+                              ...) {
   # nolint end
 
   # set default options for simulation
