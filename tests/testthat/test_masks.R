@@ -99,7 +99,7 @@ test_that("masks combine correctly as matrices", {
   target <- row(mat) == col(mat) |
     (row(mat) == 1 & col(mat) > 3)
   class(target) <- c("mask", "matrix")
-  expect_equal(value, target)
+  expect_equivalent(value, target)
 
 })
 
@@ -109,7 +109,7 @@ test_that("masks combine correctly as functions", {
   value <- combine(reproduction, survival)(mat)
   target <- row(mat) == col(mat) | row(mat) == 1
   class(target) <- c("mask", "matrix")
-  expect_equal(value, target)
+  expect_equivalent(value, target)
 
 })
 
@@ -124,13 +124,13 @@ test_that("combining masks errors informatively for inappropriate classes", {
   # errors if given combo including non-mask/function
   expect_error(
     combine(reproduction(mat), matrix(1:10)),
-    "combine is not defined for objects of class matrix"
+    "combine is not defined for mask objects combined with objects of class matrix"
   )
 
   # errors if given combo including non-mask
   expect_error(
     combine(reproduction, matrix(1:10)),
-    "combine is not defined for objects of class matrix"
+    "combine is not defined for function objects combined with objects of class matrix"
   )
 
 })

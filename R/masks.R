@@ -101,8 +101,12 @@ combine.mask <- function(...) {
   classes <- sapply(dots, function(x) class(x)[1])
 
   # error if classes not OK
-  if (!all(classes == "mask"))
-    combine(dots[classes != "mask"])
+  if (!all(classes == "mask")) {
+    stop("combine is not defined for mask objects combined with ",
+         "objects of class ",
+         clean_paste(classes[!(classes %in% c("mask"))]),
+         call. = FALSE)
+  }
 
   # return combined mask if all OK
   masks <- abind::abind(dots, along = 3)
@@ -122,8 +126,12 @@ combine.function <- function(...) {
   classes <- sapply(dots, function(x) class(x)[1])
 
   # error if classes not OK
-  if (!all(classes == "function"))
-    combine(dots[classes != "function"])
+  if (!all(classes == "function")) {
+    stop("combine is not defined for function objects combined with ",
+         "objects of class ",
+         clean_paste(classes[!(classes %in% c("function"))]),
+         call. = FALSE)
+  }
 
   # return function if all OK
   function(matrix, dims = NULL) {
@@ -146,9 +154,11 @@ combine.default <- function(...) {
   # check classes of all dots
   classes <- sapply(dots, function(x) class(x)[1])
 
+  # error and tell user which class was passed
   stop("combine is not defined for objects of class ",
        clean_paste(classes[!(classes %in% c("mask", "function"))]),
        call. = FALSE)
+
 }
 
 # internal function: set mask class
