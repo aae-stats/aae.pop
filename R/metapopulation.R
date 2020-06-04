@@ -56,7 +56,7 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   # create block diagonal with dynamics matrices
   if (any(dyn_check$covars)) {
     metapop_matrix <- lapply(
-      seq_len(dynamics$ntime),
+      seq_len(dyn_check$ntime),
       function(i) block_diagonal(lapply(dynamics, function(x) x$matrix[[i]]))
     )
   } else {
@@ -367,6 +367,16 @@ add_dispersal <- function(mat,
       mat <- lapply(mat, do_mask, mask = idx, fun = function(x) dispersal[[i]]$kernel)
     } else {
       mat <- do_mask(mat, mask = idx, function(x) dispersal[[i]]$kernel)
+    }
+
+    # pull out the from population, add dispersal, and check proportion surviving
+    idy <- metapop_idx(mat, nstage, from = str_cols[i], to = str_rows[i])
+    total <- mat[idy] + mat[idx]
+    total[reproduction(total, dims = 2:ncol(total))] <- 0
+    total_survival <- apply(total, 2, sum)
+    if (any(total_survival) > 1) {
+      message("Survival (including dispersal) exceeds 1 for classes ",
+              clean_paste(which(total_survival > 1)))
     }
 
   }
