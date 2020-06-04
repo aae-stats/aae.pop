@@ -233,6 +233,7 @@ update_binomial <- function(pop, mat) {
   # counts needs to be numbers in classes 1:(nstage-1),
   #  with nstage count added to last one
   #  not quite -- needs to be counts in classes aligned with rows??
+  nstage <- nrow(mat)
 
   # surv_vec needs to be survival summed over all ways to get into a class
   surv_vec <- NULL

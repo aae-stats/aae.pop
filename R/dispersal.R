@@ -8,6 +8,7 @@ NULL
 #'
 #' @export
 #'
+#' @param kernel djkfd
 #' @param stochasticity_masks dfds
 #' @param stochasticity_funs dfds
 #' @param density_masks dfds

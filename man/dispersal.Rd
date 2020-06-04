@@ -13,6 +13,8 @@ dispersal(
 )
 }
 \arguments{
+\item{kernel}{djkfd}
+
 \item{stochasticity_masks}{dfds}
 
 \item{stochasticity_funs}{dfds}
