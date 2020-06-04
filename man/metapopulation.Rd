@@ -6,7 +6,22 @@
 \usage{
 metapopulation(structure, dynamics, dispersal, ...)
 }
+\arguments{
+\item{structure}{djkfd}
+
+\item{dynamics}{dkjfd}
+
+\item{dispersal}{dkfjd}
+
+\item{\dots}{djfkd}
+}
 \description{
 Define population dynamics for multiple populations of
   a single species linked by dispersal.
+}
+\details{
+djkfdj
+}
+\examples{
+# do stuff
 }
