@@ -371,7 +371,7 @@ add_dispersal <- function(mat,
       # and check survival
       lapply(
         seq_along(mat),
-        function(j) check_survival(mat[[j]], nstage, str_cols[i], timestep = j)
+        function(j) check_survival(mat[[j]], nstage, str_cols[i], idx, timestep = j)
       )
 
     } else {
@@ -383,7 +383,7 @@ add_dispersal <- function(mat,
       mat <- do_mask(mat, mask = idx, function(x) dispersal[[i]]$kernel)
 
       # and check survival
-      check_survival(mat, nstage, str_cols[i])
+      check_survival(mat, nstage, str_cols[i], idx)
 
     }
 
@@ -412,7 +412,7 @@ metapop_idx <- function(mat, nstage, from, to) {
 }
 
 # internal function: check implied survival with dispersal
-check_survival <- function(mat, nstage, col, timestep = NULL) {
+check_survival <- function(mat, nstage, col, idx, timestep = NULL) {
 
   # pull out the from population, add dispersal, and check proportion surviving
   idy <- metapop_idx(mat, nstage, from = col, to = col)
