@@ -188,7 +188,7 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   )
 
   # return metapopulation object
-  as_metapopulation(metapop_dynamics)
+  as_metapopulation(as_dynamics(metapop_dynamics))
 
 }
 
@@ -394,5 +394,5 @@ metapop_idx <- function(mat, nstage, from, to) {
 
 # internal function: set metapopulation class
 as_metapopulation <- function(x) {
-  as_class(x, name = "metapopulation", type = "list")
+  as_class(x, name = "metapopulation", type = "dynamics")
 }

@@ -40,7 +40,7 @@ hex_id <- function() {
 as_class <- function(
   object,
   name,
-  type = c("function", "list", "matrix", "array")
+  type = c("function", "list", "matrix", "array", "dynamics")
 ) {
 
   type <- match.arg(type)
