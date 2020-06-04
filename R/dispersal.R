@@ -17,49 +17,56 @@ NULL
 #'
 #' @examples
 #' # add
-dispersal <- function(stochasticity_masks,
-                      stochasticity_funs,
-                      density_masks,
-                      density_funs) {
+dispersal <- function(kernel,
+                      stochasticity_masks = NULL,
+                      stochasticity_funs = NULL,
+                      density_masks = NULL,
+                      density_funs = NULL) {
 
-  if (is.list(stochasticity_masks)) {
-    stoch_fn <- function(x) {
-      for (i in seq_along(stochasticity_masks)) {
-        x[stochasticity_masks[[i]]] <-
-          stochasticity_funs[[i]](x[stochasticity_masks[[i]]])
+  # check kernel
+  if (!is.matrix(kernel))
+    stop("kernel must be a two dimensional matrix", call. = FALSE)
+
+  # define functions to calculate stochasticity for each element
+  if (!is.null(stochasticity_masks)) {
+    if (is.list(stochasticity_masks)) {
+      stoch_fn <- function(x) {
+        for (i in seq_along(stochasticity_masks))
+          x <- do_mask(x, stochasticity_masks[[i]], stochasticity_funs[[i]])
+        x
       }
-      x
-    }
-  } else {
-    stoch_fn <- function(x) {
-      x[stochasticity_masks] <-
-        stochasticity_funs(x[stochasticity_masks])
-      x
+    } else {
+      stoch_fn <- function(x) {
+        do_mask(x, stochasticity_masks, stochasticity_funs)
+      }
     }
   }
 
-  if (is.list(density_masks)) {
-    dens_fn <- function(x) {
-      for (i in seq_along(density_masks)) {
-        x[density_masks[[i]]] <-
-          density_funs[[i]](x[density_masks[[i]]])
+  # define functions to calculate density dependence for each element
+  #   based on vector of abundances in the source and destination pops
+  if (!is.null(density_masks)) {
+    if (is.list(density_masks)) {
+      dens_fn <- function(x, nsource, ndestination) {
+        for (i in seq_along(density_masks))
+          x <- do_mask(x, density_masks[[i]], density_funs[[i]], nsource, ndestination)
+        x
       }
-      x
-    }
-  } else {
-    dens_fn <- function(x) {
-      x[density_masks] <-
-        density_funs(x[density_masks])
-      x
+    } else {
+      dens_fn <- function(x, nsource, ndestination) {
+        do_mask(x, density_masks, density_funs, nsource, ndestination)
+      }
     }
   }
 
-  fn_list <- list(
+  # collate output into a list
+  dispersal <- list(
+    kernel = kernel,
     stochasticity = stoch_fn,
     density = dens_fn
   )
 
-  as_dispersal(fn_list)
+  # and return as dispersal object
+  as_dispersal(dispersal)
 
 }
 

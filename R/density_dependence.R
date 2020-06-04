@@ -32,13 +32,12 @@ density_dependence <- function(masks, funs) {
   if (is.list(masks)) {
     fn <- function(x, n) {
       for (i in seq_along(masks))
-        x[masks[[i]]] <- funs[[i]](x[masks[[i]]], n)
+        x <- do_mask(x, masks[[i]], funs[[i]], n)
       x
     }
   } else {
     fn <- function(x, n) {
-        x[masks] <- funs(x[masks], n)
-        x
+      do_mask(x, masks, funs, n)
     }
   }
 
@@ -59,13 +58,12 @@ density_dependence_n <- function(masks, funs) {
   if (is.list(masks)) {
     fn <- function(pop_t) {
       for (i in seq_along(masks))
-        pop_t[masks[[i]]] <- funs[[i]](pop_t[masks[[i]]])
+        pop_t <- do_mask(pop_t, masks[[i]], funs[[i]])
       pop_t
     }
   } else {
     fn <- function(pop_t) {
-      pop_t[masks] <- funs(pop_t[masks])
-      pop_t
+      do_mask(pop_t, masks, funs)
     }
   }
 

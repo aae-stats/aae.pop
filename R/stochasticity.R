@@ -22,13 +22,12 @@ environmental_stochasticity <- function(masks, funs) {
   if (is.list(masks)) {
     fn <- function(x) {
       for (i in seq_along(masks))
-        x[masks[[i]]] <- funs[[i]](x[masks[[i]]])
+        x <- do_mask(x, masks[[i]], funs[[i]])
       x
     }
   } else {
     fn <- function(x) {
-      x[masks] <- funs(x[masks])
-      x
+      do_mask(x, masks, funs)
     }
   }
 
@@ -49,11 +48,12 @@ demographic_stochasticity <- function(masks, funs) {
   if (is.list(masks)) {
     fn <- function(x) {
       for (i in seq_along(masks))
-        x[masks[[i]]] <- funs[[i]](x[masks[[i]]])
+        x <- do_mask(x, masks[[i]], funs[[i]])
+      x
     }
   } else {
     fn <- function(x) {
-      x[masks] <- funs(x[masks])
+      do_mask(x, masks, funs)
     }
   }
 

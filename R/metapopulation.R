@@ -22,9 +22,17 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   # check the structure is ok
   structure <- check_structure(structure)
 
+  # check dispersal is provided
+  if (missing(dispersal))
+    stop("dispersal must be provided to define a metapopulation", call. = FALSE)
+
   # check dispersal is OK
   if (length(dispersal) != structure$ndispersal)
     stop("dispersal must have one element for each non-zero element of structure", call. = FALSE)
+
+  # and convert dispersal to list if needed
+  if (structure$ndispersal == 1 & class(dispersal)[1] == "dispersal")
+    dispersal <- list(dispersal)
 
   # dynamics can be a list of length npop or a single matrix,
   #   expand if single matrix
@@ -94,24 +102,9 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   }
 
   # add dispersal to off-diagonal elements where structure == 1
-  str_rows <- row(structure$structure)[structure$structure]
-  str_cols <- col(structure$structure)[structure$structure]
-  for (i in seq_len(structure$ndispersal)) {
-    row_subset <-
-      ((str_rows[i] - 1) * dyn_check$nstage + 1):(str_rows[i] * dyn_check$nstage)
-    col_subset <-
-      ((str_cols[i] - 1) * dyn_check$nstage + 1):(str_cols[i] * dyn_check$nstage)
-    idx <- row(metapop_matrix) %in% row_subset &
-      col(metapop_matrix) %in% col_subset
-
-    # loop if we have a list of matrices (i.e. if covariates are included)
-    if (is.list(metapop_matrix)) {
-      for (j in seq_along(metapop_matrix))
-        metapop_matrix[[j]][idx] <- dispersal[[i]]
-    } else {
-      metapop_matrix[idx] <- dispersal[[i]]
-    }
-  }
+  metapop_matrix <- add_dispersal(
+    metapop_matrix, structure, dispersal, dyn_check$nstage
+  )
 
   # collate metapop object with expanded dynamics
   metapop_dynamics <- list(
@@ -246,6 +239,49 @@ block_diagonal <- function(mats) {
 
   # return
   mat
+
+}
+
+# internal function: add dispersal elements to metapopulation matrix
+add_dispersal <- function(mat, structure, dispersal, nstage) {
+
+  # work out the populations corresponding to each dispersal
+  str_rows <- row(structure$structure)[structure$structure]
+  str_cols <- col(structure$structure)[structure$structure]
+
+  # and loop through all dispersals, updating metapop matrix one-by-one
+  for (i in seq_len(structure$ndispersal)) {
+
+    # work out which cells we need to update
+    idx <- metapop_idx(mat, nstage, from = str_cols[i], to = str_rows[i])
+
+    # loop if we have a list of matrices (i.e. if covariates are included)
+    if (is.list(mat)) {
+      mat <- lapply(mat, do_mask, mask = idx, fun = function(x) dispersal[[i]]$kernel)
+    } else {
+      mat <- do_mask(mat, mask = idx, function(x) dispersal[[i]]$kernel)
+    }
+
+  }
+
+  # return
+  mat
+
+}
+
+# internal function: define masks for metapopulations based on pop IDs
+metapop_idx <- function(mat, nstage, from, to) {
+
+  # work out which rows correspond to "to"
+  row_subset <-
+    ((to - 1) * nstage + 1):(to * nstage)
+
+  # work out which cols correspond to "from"
+  col_subset <-
+    ((from - 1) * nstage + 1):(from * nstage)
+
+  # return cell subset
+  row(mat) %in% row_subset & col(mat) %in% col_subset
 
 }
 
