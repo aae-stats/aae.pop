@@ -82,8 +82,13 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
 
   # define masks for each dispersal element
   dispersal_masks <- lapply(
-    dispersal,
-    function(i) metapop_idx(metapop_matrix, dyn_check$nstage, from = str_cols[i], to = str_rows[i])
+    seq_along(dispersal),
+    function(i) metapop_idx(
+      metapop_matrix,
+      dyn_check$nstage,
+      from = str_cols[i],
+      to = str_rows[i]
+    )
   )
 
   # add in environmental stochasticity if included in any populations
