@@ -256,16 +256,16 @@ check_dynamics <- function(dyn_list) {
   covars <- check_processes(dyn_list, type = "covariates")
 
   # check environmental_stochasticity
-  envstoch <- check_processes(envstoch, type = "environmental_stochasticity")
+  envstoch <- check_processes(dyn_list, type = "environmental_stochasticity")
 
   # check demographic_stochasticity
-  demostoch <- check_processes(envstoch, type = "demographic_stochasticity")
+  demostoch <- check_processes(dyn_list, type = "demographic_stochasticity")
 
   # check density_dependence
-  dens_depend <- check_processes(envstoch, type = "density_dependence")
+  dens_depend <- check_processes(dyn_list, type = "density_dependence")
 
   # check density_dependence_n
-  dens_depend_n <- check_processes(envstoch, type = "density_dependence_n")
+  dens_depend_n <- check_processes(dyn_list, type = "density_dependence_n")
 
   # return
   list(
