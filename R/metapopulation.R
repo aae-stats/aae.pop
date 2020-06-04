@@ -416,7 +416,7 @@ check_survival <- function(mat, nstage, col, idx, timestep = NULL) {
 
   # pull out the from population, add dispersal, and check proportion surviving
   idy <- metapop_idx(mat, nstage, from = col, to = col)
-  total <- mat[idy] + mat[idx]
+  total <- matrix(mat[idy] + mat[idx], ncol = ncol(mat))
   total[reproduction(total, dims = 2:ncol(total))] <- 0
   total_survival <- apply(total, 2, sum)
   if (any(total_survival) > 1) {
