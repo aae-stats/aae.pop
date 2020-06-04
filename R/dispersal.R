@@ -74,4 +74,3 @@ dispersal <- function(kernel,
 as_dispersal <- function(x) {
   as_class(x, name = "dispersal", type = "list")
 }
-

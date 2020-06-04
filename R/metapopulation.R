@@ -22,17 +22,8 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   # check the structure is ok
   structure <- check_structure(structure)
 
-  # check dispersal is provided
-  if (missing(dispersal))
-    stop("dispersal must be provided to define a metapopulation", call. = FALSE)
-
-  # check dispersal is OK
-  if (length(dispersal) != structure$ndispersal)
-    stop("dispersal must have one element for each non-zero element of structure", call. = FALSE)
-
-  # and convert dispersal to list if needed
-  if (structure$ndispersal == 1 & class(dispersal)[1] == "dispersal")
-    dispersal <- list(dispersal)
+  # check dispersal is OK and convert to list if ndispersal = 1
+  dispersal <- check_dispersal(dispersal, structure$ndispersal)
 
   # dynamics can be a list of length npop or a single matrix,
   #   expand if single matrix
@@ -43,56 +34,27 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   # check list of dynamics objects is ok
   dyn_check <- check_dynamics(dynamics)
 
-  # expand environmental stochasticity if included
+  # expand covariates if included
   covars <- NULL
-  if (dyn_check$covars) {
+  if (any(dyn_check$covars)) {
 
-    # expand, account for some without if that's the case
-    covars <- lapply(dynamics, function(x) x$covariates)
-
-  }
-
-  # expand environmental stochasticity if included
-  envstoch <- NULL
-  if (dyn_check$envstoch) {
-
-    # expand, account for some without if that's the case
-
-    # maybe just need to make up new masks (one for each pop)
-    #  and then set masks = masks and funs = lapply(dynamics, function(x) x$environmental_stochasticity)
-
-    # include dispersal$stochasticity
-
-  }
-
-  # expand demographic stochasticity if included
-  demostoch <- NULL
-  if (dyn_check$demostoch) {
-
-    # expand, account for some without if that's the case
-
-  }
-
-  # expand density dependence if included
-  dens_depend <- NULL
-  if (dyn_check$dens_depend) {
-
-    # expand, account for some without if that's the case
-
-    # include dispersal$density
-
-  }
-
-  # expand rescale density dependence if included
-  dens_depend_n <- NULL
-  if (dyn_check$dens_depend_n) {
-
-    # expand, account for some without if that's the case
+    # if covars are missing from any populations, expand their matrix
+    if (!all(dyn_check$covars)) {
+      for (i in seq_along(dynamics)) {
+        if (!dyn_check$covars) {
+          dynamics[[i]]$matrix <- lapply(
+            seq_len(dyn_check$ntime),
+            function(x) dynamics[[i]]$matrix
+          )
+          dynamics[[i]]$ntime <- dyn_check$ntime
+        }
+      }
+    }
 
   }
 
   # create block diagonal with dynamics matrices
-  if (dyn_check$covars) {
+  if (any(dyn_check$covars)) {
     metapop_matrix <- lapply(
       seq_len(dynamics$ntime),
       function(i) block_diagonal(lapply(dynamics, function(x) x$matrix[[i]]))
@@ -102,9 +64,112 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   }
 
   # add dispersal to off-diagonal elements where structure == 1
+  str_rows <- row(structure$structure)[structure$structure]
+  str_cols <- col(structure$structure)[structure$structure]
   metapop_matrix <- add_dispersal(
-    metapop_matrix, structure, dispersal, dyn_check$nstage
+    metapop_matrix, str_rows, str_cols, dispersal, dyn_check$nstage
   )
+
+  # define masks for each population
+  mat_masks <- lapply(
+    seq_along(dynamics),
+    function(i) metapop_idx(metapop_matrix, dyn_check$nstage, from = i, to = i)
+  )
+  pop_masks <- lapply(
+    seq_along(dynamics),
+    function(i) ((i - 1) * dyn_check$nstage + 1):(i * dyn_check$nstage)
+  )
+
+  # define masks for each dispersal element
+  dispersal_masks <- lapply(
+    dispersal,
+    function(i) metapop_idx(
+      metapop_matrix,
+      dyn_check$nstage,
+      from = str_cols[i],
+      to = str_rows[i]
+    )
+  )
+
+  # add in environmental stochasticity if included in any populations
+  envstoch <- NULL
+  if (any(dyn_check$envstoch)) {
+
+    # pull out functions for all populations
+    env_funs <- lapply(dynamics, function(x) x$environmental_stochasticity)
+
+    # pull out non-NULL elements only
+    env_masks <- mat_masks[dyn_check$envstoch]
+    env_funs <- env_funs[dyn_check$envstoch]
+
+    # add in stochasticity for dispersal terms (if included)
+    dispersal_stoch <- lapply(dispersal, function(x) x$stochasticity)
+
+    # add non-NULL elements to masks and funs
+    missing <- sapply(dispersal_stoch, is.null)
+    env_masks <- c(env_masks, dispersal_masks[!missing])
+    env_funs <- c(env_funs, dispersal_stoch[!missing])
+
+    # create full environmental stochasticity component
+    envstoch <- environmental_stochasticity(env_masks, env_funs)
+
+  }
+
+  # expand demographic stochasticity if included
+  demostoch <- NULL
+  if (any(dyn_check$demostoch)) {
+
+    # pull out masks and functions for all populations
+    demo_funs <- lapply(dynamics, function(x) x$demographic_stochasticity)
+
+    # pull out non-NULL elements only
+    demo_masks <- pop_masks[dyn_check$demostoch]
+    demo_funs <- demo_funs[dyn_check$demostoch]
+
+    # create full demographic stochasticity component
+    demostoch <- demographic_stochasticity(demo_masks, demo_funs)
+
+  }
+
+  # expand density dependence if included
+  dens_depend <- NULL
+  if (any(dyn_check$dens_depend)) {
+
+    # pull out functions for all populations
+    dens_funs <- lapply(dynamics, function(x) x$density_dependence)
+
+    # pull out non-NULL elements only
+    dens_masks <- mat_masks[dyn_check$dens_depend]
+    dens_funs <- dens_funs[dyn_check$dens_depend]
+
+    # add in stochasticity for dispersal terms (if included)
+    dispersal_dens <- lapply(dispersal, function(x) x$density)
+
+    # add non-NULL elements to masks and funs
+    missing <- sapply(dispersal_dens, is.null)
+    dens_masks <- c(dens_masks, dispersal_masks[!missing])
+    dens_funs <- c(dens_funs, dispersal_dens[!missing])
+
+    # create full environmental stochasticity component
+    dens_depend <- environmental_stochasticity(dens_masks, dens_funs)
+
+  }
+
+  # expand rescale density dependence if included
+  dens_depend_n <- NULL
+  if (any(dyn_check$dens_depend_n)) {
+
+    # pull out masks and functions for all populations
+    dens_n_funs <- lapply(dynamics, function(x) x$density_dependence_n)
+
+    # pull out non-NULL elements only
+    dens_n_masks <- pop_masks[dyn_check$dens_depend_n]
+    dens_n_funs <- dens_n_funs[dyn_check$dens_depend_n]
+
+    # create full demographic stochasticity component
+    dens_depend_n <- density_dependence_n(dens_n_masks, dens_n_funs)
+
+  }
 
   # collate metapop object with expanded dynamics
   metapop_dynamics <- list(
@@ -159,6 +224,25 @@ check_structure <- function(x) {
 
 }
 
+# internal function: check dispersal object
+check_dispersal <- function(x, n) {
+
+  if (missing(x))
+    stop("dispersal must be provided to define a metapopulation", call. = FALSE)
+
+  # check dispersal is OK
+  if (length(x) != n)
+    stop("dispersal must have one element for each non-zero element of structure", call. = FALSE)
+
+  # and convert dispersal to list if needed
+  if (n == 1 & class(x)[1] == "dispersal")
+    x <- list(x)
+
+  # return checked and formatted output
+  x
+
+}
+
 # internal function: check list of dynamics object can be turned into
 #   metapopulation object
 check_dynamics <- function(dyn_list) {
@@ -168,56 +252,30 @@ check_dynamics <- function(dyn_list) {
   if (length(unique(stages)) != 1)
     stop("all populations in dynamics must have the same number of stages", call. = FALSE)
 
-  # pull out covariates
-  covars <- lapply(dyn_list, function(x) x$covariates)
-
-  # are there any at all?
-  if (all(sapply(covars, is.null))) {
-    covars <- FALSE
-    ntime <- 1
-  } else {
-
-    # if so, check they all have the same dimensions
-    ncovar <- sapply(covars, function(x) x$ntime)
-    if (length(unique(ncovar)) != 1)
-      stop("all populations in dynamics must have the same number of time steps", call. = FALSE)
-
-    # then if some are NULL and some are not, expand NULL matrices to lists
-    if (any(sapply(covars, is.null))) {
-      missing_covars <- sapply(covars, is.null)
-      for (i in seq_along(dyn_list[missing_covars])) {
-        dyn_list[[i]]$matrix <- lapply(seq_len(unique(covars)), function(x) dyn_list[[i]]$matrix)
-        dyn_list[[i]]$ntime <- unique(ncovar)
-      }
-    }
-
-    # set flag so we know we're dealing with lists of matrices
-    covars <- TRUE
-    ntime <- unique(ncovar)
-
-  }
+  # check covariates
+  covars <- check_processes(dyn_list, type = "covariates")
 
   # check environmental_stochasticity
-  envstoch <- FALSE
+  envstoch <- check_processes(envstoch, type = "environmental_stochasticity")
 
   # check demographic_stochasticity
-  demostoch <- FALSE
+  demostoch <- check_processes(envstoch, type = "demographic_stochasticity")
 
   # check density_dependence
-  dens_depend <- FALSE
+  dens_depend <- check_processes(envstoch, type = "density_dependence")
 
   # check density_dependence_n
-  dens_depend_n <- FALSE
+  dens_depend_n <- check_processes(envstoch, type = "density_dependence_n")
 
   # return
   list(
-    ntime = ntime,
+    ntime = covars$ntime,
     nstage = unique(stages),
-    covars = covars,
-    envstoch = envstoch,
-    demostoch = demostoch,
-    dens_depend = dens_depend,
-    dens_depend_n = dens_depend_n
+    covars = covars$included,
+    envstoch = envstoch$included,
+    demostoch = demostoch$included,
+    dens_depend = dens_depend$included,
+    dens_depend_n = dens_depend_n$included
   )
 
 }
@@ -242,15 +300,48 @@ block_diagonal <- function(mats) {
 
 }
 
-# internal function: add dispersal elements to metapopulation matrix
-add_dispersal <- function(mat, structure, dispersal, nstage) {
+# internal function: check processes from multiple dynamics objects
+check_processes <- function(x, type) {
 
-  # work out the populations corresponding to each dispersal
-  str_rows <- row(structure$structure)[structure$structure]
-  str_cols <- col(structure$structure)[structure$structure]
+  # pull out relevant process
+  procs <- lapply(x, function(x) x[[type]])
+
+  # check timesteps if dealing with covariates
+  ntime <- NULL
+  if (type == "covariates")
+    ntime <- check_timesteps(procs)
+
+  # assume none are included
+  included <- !sapply(procs, is.null)
+
+  # return flag
+  list(included = included,
+       ntime = ntime)
+
+}
+
+# internal function: check number of timesteps implied by covariates
+check_timesteps <- function(covs) {
+
+  # if so, check they all have the same dimensions
+  ncovar <- sapply(covs, function(x) x$ntime)
+  if (length(unique(covs)) != 1)
+    stop("all populations in dynamics must have the same number of time steps", call. = FALSE)
+
+  # return number of timesteps
+  unique(ncovar)
+
+}
+
+# internal function: add dispersal elements to metapopulation matrix
+add_dispersal <- function(mat,
+                          str_rows,
+                          str_cols,
+                          dispersal,
+                          nstage) {
 
   # and loop through all dispersals, updating metapop matrix one-by-one
-  for (i in seq_len(structure$ndispersal)) {
+  for (i in seq_along(dispersal)) {
 
     # work out which cells we need to update
     idx <- metapop_idx(mat, nstage, from = str_cols[i], to = str_rows[i])
