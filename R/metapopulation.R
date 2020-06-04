@@ -359,25 +359,34 @@ add_dispersal <- function(mat,
   # and loop through all dispersals, updating metapop matrix one-by-one
   for (i in seq_along(dispersal)) {
 
-    # work out which cells we need to update
-    idx <- metapop_idx(mat, nstage, from = str_cols[i], to = str_rows[i])
-
     # loop if we have a list of matrices (i.e. if covariates are included)
     if (is.list(mat)) {
+
+      # work out which cells we need to update (all matrices should have identical dims)
+      idx <- metapop_idx(mat[[1]], nstage, from = str_cols[i], to = str_rows[i])
+
+      # and add in dispersal bits
       mat <- lapply(mat, do_mask, mask = idx, fun = function(x) dispersal[[i]]$kernel)
+
+      # and check survival
+      lapply(
+        seq_along(mat),
+        function(j) check_survival(mat[[j]], nstage, str_cols[i], timestep = j)
+      )
+
     } else {
+
+      # work out which cells we need to update
+      idx <- metapop_idx(mat, nstage, from = str_cols[i], to = str_rows[i])
+
+      # and add in dispersal bits
       mat <- do_mask(mat, mask = idx, function(x) dispersal[[i]]$kernel)
+
+      # and check survival
+      check_survival(mat, nstage, str_cols[i])
+
     }
 
-    # pull out the from population, add dispersal, and check proportion surviving
-    idy <- metapop_idx(mat, nstage, from = str_cols[i], to = str_rows[i])
-    total <- mat[idy] + mat[idx]
-    total[reproduction(total, dims = 2:ncol(total))] <- 0
-    total_survival <- apply(total, 2, sum)
-    if (any(total_survival) > 1) {
-      message("Survival (including dispersal) exceeds 1 for classes ",
-              clean_paste(which(total_survival > 1)))
-    }
 
   }
 
@@ -399,6 +408,27 @@ metapop_idx <- function(mat, nstage, from, to) {
 
   # return cell subset
   row(mat) %in% row_subset & col(mat) %in% col_subset
+
+}
+
+# internal function: check implied survival with dispersal
+check_survival <- function(mat, nstage, col, timestep = NULL) {
+
+  # pull out the from population, add dispersal, and check proportion surviving
+  idy <- metapop_idx(mat, nstage, from = col, to = col)
+  total <- mat[idy] + mat[idx]
+  total[reproduction(total, dims = 2:ncol(total))] <- 0
+  total_survival <- apply(total, 2, sum)
+  if (any(total_survival) > 1) {
+    if (is.null(timestep)) {
+      message("Survival (including dispersal) exceeds 1 for classes ",
+              clean_paste(which(total_survival > 1)), "\n")
+    } else {
+      message("Survival (including dispersal) exceeds 1 for classes ",
+              clean_paste(which(total_survival > 1)),
+              "in timestep ", timestep, "\n")
+    }
+  }
 
 }
 
