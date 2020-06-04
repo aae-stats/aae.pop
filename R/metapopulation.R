@@ -67,7 +67,7 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   str_rows <- row(structure$structure)[structure$structure]
   str_cols <- col(structure$structure)[structure$structure]
   metapop_matrix <- add_dispersal(
-    metapop_matrix, str_rows, str_cols, dispersal, dyn_check$nstage
+    metapop_matrix, str_rows, str_cols, dispersal, dyn_check$nclass
   )
 
   # define masks for each population
@@ -76,11 +76,11 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
     mat_skeleton <- mat_skeleton[[1]]
   mat_masks <- lapply(
     seq_len(structure$npop),
-    function(i) metapop_idx(mat_skeleton, dyn_check$nstage, from = i, to = i)
+    function(i) metapop_idx(mat_skeleton, dyn_check$nclass, from = i, to = i)
   )
   pop_masks <- lapply(
     seq_len(structure$npop),
-    function(i) ((i - 1) * dyn_check$nstage + 1):(i * dyn_check$nstage)
+    function(i) ((i - 1) * dyn_check$nclass + 1):(i * dyn_check$nclass)
   )
 
   # define masks for each dispersal element
@@ -88,7 +88,7 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
     seq_len(structure$ndispersal),
     function(i) metapop_idx(
       mat_skeleton,
-      dyn_check$nstage,
+      dyn_check$nclass,
       from = str_cols[i],
       to = str_rows[i]
     )
@@ -177,7 +177,7 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   # collate metapop object with expanded dynamics
   metapop_dynamics <- list(
     ntime = dyn_check$ntime,
-    nclass = nrow(metapop_matrix),
+    nclass = dyn_check$nclass,
     npopulation = structure$npop,
     nspecies = 1,
     hex = hex_id(),
@@ -250,10 +250,10 @@ check_dispersal <- function(x, n) {
 #   metapopulation object
 check_dynamics <- function(dyn_list) {
 
-  # do all elements have the same number of stages?
-  stages <- sapply(dyn_list, function(x) x$nclass)
-  if (length(unique(stages)) != 1)
-    stop("all populations in dynamics must have the same number of stages", call. = FALSE)
+  # do all elements have the same number of classes?
+  classes <- sapply(dyn_list, function(x) x$nclass)
+  if (length(unique(classes)) != 1)
+    stop("all populations in dynamics must have the same number of classes", call. = FALSE)
 
   # check covariates
   covars <- check_processes(dyn_list, type = "covariates")
@@ -273,7 +273,7 @@ check_dynamics <- function(dyn_list) {
   # return
   list(
     ntime = covars$ntime,
-    nstage = unique(stages),
+    nclass = unique(classes),
     covars = covars$included,
     envstoch = envstoch$included,
     demostoch = demostoch$included,
@@ -357,7 +357,7 @@ add_dispersal <- function(mat,
                           str_rows,
                           str_cols,
                           dispersal,
-                          nstage) {
+                          nclass) {
 
   # and loop through all dispersals, updating metapop matrix one-by-one
   for (i in seq_along(dispersal)) {
@@ -366,27 +366,39 @@ add_dispersal <- function(mat,
     if (is.list(mat)) {
 
       # work out which cells we need to update (all matrices should have identical dims)
-      idx <- metapop_idx(mat[[1]], nstage, from = str_cols[i], to = str_rows[i])
+      idx <- metapop_idx(mat[[1]], nclass, from = str_cols[i], to = str_rows[i])
 
       # and add in dispersal bits
       mat <- lapply(mat, do_mask, mask = idx, fun = function(x) dispersal[[i]]$kernel)
 
       # and check survival
-      lapply(
+      survival_issue <- lapply(
         seq_along(mat),
-        function(j) check_survival(mat[[j]], nstage, str_cols[i], idx, timestep = j)
+        function(j) check_survival(mat[[j]], nclass, str_cols[i], idx, timestep = j)
       )
+      issue <- sapply(survival_issue, function(x) x$issue)
+      classes <- unlist(lapply(survival_issue, function(x) x$classes))
+      if (any(issue)) {
+        message("Survival (including dispersal) exceeds 1 for classes ",
+                clean_paste(unique(classes)),
+                " in timesteps ", clean_paste(which(issue)),
+                " for population ", i)
+      }
 
     } else {
 
       # work out which cells we need to update
-      idx <- metapop_idx(mat, nstage, from = str_cols[i], to = str_rows[i])
+      idx <- metapop_idx(mat, nclass, from = str_cols[i], to = str_rows[i])
 
       # and add in dispersal bits
       mat <- do_mask(mat, mask = idx, function(x) dispersal[[i]]$kernel)
 
       # and check survival
-      check_survival(mat, nstage, str_cols[i], idx)
+      survival_issue <- check_survival(mat, nclass, str_cols[i], idx)
+      if(survival_issue$issue) {
+        message("Survival (including dispersal) exceeds 1 for classes ",
+                clean_paste(survival_issue$classes))
+      }
 
     }
 
@@ -399,15 +411,15 @@ add_dispersal <- function(mat,
 }
 
 # internal function: define masks for metapopulations based on pop IDs
-metapop_idx <- function(mat, nstage, from, to) {
+metapop_idx <- function(mat, nclass, from, to) {
 
   # work out which rows correspond to "to"
   row_subset <-
-    ((to - 1) * nstage + 1):(to * nstage)
+    ((to - 1) * nclass + 1):(to * nclass)
 
   # work out which cols correspond to "from"
   col_subset <-
-    ((from - 1) * nstage + 1):(from * nstage)
+    ((from - 1) * nclass + 1):(from * nclass)
 
   # return cell subset
   row(mat) %in% row_subset & col(mat) %in% col_subset
@@ -415,23 +427,19 @@ metapop_idx <- function(mat, nstage, from, to) {
 }
 
 # internal function: check implied survival with dispersal
-check_survival <- function(mat, nstage, col, idx, timestep = NULL) {
+check_survival <- function(mat, nclass, col, idx, timestep = NULL) {
 
   # pull out the from population, add dispersal, and check proportion surviving
-  idy <- metapop_idx(mat, nstage, from = col, to = col)
-  total <- matrix(mat[idy] + mat[idx], ncol = nstage)
+  idy <- metapop_idx(mat, nclass, from = col, to = col)
+  total <- matrix(mat[idy] + mat[idx], ncol = nclass)
   total[reproduction(total, dims = 2:ncol(total))] <- 0
   total_survival <- apply(total, 2, sum)
-  if (any(total_survival > 1)) {
-    if (is.null(timestep)) {
-      message("Survival (including dispersal) exceeds 1 for classes ",
-              clean_paste(which(total_survival > 1)), "\n")
-    } else {
-      message("Survival (including dispersal) exceeds 1 for classes ",
-              clean_paste(which(total_survival > 1)),
-              "in timestep ", timestep, "\n")
-    }
-  }
+
+  # return TRUE to signal an issue with classes recorded
+  list(
+    issue = any(total_survival > 1),
+    classes = which(total_survival > 1)
+  )
 
 }
 
