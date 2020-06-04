@@ -71,20 +71,23 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   )
 
   # define masks for each population
+  mat_skeleton <- metapop_matrix
+  if (is.list(mat_skeleton))
+    mat_skeleton <- mat_skeleton[[1]]
   mat_masks <- lapply(
-    seq_along(dynamics),
-    function(i) metapop_idx(metapop_matrix, dyn_check$nstage, from = i, to = i)
+    seq_len(structure$npop),
+    function(i) metapop_idx(mat_skeleton, dyn_check$nstage, from = i, to = i)
   )
   pop_masks <- lapply(
-    seq_along(dynamics),
+    seq_len(structure$npop),
     function(i) ((i - 1) * dyn_check$nstage + 1):(i * dyn_check$nstage)
   )
 
   # define masks for each dispersal element
   dispersal_masks <- lapply(
-    seq_along(dispersal),
+    seq_len(structure$ndispersal),
     function(i) metapop_idx(
-      metapop_matrix,
+      mat_skeleton,
       dyn_check$nstage,
       from = str_cols[i],
       to = str_rows[i]
@@ -416,10 +419,10 @@ check_survival <- function(mat, nstage, col, idx, timestep = NULL) {
 
   # pull out the from population, add dispersal, and check proportion surviving
   idy <- metapop_idx(mat, nstage, from = col, to = col)
-  total <- matrix(mat[idy] + mat[idx], ncol = ncol(mat))
+  total <- matrix(mat[idy] + mat[idx], ncol = nstage)
   total[reproduction(total, dims = 2:ncol(total))] <- 0
   total_survival <- apply(total, 2, sum)
-  if (any(total_survival) > 1) {
+  if (any(total_survival > 1)) {
     if (is.null(timestep)) {
       message("Survival (including dispersal) exceeds 1 for classes ",
               clean_paste(which(total_survival > 1)), "\n")
