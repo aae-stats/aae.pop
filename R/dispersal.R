@@ -29,6 +29,7 @@ dispersal <- function(kernel,
     stop("kernel must be a two dimensional matrix", call. = FALSE)
 
   # define functions to calculate stochasticity for each element
+  stoch_fn <- NULL
   if (!is.null(stochasticity_masks)) {
     if (is.list(stochasticity_masks)) {
       stoch_fn <- function(x) {
@@ -45,6 +46,7 @@ dispersal <- function(kernel,
 
   # define functions to calculate density dependence for each element
   #   based on vector of abundances in the source and destination pops
+  dens_fn <- NULL
   if (!is.null(density_masks)) {
     if (is.list(density_masks)) {
       dens_fn <- function(x, nsource, ndestination) {

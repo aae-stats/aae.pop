@@ -83,12 +83,7 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   # define masks for each dispersal element
   dispersal_masks <- lapply(
     dispersal,
-    function(i) metapop_idx(
-      metapop_matrix,
-      dyn_check$nstage,
-      from = str_cols[i],
-      to = str_rows[i]
-    )
+    function(i) metapop_idx(metapop_matrix, dyn_check$nstage, from = str_cols[i], to = str_rows[i])
   )
 
   # add in environmental stochasticity if included in any populations
@@ -323,10 +318,26 @@ check_processes <- function(x, type) {
 # internal function: check number of timesteps implied by covariates
 check_timesteps <- function(covs) {
 
-  # if so, check they all have the same dimensions
-  ncovar <- sapply(covs, function(x) x$ntime)
-  if (length(unique(covs)) != 1)
-    stop("all populations in dynamics must have the same number of time steps", call. = FALSE)
+  # which elements include covariates?
+  included <- !sapply(covs, is.null)
+
+  # only need to worry if covariates are included
+  #   in at least one population
+  if (any(included)) {
+
+    # pull out timesteps from included covariates objects
+    ncovar <- sapply(covs[included], function(x) x$ntime)
+
+    # check they all have the same dimensions
+    if (length(unique(covs)) != 1)
+      stop("all populations in dynamics must have the same number of time steps", call. = FALSE)
+
+  } else {
+
+    # otherwise can just set ncovar = 1 for all
+    ncovar <- 1
+
+  }
 
   # return number of timesteps
   unique(ncovar)
