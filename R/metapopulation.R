@@ -446,7 +446,6 @@ rescale_dispersal <- function(mat, nclass, cols, rows) {
     col_subset <-
       ((dispersers[i] - 1) * nclass + 1):(dispersers[i] * nclass)
     idy <- col(mat) %in% col_subset
-    kernels <- mat
     rows_sub <- rows[cols == dispersers[i]]
     target_rows <- NULL
     for (i in seq_along(target_rows)) {
@@ -455,15 +454,16 @@ rescale_dispersal <- function(mat, nclass, cols, rows) {
         ((target_rows[i] - 1) * nclass + 1):(target_rows[i] * nclass)
       )
     }
-    idz <- !(row(mat) %in% target_rows)
+    idz <- !(row(mat) %in% target_rows) & col(mat) %in% col_subset
     off_target <- mat[idz]
-    kernels[off_target] <- 0
+    kernels <- mat
+    kernels[idz] <- 0
     kernels <- matrix(kernels[idy], ncol = nclass)
 
     # work out proportion available, excluding fecundity
-    rep_rows <- options()$aae.pop_reproduction_mask(source)
-    reprod <- source[rep_rows]
-    source[rep_rows] <- 0
+    idr <- options()$aae.pop_reproduction_mask(source)
+    reprod <- source[idr]
+    source[idr] <- 0
     available <- apply(source, 2, sum)
 
     # work out proportion leaving
@@ -477,7 +477,7 @@ rescale_dispersal <- function(mat, nclass, cols, rows) {
     source <- sweep(source, 2, remain, "*")
 
     # add fecundity back in
-    source[idz] <- reprod
+    source[idr] <- reprod
 
     # and update matrix, kernels first because they have zeros
     #   in the source population elements
