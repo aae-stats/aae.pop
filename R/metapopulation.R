@@ -177,7 +177,7 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   # collate metapop object with expanded dynamics
   metapop_dynamics <- list(
     ntime = dyn_check$ntime,
-    nclass = dyn_check$nclass,
+    nclass = dyn_check$nclass * structure$npop,
     npopulation = structure$npop,
     nspecies = 1,
     hex = hex_id(),
@@ -191,7 +191,7 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
   )
 
   # return metapopulation object
-  as_metapopulation(as_dynamics(metapop_dynamics))
+  as_metapopulation(metapop_dynamics)
 
 }
 
@@ -445,5 +445,13 @@ check_survival <- function(mat, nclass, col, idx, timestep = NULL) {
 
 # internal function: set metapopulation class
 as_metapopulation <- function(x) {
+
+  # it should just be a list coming in but we want it to be a
+  #   dynamics object. This will check it's a list and add
+  #   the dynamics class.
+  x <- as_dynamics(x)
+
+  # return
   as_class(x, name = "metapopulation", type = "dynamics")
+
 }
