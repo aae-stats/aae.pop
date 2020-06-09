@@ -5,12 +5,31 @@
 \alias{pairwise_interaction}
 \title{Create a population dynamics object with multiple species}
 \usage{
-multispecies(interactions, ...)
+multispecies(...)
 
-pairwise_interaction(target, cause, masks, funs)
+pairwise_interaction(target, source, masks, funs)
+}
+\arguments{
+\item{\dots}{\code{pairwise_interaction} objects defining all
+pairwise interactions of interest}
+
+\item{target}{population whose vital rates are affected by the
+pairwise interaction}
+
+\item{source}{population whose abundances affect the vital rates
+of \code{target}}
+
+\item{masks}{masks defining which vital rates are influenced by
+each function}
+
+\item{funs}{functions that take vital rates and abundances of the
+\code{source} population as inputs and return scaled vital rates}
 }
 \description{
 Define population dynamics for multiple species from
   a set of single-species \code{\link{dynamics}} objects and
   defined pairwise interactions.
+}
+\details{
+DKLDJF
 }

@@ -46,7 +46,7 @@ generic}
 Simulate single or multispecies population dynamics in R
 }
 \details{
-
+dfd
 }
 \examples{
 
