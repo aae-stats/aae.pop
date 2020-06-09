@@ -432,7 +432,7 @@ check_survival <- function(mat, nclass, col, idx, timestep = NULL) {
   # pull out the from population, add dispersal, and check proportion surviving
   idy <- metapop_idx(mat, nclass, from = col, to = col)
   total <- matrix(mat[idy] + mat[idx], ncol = nclass)
-  total[reproduction(total, dims = 2:ncol(total))] <- 0
+  total[options()$aae.pop_fecundity_mask(total)] <- 0
   total_survival <- apply(total, 2, sum)
 
   # return TRUE to signal an issue with classes recorded
