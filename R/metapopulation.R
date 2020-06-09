@@ -402,10 +402,72 @@ add_dispersal <- function(mat,
 
     }
 
+  }
+
+  # set up for rescale of dispersal and source
+  if (dispersal$proportion) {
+
+    if (is.list(mat)) {
+      mat <- lapply(mat, rescale_dispersal, nclass = nclass, str_cols = str_cols)
+    } else {
+      mat <- rescale_dispersal(mat, nclass, str_cols)
+    }
 
   }
 
   # return
+  mat
+
+}
+
+# internal function: rescale dispersal kernel and source matrices
+rescale_dispersal <- function(mat, nclass, cols) {
+
+  # work out how many dispersing from each population
+  n_disperse <- table(cols)
+  dispersers <- as.numeric(names(n_disperse))
+
+  # loop over each source population with active dispersers
+  for (i in seq_along(dispersers)) {
+
+    # pull out the source population
+    idx <- metapop_idx(mat, nclass, dispersers[i], dispersers[i])
+    source <- matrix(mat[idx], ncol = nclass)
+
+    # pull out the dispersing proportions, setting source pop to zero
+    col_subset <-
+      ((dispersers[i] - 1) * nclass + 1):(dispersers[i] * nclass)
+    idy <- col(mat) %in% col_subset
+    kernels <- mat
+    kernels[idx] <- 0
+    kernels <- matrix(kernels[idy], ncol = nclass)
+
+    # work out proportion availablem excluding fecundity
+    idz <- options()$aae.pop_reproduction_mask(source)
+    reprod <- source[idz]
+    source[idz] <- 0
+    available <- apply(source, 2, sum)
+
+    # work out proportion leaving
+    leave <- apply(kernels, 2, sum)
+
+    # work out proportion staying in source
+    remain <- 1 - leave
+
+    # update each accordingly
+    kernels <- sweep(kernels, 2, available, "*")
+    source <- sweep(source, 2, remain, "*")
+
+    # add fecundity back in
+    source[idz] <- reprod
+
+    # and update matrix, kernels first because they have zeros
+    #   in the source population elements
+    mat[idy] <- kernels
+    mat[idx] <- source
+
+  }
+
   mat
 
 }

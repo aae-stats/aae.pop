@@ -13,6 +13,9 @@ NULL
 #' @param stochasticity_funs dfds
 #' @param density_masks dfds
 #' @param density_funs dfds
+#' @param proportion logical indicating whether kernel is specified in absolute
+#'   probabilites or as a proportion of the source population (defaults
+#'   to \code{FALSE})
 #'
 #' @details something
 #'
@@ -22,7 +25,8 @@ dispersal <- function(kernel,
                       stochasticity_masks = NULL,
                       stochasticity_funs = NULL,
                       density_masks = NULL,
-                      density_funs = NULL) {
+                      density_funs = NULL,
+                      proportion = FALSE) {
 
   # check kernel
   if (!is.matrix(kernel))
@@ -65,58 +69,12 @@ dispersal <- function(kernel,
   dispersal <- list(
     kernel = kernel,
     stochasticity = stoch_fn,
-    density = dens_fn
+    density = dens_fn,
+    proportion = proportion
   )
 
   # and return as dispersal object
   as_dispersal(dispersal)
-
-}
-
-#' @rdname dispersal
-#'
-#' @export
-#'
-#' @param kernel kernel defined as a mask of proportions
-#' @param source population dynamics matrix for source population
-#'
-#' @details \code{dispersal_from_source} is a helper function to assist
-#'   with definitions of kernels and populations when dealing with
-#'   probabilities of dispersal. This function takes a kernel
-#'   of proportions and a population dynamics matrix for a source
-#'   population and automatically rescales both so that a fixed
-#'   proportion of the population leaves and/or remains in the
-#'   population at any time step. This function aims to avoid issues
-#'   where dispersal kernels are inappopriately defined, resulting
-#'   in unexpected creation or destruction of individuals at each
-#'   time step.
-dispersal_from_source <- function(kernel, source) {
-
-  # check dims match
-  if (!all.equal(dim(kernel), dim(source)))
-    stop("kernel and source must have identical dimensions", call. = FALSE)
-
-  # calculate total probabilities in source, excluding fecundity
-  idx <- options()$aae.pop_reproduction_mask(source)
-  reprod <- source[idx]
-  source[idx] <- 0
-  leave <- apply(source, 2, sum)
-
-  # work out proportion staying in source
-  remain <- 1 - apply(kernel, 2, sum)
-
-  # work out probability of leaving
-  kernel <- sweep(kernel, 2, leave, "*")
-
-  # and of remaining
-  source <- sweep(source, 2, remain, "*")
-
-  # add fecundity back in
-  source[idx] <- reprod
-
-  # and return both
-  list(kernel = kernel,
-       source = source)
 
 }
 
