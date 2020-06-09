@@ -371,7 +371,33 @@ add_dispersal <- function(mat,
       # and add in dispersal bits
       mat <- lapply(mat, do_mask, mask = idx, fun = function(x) dispersal[[i]]$kernel)
 
-      # and check survival
+    } else {
+
+      # work out which cells we need to update
+      idx <- metapop_idx(mat, nclass, from = str_cols[i], to = str_rows[i])
+
+      # and add in dispersal bits
+      mat <- do_mask(mat, mask = idx, function(x) dispersal[[i]]$kernel)
+
+    }
+
+  }
+
+  # rescale if needed
+  rescale_needed <- sapply(dispersal, function(x) x$proportion)
+  col_sub <- str_cols[rescale_needed]
+  row_sub <- str_rows[rescale_needed]
+  if (is.list(mat)) {
+    mat <- lapply(mat, rescale_dispersal, nclass, col_sub, row_sub)
+  } else {
+    mat <- rescale_dispersal(mat, nclass, col_sub, row_sub)
+  }
+
+  # and check survival doesn't exceed 1
+  for (i in seq_along(dispersal)) {
+
+    if (is.list(mat)) {
+
       survival_issue <- lapply(
         seq_along(mat),
         function(j) check_survival(mat[[j]], nclass, str_cols[i], idx, timestep = j)
@@ -387,13 +413,6 @@ add_dispersal <- function(mat,
 
     } else {
 
-      # work out which cells we need to update
-      idx <- metapop_idx(mat, nclass, from = str_cols[i], to = str_rows[i])
-
-      # and add in dispersal bits
-      mat <- do_mask(mat, mask = idx, function(x) dispersal[[i]]$kernel)
-
-      # and check survival
       survival_issue <- check_survival(mat, nclass, str_cols[i], idx)
       if (survival_issue$issue) {
         message("Survival (including dispersal) exceeds 1 for classes ",
@@ -404,24 +423,13 @@ add_dispersal <- function(mat,
 
   }
 
-  # set up for rescale of dispersal and source
-  if (dispersal$proportion) {
-
-    if (is.list(mat)) {
-      mat <- lapply(mat, rescale_dispersal, nclass = nclass, str_cols = str_cols)
-    } else {
-      mat <- rescale_dispersal(mat, nclass, str_cols)
-    }
-
-  }
-
   # return
   mat
 
 }
 
 # internal function: rescale dispersal kernel and source matrices
-rescale_dispersal <- function(mat, nclass, cols) {
+rescale_dispersal <- function(mat, nclass, cols, rows) {
 
   # work out how many dispersing from each population
   n_disperse <- table(cols)
@@ -434,18 +442,28 @@ rescale_dispersal <- function(mat, nclass, cols) {
     idx <- metapop_idx(mat, nclass, dispersers[i], dispersers[i])
     source <- matrix(mat[idx], ncol = nclass)
 
-    # pull out the dispersing proportions, setting source pop to zero
+    # pull out the dispersing proportions, setting non-target rows to zero
     col_subset <-
       ((dispersers[i] - 1) * nclass + 1):(dispersers[i] * nclass)
     idy <- col(mat) %in% col_subset
     kernels <- mat
-    kernels[idx] <- 0
+    rows_sub <- rows[cols == dispersers[i]]
+    target_rows <- NULL
+    for (i in seq_along(target_rows)) {
+      target_rows <- c(
+        target_rows,
+        ((target_rows[i] - 1) * nclass + 1):(target_rows[i] * nclass)
+      )
+    }
+    idz <- !(row(mat) %in% target_rows)
+    off_target <- mat[idz]
+    kernels[off_target] <- 0
     kernels <- matrix(kernels[idy], ncol = nclass)
 
-    # work out proportion availablem excluding fecundity
-    idz <- options()$aae.pop_reproduction_mask(source)
-    reprod <- source[idz]
-    source[idz] <- 0
+    # work out proportion available, excluding fecundity
+    rep_rows <- options()$aae.pop_reproduction_mask(source)
+    reprod <- source[rep_rows]
+    source[rep_rows] <- 0
     available <- apply(source, 2, sum)
 
     # work out proportion leaving
@@ -464,6 +482,7 @@ rescale_dispersal <- function(mat, nclass, cols) {
     # and update matrix, kernels first because they have zeros
     #   in the source population elements
     mat[idy] <- kernels
+    mat[idz] <- off_target
     mat[idx] <- source
 
   }
