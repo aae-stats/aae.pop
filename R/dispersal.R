@@ -80,7 +80,7 @@ dispersal <- function(kernel,
 #' @param kernel kernel defined as a mask of proportions
 #' @param source population dynamics matrix for source population
 #'
-#' @details \code{rescale_dispersal} is a helper function to assist
+#' @details \code{dispersal_from_source} is a helper function to assist
 #'   with definitions of kernels and populations when dealing with
 #'   probabilities of dispersal. This function takes a kernel
 #'   of proportions and a population dynamics matrix for a source
@@ -90,7 +90,7 @@ dispersal <- function(kernel,
 #'   where dispersal kernels are inappopriately defined, resulting
 #'   in unexpected creation or destruction of individuals at each
 #'   time step.
-rescale_dispersal <- function(kernel, source) {
+dispersal_from_source <- function(kernel, source) {
 
   # check dims match
   if (!all.equal(dim(kernel), dim(source)))

@@ -2,6 +2,7 @@
 % Please edit documentation in R/dispersal.R
 \name{dispersal}
 \alias{dispersal}
+\alias{dispersal_from_source}
 \title{Specify dispersal between populations in a metapopulation model}
 \usage{
 dispersal(
@@ -11,9 +12,11 @@ dispersal(
   density_masks = NULL,
   density_funs = NULL
 )
+
+dispersal_from_source(kernel, source)
 }
 \arguments{
-\item{kernel}{djkfd}
+\item{kernel}{kernel defined as a mask of proportions}
 
 \item{stochasticity_masks}{dfds}
 
@@ -22,6 +25,8 @@ dispersal(
 \item{density_masks}{dfds}
 
 \item{density_funs}{dfds}
+
+\item{source}{population dynamics matrix for source population}
 }
 \description{
 Specify disperal between populations, including stochasticity
@@ -29,6 +34,17 @@ Specify disperal between populations, including stochasticity
 }
 \details{
 something
+
+\code{dispersal_from_source} is a helper function to assist
+  with definitions of kernels and populations when dealing with
+  probabilities of dispersal. This function takes a kernel
+  of proportions and a population dynamics matrix for a source
+  population and automatically rescales both so that a fixed
+  proportion of the population leaves and/or remains in the
+  population at any time step. This function aims to avoid issues
+  where dispersal kernels are inappopriately defined, resulting
+  in unexpected creation or destruction of individuals at each
+  time step.
 }
 \examples{
 # add
