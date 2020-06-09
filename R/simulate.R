@@ -84,33 +84,37 @@ simulate.dynamics <- function(object,
 
   # initalise the population with init if provided, following
   #   options()$aae.pop_initialisation otherwise
-  pop <- initialise(object, opt, init)
+  pop <- initialise(object, opt, init, keep_slices = opt$keep_slices)
 
   # loop through timesteps, updating population at each timestep
   for (i in seq_len(opt$ntime)) {
 
     # split based on multispecies or single species
     if (object$nspecies > 1) {
-      pop[, , , i + 1] <- simulate_once_multispecies(
+      pop_tmp <- simulate_once_multispecies(
         iter = i,
         object,
         pop[, , , i],
         opt = opt
       )
+      if (opt$keep_slices)
+        pop[, , , i + 1] <- pop_tmp
     } else {
-      pop[, , i + 1] <- simulate_once(
+      pop_tmp <- simulate_once(
         iter = i,
         object,
         pop[, , i],
         opt = opt
       )
+      if (opt$keep_slices)
+        pop[, , i + 1] <- pop_tmp
     }
 
   }
 
   # do we want to keep intermediate abundances or just the final step?
   if (!opt$keep_slices)
-    pop <- pop[, , opt$ntime + 1]
+    pop <- pop_tmp
 
   # return
   as_simulation(pop)
@@ -252,7 +256,7 @@ update_binomial <- function(pop, mat) {
 }
 
 # internal function: initialise a simulation when inits not provided
-initialise <- function(obj, opt, init) {
+initialise <- function(obj, opt, init, keep_slices) {
 
   if (obj$nspecies > 1) {
     dims <- c(opt$replicates, obj$nclass, obj$nspecies, opt$ntime + 1)
@@ -304,6 +308,10 @@ initialise <- function(obj, opt, init) {
 
   pop <- array(NA, dim = dims)
   pop[seq_len(prod(dims[-ndim]))] <- init
+
+  # only return single slice (initials) if !keep_slices
+  if (!keep_slices)
+    pop <- array(pop[seq_len(prod(dims[-ndim]))], dims = dims[-ndim])
 
   pop
 
