@@ -395,7 +395,7 @@ add_dispersal <- function(mat,
 
       # and check survival
       survival_issue <- check_survival(mat, nclass, str_cols[i], idx)
-      if(survival_issue$issue) {
+      if (survival_issue$issue) {
         message("Survival (including dispersal) exceeds 1 for classes ",
                 clean_paste(survival_issue$classes))
       }
@@ -432,7 +432,7 @@ check_survival <- function(mat, nclass, col, idx, timestep = NULL) {
   # pull out the from population, add dispersal, and check proportion surviving
   idy <- metapop_idx(mat, nclass, from = col, to = col)
   total <- matrix(mat[idy] + mat[idx], ncol = nclass)
-  total[options()$aae.pop_fecundity_mask(total)] <- 0
+  total[options()$aae.pop_reproduction_mask(total)] <- 0
   total_survival <- apply(total, 2, sum)
 
   # return TRUE to signal an issue with classes recorded

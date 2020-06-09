@@ -27,7 +27,7 @@ NULL
   reproduction_default <- function(x) {
     reproduction(x, dims = 2:ncol(x))
   }
-  options(aae.pop_fecundity_mask = reproduction_default)
+  options(aae.pop_reproduction_mask = reproduction_default)
 
   # set default options for simulations
   options(aae.pop_ntime = 50,
