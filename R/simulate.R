@@ -34,7 +34,7 @@
 #' @param \dots currently ignored, included for consistency with simulate
 #'   generic
 #'
-#' @details
+#' @details dfd
 #'
 #' @examples
 #'
@@ -311,7 +311,7 @@ initialise <- function(obj, opt, init, keep_slices) {
 
   # only return single slice (initials) if !keep_slices
   if (!keep_slices)
-    pop <- array(pop[seq_len(prod(dims[-ndim]))], dims = dims[-ndim])
+    pop <- array(pop[seq_len(prod(dims[-ndim]))], dim = dims[-ndim])
 
   pop
 
