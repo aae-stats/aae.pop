@@ -385,12 +385,14 @@ add_dispersal <- function(mat,
 
   # rescale if needed
   rescale_needed <- sapply(dispersal, function(x) x$proportion)
-  col_sub <- str_cols[rescale_needed]
-  row_sub <- str_rows[rescale_needed]
-  if (is.list(mat)) {
-    mat <- lapply(mat, rescale_dispersal, nclass, col_sub, row_sub)
-  } else {
-    mat <- rescale_dispersal(mat, nclass, col_sub, row_sub)
+  if (any(rescale_needed)) {
+    col_sub <- str_cols[rescale_needed]
+    row_sub <- str_rows[rescale_needed]
+    if (is.list(mat)) {
+      mat <- lapply(mat, rescale_dispersal, nclass, col_sub, row_sub)
+    } else {
+      mat <- rescale_dispersal(mat, nclass, col_sub, row_sub)
+    }
   }
 
   # and check survival doesn't exceed 1
@@ -448,10 +450,10 @@ rescale_dispersal <- function(mat, nclass, cols, rows) {
     idy <- col(mat) %in% col_subset
     rows_sub <- rows[cols == dispersers[i]]
     target_rows <- NULL
-    for (i in seq_along(target_rows)) {
+    for (i in seq_along(rows_sub)) {
       target_rows <- c(
         target_rows,
-        ((target_rows[i] - 1) * nclass + 1):(target_rows[i] * nclass)
+        ((rows_sub[i] - 1) * nclass + 1):(rows_sub[i] * nclass)
       )
     }
     idz <- !(row(mat) %in% target_rows) & col(mat) %in% col_subset
