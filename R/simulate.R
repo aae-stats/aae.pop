@@ -195,12 +195,11 @@ simulate_once <- function(iter, obj, pop_t, opt) {
 simulate_once_multispecies <- function(iter,
                                        obj,
                                        pop_t,
-                                       nspecies,
                                        opt) {
 
   # calculate density effects of other species
   #   according to something save in obj (interaction matrix with fns?)
-  for (i in seq_len(nspecies)) {
+  for (i in seq_len(obj$nspecies)) {
 
     # pull out relevant object
     dynamics <- obj$dynamics[[i]]
