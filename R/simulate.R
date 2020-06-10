@@ -200,22 +200,90 @@ simulate_once_multispecies <- function(iter,
 
   # calculate density effects of other species
   #   according to something save in obj (interaction matrix with fns?)
+  for (i in seq_len(nspecies)) {
 
-  # initialise abundance array for next time step
-  pop_tp1 <- array(NA, dim = dim(pop_t))
+    # pull out relevant object
+    dynamics <- obj$dynamics[[i]]
 
-  # loop through species, updating one-by-one
-  for (j in seq_along(obj$nspecies)) {
+    # matrix will be a list if expanded over covariates
+    if (!is.null(dynamics$covariates)) {
+      mat <- dynamics$matrix[[iter]]
+    } else {
+      mat <- dynamics$matrix
+    }
 
-    # apply density rescaling
-    #  (don't recalculate dnesities here because will change
-    #   with each species update)
+    # rescale matrix according to interspecific interactions
+    if (!is.null(obj$interaction[[i]])) {
+      if (is_expanded) {
+        mat_list <- mapply(
+          obj$interaction[[i]],
+          mat_list,
+          lapply(seq_len(opt$replicates), function(j) pop_t[j, , ]),
+          SIMPLIFY = FALSE
+        )
+      } else {
+        mat_list <- lapply(
+          seq_len(opt$replicates),
+          function(j) obj$interaction[[i]](mat, pop_t[j, , ])
+        )
+        is_expanded <- TRUE
+      }
+    }
 
-    # update as above, accounting for DIMS of pop_t carefully
+    # draw stochastic matrix values if env stoch included,
+    #   setting a flag to change update step accordingly
+    is_expanded <- FALSE
+    if (!is.null(dynamics$environmental_stochasticity)) {
+      mat_list <- lapply(
+        seq_len(opt$replicates),
+        function(j) dynamics$environmental_stochasticity(mat)
+      )
+      is_expanded <- TRUE
+    }
 
+    # tweak matrix to account for density effects on vital rates,
+    #   accounting for previously expanded matrix
+    if (!is.null(dynamics$density_dependence)) {
+      if (is_expanded) {
+        mat_list <- mapply(
+          dynamics$density_dependence,
+          mat_list,
+          lapply(seq_len(opt$replicates), function(j) pop_t[j, , i]),
+          SIMPLIFY = FALSE
+        )
+      } else {
+        mat_list <- lapply(
+          seq_len(opt$replicates),
+          function(j) dynamics$density_dependence(mat, pop_t[j, , i])
+        )
+        is_expanded <- TRUE
+      }
+    }
+
+    # single-step update of abundances
+    if (is_expanded) {
+      pop_tp1[, , i] <- t(mapply(
+        options()$aae.pop_update,
+        lapply(seq_len(opt$replicates), function(j) pop_t[j, , i]),
+        mat_list
+      ))
+    } else {
+      pop_tp1[, , i] <- options()$aae.pop_update(pop_t[, , i], mat)
+    }
+
+    # tweak abundances to add stochastic variation in demographic
+    #   outcomes
+    if (!is.null(dynamics$demographic_stochasticity))
+      pop_tp1[, , i] <- t(apply(pop_tp1[, , i], 1, dynamics$demographic_stochasticity))
+
+    # final hit to abundances if they are rescaled based on biomass
+    #   constraints or similar
+    if (!is.null(dynamics$density_dependence_n))
+      pop_tp1[, , i] <- t(apply(pop_tp1[, , i], 1, dynamics$density_dependence_n))
 
   }
 
+  # return tidied abundances (e.g. rounded or floored values)
   opt$tidy_abundances(pop_tp1)
 
 }
