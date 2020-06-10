@@ -212,6 +212,8 @@ simulate_once_multispecies <- function(iter,
     }
 
     # rescale matrix according to interspecific interactions
+    #   setting a flag to change update step accordingly
+    is_expanded <- FALSE
     if (!is.null(obj$interaction[[i]])) {
       if (is_expanded) {
         mat_list <- mapply(
@@ -230,14 +232,19 @@ simulate_once_multispecies <- function(iter,
     }
 
     # draw stochastic matrix values if env stoch included,
-    #   setting a flag to change update step accordingly
-    is_expanded <- FALSE
     if (!is.null(dynamics$environmental_stochasticity)) {
-      mat_list <- lapply(
-        seq_len(opt$replicates),
-        function(j) dynamics$environmental_stochasticity(mat)
-      )
-      is_expanded <- TRUE
+      if (is_expanded) {
+        mat_list <- lapply(
+          mat_list,
+          function(x) dynamics$environmental_stochasticity(x)
+        )
+      } else {
+        mat_list <- lapply(
+          seq_len(opt$replicates),
+          function(j) dynamics$environmental_stochasticity(mat)
+        )
+        is_expanded <- TRUE
+      }
     }
 
     # tweak matrix to account for density effects on vital rates,

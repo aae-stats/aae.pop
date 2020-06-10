@@ -53,8 +53,8 @@ multispecies <- function(...) {
       source_sp <- match(sapply(dots[idx], function(x) x$source$hex), hex_list)
       interaction[[i]] <- function(x, n) {
         for (j in seq_along(idx))
-          out <- out + interaction_list[[idx[j]]](x, n[, source_sp[j]])
-        out
+          x <- interaction_list[[idx[j]]](x, n[, source_sp[j]])
+        x
       }
     } else {
       interaction[[i]] <- NULL
