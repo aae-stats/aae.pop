@@ -15,7 +15,7 @@ Maintainer: Jian Yen <jdl.yen@gmail.com>
 Description: Simulate multispecies population dynamics when vital rates
     are influenced by time-varying covariates, such as environmental
     conditions or the abundances of other species.
-License: file [LICENSE]
+License: Apache License 2.0 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
