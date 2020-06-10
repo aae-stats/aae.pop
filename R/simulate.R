@@ -147,12 +147,12 @@ simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE) {
   #   accounting for previously expanded matrix if multispecies
   if (!is.null(obj$environmental_stochasticity)) {
     if (is_expanded) {
-      mat_list <- lapply(
-        mat_list,
+      mat <- lapply(
+        mat,
         function(x) obj$environmental_stochasticity(x)
       )
     } else {
-      mat_list <- lapply(
+      mat <- lapply(
         seq_len(opt$replicates),
         function(j) obj$environmental_stochasticity(mat)
       )
@@ -164,14 +164,14 @@ simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE) {
   #   accounting for previously expanded matrix
   if (!is.null(obj$density_dependence)) {
     if (is_expanded) {
-      mat_list <- mapply(
+      mat <- mapply(
         obj$density_dependence,
-        mat_list,
+        mat,
         lapply(seq_len(opt$replicates), function(i) pop_t[i, ]),
         SIMPLIFY = FALSE
       )
     } else {
-      mat_list <- lapply(
+      mat <- lapply(
         seq_len(opt$replicates),
         function(i) obj$density_dependence(mat, pop_t[i, ])
       )
@@ -184,7 +184,7 @@ simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE) {
     pop_tp1 <- t(mapply(
       options()$aae.pop_update,
       lapply(seq_len(opt$replicates), function(i) pop_t[i, ]),
-      mat_list
+      mat
     ))
   } else {
     pop_tp1 <- options()$aae.pop_update(pop_t, mat)
@@ -230,21 +230,26 @@ simulate_once_multispecies <- function(iter,
     is_expanded <- FALSE
     if (!is.null(obj$interaction[[i]])) {
       if (is_expanded) {
-        mat_list <- mapply(
+        mat <- mapply(
           obj$interaction[[i]],
-          mat_list,
+          mat,
           lapply(seq_len(opt$replicates),
                  function(j) lapply(pop_t, function(x) x[j, ])),
           SIMPLIFY = FALSE
         )
       } else {
-        mat_list <- lapply(
+        mat <- lapply(
           seq_len(opt$replicates),
           function(j) obj$interaction[[i]](mat, lapply(pop_t, function(x) x[j, ]))
         )
         is_expanded <- TRUE
       }
     }
+
+    # include correct matrix in dynamics and set covariates to NULL
+    #   because it's already handled above
+    dynamics$matrix <- mat
+    dynamics$covariates <- NULL
 
     # update abundances of species i using single-species updater
     pop_tp[[i]] <- simulate_once(iter, dynamics, pop_t[[i]], opt, is_expanded = is_expanded)
