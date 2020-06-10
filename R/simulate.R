@@ -211,8 +211,11 @@ simulate_once_multispecies <- function(iter,
                                        pop_t,
                                        opt) {
 
-  # calculate density effects of other species
-  #   according to something save in obj (interaction matrix with fns?)
+  # initialise an output list
+  pop_tp1 <- vector("list", length = obj$nspecies)
+
+  # loop through each species, passing a matrix corrected for the
+  #   the density effects of other species to a single-species update
   for (i in seq_len(obj$nspecies)) {
 
     # pull out relevant object
@@ -252,7 +255,7 @@ simulate_once_multispecies <- function(iter,
     dynamics$covariates <- NULL
 
     # update abundances of species i using single-species updater
-    pop_tp[[i]] <- simulate_once(iter, dynamics, pop_t[[i]], opt, is_expanded = is_expanded)
+    pop_tp1[[i]] <- simulate_once(iter, dynamics, pop_t[[i]], opt, is_expanded = is_expanded)
 
   }
 
