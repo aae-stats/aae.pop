@@ -42,6 +42,7 @@ multispecies <- function(...) {
   interaction_list <- lapply(dots, function(x) x$interaction)
 
   # and collate these into a list with one element for each species
+  interaction <- vector("list", length = length(dynamicsa))
   for (i in seq_along(dynamics)) {
 
     # pull out relevant elements of fn_list
@@ -63,7 +64,8 @@ multispecies <- function(...) {
 
   # return
   as_multispecies(
-    list(structure = structure,
+    list(nspecies = length(dynamics),
+         structure = structure,
          dynamics = dynamics,
          interaction = interaction)
   )
@@ -121,9 +123,12 @@ get_unique_dynamics <- function(interactions) {
 
   # which pops match these unique hexes?
   target_ids <- match(hex_list, hex_target)
-  out <- lapply(interactions[target_ids], function(x) x$target)
+  out <- lapply(
+    interactions[target_ids[!is.na(target_ids)]],
+    function(x) x$target
+  )
   if (any(is.na(target_ids))) {
-    source_ids <- match(hex_list[is.na(target_ids)], source_ids)
+    source_ids <- match(hex_list[is.na(target_ids)], hex_source)
     out <- c(
       out,
       lapply(interactions[source_ids], function(x) x$source)
