@@ -57,7 +57,9 @@ multispecies <- function(...) {
         x
       }
     } else {
-      interaction[[i]] <- NULL
+      interaction[[i]] <- function(x, n) {
+        identity(x)
+      }
     }
 
   }
