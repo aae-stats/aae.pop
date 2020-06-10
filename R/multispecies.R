@@ -114,14 +114,14 @@ get_unique_dynamics <- function(interactions) {
 
   # which hex values do we have?
   hex_target <- sapply(interactions, function(x) x$target$hex)
-  hex_source <- spaply(interactions, function(x) x$source$hex)
+  hex_source <- sapply(interactions, function(x) x$source$hex)
 
   # create a vector of unique targets and sources
   hex_list <- unique(c(hex_target, hex_source))
 
   # which pops match these unique hexes?
   target_ids <- match(hex_list, hex_target)
-  out <- lapply(interactons[target_ids], function(x) x$target)
+  out <- lapply(interactions[target_ids], function(x) x$target)
   if (any(is.na(target_ids))) {
     source_ids <- match(hex_list[is.na(target_ids)], source_ids)
     out <- c(
