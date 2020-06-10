@@ -42,7 +42,7 @@ multispecies <- function(...) {
   interaction_list <- lapply(dots, function(x) x$interaction)
 
   # and collate these into a list with one element for each species
-  interaction <- vector("list", length = length(dynamicsa))
+  interaction <- vector("list", length = length(dynamics))
   for (i in seq_along(dynamics)) {
 
     # pull out relevant elements of fn_list
