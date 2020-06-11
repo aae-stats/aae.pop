@@ -69,20 +69,20 @@ test_that("mask definitions are correct", {
   target <- all_cells(mat, dims = 1)
   expect_equal(value, target)
 
-  # all_stages without dims
-  value <- all_stages(mat)
+  # all_classes without dims
+  value <- all_classes(mat)
   target <- matrix(!is.na(seq_len(ncol(mat))), ncol = 1)
   class(target) <- c("mask", "matrix", "array")
   expect_equal(value, target)
 
-  # all_stages with consecutive dims
-  value <- all_stages(mat, dims = 4:5)
+  # all_classes with consecutive dims
+  value <- all_classes(mat, dims = 4:5)
   target <- row(target) > 3
   class(target) <- c("mask", "matrix", "array")
   expect_equal(value, target)
 
-  # all_stages with non-consecutive dims
-  value <- all_stages(mat, dims = c(2, 5))
+  # all_classes with non-consecutive dims
+  value <- all_classes(mat, dims = c(2, 5))
   target <- matrix(row(value) %in% c(2, 5), ncol = 1)
   class(target) <- c("mask", "matrix", "array")
   expect_equal(value, target)
