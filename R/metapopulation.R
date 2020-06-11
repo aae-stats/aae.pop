@@ -51,6 +51,10 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
       }
     }
 
+    # need a flag so simulate works correctly when covariates
+    #   are included
+    covars <- TRUE
+
   }
 
   # create block diagonal with dynamics matrices
