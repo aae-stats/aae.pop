@@ -2,26 +2,33 @@
 % Please edit documentation in R/metapopulation.R
 \name{metapopulation}
 \alias{metapopulation}
-\title{Create a population dynamics object with multiple populations}
+\title{Create a metapopulation dynamics object}
 \usage{
-metapopulation(structure, dynamics, dispersal, ...)
+metapopulation(structure, dynamics, dispersal)
 }
 \arguments{
-\item{structure}{djkfd}
+\item{structure}{binary or logical matrix denoting dispersal
+links between populations. Columns move to rows, so a \code{1} or
+\code{TRUE} in cell (a, b) denotes movement from population b
+to population a}
 
-\item{dynamics}{dkjfd}
+\item{dynamics}{a dynamics object or list of dynamics objects
+with one element for each population (each column/row of
+\code{structure}). If a single dynamics object is
+provided, it is recycled over all required populations}
 
-\item{dispersal}{dkfjd}
-
-\item{\dots}{djfkd}
+\item{dispersal}{object created with
+\code{\link{dispersal}}. \code{dispersal} objects
+describe movements between populations and can include
+class-specific movements and density-dependent movements}
 }
 \description{
 Define population dynamics for multiple populations of
-  a single species linked by dispersal.
+  a single species linked by dispersal (a metapopulation).
 }
 \details{
-djkfdj
+To be completed.
 }
 \examples{
-# do stuff
+# add
 }

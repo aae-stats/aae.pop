@@ -10,8 +10,8 @@ multispecies(...)
 pairwise_interaction(target, source, masks, funs)
 }
 \arguments{
-\item{\dots}{\code{pairwise_interaction} objects defining all
-pairwise interactions of interest}
+\item{\dots}{\code{pairwise_interaction} objects defining
+a set of pairwise interactions between species}
 
 \item{target}{population whose vital rates are affected by the
 pairwise interaction}
@@ -31,5 +31,5 @@ Define population dynamics for multiple species from
   defined pairwise interactions.
 }
 \details{
-DKLDJF
+To be completed.
 }

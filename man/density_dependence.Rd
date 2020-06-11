@@ -16,7 +16,7 @@ beverton_holt(k)
 ricker(k)
 }
 \arguments{
-\item{masks}{a logical matrix or list of logical matrices
+\item{masks}{a logical matrix or vector (or list of these)
 defining cells affected by \code{funs}. See Details and
 \code{\link{masks}}}
 
@@ -24,7 +24,7 @@ defining cells affected by \code{funs}. See Details and
 for each element of \code{masks}. See Details}
 
 \item{k}{carrying capacity used to define models of
-density dependence. See details for details of
+density dependence. See details for
 currently implemented models and their parameters.}
 }
 \description{
@@ -41,14 +41,19 @@ Masks must be of the same dimension as the population
   abundances. Functions must return a matrix with
   the same dimensions as \code{x}, modified to reflect the
   effects of current abundances by class (\code{n}) on
-  vital rates
+  vital rates.
 
-something
+\code{density_dependence_n} is an alternative
+  parameterisation of density dependence that acts directly
+  on population abundances. In this case, \code{masks} are
+  logical vectors with one element for each class and
+  \code{funs} defines a rescaling of population abundances
+  based on the abundances of all classes.
 
 Additional functions are provided to define common
   forms of density dependence. Currently implemented models
   are the Ricker model and Beverton-Holt model, both with
-  a single parameter K.
+  a single parameter \code{k}.
 }
 \examples{
 # add

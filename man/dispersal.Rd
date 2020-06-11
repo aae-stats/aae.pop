@@ -14,26 +14,41 @@ dispersal(
 )
 }
 \arguments{
-\item{kernel}{djkfd}
+\item{kernel}{binary or logical matrix identifying transitions
+among classes when moving between two populations. Matrix
+structure is the same as population dynamics matrices used
+in \code{\link{dynamics}}, so a \code{1} or \code{TRUE}
+in cell (a, b) denotes a transition from class b to class a}
 
-\item{stochasticity_masks}{dfds}
+\item{stochasticity_masks}{a logical matrix or list of logical matrices
+defining cells affected by \code{stochasticity_funs}.
+See Details and \code{\link{masks}}}
 
-\item{stochasticity_funs}{dfds}
+\item{stochasticity_funs}{a function or list of functions with
+one element for each element of \code{stochasticity_masks}.
+See Details}
 
-\item{density_masks}{dfds}
+\item{density_masks}{a logical matrix or list of logical matrices
+defining cells affected by \code{density_funs}.
+See Details and \code{\link{masks}}}
 
-\item{density_funs}{dfds}
+\item{density_funs}{a function or list of functions with
+one element for each element of \code{density_masks}.
+See Details}
 
-\item{proportion}{logical indicating whether kernel is specified in absolute
-probabilites or as a proportion of the source population (defaults
-to \code{FALSE})}
+\item{proportion}{logical indicating whether \code{kernel}
+is specified in absolute probabilites or as a proportion
+of the source population (defaults to \code{FALSE}).
+If \code{TRUE}, values in \code{kernel} are calculated as
+a proportion of the total probability an individual
+exits that class at any given time step}
 }
 \description{
 Specify disperal between populations, including stochasticity
   and density dependence in dispersal parameters
 }
 \details{
-something
+To be completed.
 }
 \examples{
 # add

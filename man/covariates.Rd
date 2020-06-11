@@ -7,16 +7,23 @@
 covariates(x, fun)
 }
 \arguments{
-\item{x}{fk}
+\item{x}{a vector or matrix of covariates with one observation
+for each time step. \code{\link{dynamics}} passes \code{x} directly
+to \code{fun} and assumes that \code{x} is a matrix with
+observations in rows. Numeric vectors are converted to
+matrices with one column}
 
-\item{fun}{fk}
+\item{fun}{a function that takes two arguments, the first
+being the population dynamics matrix and the second being
+\code{x}. Arguments can have any name but are assumed
+to be in this order}
 }
 \description{
 Specify relationship between a vector or matrix of covariates
   and vital rates.
 }
 \details{
-something
+To be completed.
 }
 \examples{
 # add

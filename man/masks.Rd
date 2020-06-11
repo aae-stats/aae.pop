@@ -6,7 +6,7 @@
 \alias{survival}
 \alias{transition}
 \alias{all_cells}
-\alias{all_stages}
+\alias{all_classes}
 \alias{combine}
 \alias{combine.mask}
 \alias{combine.function}
@@ -21,7 +21,7 @@ transition(matrix, dims = NULL)
 
 all_cells(matrix, dims = NULL)
 
-all_stages(matrix, dims = NULL)
+all_classes(matrix, dims = NULL)
 
 combine(...)
 
@@ -32,11 +32,17 @@ combine(...)
 \method{combine}{default}(...)
 }
 \arguments{
-\item{matrix}{s}
+\item{matrix}{a population dynamics matrix for which
+a particular mask is required. Only used to determine
+mask dimensions, so can be any matrix with appropriate
+dimensions}
 
-\item{dims}{dfd}
+\item{dims}{a numeric value or vector identifying
+subsets of cells to include in a given mask}
 
-\item{\dots}{sj}
+\item{\dots}{a set of masks or masking functions
+to be combined into a single mask by one of the
+\code{combine} methods}
 }
 \description{
 Helper functions to isolate particular components
@@ -45,7 +51,7 @@ Helper functions to isolate particular components
   abundance vector, such as pre- or post-reproductive stages.
 }
 \details{
-something
+To be completed.
 
 something
 }

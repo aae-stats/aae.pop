@@ -12,9 +12,12 @@ environmental_stochasticity(masks, funs)
 demographic_stochasticity(masks, funs)
 }
 \arguments{
-\item{masks}{dfds}
+\item{masks}{a logical matrix or vector (or list of these)
+defining cells affected by \code{funs}. See Details and
+\code{\link{masks}}}
 
-\item{funs}{d}
+\item{funs}{a function or list of functions with one element
+for each element of \code{masks}. See Details}
 }
 \description{
 Specify environmental stochasticity (random variation
@@ -22,11 +25,18 @@ Specify environmental stochasticity (random variation
   in population outcomes).
 }
 \details{
-something
-
-something
+Masks must be of the same dimension as the population
+  dynamics matrix (in the case of environmental stochasticity)
+  or have one element for each class (in the case of demographic
+  stochasticity). Masks specify cells influenced by stochasticity
+  according to \code{funs}. Functions must take one
+  argument, a population dynamics matrix for environmental
+  stochasticity or a vector of population abundances for
+  demographic stochasticity. Functions must return an
+  output of the same dimensions as the input,
+  modified to reflect the effects of stochasticity on
+  vital rates or population abundances.
 }
 \examples{
-# add
 # add
 }

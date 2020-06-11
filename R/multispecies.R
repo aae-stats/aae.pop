@@ -9,8 +9,8 @@ NULL
 #'
 #' @export
 #'
-#' @param \dots \code{pairwise_interaction} objects defining all
-#'   pairwise interactions of interest
+#' @param \dots \code{pairwise_interaction} objects defining
+#'   a set of pairwise interactions between species
 multispecies <- function(...) {
 
   # collate dots into list
@@ -106,7 +106,7 @@ multispecies <- function(...) {
 #' @param funs functions that take vital rates and abundances of the
 #'   \code{source} population as inputs and return scaled vital rates
 #'
-#' @details DKLDJF
+#' @details To be completed.
 pairwise_interaction <- function(target, source, masks, funs) {
 
   # define function that specifies effects of source on target

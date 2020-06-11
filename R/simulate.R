@@ -34,7 +34,7 @@
 #' @param \dots currently ignored, included for consistency with simulate
 #'   generic
 #'
-#' @details dfd
+#' @details To be completed.
 #'
 #' @examples
 #'

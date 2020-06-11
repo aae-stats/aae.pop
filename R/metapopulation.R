@@ -1,23 +1,31 @@
 #' @name metapopulation
-#' @title Create a population dynamics object with multiple populations
+#' @title Create a metapopulation dynamics object
 #' @description Define population dynamics for multiple populations of
-#'   a single species linked by dispersal.
+#'   a single species linked by dispersal (a metapopulation).
 NULL
 
 #' @rdname metapopulation
 #'
 #' @export
 #'
-#' @param structure djkfd
-#' @param dynamics dkjfd
-#' @param dispersal dkfjd
-#' @param \dots djfkd
+#' @param structure binary or logical matrix denoting dispersal
+#'   links between populations. Columns move to rows, so a \code{1} or
+#'   \code{TRUE} in cell (a, b) denotes movement from population b
+#'   to population a
+#' @param dynamics a dynamics object or list of dynamics objects
+#'   with one element for each population (each column/row of
+#'   \code{structure}). If a single dynamics object is
+#'   provided, it is recycled over all required populations
+#' @param dispersal object created with
+#'   \code{\link{dispersal}}. \code{dispersal} objects
+#'   describe movements between populations and can include
+#'   class-specific movements and density-dependent movements
 #'
-#' @details djkfdj
+#' @details To be completed.
 #'
 #' @examples
-#' # do stuff
-metapopulation <- function(structure, dynamics, dispersal, ...) {
+#' # add
+metapopulation <- function(structure, dynamics, dispersal) {
 
   # check the structure is ok
   structure <- check_structure(structure)

@@ -10,10 +10,14 @@ NULL
 #'
 #' @export
 #'
-#' @param matrix s
-#' @param dims dfd
+#' @param matrix a population dynamics matrix for which
+#'   a particular mask is required. Only used to determine
+#'   mask dimensions, so can be any matrix with appropriate
+#'   dimensions
+#' @param dims a numeric value or vector identifying
+#'   subsets of cells to include in a given mask
 #'
-#' @details something
+#' @details To be completed.
 #'
 #' @examples
 #' # add
@@ -62,15 +66,15 @@ all_cells <- function(matrix, dims = NULL) {
 #' @rdname masks
 #'
 #' @export
-all_stages <- function(matrix, dims = NULL) {
+all_classes <- function(matrix, dims = NULL) {
 
-  nstage <- ncol(matrix)
+  nclass <- ncol(matrix)
 
   if (is.null(dims))
-    dims <- seq_len(nstage)
+    dims <- seq_len(nclass)
 
   as_mask(
-    matrix(seq_len(nstage) %in% dims, ncol = 1)
+    matrix(seq_len(nclass) %in% dims, ncol = 1)
   )
 
 }
@@ -79,7 +83,9 @@ all_stages <- function(matrix, dims = NULL) {
 #'
 #' @export
 #'
-#' @param \dots sj
+#' @param \dots a set of masks or masking functions
+#'   to be combined into a single mask by one of the
+#'   \code{combine} methods
 combine <- function(...) {
   UseMethod("combine")
 }

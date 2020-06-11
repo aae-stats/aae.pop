@@ -10,10 +10,23 @@ NULL
 #'
 #' @export
 #'
-#' @param masks dfds
-#' @param funs d
+#' @param masks a logical matrix or vector (or list of these)
+#'   defining cells affected by \code{funs}. See Details and
+#'   \code{\link{masks}}
+#' @param funs a function or list of functions with one element
+#'   for each element of \code{masks}. See Details
 #'
-#' @details something
+#' @details Masks must be of the same dimension as the population
+#'   dynamics matrix (in the case of environmental stochasticity)
+#'   or have one element for each class (in the case of demographic
+#'   stochasticity). Masks specify cells influenced by stochasticity
+#'   according to \code{funs}. Functions must take one
+#'   argument, a population dynamics matrix for environmental
+#'   stochasticity or a vector of population abundances for
+#'   demographic stochasticity. Functions must return an
+#'   output of the same dimensions as the input,
+#'   modified to reflect the effects of stochasticity on
+#'   vital rates or population abundances.
 #'
 #' @examples
 #' # add
@@ -38,11 +51,6 @@ environmental_stochasticity <- function(masks, funs) {
 #' @rdname stochasticity
 #'
 #' @export
-#'
-#' @details something
-#'
-#' @examples
-#' # add
 demographic_stochasticity <- function(masks, funs) {
 
   if (is.list(masks)) {

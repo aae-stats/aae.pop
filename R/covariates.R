@@ -7,18 +7,21 @@
 #'
 #' @export
 #'
-#' @param x fk
-#' @param fun fk
+#' @param x a vector or matrix of covariates with one observation
+#'   for each time step. \code{\link{dynamics}} passes \code{x} directly
+#'   to \code{fun} and assumes that \code{x} is a matrix with
+#'   observations in rows. Numeric vectors are converted to
+#'   matrices with one column
+#' @param fun a function that takes two arguments, the first
+#'   being the population dynamics matrix and the second being
+#'   \code{x}. Arguments can have any name but are assumed
+#'   to be in this order
 #'
-#' @details something
+#' @details To be completed.
 #'
 #' @examples
 #' # add
 covariates <- function(x, fun) {
-
-  # don't precalculate this step -- means same modifier can be used for
-  #    several matrices with different dimensions (assuming fun is
-  #    general enough for this, e.g., defined with masks not explicit dims)
 
   # convert all x to matrix with time slices in columns
   if (!is.matrix(x))
