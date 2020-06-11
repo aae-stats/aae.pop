@@ -105,8 +105,11 @@ simulate.dynamics <- function(object,
         pop_tmp,
         opt = opt
       )
-      if (opt$keep_slices)
-        pop <- lapply(pop, function(x) x[, , i + 1] <- pop_tmp)
+      if (opt$keep_slices) {
+        pop <- mapply(
+          function(x, y) x[, , i + 1] <- y, pop, pop_tmp
+        )
+      }
     } else {
       pop_tmp <- simulate_once(
         iter = i,
