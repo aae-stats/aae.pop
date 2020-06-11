@@ -107,7 +107,7 @@ simulate.dynamics <- function(object,
       )
       if (opt$keep_slices) {
         pop <- mapply(
-          function(x, y) x[, , i + 1] <- y, pop, pop_tmp,
+          add_multispecies_sims, pop, pop_tmp,
           SIMPLIFY = FALSE
         )
       }
@@ -266,6 +266,12 @@ simulate_once_multispecies <- function(iter,
   # return tidied abundances (e.g. rounded or floored values)
   opt$tidy_abundances(pop_tp1)
 
+}
+
+# internal function: update single step of simulation with multiple species
+add_multispecies_sims <- function(x, y) {
+  x[, , i + 1] <- y
+  x
 }
 
 # internal function: update abundances for one time step
