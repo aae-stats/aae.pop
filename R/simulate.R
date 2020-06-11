@@ -288,41 +288,6 @@ add_multispecies_sims <- function(x, y, iter) {
   x
 }
 
-# internal function: update abundances for one time step
-update_crossprod <- function(pop, mat) {
-  tcrossprod(pop, mat)
-}
-
-# internal function: update abundances with a direct RNG draw
-#   that combines update with demographic stochasticity
-update_binomial <- function(pop, mat) {
-
-  stop("update_binomial is not implemented", call. = FALSE)
-
-  # check that counts are round values, otherwise can't work with size of rbinom
-  # perhaps just check options()$tidy_abundances and error/warn if needed?
-
-  # counts needs to be numbers in classes 1:(nstage-1),
-  #  with nstage count added to last one
-  #  not quite -- needs to be counts in classes aligned with rows??
-  nstage <- nrow(mat)
-
-  # surv_vec needs to be survival summed over all ways to get into a class
-  surv_vec <- NULL
-  fec_vec <- NULL
-  counts <- NULL
-
-  # update survival steps with rbinom
-  pop_next[, 2:nstage] <- rbinom(length(counts), size = counts, prob = surv_vec)
-
-  # update fecundity steps with rpois
-  pop_next[, 1] <- rpois(length(fec_vec), lambda = fec_vec)
-
-  # return
-  pop_next
-
-}
-
 # internal function: initialise a simulation when inits not provided
 initialise <- function(obj, opt, init, keep_slices) {
 
