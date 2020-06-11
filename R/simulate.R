@@ -134,8 +134,16 @@ simulate.dynamics <- function(object,
   if (!opt$keep_slices)
     pop <- pop_tmp
 
+  # set appropriate class for outputs
+  if (object$nspecies > 1) {
+    as_simulation_list(pop)
+  } else {
+    as_simulation(pop)
+  }
+
+
   # return
-  as_simulation(pop)
+  out
 
 }
 
@@ -443,4 +451,15 @@ initialise_poisson <- function(n, args) {
 # internal function: set simulation class
 as_simulation <- function(x) {
   as_class(x, name = "simulation", type = "array")
+}
+
+# internal function: set simulation class
+as_simulation_list <- function(x) {
+
+  # each species is a simulation object
+  x <- lapply(x, as_simulation)
+
+  # but combination of species is a list
+  as_class(x, name = "simulation_list", type = "list")
+
 }
