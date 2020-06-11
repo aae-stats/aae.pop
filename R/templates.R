@@ -202,7 +202,7 @@ template_murraycod <- function(k = 20000) {
     rpois(length(x), lambda = x)
   }
   demostoch <- demographic_stochasticity(
-    masks = all_stages(mat),
+    masks = all_classes(mat),
     funs = demo_fn
   )
 
