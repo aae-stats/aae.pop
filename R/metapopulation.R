@@ -158,7 +158,7 @@ metapopulation <- function(structure, dynamics, dispersal, ...) {
     dens_funs <- c(dens_funs, dispersal_dens[!missing])
 
     # create full environmental stochasticity component
-    dens_depend <- environmental_stochasticity(dens_masks, dens_funs)
+    dens_depend <- density_dependence(dens_masks, dens_funs)
 
   }
 
