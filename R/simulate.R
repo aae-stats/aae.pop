@@ -108,6 +108,7 @@ simulate.dynamics <- function(object,
       if (opt$keep_slices) {
         pop <- mapply(
           add_multispecies_sims, pop, pop_tmp,
+          MoreArgs = list(iter = i),
           SIMPLIFY = FALSE
         )
       }
@@ -269,8 +270,8 @@ simulate_once_multispecies <- function(iter,
 }
 
 # internal function: update single step of simulation with multiple species
-add_multispecies_sims <- function(x, y) {
-  x[, , i + 1] <- y
+add_multispecies_sims <- function(x, y, iter) {
+  x[, , iter + 1] <- y
   x
 }
 
