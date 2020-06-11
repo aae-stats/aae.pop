@@ -136,9 +136,9 @@ simulate.dynamics <- function(object,
 
   # set appropriate class for outputs
   if (object$nspecies > 1) {
-    as_simulation_list(pop)
+    out <- as_simulation_list(pop)
   } else {
-    as_simulation(pop)
+    out <- as_simulation(pop)
   }
 
 
