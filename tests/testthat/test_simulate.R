@@ -25,7 +25,7 @@ dd_fns <- list(
 dd <- density_dependence(masks = dd_masks, funs = dd_fns)
 
 # add demographic stochasticity
-demo_mask <- all_stages(mat)
+demo_mask <- all_classes(mat)
 demo_fn <- function(x) x + 1
 demostoch <- demographic_stochasticity(masks = demo_mask, funs = demo_fn)
 
@@ -38,7 +38,7 @@ fn_list <- list(
 envstoch <- environmental_stochasticity(masks = mask_list, funs = fn_list)
 
 # add rescaling method (alternative form of density dependence)
-rescale_mask <- all_stages(mat)
+rescale_mask <- all_classes(mat)
 rescale_fn <- function(x) 200 * (x / sum(x))
 resc <- density_dependence_n(rescale_mask, rescale_fn)
 
