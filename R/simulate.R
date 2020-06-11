@@ -66,8 +66,13 @@ simulate.dynamics <- function(object,
 
   # use the number of covariate values instead of fixed ntime if
   #   covariates are provided
-  if (!is.null(object$covariates))
-    opt$ntime <- object$ntime
+  if (object$nspecies > 1) {
+    if (object$include_covariates)
+      opt$ntime <- object$ntime
+  } else {
+    if (!is.null(object$covariates))
+      opt$ntime <- object$ntime
+  }
 
   # if seed is provided, use it but reset random seed afterwards
   if (!is.null(seed)) {

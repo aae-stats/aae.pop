@@ -64,9 +64,28 @@ multispecies <- function(...) {
 
   }
 
+  # pull out covariates, check them, and set timesteps if required
+  covariate_idx <- sapply(dynamics, function(x) !is.null(x$covariates))
+  include_covariates <- any(covariate_idx)
+  ntime <- NULL
+  if (include_covariates)
+    ntime <- unique(sapply(dynamics[covariate_idx], function(x) x$covariates$ntime))
+
+  # check covariates are either missing or included with same number of
+  #   time steps for all species
+  if (length(ntime) > 1) {
+    stop("covariates must have same number of time steps for all ",
+         "species (unless excluded) but ... includes species with ",
+         clean_paste(ntime),
+         " time steps",
+         call. = FALSE)
+  }
+
   # return
   as_multispecies(
     list(nspecies = length(dynamics),
+         include_covariates = include_covariates,
+         ntime = ntime,
          structure = structure,
          dynamics = dynamics,
          interaction = interaction)
