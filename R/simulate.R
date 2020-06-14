@@ -200,7 +200,7 @@ simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE) {
 
   # single-step update of abundances
   if (is_expanded) {
-    pop_tp1 <- t(future_mapply(
+    pop_tp1 <- t(mapply(
       options()$aae.pop_update,
       lapply(seq_len(opt$replicates), function(i) pop_t[i, ]),
       mat
