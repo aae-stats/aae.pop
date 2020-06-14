@@ -22,7 +22,8 @@ Depends:
     R (>= 3.0)
 Imports:
     stats,
-    abind
+    abind,
+    future.apply
 Suggests:
     knitr,
     DiagrammeR,

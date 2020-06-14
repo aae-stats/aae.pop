@@ -147,6 +147,7 @@ simulate.dynamics <- function(object,
 
 }
 
+#' @importFrom future.apply future_lapply future_mapply
 # internal function: update a single time step for one species
 simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE) {
 
@@ -199,7 +200,7 @@ simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE) {
 
   # single-step update of abundances
   if (is_expanded) {
-    pop_tp1 <- t(mapply(
+    pop_tp1 <- t(future_mapply(
       options()$aae.pop_update,
       lapply(seq_len(opt$replicates), function(i) pop_t[i, ]),
       mat
@@ -229,56 +230,60 @@ simulate_once_multispecies <- function(iter,
                                        pop_t,
                                        opt) {
 
-  # initialise an output list
-  pop_tp1 <- vector("list", length = obj$nspecies)
-
-  # loop through each species, passing a matrix corrected for the
-  #   the density effects of other species to a single-species update
-  for (i in seq_len(obj$nspecies)) {
-
-    # pull out relevant object
-    dynamics <- obj$dynamics[[i]]
-
-    # matrix will be a list if expanded over covariates
-    if (!is.null(dynamics$covariates)) {
-      mat <- dynamics$matrix[[iter]]
-    } else {
-      mat <- dynamics$matrix
-    }
-
-    # rescale matrix according to interspecific interactions
-    #   setting a flag to change update step accordingly
-    is_expanded <- FALSE
-    if (!is.null(obj$interaction[[i]])) {
-      if (is_expanded) {
-        mat <- mapply(
-          obj$interaction[[i]],
-          mat,
-          lapply(seq_len(opt$replicates),
-                 function(j) lapply(pop_t, function(x) x[j, ])),
-          SIMPLIFY = FALSE
-        )
-      } else {
-        mat <- lapply(
-          seq_len(opt$replicates),
-          function(j) obj$interaction[[i]](mat, lapply(pop_t, function(x) x[j, ]))
-        )
-        is_expanded <- TRUE
-      }
-    }
-
-    # include correct matrix in dynamics and set covariates to NULL
-    #   because it's already handled above
-    dynamics$matrix <- mat
-    dynamics$covariates <- NULL
-
-    # update abundances of species i using single-species updater
-    pop_tp1[[i]] <- simulate_once(iter, dynamics, pop_t[[i]], opt, is_expanded = is_expanded)
-
-  }
+  # vectorised update for all species
+  pop_tp1 <- future_lapply(
+    seq_len(obj$nspecies),
+    simulate_multispecies_internal,
+    iter, obj, pop_t, opt
+  )
 
   # return tidied abundances (e.g. rounded or floored values)
   opt$tidy_abundances(pop_tp1)
+
+}
+
+# internal function: update one species in a multispecies simulation
+#   (to vectorise simulate_once_multispecies)
+simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt) {
+
+  # pull out relevant object
+  dynamics <- obj$dynamics[[i]]
+
+  # matrix will be a list if expanded over covariates
+  if (!is.null(dynamics$covariates)) {
+    mat <- dynamics$matrix[[iter]]
+  } else {
+    mat <- dynamics$matrix
+  }
+
+  # rescale matrix according to interspecific interactions
+  #   setting a flag to change update step accordingly
+  is_expanded <- FALSE
+  if (!is.null(obj$interaction[[i]])) {
+    if (is_expanded) {
+      mat <- mapply(
+        obj$interaction[[i]],
+        mat,
+        lapply(seq_len(opt$replicates),
+               function(j) lapply(pop_t, function(x) x[j, ])),
+        SIMPLIFY = FALSE
+      )
+    } else {
+      mat <- lapply(
+        seq_len(opt$replicates),
+        function(j) obj$interaction[[i]](mat, lapply(pop_t, function(x) x[j, ]))
+      )
+      is_expanded <- TRUE
+    }
+  }
+
+  # include correct matrix in dynamics and set covariates to NULL
+  #   because it's already handled above
+  dynamics$matrix <- mat
+  dynamics$covariates <- NULL
+
+  # update and return abundances of species i using single-species updater
+  simulate_once(iter, dynamics, pop_t[[i]], opt, is_expanded = is_expanded)
 
 }
 
