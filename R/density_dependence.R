@@ -30,14 +30,14 @@ NULL
 density_dependence <- function(masks, funs) {
 
   if (is.list(masks)) {
-    fn <- function(x, n) {
+    fn <- function(x, n, ...) {
       for (i in seq_along(masks))
-        x <- do_mask(x, masks[[i]], funs[[i]], n)
+        x <- do_mask(x, masks[[i]], funs[[i]], n, ...)
       x
     }
   } else {
-    fn <- function(x, n) {
-      do_mask(x, masks, funs, n)
+    fn <- function(x, n, ...) {
+      do_mask(x, masks, funs, n, ...)
     }
   }
 
@@ -61,14 +61,14 @@ density_dependence <- function(masks, funs) {
 density_dependence_n <- function(masks, funs) {
 
   if (is.list(masks)) {
-    fn <- function(pop_t) {
+    fn <- function(pop_t, ...) {
       for (i in seq_along(masks))
-        pop_t <- do_mask(pop_t, masks[[i]], funs[[i]])
+        pop_t <- do_mask(pop_t, masks[[i]], funs[[i]], ...)
       pop_t
     }
   } else {
-    fn <- function(pop_t) {
-      do_mask(pop_t, masks, funs)
+    fn <- function(pop_t, ...) {
+      do_mask(pop_t, masks, funs, ...)
     }
   }
 
@@ -110,6 +110,7 @@ ricker <- function(k) {
   function(x, n) {
     x * exp(1 - sum(n) / k) / exp(1)
   }
+
 }
 
 # internal function: set density_dependence class

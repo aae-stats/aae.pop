@@ -42,29 +42,6 @@ metapopulation <- function(structure, dynamics, dispersal) {
   # check list of dynamics objects is ok
   dyn_check <- check_dynamics(dynamics)
 
-  # expand covariates if included
-  covars <- NULL
-  if (any(dyn_check$covars)) {
-
-    # if covars are missing from any populations, expand their matrix
-    if (!all(dyn_check$covars)) {
-      for (i in seq_along(dynamics)) {
-        if (!dyn_check$covars) {
-          dynamics[[i]]$matrix <- lapply(
-            seq_len(dyn_check$ntime),
-            function(x) dynamics[[i]]$matrix
-          )
-          dynamics[[i]]$ntime <- dyn_check$ntime
-        }
-      }
-    }
-
-    # need a flag so simulate works correctly when covariates
-    #   are included
-    covars <- TRUE
-
-  }
-
   # create block diagonal with dynamics matrices
   if (any(dyn_check$covars)) {
     metapop_matrix <- lapply(
@@ -105,6 +82,30 @@ metapopulation <- function(structure, dynamics, dispersal) {
       to = str_rows[i]
     )
   )
+
+  # add in covariates if included in any populations
+  if (any(dyn_check$covars)) {
+
+    # pull out functions for all populations
+    covar_funs <- lapply(dynamics, function(x) x$covariates$fun)
+
+    # pull out non-NULL elements only
+    covar_masks <- mat_masks[dyn_check$covars]
+    covar_funs <- covar_funs[dyn_check$covars]
+
+    # define new covariate function that combines all others
+    covar_fun <- function(x, ...) do_mask(x, covar_masks, covar_funs, ...)
+
+    # define new x object by combining x for all species
+    covar_x <- do.call(
+      rbind,
+      lapply(dynamics, function(x) x$covariates$x)
+    )
+
+    # create full environmental stochasticity component
+    covars <- covariates(covar_x, covar_fun)
+
+  }
 
   # add in environmental stochasticity if included in any populations
   envstoch <- NULL

@@ -90,17 +90,9 @@ dynamics <- function(matrix, ...) {
   process_list <- processes[processes_supported]
   names(process_list) <- processes_supported
 
-  # store the original matrix so we can recover it if needed
-  base_matrix <- matrix
-
   # use covariates to expand matrix over time steps
   if ("covariates" %in% processes_supplied) {
-    covars <- process_list[["covariates"]]
     defaults$ntime <- covars$ntime
-    matrix <- lapply(
-      seq_len(defaults$ntime),
-      function(i) covars$fun(matrix, covars$x[i, ])
-    )
   }
 
   # compile and return everything
@@ -111,7 +103,6 @@ dynamics <- function(matrix, ...) {
         nclass = defaults$nclass,
         nspecies = defaults$nspecies,
         hex = hex_id(),
-        base_matrix = base_matrix,
         matrix = matrix
       ),
       process_list

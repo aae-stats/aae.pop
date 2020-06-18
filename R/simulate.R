@@ -32,7 +32,8 @@
 #'       initialisation function is defined by
 #'       \code{options()$aae.pop_initialisation}.
 #' @param args named list of lists passing arguments to processes defined
-#'   in \code{object}.
+#'   in \code{object}, including \code{interaction} for
+#'   \code{\link{multispecies}} objects.
 #' @param \dots currently ignored, included for consistency with simulate
 #'   generic
 #'
@@ -70,21 +71,13 @@ simulate.dynamics <- function(object,
     environmental_stochasticity = list(),
     demographic_stochasticity = list(),
     density_dependence = list(),
-    density_dependence_n = list()
+    density_dependence_n = list(),
+    interaction = list()
   )
+  default_args[names(args)] <- args
 
   # add nsim into options
   opt$replicates <- nsim
-
-  # use the number of covariate values instead of fixed ntime if
-  #   covariates are provided
-  if (object$nspecies > 1) {
-    if (object$include_covariates)
-      opt$ntime <- object$ntime
-  } else {
-    if (!is.null(object$covariates))
-      opt$ntime <- object$ntime
-  }
 
   # if seed is provided, use it but reset random seed afterwards
   if (!is.null(seed)) {
@@ -111,6 +104,37 @@ simulate.dynamics <- function(object,
       pop <- initialise(object, opt, init, keep_slices = opt$keep_slices)
   }
 
+  # expand matrix and use the number of covariate values instead
+  #   of fixed ntime if covariates are provided
+  if (object$nspecies > 1) {
+
+    if (object$include_covariates) {
+
+      # how many time steps?
+      opt$ntime <- object$ntime
+
+      # expand covariate matrix for each species if needed
+      object$dynamics <- lapply(
+        object$dynamics,
+        expand_matrix(opt$ntime, default_args$covariates)
+      )
+
+    }
+
+  } else {
+
+    if (!is.null(object$covariates)) {
+
+      # how many time steps are included?
+      opt$ntime <- object$ntime
+
+      # expand covariate matrix if covariates included
+      matrix <- expand_matrix(object, opt$ntime, default_args$covariates)
+
+    }
+
+  }
+
   # loop through timesteps, updating population at each timestep
   for (i in seq_len(opt$ntime)) {
 
@@ -120,7 +144,8 @@ simulate.dynamics <- function(object,
         iter = i,
         object,
         pop_tmp,
-        opt = opt
+        opt = opt,
+        args = default_args
       )
       if (opt$keep_slices) {
         pop <- mapply(
@@ -134,7 +159,8 @@ simulate.dynamics <- function(object,
         iter = i,
         object,
         pop_tmp,
-        opt = opt
+        opt = opt,
+        args = default_args
       )
       if (opt$keep_slices)
         pop[, , i + 1] <- pop_tmp
@@ -161,7 +187,7 @@ simulate.dynamics <- function(object,
 
 #' @importFrom future.apply future_lapply future_mapply
 # internal function: update a single time step for one species
-simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE, args = list()) {
+simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
 
   # matrix will be a list if expanded over covariates
   if (!is.null(obj$covariates)) {
@@ -196,7 +222,7 @@ simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE, args = lis
   if (!is.null(obj$density_dependence)) {
     if (is_expanded) {
       mat <- mapply(
-        obj$density_dependence,
+        function(x, y) do.call(obj$density_dependence, c(list(x, y), args$density_dependence)),
         mat,
         lapply(seq_len(opt$replicates), function(i) pop_t[i, ]),
         SIMPLIFY = FALSE
@@ -204,7 +230,7 @@ simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE, args = lis
     } else {
       mat <- lapply(
         seq_len(opt$replicates),
-        function(i) obj$density_dependence(mat, pop_t[i, ])
+        function(i) do.call(obj$density_dependence, c(list(mat, pop_t[i, ]), args$density_dependence))
       )
       is_expanded <- TRUE
     }
@@ -229,7 +255,7 @@ simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE, args = lis
   # final hit to abundances if they are rescaled based on biomass
   #   constraints or similar
   if (!is.null(obj$density_dependence_n))
-    pop_tp1 <- t(apply(pop_tp1, 1, obj$density_dependence_n))
+    pop_tp1 <- t(apply(pop_tp1, 1, function(x) do.call(obj$density_dependence_n, c(list(x), args$density_dependence_n))))
 
   # return tidied abundances (e.g. rounded or floored values)
   opt$tidy_abundances(pop_tp1)
@@ -240,13 +266,14 @@ simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE, args = lis
 simulate_once_multispecies <- function(iter,
                                        obj,
                                        pop_t,
-                                       opt) {
+                                       opt,
+                                       args) {
 
   # vectorised update for all species
   pop_tp1 <- future_lapply(
     seq_len(obj$nspecies),
     simulate_multispecies_internal,
-    iter, obj, pop_t, opt
+    iter, obj, pop_t, opt, args
   )
 
   # return tidied abundances (e.g. rounded or floored values)
@@ -256,7 +283,7 @@ simulate_once_multispecies <- function(iter,
 
 # internal function: update one species in a multispecies simulation
 #   (to vectorise simulate_once_multispecies)
-simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt) {
+simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args) {
 
   # pull out relevant object
   dynamics <- obj$dynamics[[i]]
@@ -274,7 +301,7 @@ simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt) {
   if (!is.null(obj$interaction[[i]])) {
     if (is_expanded) {
       mat <- mapply(
-        obj$interaction[[i]],
+        function(x, y) do.call(obj$interaction[[i]], c(list(x, y), args$interaction)),
         mat,
         lapply(seq_len(opt$replicates),
                function(j) lapply(pop_t, function(x) x[j, ])),
@@ -283,7 +310,7 @@ simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt) {
     } else {
       mat <- lapply(
         seq_len(opt$replicates),
-        function(j) obj$interaction[[i]](mat, lapply(pop_t, function(x) x[j, ]))
+        function(j) do.call(obj$interaction[[i]], c(list(mat, lapply(pop_t, function(x) x[j, ])), args$interaction))
       )
       is_expanded <- TRUE
     }
@@ -295,7 +322,7 @@ simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt) {
   dynamics$covariates <- NULL
 
   # update and return abundances of species i using single-species updater
-  simulate_once(iter, dynamics, pop_t[[i]], opt, is_expanded = is_expanded)
+  simulate_once(iter, dynamics, pop_t[[i]], opt, args, is_expanded = is_expanded)
 
 }
 
@@ -419,6 +446,16 @@ expand_dims <- function(init, replicates) {
   abind::abind(
     lapply(seq_len(replicates), function(x) init),
     along = 0
+  )
+
+}
+
+# internal function: expand matrix to include covariates at each time step
+expand_matrix <- function(obj, ntime, args) {
+
+  lapply(
+    seq_len(ntime),
+    function(i) do.call(obj$covariates$fun, c(list(obj$matrix, obj$covariates$x[i, ]), args))
   )
 
 }
