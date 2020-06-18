@@ -63,7 +63,7 @@ demographic_stochasticity <- function(masks, funs) {
       x
     }
   } else {
-    fn <- function(x) {
+    fn <- function(x, ...) {
       do_mask(x, masks, funs, ...)
     }
   }
