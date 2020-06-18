@@ -20,7 +20,7 @@ NULL
 #'   dynamics matrix (in the case of environmental stochasticity)
 #'   or have one element for each class (in the case of demographic
 #'   stochasticity). Masks specify cells influenced by stochasticity
-#'   according to \code{funs}. Functions must take one
+#'   according to \code{funs}. Functions must have at least one
 #'   argument, a population dynamics matrix for environmental
 #'   stochasticity or a vector of population abundances for
 #'   demographic stochasticity. Functions must return an
@@ -28,19 +28,22 @@ NULL
 #'   modified to reflect the effects of stochasticity on
 #'   vital rates or population abundances.
 #'
+#'   Additional arguments to functions are supported and can be
+#'   passed as the \code{} to \code{\link{simulate}}.
+#'
 #' @examples
 #' # add
 environmental_stochasticity <- function(masks, funs) {
 
   if (is.list(masks)) {
-    fn <- function(x) {
+    fn <- function(x, ...) {
       for (i in seq_along(masks))
-        x <- do_mask(x, masks[[i]], funs[[i]])
+        x <- do_mask(x, masks[[i]], funs[[i]], ...)
       x
     }
   } else {
-    fn <- function(x) {
-      do_mask(x, masks, funs)
+    fn <- function(x, ...) {
+      do_mask(x, masks, funs, ...)
     }
   }
 
@@ -54,14 +57,14 @@ environmental_stochasticity <- function(masks, funs) {
 demographic_stochasticity <- function(masks, funs) {
 
   if (is.list(masks)) {
-    fn <- function(x) {
+    fn <- function(x, ...) {
       for (i in seq_along(masks))
-        x <- do_mask(x, masks[[i]], funs[[i]])
+        x <- do_mask(x, masks[[i]], funs[[i]], ...)
       x
     }
   } else {
     fn <- function(x) {
-      do_mask(x, masks, funs)
+      do_mask(x, masks, funs, ...)
     }
   }
 

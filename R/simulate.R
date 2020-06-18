@@ -31,6 +31,8 @@
 #'       which specifies lambda for Poisson random draws. The default
 #'       initialisation function is defined by
 #'       \code{options()$aae.pop_initialisation}.
+#' @param args named list of lists passing arguments to processes defined
+#'   in \code{object}.
 #' @param \dots currently ignored, included for consistency with simulate
 #'   generic
 #'
@@ -49,6 +51,7 @@ simulate.dynamics <- function(object,
                               seed = NULL,
                               init = NULL,
                               options = list(),
+                              args = list(),
                               ...) {
   # nolint end
 
@@ -60,6 +63,15 @@ simulate.dynamics <- function(object,
     initialise_args = list(options()$aae.pop_lambda)
   )
   opt[names(options)] <- options
+
+  # set default arguments passed to dynamic processes
+  default_args <- list(
+    covariates = list(),
+    environmental_stochasticity = list(),
+    demographic_stochasticity = list(),
+    density_dependence = list(),
+    density_dependence_n = list()
+  )
 
   # add nsim into options
   opt$replicates <- nsim
@@ -149,7 +161,7 @@ simulate.dynamics <- function(object,
 
 #' @importFrom future.apply future_lapply future_mapply
 # internal function: update a single time step for one species
-simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE) {
+simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE, args = list()) {
 
   # matrix will be a list if expanded over covariates
   if (!is.null(obj$covariates)) {
@@ -168,12 +180,12 @@ simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE) {
     if (is_expanded) {
       mat <- lapply(
         mat,
-        function(x) obj$environmental_stochasticity(x)
+        function(x) do.call(obj$environmental_stochasticity, c(list(x), args$environmental_stochasticity))
       )
     } else {
       mat <- lapply(
         seq_len(opt$replicates),
-        function(j) obj$environmental_stochasticity(mat)
+        function(j) do.call(obj$environmental_stochasticity, c(list(mat), args$environmental_stochasticity))
       )
       is_expanded <- TRUE
     }
@@ -212,7 +224,7 @@ simulate_once <- function(iter, obj, pop_t, opt, is_expanded = FALSE) {
   # tweak abundances to add stochastic variation in demographic
   #   outcomes
   if (!is.null(obj$demographic_stochasticity))
-    pop_tp1 <- t(apply(pop_tp1, 1, obj$demographic_stochasticity))
+    pop_tp1 <- t(apply(pop_tp1, 1, function(x) do.call(obj$demographic_stochasticity, c(list(x), args$demographic_stochasticity))))
 
   # final hit to abundances if they are rescaled based on biomass
   #   constraints or similar
