@@ -60,14 +60,15 @@ get_template <- function(sp, x = NULL, params = list(), ...) {
     # define covariates object
     all_parameters$covariates <- covariates(
       x,
-      all_parameters$cov_masks,
-      all_parameters$cov_funs
+      all_parameters$covariate_masks,
+      all_parameters$covariate_funs
     )
 
     # and remove cov_masks and cov_funs because they are
     #   no longer needed
-    all_parameters$cov_masks <- NULL
-    all_parameters$cov_funs <- NULL
+    all_parameters$covariate_masks <- NULL
+    all_parameters$covariate_funs <- NULL
+
   }
 
   # unpack dots and replace defaults if any objects provided
