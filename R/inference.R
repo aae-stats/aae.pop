@@ -1,7 +1,7 @@
 #' @name inference
 #' @title Perform inference on a population dynamics model
 #' @description Estimate parameters in a population dynamics model
-#'   defined with the \code{\link{aae.pop}} package.
+#'   defined with the \code{aae.pop} package.
 NULL
 
 #' @rdname inference
@@ -18,7 +18,7 @@ NULL
 #' @param method a function call for an inference method that
 #'   takes as arguments a function and parameters, returning
 #'   a vector of summary statistics that define model fit to data.
-#'   Example methods include those defined in the \link{\code{EasyABC}}
+#'   Example methods include those defined in the \code{EasyABC}
 #'   package
 #' @param \dots additional arguments passed to \code{method}
 #'
