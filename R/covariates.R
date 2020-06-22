@@ -21,11 +21,24 @@
 #'
 #' @examples
 #' # add
-covariates <- function(x, fun) {
+covariates <- function(x, masks, funs) {
 
   # convert all x to matrix with time slices in columns
   if (!is.matrix(x))
     x <- matrix(x, ncol = 1)
+
+  # define function to combine masks and funs
+  if (is.list(masks)) {
+    fn <- function(x, ...) {
+      for (i in seq_along(masks))
+        x <- do_mask(x, masks[[i]], funs[[i]], ...)
+      x
+    }
+  } else {
+    fn <- function(x, ...) {
+      do_mask(x, masks, funs, ...)
+    }
+  }
 
   # return
   as_covariates(list(x = x, fun = fun, ntime = nrow(x)))
