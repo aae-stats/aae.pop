@@ -56,7 +56,18 @@ get_template <- function(sp, x = NULL, params = list(), ...) {
 
   # optional: add covariates
   if (!is.null(x)) {
-    all_parameters$covariates$x <- x
+
+    # define covariates object
+    all_parameters$covariates <- covariates(
+      x,
+      all_parameters$cov_masks,
+      all_parameters$cov_funs
+    )
+
+    # and remove cov_masks and cov_funs because they are
+    #   no longer needed
+    all_parameters$cov_masks <- NULL
+    all_parameters$cov_funs <- NULL
   }
 
   # unpack dots and replace defaults if any objects provided
@@ -138,7 +149,6 @@ template_murraycod <- function(k = 20000) {
     mat * (1 / (1 + exp(-0.5 * (x + 10))))
   }
   cov_masks <- transition(mat)
-  covs <- covariates(x, cov_masks, cov_funs)
 
   # define environmental stochasticity based on known standard deviations of
   #   parameters
@@ -205,7 +215,8 @@ template_murraycod <- function(k = 20000) {
   # return template
   list(
     matrix = mat,
-    covariates = covs,
+    covariate_masks = cov_masks,
+    covariate_funs = cov_funs,
     environmental_stochasticity = envstoch,
     demographic_stochasticity = demostoch,
     density_dependence = dd,
