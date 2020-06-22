@@ -41,7 +41,7 @@ covariates <- function(x, masks, funs) {
   }
 
   # return
-  as_covariates(list(x = x, fun = fun, ntime = nrow(x)))
+  as_covariates(list(x = x, fun = fn, ntime = nrow(x)))
 
 }
 
