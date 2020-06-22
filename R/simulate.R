@@ -103,8 +103,9 @@ simulate.dynamics <- function(object,
 
       # expand covariate matrix for each species if needed
       for (i in seq_len(object$nspecies)) {
-        object$dynamics[[i]]$matrix <-
-          expand_matrix(object$dynamics[[i]], opt$ntime, default_args$covariates)
+        object$dynamics[[i]]$matrix <- expand_matrix(
+          object$dynamics[[i]], opt$ntime, default_args$covariates
+        )
       }
 
     }
@@ -453,10 +454,26 @@ expand_dims <- function(init, replicates) {
 # internal function: expand matrix to include covariates at each time step
 expand_matrix <- function(obj, ntime, args) {
 
-  lapply(
-    seq_len(ntime),
-    function(i) do.call(obj$covariates$fun, c(list(obj$matrix, obj$covariates$x[i, ]), args))
-  )
+  if (!is.null(obj$covariates)) {
+
+    # expand with covariates if included
+    matrix <- lapply(
+      seq_len(ntime),
+      function(i) do.call(obj$covariates$fun, c(list(obj$matrix, obj$covariates$x[i, ]), args))
+    )
+
+  } else {
+
+    # replicate matrix identically otherwise
+    matrix <- lapply(
+      seq_len(ntime),
+      function(i) obj$matrix
+    )
+
+  }
+
+  # return
+  matrix
 
 }
 
