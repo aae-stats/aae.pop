@@ -92,18 +92,6 @@ simulate.dynamics <- function(object,
 
   }
 
-  # initalise the population with init if provided, following
-  #   options()$aae.pop_initialisation otherwise
-  if (object$nspecies > 1) {
-    pop_tmp <- lapply(object$dynamics, initialise, opt, init, keep_slices = FALSE)
-    if (opt$keep_slices)
-      pop <- lapply(object$dynamics, initialise, opt, init, keep_slices = opt$keep_slices)
-  } else {
-    pop_tmp <- initialise(object, opt, init, keep_slices = FALSE)
-    if (opt$keep_slices)
-      pop <- initialise(object, opt, init, keep_slices = opt$keep_slices)
-  }
-
   # expand matrix and use the number of covariate values instead
   #   of fixed ntime if covariates are provided
   if (object$nspecies > 1) {
@@ -114,10 +102,10 @@ simulate.dynamics <- function(object,
       opt$ntime <- object$ntime
 
       # expand covariate matrix for each species if needed
-      object$dynamics <- lapply(
-        object$dynamics,
-        expand_matrix(opt$ntime, default_args$covariates)
-      )
+      for (i in seq_len(nspecies)) {
+        object$dynamics[[i]]$matrix <-
+          expand_matrix(object, opt$ntime, default_args$covariates)
+      }
 
     }
 
@@ -133,6 +121,18 @@ simulate.dynamics <- function(object,
 
     }
 
+  }
+
+  # initalise the population with init if provided, following
+  #   options()$aae.pop_initialisation otherwise
+  if (object$nspecies > 1) {
+    pop_tmp <- lapply(object$dynamics, initialise, opt, init, keep_slices = FALSE)
+    if (opt$keep_slices)
+      pop <- lapply(object$dynamics, initialise, opt, init, keep_slices = opt$keep_slices)
+  } else {
+    pop_tmp <- initialise(object, opt, init, keep_slices = FALSE)
+    if (opt$keep_slices)
+      pop <- initialise(object, opt, init, keep_slices = opt$keep_slices)
   }
 
   # loop through timesteps, updating population at each timestep
