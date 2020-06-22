@@ -4,7 +4,7 @@
 \alias{covariates}
 \title{Specify covariate dependence in models of population dynamics}
 \usage{
-covariates(x, fun)
+covariates(x, masks, funs)
 }
 \arguments{
 \item{x}{a vector or matrix of covariates with one observation
@@ -13,17 +13,27 @@ to \code{fun} and assumes that \code{x} is a matrix with
 observations in rows. Numeric vectors are converted to
 matrices with one column}
 
-\item{fun}{a function that takes two arguments, the first
-being the population dynamics matrix and the second being
-\code{x}. Arguments can have any name but are assumed
-to be in this order}
+\item{masks}{a logical matrix or vector (or list of these)
+defining cells affected by \code{funs}. See Details and
+\code{\link{masks}}}
+
+\item{funs}{a function or list of functions with one element
+for each element of \code{masks}. See Details}
 }
 \description{
 Specify relationship between a vector or matrix of covariates
   and vital rates.
 }
 \details{
-To be completed.
+Masks must be of the same dimension as the population
+  dynamics matrix and specify cells influenced by covariates
+  according to \code{funs}. Functions must take at least
+  one arguments, a matrix \code{x} representing the population
+  dynamics matrix. Functions must return a matrix with
+  the same dimensions as \code{x}, modified to reflect the
+  effects of covariates on vital rates. Additional arguments
+  can be passed to \code{funs} and can be specified as
+  \code{args} in \code{\link{simulate}}.
 }
 \examples{
 # add

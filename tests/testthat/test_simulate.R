@@ -93,7 +93,7 @@ test_that("simulate returns correct abundances with covariates", {
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
   for (i in seq_len(dyn$ntime))
-    target[, , i + 1] <- floor(target[, , i] %*% t(dyn$matrix[[i]]))
+    target[, , i + 1] <- floor(target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i])))
   class(target) <- c("simulation", "array")
   expect_equal(target, value)
 
@@ -117,7 +117,7 @@ test_that("simulate returns correct abundances with density dependence and covar
     x
   }
   for (i in seq_len(dyn$ntime)) {
-    mat_tmp <- lapply(seq_len(nsim), function(x) t(dd_manual(dyn$matrix[[i]], target[x, , i])))
+    mat_tmp <- lapply(seq_len(nsim), function(x) t(dd_manual(dyn$covariates(dyn$matrix, xsim[i]), target[x, , i])))
     target[, , i + 1] <- floor(t(mapply(`%*%`, lapply(seq_len(nsim), function(x) target[x, , i]), mat_tmp)))
   }
   class(target) <- c("simulation", "array")
@@ -139,7 +139,7 @@ test_that("simulate returns correct abundances with demographic stochasticity an
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
   for (i in seq_len(dyn$ntime))
-    target[, , i + 1] <- floor(target[, , i] %*% t(dyn$matrix[[i]])) + 1
+    target[, , i + 1] <- floor(target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i]))) + 1
   class(target) <- c("simulation", "array")
   expect_equal(target, value)
 
@@ -159,7 +159,7 @@ test_that("simulate returns correct abundances with demographic and environmenta
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
   for (i in seq_len(dyn$ntime)) {
-    mat_tmp <- dyn$matrix[[i]]
+    mat_tmp <- dyn$covariates(dyn$matrix, xsim[i])
     mat_tmp[1, 4:5] <- mat_tmp[1, 4:5] + 2
     idx <- row(mat_tmp) == col(mat_tmp)
     mat_tmp[idx] <- mat_tmp[idx] + 0.01
@@ -184,7 +184,7 @@ test_that("simulate returns correct abundances with rescale density dependence a
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
   for (i in seq_len(dyn$ntime)) {
-    target[, , i + 1] <- target[, , i] %*% t(dyn$matrix[[i]])
+    target[, , i + 1] <- target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i]))
     target[, , i + 1] <- floor(t(apply(target[, , i + 1], 1, function(x) 200 * (x / sum(x)))))
   }
   class(target) <- c("simulation", "array")

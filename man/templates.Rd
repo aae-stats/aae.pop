@@ -52,7 +52,7 @@ The \code{get_template} function and associated
   list with at least a population matrix model (\code{matrix}), and
   other arguments to pass to \code{\link{dynamics}}. Terms
   specifying \code{covariates} would typically be defined
-  in a template with the function only (\code{covariate_function}),
+  in a template with the function only (\code{covariate_functions}),
   so that templates can be used with different covariate sets.
   If defined in this way, \code{get_template("my_species")} will
   return a compiled dynamics object for my_species.

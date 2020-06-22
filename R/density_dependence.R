@@ -17,13 +17,15 @@ NULL
 #'
 #' @details Masks must be of the same dimension as the population
 #'   dynamics matrix and specify cells influenced by density
-#'   dependence according to \code{funs}. Functions must take two
-#'   arguments, a matrix \code{x} and a vector \code{n}, which
+#'   dependence according to \code{funs}. Functions must take at least
+#'   two arguments, a matrix \code{x} and a vector \code{n}, which
 #'   represent the population dynamics matrix and the population
 #'   abundances. Functions must return a matrix with
 #'   the same dimensions as \code{x}, modified to reflect the
 #'   effects of current abundances by class (\code{n}) on
-#'   vital rates.
+#'   vital rates. Additional arguments can be passed to
+#'   \code{funs} and can be specified as \code{args} in
+#'   \code{\link{simulate}}.
 #'
 #' @examples
 #' # add

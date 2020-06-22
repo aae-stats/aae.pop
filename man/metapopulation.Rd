@@ -12,7 +12,7 @@ links between populations. Columns move to rows, so a \code{1} or
 \code{TRUE} in cell (a, b) denotes movement from population b
 to population a}
 
-\item{dynamics}{a dynamics object or list of dynamics objects
+\item{dynamics}{a \code{\link{dynamics}} object or list of dynamics objects
 with one element for each population (each column/row of
 \code{structure}). If a single dynamics object is
 provided, it is recycled over all required populations}

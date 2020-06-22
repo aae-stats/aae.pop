@@ -94,18 +94,32 @@ simulate.dynamics <- function(object,
 
   # expand matrix and use the number of covariate values instead
   #   of fixed ntime if covariates are provided
-  if (object$nspecies > 1) {
+  if ("multispecies" %in% class(object)) {
 
     if (object$include_covariates) {
-
-      # how many time steps?
-      opt$ntime <- object$ntime
 
       # expand covariate matrix for each species if needed
       for (i in seq_len(object$nspecies)) {
         object$dynamics[[i]]$matrix <- expand_matrix(
-          object$dynamics[[i]], opt$ntime, default_args$covariates
+          object$dynamics[[i]], default_args$covariates
         )
+      }
+
+      # are any matrices not expanded (no covariates)?
+      not_expanded <- sapply(object$dynamics, function(x) is.matrix(x$matrix))
+
+      # how many time steps?
+      idx <- which(!not_expanded)[1]
+      opt$ntime <- length(object$dynamics[[idx]]$matrix)
+
+      # expand others to match ntime if needed
+      if (any(not_expanded)) {
+        for (i in which(not_expanded)) {
+          object$dynamics[[i]]$matrix <- lapply(
+            seq_len(ntime),
+            function(i) object$dynamics[[i]]$matrix
+          )
+        }
       }
 
     }
@@ -114,19 +128,20 @@ simulate.dynamics <- function(object,
 
     if (!is.null(object$covariates)) {
 
-      # how many time steps are included?
-      opt$ntime <- object$ntime
-
       # expand covariate matrix if covariates included
-      object$matrix <- expand_matrix(object, opt$ntime, default_args$covariates)
+      object$matrix <- expand_matrix(object, default_args$covariates)
+
+      # how many time steps?
+      opt$ntime <- length(object$matrix)
 
     }
 
   }
 
+
   # initalise the population with init if provided, following
   #   options()$aae.pop_initialisation otherwise
-  if (object$nspecies > 1) {
+  if ("multispecies" %in% class(object)) {
     pop_tmp <- lapply(object$dynamics, initialise, opt, init, keep_slices = FALSE)
     if (opt$keep_slices)
       pop <- lapply(object$dynamics, initialise, opt, init, keep_slices = opt$keep_slices)
@@ -140,7 +155,7 @@ simulate.dynamics <- function(object,
   for (i in seq_len(opt$ntime)) {
 
     # split based on multispecies or single species
-    if (object$nspecies > 1) {
+    if ("multispecies" %in% class(object)) {
       pop_tmp <- simulate_once_multispecies(
         iter = i,
         object,
@@ -174,7 +189,7 @@ simulate.dynamics <- function(object,
     pop <- pop_tmp
 
   # set appropriate class for outputs
-  if (object$nspecies > 1) {
+  if ("multispecies" %in% class(object)) {
     out <- as_simulation_list(pop)
   } else {
     out <- as_simulation(pop)
@@ -452,23 +467,20 @@ expand_dims <- function(init, replicates) {
 }
 
 # internal function: expand matrix to include covariates at each time step
-expand_matrix <- function(obj, ntime, args) {
+expand_matrix <- function(obj, args) {
 
   if (!is.null(obj$covariates)) {
 
     # expand with covariates if included
     matrix <- lapply(
-      seq_len(ntime),
-      function(i) do.call(obj$covariates$fun, c(list(obj$matrix, obj$covariates$x[i, ]), args))
+      seq_len(nrow(args[[1]])),
+      function(i) do.call(obj$covariates, c(list(obj$matrix), args))
     )
 
   } else {
 
     # replicate matrix identically otherwise
-    matrix <- lapply(
-      seq_len(ntime),
-      function(i) obj$matrix
-    )
+    matrix <- obj$matrix
 
   }
 

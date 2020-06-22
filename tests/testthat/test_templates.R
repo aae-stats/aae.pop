@@ -18,7 +18,6 @@ test_that("templates return working dynamics objects", {
   dyn <- murraycod(x = rnorm(20))
   sim <- simulate(dyn)
   expect_equal(dim(sim), c(1L, 25L, 21L))
-  expect_length(dyn$matrix, 20L)
 
   # expect covariates now to be defined
   expect_equal(class(dyn$covariates), c("covariates", "list"))

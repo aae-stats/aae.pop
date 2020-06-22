@@ -41,13 +41,6 @@ dynamics <- function(matrix, ...) {
          call. = FALSE)
   }
 
-  # initialise
-  defaults <- list(
-    ntime = 1,
-    nspecies = 1,
-    nclass = nrow(matrix)
-  )
-
   # list possible processes
   processes_supported <- c(
     "covariates",
@@ -90,18 +83,11 @@ dynamics <- function(matrix, ...) {
   process_list <- processes[processes_supported]
   names(process_list) <- processes_supported
 
-  # use covariates to expand matrix over time steps
-  if ("covariates" %in% processes_supplied) {
-    defaults$ntime <- process_list$covariates$ntime
-  }
-
   # compile and return everything
   as_dynamics(
     c(
       list(
-        ntime = defaults$ntime,
-        nclass = defaults$nclass,
-        nspecies = defaults$nspecies,
+        nclass = nrow(matrix),
         hex = hex_id(),
         matrix = matrix
       ),
