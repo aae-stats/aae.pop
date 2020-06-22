@@ -41,7 +41,7 @@ NULL
 #'   list with at least a population matrix model (\code{matrix}), and
 #'   other arguments to pass to \code{\link{dynamics}}. Terms
 #'   specifying \code{covariates} would typically be defined
-#'   in a template with the function only (\code{covariate_function}),
+#'   in a template with the function only (\code{covariate_functions}),
 #'   so that templates can be used with different covariate sets.
 #'   If defined in this way, \code{get_template("my_species")} will
 #'   return a compiled dynamics object for my_species.
@@ -56,12 +56,8 @@ get_template <- function(sp, x = NULL, params = list(), ...) {
 
   # optional: add covariates
   if (!is.null(x)) {
-    all_parameters$covariates <-
-      covariates(x = x, fun = all_parameters$covariate_function)
+    all_parameters$covariates$x <- x
   }
-
-  # remove covariate_function from all_parameters in all cases
-  all_parameters$covariate_function <- NULL
 
   # unpack dots and replace defaults if any objects provided
   arg_list <- list(...)
@@ -138,11 +134,11 @@ template_murraycod <- function(k = 20000) {
   dd <- density_dependence(dd_masks, dd_fns)
 
   # basic single variable covariate function
-  covs <- function(mat, x) {
-    mat[transition(mat)] <-
-      mat[transition(mat)] * (1 / (1 + exp(-0.5 * (x + 10))))
-    mat
+  cov_funs <- function(mat, x) {
+    mat * (1 / (1 + exp(-0.5 * (x + 10))))
   }
+  cov_masks <- transition(mat)
+  covs <- covariates(x, cov_masks, cov_funs)
 
   # define environmental stochasticity based on known standard deviations of
   #   parameters
@@ -209,7 +205,7 @@ template_murraycod <- function(k = 20000) {
   # return template
   list(
     matrix = mat,
-    covariate_function = covs,
+    covariates = covs,
     environmental_stochasticity = envstoch,
     demographic_stochasticity = demostoch,
     density_dependence = dd,
@@ -224,7 +220,7 @@ template_troutcod <- function() {
   # return template
   list(
     matrix = NULL,
-    covariate_function = NULL,
+    covariate_functions = NULL,
     environmental_stochasticity = NULL,
     demographic_stochasticity = NULL,
     density_dependence = NULL,
@@ -239,7 +235,7 @@ template_goldenperch <- function() {
   # return template
   list(
     matrix = NULL,
-    covariate_function = NULL,
+    covariate_functions = NULL,
     environmental_stochasticity = NULL,
     demographic_stochasticity = NULL,
     density_dependence = NULL,
@@ -254,7 +250,7 @@ template_silverperch <- function() {
   # return template
   list(
     matrix = NULL,
-    covariate_function = NULL,
+    covariate_functions = NULL,
     environmental_stochasticity = NULL,
     demographic_stochasticity = NULL,
     density_dependence = NULL,
@@ -269,7 +265,7 @@ template_macquarieperch <- function() {
   # return template
   list(
     matrix = NULL,
-    covariate_function = NULL,
+    covariate_functions = NULL,
     environmental_stochasticity = NULL,
     demographic_stochasticity = NULL,
     density_dependence = NULL,
@@ -284,7 +280,7 @@ template_australiansmelt <- function() {
   # return template
   list(
     matrix = NULL,
-    covariate_function = NULL,
+    covariate_functions = NULL,
     environmental_stochasticity = NULL,
     demographic_stochasticity = NULL,
     density_dependence = NULL,
@@ -299,7 +295,7 @@ template_commongalaxias <- function() {
   # return template
   list(
     matrix = NULL,
-    covariate_function = NULL,
+    covariate_functions = NULL,
     environmental_stochasticity = NULL,
     demographic_stochasticity = NULL,
     density_dependence = NULL,
