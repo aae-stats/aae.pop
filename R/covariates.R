@@ -23,7 +23,7 @@
 #' # add
 covariates <- function(x, masks, funs) {
 
-  # see if we can force evaluation to avoid NULL functions down the line
+  # force evaluation to avoid NULL functions down the line
   force(masks)
   force(funs)
 

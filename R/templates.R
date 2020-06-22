@@ -64,12 +64,11 @@ get_template <- function(sp, x = NULL, params = list(), ...) {
       all_parameters$covariate_funs
     )
 
-    # and remove cov_masks and cov_funs because they are
-    #   no longer needed
-    all_parameters$covariate_masks <- NULL
-    all_parameters$covariate_funs <- NULL
-
   }
+
+  # remove cov_masks and cov_funs; not needed beyond this
+  all_parameters$covariate_masks <- NULL
+  all_parameters$covariate_funs <- NULL
 
   # unpack dots and replace defaults if any objects provided
   arg_list <- list(...)

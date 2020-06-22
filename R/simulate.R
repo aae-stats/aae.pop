@@ -104,7 +104,7 @@ simulate.dynamics <- function(object,
       # expand covariate matrix for each species if needed
       for (i in seq_len(object$nspecies)) {
         object$dynamics[[i]]$matrix <-
-          expand_matrix(object, opt$ntime, default_args$covariates)
+          expand_matrix(object$dynamics[[i]], opt$ntime, default_args$covariates)
       }
 
     }
