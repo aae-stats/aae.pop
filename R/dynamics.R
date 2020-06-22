@@ -92,7 +92,7 @@ dynamics <- function(matrix, ...) {
 
   # use covariates to expand matrix over time steps
   if ("covariates" %in% processes_supplied) {
-    defaults$ntime <- covars$ntime
+    defaults$ntime <- process_list$covariates$ntime
   }
 
   # compile and return everything
