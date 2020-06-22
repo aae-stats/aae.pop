@@ -43,14 +43,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
   dyn_check <- check_dynamics(dynamics)
 
   # create block diagonal with dynamics matrices
-  if (any(dyn_check$covars)) {
-    metapop_matrix <- lapply(
-      seq_len(dyn_check$ntime),
-      function(i) block_diagonal(lapply(dynamics, function(x) x$matrix[[i]]))
-    )
-  } else {
-    metapop_matrix <- block_diagonal(lapply(dynamics, function(x) x$matrix))
-  }
+  metapop_matrix <- block_diagonal(lapply(dynamics, function(x) x$matrix))
 
   # add dispersal to off-diagonal elements where structure == 1
   str_rows <- row(structure$structure)[structure$structure]
