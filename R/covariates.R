@@ -23,6 +23,10 @@
 #' # add
 covariates <- function(x, masks, funs) {
 
+  # see if we can force evaluation to avoid NULL functions down the line
+  force(masks)
+  force(funs)
+
   # convert all x to matrix with time slices in columns
   if (!is.matrix(x))
     x <- matrix(x, ncol = 1)
