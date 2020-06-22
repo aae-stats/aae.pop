@@ -129,7 +129,7 @@ simulate.dynamics <- function(object,
       opt$ntime <- object$ntime
 
       # expand covariate matrix if covariates included
-      matrix <- expand_matrix(object, opt$ntime, default_args$covariates)
+      object$matrix <- expand_matrix(object, opt$ntime, default_args$covariates)
 
     }
 
