@@ -159,7 +159,7 @@ update.dynamics <- function(object, ...) {
     processes_updated
 
   # recreate and return dynamics object with new processes
-  do.call(dynamics, c(list(object$base_matrix), processes_existing))
+  do.call(dynamics, c(list(object$matrix), processes_existing))
 
 }
 
@@ -179,10 +179,6 @@ plot.dynamics <- function(x, y, ...) {
 
   # pull out the population matrix
   mat <- x$matrix
-
-  # only need matrix structure, so just use first element if it's a list
-  if (is.list(mat))
-    mat <- mat[[1]]
 
   # work out the matrix structure (binary)
   mat <- ifelse(mat > 0, 1, 0)

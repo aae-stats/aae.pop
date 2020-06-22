@@ -84,6 +84,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
   )
 
   # add in covariates if included in any populations
+  covars <- NULL
   if (any(dyn_check$covars)) {
 
     # pull out functions for all populations

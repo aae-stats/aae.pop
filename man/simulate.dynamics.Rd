@@ -4,7 +4,15 @@
 \alias{simulate.dynamics}
 \title{Simulate single or multispecies population dynamics in R}
 \usage{
-\method{simulate}{dynamics}(object, nsim = 1, seed = NULL, init = NULL, options = list(), ...)
+\method{simulate}{dynamics}(
+  object,
+  nsim = 1,
+  seed = NULL,
+  init = NULL,
+  options = list(),
+  args = list(),
+  ...
+)
 }
 \arguments{
 \item{object}{a \code{dynamics} object created with
@@ -38,6 +46,10 @@ values are:
     which specifies lambda for Poisson random draws. The default
     initialisation function is defined by
     \code{options()$aae.pop_initialisation}.}
+
+\item{args}{named list of lists passing arguments to processes defined
+in \code{object}, including \code{interaction} for
+\code{\link{multispecies}} objects.}
 
 \item{\dots}{currently ignored, included for consistency with simulate
 generic}

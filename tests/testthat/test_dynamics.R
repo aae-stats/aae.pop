@@ -46,7 +46,6 @@ test_that("dynamics object returns correct processes for different combinations 
 
   # test basic dynamics object with no additional processes
   dyn_obj <- dynamics(mat)
-  expect_equal(dyn_obj$base_matrix, dyn_obj$matrix)
   expect_equal(dyn_obj$matrix, mat)
   expect_equal(dyn_obj$nclass, ncol(mat))
   expect_equal(dyn_obj$nspecies, 1L)
@@ -59,8 +58,7 @@ test_that("dynamics object returns correct processes for different combinations 
 
   # test basic dynamics object with covariates
   dyn_obj <- dynamics(mat, cov_eff)
-  expect_equal(dyn_obj$base_matrix, mat)
-  expect_length(dyn_obj$matrix, cov_eff$ntime)
+  expect_equal(dyn_obj$matrix, mat)
   expect_equal(dyn_obj$nclass, ncol(mat))
   expect_equal(dyn_obj$nspecies, 1L)
   expect_equal(dyn_obj$ntime, cov_eff$ntime)
@@ -72,7 +70,6 @@ test_that("dynamics object returns correct processes for different combinations 
 
   # test basic dynamics object with environmental stochasticity
   dyn_obj <- dynamics(mat, envstoch)
-  expect_equal(dyn_obj$base_matrix, mat)
   expect_equal(dyn_obj$matrix, mat)
   expect_equal(dyn_obj$nclass, ncol(mat))
   expect_equal(dyn_obj$nspecies, 1L)
@@ -85,7 +82,6 @@ test_that("dynamics object returns correct processes for different combinations 
 
   # test basic dynamics object with demographic stochasticity
   dyn_obj <- dynamics(mat, demostoch)
-  expect_equal(dyn_obj$base_matrix, mat)
   expect_equal(dyn_obj$matrix, mat)
   expect_equal(dyn_obj$nclass, ncol(mat))
   expect_equal(dyn_obj$nspecies, 1L)
@@ -98,7 +94,6 @@ test_that("dynamics object returns correct processes for different combinations 
 
   # test basic dynamics object with density_dependence
   dyn_obj <- dynamics(mat, dd)
-  expect_equal(dyn_obj$base_matrix, mat)
   expect_equal(dyn_obj$matrix, mat)
   expect_equal(dyn_obj$nclass, ncol(mat))
   expect_equal(dyn_obj$nspecies, 1L)
@@ -111,7 +106,6 @@ test_that("dynamics object returns correct processes for different combinations 
 
   # test basic dynamics object with rescale density dependence
   dyn_obj <- dynamics(mat, resc)
-  expect_equal(dyn_obj$base_matrix, mat)
   expect_equal(dyn_obj$matrix, mat)
   expect_equal(dyn_obj$nclass, ncol(mat))
   expect_equal(dyn_obj$nspecies, 1L)

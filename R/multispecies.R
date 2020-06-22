@@ -51,13 +51,13 @@ multispecies <- function(...) {
     # create function is species i is a target for any other species
     if (length(idx) > 0) {
       source_sp <- match(sapply(dots[idx], function(x) x$source$hex), hex_list)
-      interaction[[i]] <- function(x, n) {
+      interaction[[i]] <- function(x, n, ...) {
         for (j in seq_along(idx))
-          x <- interaction_list[[idx[j]]](x, n[[source_sp[j]]])
+          x <- interaction_list[[idx[j]]](x, n[[source_sp[j]]], ...)
         x
       }
     } else {
-      interaction[[i]] <- function(x, n) {
+      interaction[[i]] <- function(x, n, ...) {
         identity(x)
       }
     }
@@ -111,14 +111,14 @@ pairwise_interaction <- function(target, source, masks, funs) {
 
   # define function that specifies effects of source on target
   if (is.list(masks)) {
-    interaction <- function(x, n) {
+    interaction <- function(x, n, ...) {
       for (i in seq_along(masks))
-        x <- do_mask(x, masks[[i]], funs[[i]], n)
+        x <- do_mask(x, masks[[i]], funs[[i]], n, ...)
       x
     }
   } else {
-    interaction <- function(x, n) {
-      do_mask(x, masks, funs, n)
+    interaction <- function(x, n, ...) {
+      do_mask(x, masks, funs, n, ...)
     }
   }
 
