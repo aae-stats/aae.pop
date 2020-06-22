@@ -29,14 +29,14 @@ covariates <- function(x, masks, funs) {
 
   # define function to combine masks and funs
   if (is.list(masks)) {
-    fn <- function(x, ...) {
+    fn <- function(mat, ...) {
       for (i in seq_along(masks))
-        x <- do_mask(x, masks[[i]], funs[[i]], ...)
-      x
+        mat <- do_mask(mat, masks[[i]], funs[[i]], ...)
+      mat
     }
   } else {
-    fn <- function(x, ...) {
-      do_mask(x, masks, funs, ...)
+    fn <- function(mat, ...) {
+      do_mask(mat, masks, funs, ...)
     }
   }
 
