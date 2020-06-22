@@ -29,6 +29,10 @@ NULL
 #' # add
 density_dependence <- function(masks, funs) {
 
+  # force evaluation to avoid NULL functions down the line
+  force(masks)
+  force(funs)
+
   if (is.list(masks)) {
     fn <- function(x, n, ...) {
       for (i in seq_along(masks))
@@ -59,6 +63,10 @@ density_dependence <- function(masks, funs) {
 #' @examples
 #' # add
 density_dependence_n <- function(masks, funs) {
+
+  # force evaluation to avoid NULL functions down the line
+  force(masks)
+  force(funs)
 
   if (is.list(masks)) {
     fn <- function(pop_t, ...) {

@@ -35,6 +35,10 @@ NULL
 #' # add
 environmental_stochasticity <- function(masks, funs) {
 
+  # force evaluation to avoid NULL functions down the line
+  force(masks)
+  force(funs)
+
   if (is.list(masks)) {
     fn <- function(x, ...) {
       for (i in seq_along(masks))
@@ -55,6 +59,10 @@ environmental_stochasticity <- function(masks, funs) {
 #'
 #' @export
 demographic_stochasticity <- function(masks, funs) {
+
+  # force evaluation to avoid NULL functions down the line
+  force(masks)
+  force(funs)
 
   if (is.list(masks)) {
     fn <- function(x, ...) {

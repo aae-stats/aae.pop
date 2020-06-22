@@ -109,6 +109,10 @@ multispecies <- function(...) {
 #' @details To be completed.
 pairwise_interaction <- function(target, source, masks, funs) {
 
+  # force evaluation to avoid NULL functions down the line
+  force(masks)
+  force(funs)
+
   # define function that specifies effects of source on target
   if (is.list(masks)) {
     interaction <- function(x, n, ...) {
