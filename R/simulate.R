@@ -92,11 +92,14 @@ simulate.dynamics <- function(object,
 
   }
 
+  # are covariates included?
+  include_covariates <- length(default_args$covariates) > 0
+
   # expand matrix and use the number of covariate values instead
   #   of fixed ntime if covariates are provided
   if ("multispecies" %in% class(object)) {
 
-    if (object$include_covariates) {
+    if (include_covariates) {
 
       # expand covariate matrix for each species if needed
       for (i in seq_len(object$nspecies)) {
@@ -126,7 +129,7 @@ simulate.dynamics <- function(object,
 
   } else {
 
-    if (!is.null(object$covariates)) {
+    if (include_covariates) {
 
       # expand covariate matrix if covariates included
       object$matrix <- expand_matrix(object, default_args$covariates)

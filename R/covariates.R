@@ -7,11 +7,6 @@
 #'
 #' @export
 #'
-#' @param x a vector or matrix of covariates with one observation
-#'   for each time step. \code{\link{dynamics}} passes \code{x} directly
-#'   to \code{fun} and assumes that \code{x} is a matrix with
-#'   observations in rows. Numeric vectors are converted to
-#'   matrices with one column
 #' @param masks a logical matrix or vector (or list of these)
 #'   defining cells affected by \code{funs}. See Details and
 #'   \code{\link{masks}}
@@ -30,15 +25,11 @@
 #'
 #' @examples
 #' # add
-covariates <- function(x, masks, funs) {
+covariates <- function(masks, funs) {
 
   # force evaluation to avoid NULL functions down the line
   force(masks)
   force(funs)
-
-  # convert all x to matrix with time slices in columns
-  if (!is.matrix(x))
-    x <- matrix(x, ncol = 1)
 
   # define function to combine masks and funs
   if (is.list(masks)) {

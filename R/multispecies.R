@@ -64,14 +64,9 @@ multispecies <- function(...) {
 
   }
 
-  # pull out covariates, check them, and set timesteps if required
-  covariate_idx <- sapply(dynamics, function(x) !is.null(x$covariates))
-  include_covariates <- any(covariate_idx)
-
   # return
   as_multispecies(
     list(nspecies = length(dynamics),
-         include_covariates = include_covariates,
          structure = structure,
          dynamics = dynamics,
          interaction = interaction)

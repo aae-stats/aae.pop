@@ -11,9 +11,6 @@ NULL
 #'
 #' @param sp string specifying species common name (see details for
 #'   a list of species currently included)
-#' @param x a vector or matrix of covariates used to define
-#'   time-varying vital rates according to a pre-defined
-#'   functional response
 #' @param params a named list of parameters passed to specific
 #'   templates (e.g. carrying capacity \code{K} for Murray cod)
 #' @param \dots additional objects passed to \code{\link{dynamics}},
@@ -48,23 +45,17 @@ NULL
 #'
 #' @examples
 #' # add
-get_template <- function(sp, x = NULL, params = list(), ...) {
+get_template <- function(sp, params = list(), ...) {
 
   # draw up relevant parameters based on corrected species name
   sp <- parse_species(sp)
   all_parameters <- do.call(get(paste0("template_", sp)), params)
 
-  # optional: add covariates
-  if (!is.null(x)) {
-
-    # define covariates object
-    all_parameters$covariates <- covariates(
-      x,
-      all_parameters$covariate_masks,
-      all_parameters$covariate_funs
-    )
-
-  }
+  # define covariates object
+  all_parameters$covariates <- covariates(
+    all_parameters$covariate_masks,
+    all_parameters$covariate_funs
+  )
 
   # remove cov_masks and cov_funs; not needed beyond this
   all_parameters$covariate_masks <- NULL
@@ -87,8 +78,8 @@ get_template <- function(sp, x = NULL, params = list(), ...) {
 #' @export
 #'
 #' @importFrom stats rnorm
-murraycod <- function(x = NULL, params = list(), ...) {
-  get_template(sp = "murraycod", x = x, params, ...)
+murraycod <- function(params = list(), ...) {
+  get_template(sp = "murraycod", params, ...)
 }
 
 # internal function: define species defaults
