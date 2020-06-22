@@ -354,7 +354,7 @@ add_multispecies_sims <- function(x, y, iter) {
 # internal function: initialise a simulation when inits not provided
 initialise <- function(obj, opt, init, keep_slices) {
 
-  if (obj$nspecies > 1) {
+  if ("multispecies" %in% class(object)) {
     dims <- c(opt$replicates, obj$nclass, obj$nspecies, opt$ntime + 1)
   } else {
     dims <- c(opt$replicates, obj$nclass, opt$ntime + 1)
