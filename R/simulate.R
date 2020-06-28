@@ -164,7 +164,8 @@ simulate.dynamics <- function(object,
         object,
         pop_tmp,
         opt = opt,
-        args = default_args
+        args = default_args,
+        include_covariates = include_covariates
       )
       if (opt$keep_slices) {
         pop <- mapply(
@@ -179,7 +180,8 @@ simulate.dynamics <- function(object,
         object,
         pop_tmp,
         opt = opt,
-        args = default_args
+        args = default_args,
+        include_covariates = include_covariates
       )
       if (opt$keep_slices)
         pop[, , i + 1] <- pop_tmp
@@ -206,10 +208,10 @@ simulate.dynamics <- function(object,
 
 #' @importFrom future.apply future_lapply future_mapply
 # internal function: update a single time step for one species
-simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
+simulate_once <- function(iter, obj, pop_t, opt, args, include_covariates, is_expanded = FALSE) {
 
   # matrix will be a list if expanded over covariates
-  if (!is.null(obj$covariates)) {
+  if (include_covariates) {
     mat <- obj$matrix[[iter]]
   } else {
     mat <- obj$matrix
@@ -286,13 +288,14 @@ simulate_once_multispecies <- function(iter,
                                        obj,
                                        pop_t,
                                        opt,
-                                       args) {
+                                       args,
+                                       include_covariates) {
 
   # vectorised update for all species
   pop_tp1 <- future_lapply(
     seq_len(obj$nspecies),
     simulate_multispecies_internal,
-    iter, obj, pop_t, opt, args
+    iter, obj, pop_t, opt, args, include_covariates
   )
 
   # return tidied abundances (e.g. rounded or floored values)
@@ -302,7 +305,7 @@ simulate_once_multispecies <- function(iter,
 
 # internal function: update one species in a multispecies simulation
 #   (to vectorise simulate_once_multispecies)
-simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args) {
+simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args, include_covariates) {
 
   # pull out relevant object
   dynamics <- obj$dynamics[[i]]
@@ -341,7 +344,7 @@ simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args) {
   dynamics$covariates <- NULL
 
   # update and return abundances of species i using single-species updater
-  simulate_once(iter, dynamics, pop_t[[i]], opt, args, is_expanded = is_expanded)
+  simulate_once(iter, dynamics, pop_t[[i]], opt, args, include_covariates, is_expanded = is_expanded)
 
 }
 
