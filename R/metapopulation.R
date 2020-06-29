@@ -174,7 +174,6 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
   # collate metapop object with expanded dynamics
   metapop_dynamics <- list(
-    ntime = dyn_check$ntime,
     nclass = dyn_check$nclass * structure$npop,
     npopulation = structure$npop,
     nspecies = 1,
@@ -270,13 +269,12 @@ check_dynamics <- function(dyn_list) {
 
   # return
   list(
-    ntime = covars$ntime,
     nclass = unique(classes),
-    covars = covars$included,
-    envstoch = envstoch$included,
-    demostoch = demostoch$included,
-    dens_depend = dens_depend$included,
-    dens_depend_n = dens_depend_n$included
+    covars = covars,
+    envstoch = envstoch,
+    demostoch = demostoch,
+    dens_depend = dens_depend,
+    dens_depend_n = dens_depend_n
   )
 
 }
@@ -307,46 +305,8 @@ check_processes <- function(x, type) {
   # pull out relevant process
   procs <- lapply(x, function(x) x[[type]])
 
-  # check timesteps if dealing with covariates
-  ntime <- NULL
-  if (type == "covariates")
-    ntime <- check_timesteps(procs)
-
-  # assume none are included
-  included <- !sapply(procs, is.null)
-
-  # return flag
-  list(included = included,
-       ntime = ntime)
-
-}
-
-# internal function: check number of timesteps implied by covariates
-check_timesteps <- function(covs) {
-
-  # which elements include covariates?
-  included <- !sapply(covs, is.null)
-
-  # only need to worry if covariates are included
-  #   in at least one population
-  if (any(included)) {
-
-    # pull out timesteps from included covariates objects
-    ncovar <- sapply(covs[included], function(x) x$ntime)
-
-    # check they all have the same dimensions
-    if (length(unique(covs)) != 1)
-      stop("all populations in dynamics must have the same number of time steps", call. = FALSE)
-
-  } else {
-
-    # otherwise can just set ncovar = 1 for all
-    ncovar <- 1
-
-  }
-
-  # return number of timesteps
-  unique(ncovar)
+  # return flag checking which pops include process
+  !sapply(procs, is.null)
 
 }
 
