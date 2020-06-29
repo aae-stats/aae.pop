@@ -311,37 +311,25 @@ simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args, inclu
   dynamics <- obj$dynamics[[i]]
 
   # matrix will be a list if expanded over covariates
-  if (!is.null(dynamics$covariates)) {
+  if (include_covariates) {
     mat <- dynamics$matrix[[iter]]
   } else {
     mat <- dynamics$matrix
   }
 
+  # and turn off covariates flag so subsetting isn't repeated
+  include_covariates <- FALSE
+
   # rescale matrix according to interspecific interactions
   #   setting a flag to change update step accordingly
   is_expanded <- FALSE
   if (!is.null(obj$interaction[[i]])) {
-    if (is_expanded) {
-      mat <- mapply(
-        function(x, y) do.call(obj$interaction[[i]], c(list(x, y), args$interaction)),
-        mat,
-        lapply(seq_len(opt$replicates),
-               function(j) lapply(pop_t, function(x) x[j, ])),
-        SIMPLIFY = FALSE
-      )
-    } else {
-      mat <- lapply(
-        seq_len(opt$replicates),
-        function(j) do.call(obj$interaction[[i]], c(list(mat, lapply(pop_t, function(x) x[j, ])), args$interaction))
-      )
-      is_expanded <- TRUE
-    }
+    mat <- lapply(
+      seq_len(opt$replicates),
+      function(j) do.call(obj$interaction[[i]], c(list(mat, lapply(pop_t, function(x) x[j, ])), args$interaction))
+    )
+    is_expanded <- TRUE
   }
-
-  # include correct matrix in dynamics and set covariates to NULL
-  #   because it's already handled above
-  dynamics$matrix <- mat
-  dynamics$covariates <- NULL
 
   # update and return abundances of species i using single-species updater
   simulate_once(iter, dynamics, pop_t[[i]], opt, args, include_covariates, is_expanded = is_expanded)
