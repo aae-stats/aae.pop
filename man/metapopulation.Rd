@@ -28,7 +28,58 @@ Define population dynamics for multiple populations of
 }
 \details{
 To be completed.
+
+  Covariates can be included in metapopulation models. The default
+  behaviour is for all populations to share a single set of covariates.
+  A workaround is included in the examples, below, to deal with
+  situations where populations have different sets of covariates.
 }
 \examples{
-# add
+# define some populations
+dyn1 <- murraycod()
+dyn2 <- murraycod(params = list(k = 15000))
+dyn3 <- murraycod(params = list(k = 30000))
+
+# define metapopulation structure with populations
+#   1 and 3 dispersing into population 2
+mc_structure <- matrix(0, nrow = 5, ncol = 5)
+mc_structure[1, 2] <- 1
+mc_structure[3, 2] <- 1
+
+# define dispersal between populations
+nclass <- nrow(dyn1$matrix)
+dispersal_matrix <- matrix(0, nrow = nclass, ncol = nclass)
+dispersal_matrix[survival(dispersal_matrix, dims = 20:25)] <- 0.2
+mc_dispersal1 <- dispersal(dispersal_matrix, proportion = TRUE)
+mc_dispersal2 <- dispersal(dispersal_matrix, proportion = FALSE)
+mc_dispersal <- list(mc_dispersal1, mc_dispersal2)
+
+# create metapopulation object
+mc_meta <- metapopulation(mc_structure, list(dyn1, dyn2, dyn3), mc_dispersal)
+
+# simulate without covariates
+sims <- simulate(mc_meta, nsim = 2)
+
+# simulate with shared covariates
+#  (uses pre-defined Murray cod covariate function)
+xsim <- matrix(rnorm(20), ncol = 1)
+sims <- simulate(mc_meta, nsim = 2, args = list(covariates = list(x = x_sim)))
+
+# simulate with separate covariates
+#  (requires re-definition of Murray cod covariate function)
+new_fn <- function(i) {
+  function(mat, x) {
+    mat * (1 / (1 + exp(-0.5 * (x[i] + 10))))
+  }
+}
+dyn1 <- update(dyn1, covariates(masks = transition(dyn1$matrix), funs = new_fn))
+dyn2 <- update(dyn2, covariates(masks = transition(dyn2$matrix), funs = new_fn))
+dyn3 <- update(dyn3, covariates(masks = transition(dyn3$matrix), funs = new_fn))
+
+# (re)create metapopulation object
+mc_meta <- metapopulation(mc_structure, list(dyn1, dyn2, dyn3), mc_dispersal)
+
+# and simulate
+xsim <- matrix(rnorm(60), ncol = 3)
+sims <- simulate(mc_meta, nsim = 2, args = list(covariates = list(x = x_sim)))
 }
