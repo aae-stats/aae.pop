@@ -10,12 +10,11 @@ mat[transition(mat)] <- plogis(rnorm(nstage - 1))
 # add covariate effects
 ntime <- 35
 xsim <- rnorm(ntime)
-cov_fn <- function(popmat, x) {
-  popmat[survival(popmat)] <- popmat[survival(popmat)] * plogis(x)
-  popmat
+cov_fn <- function(mat, x) {
+  mat * plogis(x)
 }
-cov_eff <- covariates(x = xsim,
-                      fun = cov_fn)
+cov_eff <- covariates(masks = survival(popmat),
+                      funs = cov_fn)
 
 # add density dependence
 dd_masks <- list(reproduction(mat, dims = 4:5))
@@ -88,7 +87,8 @@ test_that("simulate returns correct abundances with covariates", {
     dyn,
     nsim = nsim,
     init = init_set,
-    options = list(ntime = ntime, tidy_abundances = floor)
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(covariates = list(matrix(xsim, ncol = 1)))
   )
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
@@ -108,7 +108,8 @@ test_that("simulate returns correct abundances with density dependence and covar
     dyn,
     nsim = nsim,
     init = init_set,
-    options = list(ntime = ntime, tidy_abundances = floor)
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(covariates = list(matrix(xsim, ncol = 1)))
   )
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
@@ -134,7 +135,8 @@ test_that("simulate returns correct abundances with demographic stochasticity an
     dyn,
     nsim = nsim,
     init = init_set,
-    options = list(ntime = ntime, tidy_abundances = floor)
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(covariates = list(matrix(xsim, ncol = 1)))
   )
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
@@ -154,7 +156,8 @@ test_that("simulate returns correct abundances with demographic and environmenta
     dyn,
     nsim = nsim,
     init = init_set,
-    options = list(ntime = ntime, tidy_abundances = floor)
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(covariates = list(matrix(xsim, ncol = 1)))
   )
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
@@ -179,7 +182,8 @@ test_that("simulate returns correct abundances with rescale density dependence a
     dyn,
     nsim = nsim,
     init = init_set,
-    options = list(ntime = ntime, tidy_abundances = floor)
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(covariates = list(matrix(xsim, ncol = 1)))
   )
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
@@ -294,14 +298,16 @@ test_that("simulate returns reproducible outputs when seed is set", {
     nsim = nsim,
     seed = 123,
     init = init_set,
-    options = list(ntime = ntime, tidy_abundances = floor)
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(covariates = list(matrix(xsim, ncol = 1)))
   )
   target <- simulate(
     dyn,
     nsim = nsim,
     seed = 123,
     init = init_set,
-    options = list(ntime = ntime, tidy_abundances = floor)
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(covariates = list(matrix(xsim, ncol = 1)))
   )
   expect_equal(target, value)
 
@@ -311,7 +317,8 @@ test_that("simulate returns reproducible outputs when seed is set", {
     nsim = nsim,
     seed = 124,
     init = init_set,
-    options = list(ntime = ntime, tidy_abundances = floor)
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(covariates = list(matrix(xsim, ncol = 1)))
   )
   expect_false(all(target == value))
 
