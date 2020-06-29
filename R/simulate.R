@@ -471,7 +471,7 @@ expand_matrix <- function(obj, args) {
     #   one row of first argument for each time step
     matrix <- lapply(
       seq_len(ncov),
-      function(i) do.call(obj$covariates, c(list(obj$matrix), args[[1]][i, ], args[-1]))
+      function(i) do.call(obj$covariates, c(list(obj$matrix), list(args[[1]][i, ]), args[-1]))
     )
 
   } else {
