@@ -45,4 +45,3 @@ update_binomial_internal <- function(x, n) {
   n_tp1
 
 }
-
