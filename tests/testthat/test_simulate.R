@@ -13,7 +13,7 @@ xsim <- rnorm(ntime)
 cov_fn <- function(mat, x) {
   mat * plogis(x)
 }
-cov_eff <- covariates(masks = survival(popmat),
+cov_eff <- covariates(masks = survival(mat),
                       funs = cov_fn)
 
 # add density dependence

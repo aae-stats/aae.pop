@@ -10,12 +10,11 @@ mat[transition(mat)] <- plogis(rnorm(nstage - 1))
 # add covariate effects
 ntime <- 35
 xsim <- rnorm(ntime)
-cov_fn <- function(popmat, x) {
-  popmat[survival(popmat)] <- popmat[survival(popmat)] * plogis(x)
-  popmat
+cov_fn <- function(mat, x) {
+  mat * plogis(x)
 }
-cov_eff <- covariates(x = xsim,
-                      fun = cov_fn)
+cov_eff <- covariates(masks = survival(mat),
+                      funs = cov_fn)
 
 # add density dependence
 dd_masks <- list(reproduction(mat, dims = 4:5))
@@ -50,7 +49,7 @@ test_that("dynamics object returns correct processes for different combinations 
   expect_equal(dyn_obj$nclass, ncol(mat))
   expect_equal(dyn_obj$nspecies, 1L)
   expect_equal(dyn_obj$ntime, 1L)
-  expect_null(dyn_obj$covariates)
+  expect_equal(class(dyn_obj$covariates), c("covariates", "list"))
   expect_null(dyn_obj$environmental_stochasticity)
   expect_null(dyn_obj$demographic_stochasticity)
   expect_null(dyn_obj$density_dependence)
@@ -74,7 +73,7 @@ test_that("dynamics object returns correct processes for different combinations 
   expect_equal(dyn_obj$nclass, ncol(mat))
   expect_equal(dyn_obj$nspecies, 1L)
   expect_equal(dyn_obj$ntime, 1L)
-  expect_null(dyn_obj$covariates)
+  expect_equal(class(dyn_obj$covariates), c("covariates", "list"))
   expect_equal(dyn_obj$environmental_stochasticity, envstoch)
   expect_null(dyn_obj$demographic_stochasticity)
   expect_null(dyn_obj$density_dependence)
@@ -86,7 +85,7 @@ test_that("dynamics object returns correct processes for different combinations 
   expect_equal(dyn_obj$nclass, ncol(mat))
   expect_equal(dyn_obj$nspecies, 1L)
   expect_equal(dyn_obj$ntime, 1L)
-  expect_null(dyn_obj$covariates)
+  expect_equal(class(dyn_obj$covariates), c("covariates", "list"))
   expect_null(dyn_obj$environmental_stochasticity)
   expect_equal(dyn_obj$demographic_stochasticity, demostoch)
   expect_null(dyn_obj$density_dependence)
@@ -98,7 +97,7 @@ test_that("dynamics object returns correct processes for different combinations 
   expect_equal(dyn_obj$nclass, ncol(mat))
   expect_equal(dyn_obj$nspecies, 1L)
   expect_equal(dyn_obj$ntime, 1L)
-  expect_null(dyn_obj$covariates)
+  expect_equal(class(dyn_obj$covariates), c("covariates", "list"))
   expect_null(dyn_obj$environmental_stochasticity)
   expect_null(dyn_obj$demographic_stochasticity)
   expect_equal(dyn_obj$density_dependence, dd)
@@ -110,7 +109,7 @@ test_that("dynamics object returns correct processes for different combinations 
   expect_equal(dyn_obj$nclass, ncol(mat))
   expect_equal(dyn_obj$nspecies, 1L)
   expect_equal(dyn_obj$ntime, 1L)
-  expect_null(dyn_obj$covariates)
+  expect_equal(class(dyn_obj$covariates), c("covariates", "list"))
   expect_null(dyn_obj$environmental_stochasticity)
   expect_null(dyn_obj$demographic_stochasticity)
   expect_null(dyn_obj$density_dependence)
@@ -126,7 +125,7 @@ test_that("dynamics objects can be updated", {
 
   # update by adding covariates
   dyn_new <- update(dyn_obj, cov_eff)
-  expect_null(dyn_obj$covariates)
+  expect_equal(class(dyn_new$covariates), c("covariates", "list"))
   expect_equal(dyn_new$covariates, cov_eff)
 
   # update by adding density dependence
@@ -149,12 +148,16 @@ test_that("dynamics objects can be updated", {
   expect_null(dyn_obj$density_dependence_n)
   expect_equal(dyn_new$density_dependence_n, resc)
 
-  # update by changing covariates
+  # update by changing covariate function
   dyn_new <- update(dyn_obj, cov_eff)
-  expect_equivalent(dyn_new$covariates$x, xsim)
-  xnew <- rnorm(length(xsim))
-  dyn_new <- update(dyn_new, covariates(x = xnew, fun = cov_fn))
-  expect_equivalent(dyn_new$covariates$x, xnew)
+  new_mat <- dyn_new$matrix
+  new_mat[survival(new_mat)] <- plogis(10) * new_mat[survival(new_mat)]
+  expect_equal(dyn_new$covariates(dyn_new$matrix, 10), new_mat)
+  new_fn <- function(mat, x) mat + x
+  dyn_new <- update(dyn_new, covariates(masks = survival(dyn_new$matrix), funs = new_fn))
+  new_mat <- dyn_new$matrix
+  new_mat[survival(new_mat)] <- 0.01 + new_mat[survival(new_mat)]
+  expect_equal(dyn_new$covariates(dyn_new$matrix, 0.01), new_mat)
 
 })
 
