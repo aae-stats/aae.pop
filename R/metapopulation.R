@@ -544,15 +544,19 @@ check_survival <- function(mat, nclass, col, idx, timestep = NULL) {
 #' @export
 #'
 #' @param x a metapopulation object
+# nolint start
 is.metapopulation <- function(x) {
+  # nolint end
   inherits(x, "metapopulation")
 }
 
 #' @rdname metapopulation
 #'
 #' @export
-print.metapopulation <- function (x, ...) {
-  cat(paste0("Metapopulation dynamics object\n"))
+# nolint start
+print.metapopulation <- function(x, ...) {
+  # nolint end
+  cat(paste0("Metapopulation dynamics object with ", x$npopulation, " populations\n"))
 }
 
 # internal function: set metapopulation class

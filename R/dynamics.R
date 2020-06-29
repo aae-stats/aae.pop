@@ -280,15 +280,19 @@ plot.dynamics <- function(x, y, ...) {
 #' @rdname dynamics
 #'
 #' @export
+# nolint start
 is.dynamics <- function(x) {
+  # nolint end
   inherits(x, "dynamics")
 }
 
 #' @rdname dynamics
 #'
 #' @export
-print.dynamics <- function (x, ...) {
-  cat(paste0("Population dynamics object\n"))
+# nolint start
+print.dynamics <- function(x, ...) {
+  # nolint end
+  cat(paste0("Population dynamics object for ", x$nspecies, " species\n"))
 }
 
 # internal function: set dynamics class

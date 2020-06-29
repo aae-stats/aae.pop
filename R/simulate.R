@@ -501,28 +501,36 @@ initialise_poisson <- function(n, args) {
 #' @export
 #'
 #' @param x a simulation or simulation_list object
+# nolint start
 is.simulation <- function(x) {
+  # nolint end
   inherits(x, "simulation")
 }
 
 #' @rdname simulate
 #'
 #' @export
+# nolint start
 is.simulation_list <- function(x) {
+  # nolint end
   inherits(x, "simulation_list")
 }
 
 #' @rdname simulate
 #'
 #' @export
-print.simulation <- function (x, ...) {
+# nolint start
+print.simulation <- function(x, ...) {
+  # nolint end
   cat(paste0("Simulated population dynamics for a single species\n"))
 }
 
 #' @rdname simulate
 #'
 #' @export
-print.simulation_list <- function (x, ...) {
+# nolint start
+print.simulation_list <- function(x, ...) {
+  # nolint end
   cat(paste0("Simulated population dynamics for ", length(x), " species\n"))
 }
 
@@ -541,7 +549,9 @@ print.simulation_list <- function (x, ...) {
 #'   for \code{simulation_list} objects. \code{\dots} can be used to
 #'   pass additional arguments to \code{\link[graphics]{plot}} and
 #'   \code{\link[graphics]{lines}}.
+# nolint start
 plot.simulation <- function(x, y, ..., class = NULL) {
+  # nolint end
 
   if (is.null(class)) {
     yplot <- apply(x, c(1, 3), sum)
@@ -565,7 +575,9 @@ plot.simulation <- function(x, y, ..., class = NULL) {
 #'
 #' @param which integer value or vector of integer values specifying
 #'   which species to plot. Defaults to one plot for each species
+# nolint start
 plot.simulation_list <- function(x, y, ..., which = seq_along(x)) {
+  # nolint end
 
   nspecies <- length(x)
 
