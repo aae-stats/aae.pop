@@ -22,10 +22,10 @@ clean_paste <- function(x, final_sep = "and") {
 }
 
 # update elements of an object based on a mask, function, and arguments
-do_mask <- function(.x, mask, fun, ...) {
+do_mask <- function(x, mask, fun, ...) {
   args <- list(...)
-  .x[mask] <- do.call(fun, c(list(.x[mask]), args))
-  .x
+  x[mask] <- do.call(fun, c(list(x[mask]), args))
+  x
 }
 
 
