@@ -89,9 +89,16 @@ metapopulation <- function(structure, dynamics, dispersal) {
   dispersal <- check_dispersal(dispersal, structure$ndispersal)
 
   # dynamics can be a list of length npop or a single matrix,
-  #   expand if single matrix
-  if (class(dynamics)[1] == "dynamics") {
+  #   expand if single matrix, error if multiple dynamics but not
+  #   npop dynamics
+  if (is.dynamics(dynamics)) {
     dynamics <- lapply(seq_len(structure$npop), function(x) dynamics)
+  } else {
+    if (length(dynamics) != structure$npop) {
+      stop("dynamics must be a single dynamics object or a list of dynamics ",
+           "objects with one element for each row/col of structure",
+           call. = FALSE)
+    }
   }
 
   # check list of dynamics objects is ok
@@ -253,6 +260,10 @@ check_structure <- function(x) {
   # is structure actually a matrix?
   if (!is.matrix(x))
     stop("structure must be a matrix", call. = FALSE)
+
+  # structure must be a square matrix
+  if (nrow(x) != ncol(x))
+    stop("structure must be a square matrix", call. = FALSE)
 
   # convert binary matrix to logical
   if (all(x %in% c(0, 1)))
