@@ -473,10 +473,14 @@ expand_matrix <- function(obj, args) {
 
   if (!is.null(obj$covariates)) {
 
-    # expand with covariates if included
+    # how many covariate observations do we have?
+    ncov <- nrow(args[[1]])
+
+    # expand with covariates if included, passing
+    #   one row of first argument for each time step
     matrix <- lapply(
-      seq_len(nrow(args[[1]])),
-      function(i) do.call(obj$covariates, c(list(obj$matrix), args))
+      seq_len(ncov),
+      function(i) do.call(obj$covariates, c(list(obj$matrix), args[[1]][i, ], args[-1]))
     )
 
   } else {

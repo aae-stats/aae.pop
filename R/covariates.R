@@ -16,9 +16,9 @@
 #' @details Masks must be of the same dimension as the population
 #'   dynamics matrix and specify cells influenced by covariates
 #'   according to \code{funs}. Functions must take at least
-#'   one arguments, a matrix \code{x} representing the population
+#'   one arguments, a matrix representing the population
 #'   dynamics matrix. Functions must return a matrix with
-#'   the same dimensions as \code{x}, modified to reflect the
+#'   the same dimensions as the input, modified to reflect the
 #'   effects of covariates on vital rates. Additional arguments
 #'   can be passed to \code{funs} and can be specified as
 #'   \code{args} in \code{\link{simulate}}.
