@@ -9,12 +9,12 @@ NULL
 #' @export
 #'
 #' @param dynamics a \code{\link{dynamics}} object
-#' @param priors a list of priors defined with \code{\link{priors}}
+#' @param priors a list of priors defined with \code{\link{prior}}
 #' @param comparison a function that takes an output from
 #'   \code{\link{simulate}} and formats to match inputs
 #'   specified in \code{target}
 #' @param target values to be compared to simulated model outputs
-#'   with \code{\link{comparison}}
+#'   with \code{comparison}
 #' @param method a function call for an inference method that
 #'   takes as arguments a function and parameters, returning
 #'   a vector of summary statistics that define model fit to data.
@@ -47,6 +47,7 @@ inference <- function(dynamics, priors, comparison, target, method, ...) {
 #' @export
 #'
 #' @param dynamics a \code{\link{dynamics}} object
+#' @param args a list of arguments for ???
 #'
 #' @details Return parameters from a dynamics object in format
 #'   suitable for inference or for construction of priors.

@@ -15,14 +15,14 @@ prior(distribution, ...)
 \arguments{
 \item{dynamics}{a \code{\link{dynamics}} object}
 
-\item{priors}{a list of priors defined with \code{\link{priors}}}
+\item{priors}{a list of priors defined with \code{\link{prior}}}
 
 \item{comparison}{a function that takes an output from
 \code{\link{simulate}} and formats to match inputs
 specified in \code{target}}
 
 \item{target}{values to be compared to simulated model outputs
-with \code{\link{comparison}}}
+with \code{comparison}}
 
 \item{method}{a function call for an inference method that
 takes as arguments a function and parameters, returning
@@ -31,6 +31,8 @@ Example methods include those defined in the \code{EasyABC}
 package}
 
 \item{\dots}{additional arguments passed to \code{distribution}}
+
+\item{args}{a list of arguments for ???}
 
 \item{distribution}{xff}
 }

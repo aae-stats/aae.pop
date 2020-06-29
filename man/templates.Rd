@@ -6,17 +6,13 @@
 \alias{murraycod}
 \title{Use a fully parameterised population dynamics object}
 \usage{
-get_template(sp, x = NULL, params = list(), ...)
+get_template(sp, params = list(), ...)
 
-murraycod(x = NULL, params = list(), ...)
+murraycod(params = list(), ...)
 }
 \arguments{
 \item{sp}{string specifying species common name (see details for
 a list of species currently included)}
-
-\item{x}{a vector or matrix of covariates used to define
-time-varying vital rates according to a pre-defined
-functional response}
 
 \item{params}{a named list of parameters passed to specific
 templates (e.g. carrying capacity \code{K} for Murray cod)}

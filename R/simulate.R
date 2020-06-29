@@ -119,7 +119,7 @@ simulate.dynamics <- function(object,
       if (any(not_expanded)) {
         for (i in which(not_expanded)) {
           object$dynamics[[i]]$matrix <- lapply(
-            seq_len(ntime),
+            seq_len(opt$ntime),
             function(i) object$dynamics[[i]]$matrix
           )
         }
