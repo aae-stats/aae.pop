@@ -87,14 +87,8 @@ metapopulation <- function(structure, dynamics, dispersal) {
     covar_masks <- mat_masks[dyn_check$covars]
     covar_funs <- covar_funs[dyn_check$covars]
 
-    # define new x object by combining x for all species
-    covar_x <- do.call(
-      rbind,
-      lapply(dynamics, function(x) x$covariates$x)
-    )
-
     # create full environmental stochasticity component
-    covars <- covariates(covar_x, covar_masks, covar_funs)
+    covars <- covariates(covar_masks, covar_funs)
 
   }
 
