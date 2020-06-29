@@ -36,7 +36,7 @@ NULL
 #'
 #' # define metapopulation structure with populations
 #' #   1 and 3 dispersing into population 2
-#' mc_structure <- matrix(0, nrow = 5, ncol = 5)
+#' mc_structure <- matrix(0, nrow = 3, ncol = 3)
 #' mc_structure[1, 2] <- 1
 #' mc_structure[3, 2] <- 1
 #'
