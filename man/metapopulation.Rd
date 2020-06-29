@@ -63,23 +63,27 @@ sims <- simulate(mc_meta, nsim = 2)
 # simulate with shared covariates
 #  (uses pre-defined Murray cod covariate function)
 xsim <- matrix(rnorm(20), ncol = 1)
-sims <- simulate(mc_meta, nsim = 2, args = list(covariates = list(x = x_sim)))
+sims <- simulate(mc_meta, nsim = 2, args = list(covariates = list(x = xsim)))
 
 # simulate with separate covariates
 #  (requires re-definition of Murray cod covariate function)
-new_fn <- function(i) {
-  function(mat, x) {
-    mat * (1 / (1 + exp(-0.5 * (x[i] + 10))))
-  }
+new_fn1 <- function(mat, x) {
+  mat * (1 / (1 + exp(-0.5 * (x[1] + 10))))
 }
-dyn1 <- update(dyn1, covariates(masks = transition(dyn1$matrix), funs = new_fn))
-dyn2 <- update(dyn2, covariates(masks = transition(dyn2$matrix), funs = new_fn))
-dyn3 <- update(dyn3, covariates(masks = transition(dyn3$matrix), funs = new_fn))
+new_fn2 <- function(mat, x) {
+  mat * (1 / (1 + exp(-0.5 * (x[2] + 10))))
+}
+new_fn3 <- function(mat, x) {
+  mat * (1 / (1 + exp(-0.5 * (x[3] + 10))))
+}
+dyn1 <- update(dyn1, covariates(masks = transition(dyn1$matrix), funs = new_fn1))
+dyn2 <- update(dyn2, covariates(masks = transition(dyn2$matrix), funs = new_fn2))
+dyn3 <- update(dyn3, covariates(masks = transition(dyn3$matrix), funs = new_fn3))
 
 # (re)create metapopulation object
 mc_meta <- metapopulation(mc_structure, list(dyn1, dyn2, dyn3), mc_dispersal)
 
-# and simulate
+# and simulate with one column of predictors for each population
 xsim <- matrix(rnorm(60), ncol = 3)
-sims <- simulate(mc_meta, nsim = 2, args = list(covariates = list(x = x_sim)))
+sims <- simulate(mc_meta, nsim = 2, args = list(covariates = list(x = xsim)))
 }
