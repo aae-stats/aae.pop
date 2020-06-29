@@ -146,6 +146,29 @@ get_unique_dynamics <- function(interactions) {
 
 }
 
+#' @rdname multispecies
+#'
+#' @export
+#'
+#' @param x a multispecies or interaction object
+is.multispecies <- function(x) {
+  inherits(x, "multispecies")
+}
+
+#' @rdname multispecies
+#'
+#' @export
+print.multispecies <- function (x, ...) {
+  cat(paste0("Multispecies population dynamics object\n"))
+}
+
+#' @rdname multispecies
+#'
+#' @export
+is.interaction <- function(x) {
+  inherits(x, "interaction")
+}
+
 # internal function: set multispecies class
 as_multispecies <- function(x) {
 

@@ -1,4 +1,10 @@
+#' @name simulate
 #' @title Simulate single or multispecies population dynamics in R
+#' @description Simulate population dynamics for one or more
+#'   species defined by \code{\link{dynamics}} objects.
+NULL
+
+#' @rdname simulate
 #'
 #' @importFrom stats rpois rbinom runif simulate
 #'
@@ -34,8 +40,6 @@
 #' @param args named list of lists passing arguments to processes defined
 #'   in \code{object}, including \code{interaction} for
 #'   \code{\link{multispecies}} objects.
-#' @param \dots currently ignored, included for consistency with simulate
-#'   generic
 #'
 #' @details To be completed.
 #'
@@ -52,8 +56,7 @@ simulate.dynamics <- function(object,
                               seed = NULL,
                               init = NULL,
                               options = list(),
-                              args = list(),
-                              ...) {
+                              args = list()) {
   # nolint end
 
   # set default options for simulation
@@ -97,7 +100,7 @@ simulate.dynamics <- function(object,
 
   # expand matrix and use the number of covariate values instead
   #   of fixed ntime if covariates are provided
-  if ("multispecies" %in% class(object)) {
+  if (is.multispecies(object)) {
 
     if (include_covariates) {
 
@@ -144,7 +147,7 @@ simulate.dynamics <- function(object,
 
   # initalise the population with init if provided, following
   #   options()$aae.pop_initialisation otherwise
-  if ("multispecies" %in% class(object)) {
+  if (is.multispecies(object)) {
     pop_tmp <- lapply(object$dynamics, initialise, opt, init, keep_slices = FALSE)
     if (opt$keep_slices)
       pop <- lapply(object$dynamics, initialise, opt, init, keep_slices = opt$keep_slices)
@@ -158,7 +161,7 @@ simulate.dynamics <- function(object,
   for (i in seq_len(opt$ntime)) {
 
     # split based on multispecies or single species
-    if ("multispecies" %in% class(object)) {
+    if (is.multispecies(object)) {
       pop_tmp <- simulate_once_multispecies(
         iter = i,
         object,
@@ -194,7 +197,7 @@ simulate.dynamics <- function(object,
     pop <- pop_tmp
 
   # set appropriate class for outputs
-  if ("multispecies" %in% class(object)) {
+  if (is.multispecies(object)) {
     out <- as_simulation_list(pop)
   } else {
     out <- as_simulation(pop)
@@ -491,6 +494,84 @@ expand_matrix <- function(obj, args) {
 #' @importFrom stats rpois
 initialise_poisson <- function(n, args) {
   do.call(rpois, c(list(n), args))
+}
+
+#' @rdname simulate
+#'
+#' @export
+#'
+#' @param x a simulation or simulation_list object
+is.simulation <- function(x) {
+  inherits(x, "simulation")
+}
+
+#' @rdname simulate
+#'
+#' @export
+is.simulation_list <- function(x) {
+  inherits(x, "simulation_list")
+}
+
+#' @rdname simulate
+#'
+#' @export
+print.simulation <- function (x, ...) {
+  cat(paste0("Simulated population dynamics for a single species\n"))
+}
+
+#' @rdname simulate
+#'
+#' @export
+print.simulation_list <- function (x, ...) {
+  cat(paste0("Simulated population dynamics for ", length(x), " species\n"))
+}
+
+#' @rdname simulate
+#'
+#' @export
+#'
+#' @param y ignored; included for consistency with plot method
+#' @param class integer value specifying which age/stage class to plot.
+#'   Defaults to NULL, in which case the sum of all classes is plotted
+#' @param \dots Additional arguments passed to plot
+#'
+#' @details Basic plot methods are provided for \code{simulation} and
+#'   \code{simulation_list} classes. Plots can present a single class
+#'   or the sum of all classes, and can include one or more species
+#'   for \code{simulation_list} objects. \code{\dots} can be used to
+#'   pass additional arguments to \code{\link[graphics]{plot}} and
+#'   \code{\link[graphics]{lines}}.
+plot.simulation <- function(x, y, ..., class = NULL) {
+
+  if (is.null(class)) {
+    yplot <- apply(x, c(1, 3), sum)
+  } else {
+    yplot <- x[, class, ]
+  }
+  xplot <- seq_len(ncol(yplot))
+  ylims <- range(yplot)
+  plot(yplot[1, ] ~ xplot,
+       ylim = ylims,
+       type = "l",
+       ...)
+  for (i in seq_len(nrow(yplot))[-1])
+    lines(yplot[i, ] ~ xplot, ...)
+
+}
+
+#' @rdname simulate
+#'
+#' @export
+#'
+#' @param which integer value or vector of integer values specifying
+#'   which species to plot. Defaults to one plot for each species
+plot.simulation_list <- function(x, y, ..., which = seq_along(x)) {
+
+  nspecies <- length(x)
+
+  for (i in which)
+    plot(x[[i]], ...)
+
 }
 
 # internal function: set simulation class

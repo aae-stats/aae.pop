@@ -4,6 +4,8 @@
 \alias{dynamics}
 \alias{update.dynamics}
 \alias{plot.dynamics}
+\alias{is.dynamics}
+\alias{print.dynamics}
 \title{Create a population dynamics object}
 \usage{
 dynamics(matrix, ...)
@@ -11,6 +13,10 @@ dynamics(matrix, ...)
 \method{update}{dynamics}(object, ...)
 
 \method{plot}{dynamics}(x, y, ...)
+
+is.dynamics(x)
+
+\method{print}{dynamics}(x, ...)
 }
 \arguments{
 \item{matrix}{a matrix of vital rates specifying transitions between
