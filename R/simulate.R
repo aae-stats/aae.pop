@@ -331,6 +331,9 @@ simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args, inclu
     is_expanded <- TRUE
   }
 
+  # pass rescaled matrix as part of dynamics
+  dynamics$matrix <- mat
+
   # update and return abundances of species i using single-species updater
   simulate_once(iter, dynamics, pop_t[[i]], opt, args, include_covariates, is_expanded = is_expanded)
 
