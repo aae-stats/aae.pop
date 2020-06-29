@@ -81,7 +81,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
   if (any(dyn_check$covars)) {
 
     # pull out functions for all populations
-    covar_funs <- lapply(dynamics, function(x) x$covariates$fun)
+    covar_funs <- lapply(dynamics, function(x) x$covariates)
 
     # pull out non-NULL elements only
     covar_masks <- mat_masks[dyn_check$covars]
