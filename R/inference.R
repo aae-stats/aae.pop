@@ -114,7 +114,7 @@ define_inference <- function(dynamics, comparison) {
   #   returns summary statistics
   function(params) {
 
-    new_dynamics <- update_dynamics(params)
+    new_dynamics <- update_dynamics(dynamics, params)
 
     comparison(new_dynamics)
 
@@ -123,7 +123,7 @@ define_inference <- function(dynamics, comparison) {
 }
 
 # internal function: update a dynamics object based on a new set of parameters
-update_dynamics <- function(params) {
+update_dynamics <- function(dynamics, params) {
 
   NULL
 
