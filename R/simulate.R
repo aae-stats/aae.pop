@@ -40,6 +40,12 @@ NULL
 #' @param args named list of lists passing arguments to processes defined
 #'   in \code{object}, including \code{interaction} for
 #'   \code{\link{multispecies}} objects.
+#' @param args.dyn list of time-varying values of \code{args}. Defaults to
+#'   \code{NULL} and requires one element for each generation (specified
+#'   by covariates or with \code{options$ntime}).
+#' @param args.fn named list of functions evaluating additional values of
+#'   \code{args} based on the matrix and abundances in each generation.
+#'   Defaults to \code{NULL}.
 #'
 #' @details To be completed.
 #'
@@ -56,7 +62,9 @@ simulate.dynamics <- function(object,
                               seed = NULL,
                               init = NULL,
                               options = list(),
-                              args = list()) {
+                              args = list(),
+                              args.dyn = NULL,
+                              args.fn = NULL) {
   # nolint end
 
   # set default options for simulation
@@ -144,7 +152,6 @@ simulate.dynamics <- function(object,
 
   }
 
-
   # initalise the population with init if provided, following
   #   options()$aae.pop_initialisation otherwise
   if (is.multispecies(object)) {
@@ -159,6 +166,11 @@ simulate.dynamics <- function(object,
 
   # loop through timesteps, updating population at each timestep
   for (i in seq_len(opt$ntime)) {
+
+    # update args if required
+    default_args <- update_args(
+      args = default_args, dyn = args.dyn, fn = args.fn, obj = object, pop = pop_tmp, iter = i
+    )
 
     # split based on multispecies or single species
     if (is.multispecies(object)) {
@@ -486,6 +498,38 @@ expand_matrix <- function(obj, args) {
 
   # return
   matrix
+
+}
+
+# internal function: update arguments based on the current generation
+update_args <- function(args, dyn, fn, obj, pop, iter) {
+
+  if (!is.null(dyn)) {
+
+    # check which exist
+    dyn_exist <- names(dyn)
+
+    # update accordingly
+    for (i in seq_along(dyn_exist))
+      args[dyn_exist[i]] <- c(args[dyn_exist[i]], dyn[i])
+
+  }
+
+  if (!is.null(fn)) {
+
+    # check which exist
+    fn_exist <- names(fn)
+
+    # update accordingly
+    for (i in seq_along(fn_exist)) {
+      fn_eval <- fn[[i]](obj, pop, iter)
+      args[fn_exist[i]] <- c(args[fn_exist[i]], list(fn_eval))
+    }
+
+  }
+
+  # and return
+  args
 
 }
 
