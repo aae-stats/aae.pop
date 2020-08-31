@@ -28,13 +28,11 @@ do_mask <- function(.x, mask, fun, ...) {
   .x
 }
 
-
 # generate a unique ID for an object based on hex code
 # function adapted from: https://github.com/greta-dev/greta
 hex_id <- function() {
   paste(as.raw(sample.int(256L, 4, TRUE) - 1L), collapse = "")
 }
-
 
 # set an object class
 as_class <- function(
