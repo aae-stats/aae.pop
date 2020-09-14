@@ -87,6 +87,9 @@ simulate.dynamics <- function(object,
   )
   default_args[names(args)] <- args
 
+  # store a copy of the defaults to reset if changed dynamically below
+  static_args <- default_args
+
   # add nsim into options
   opt$replicates <- nsim
 
@@ -169,7 +172,7 @@ simulate.dynamics <- function(object,
 
     # update args if required
     default_args <- update_args(
-      args = default_args, dyn = args.dyn, fn = args.fn, obj = object, pop = pop_tmp, iter = i
+      args = static_args, dyn = args.dyn, fn = args.fn, obj = object, pop = pop_tmp, iter = i
     )
 
     # split based on multispecies or single species
