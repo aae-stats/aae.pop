@@ -68,7 +68,9 @@ values are:
     \code{init = NULL}. Defaults to \code{options()$aae.pop_lambda},
     which specifies lambda for Poisson random draws. The default
     initialisation function is defined by
-    \code{options()$aae.pop_initialisation}.}
+    \code{options()$aae.pop_initialisation}.
+ - \code{update} a function to update abundances from one time
+    step to the next. Defaults to \code{options()$aae.pop_update}.}
 
 \item{args}{named list of lists passing arguments to processes defined
 in \code{object}, including \code{interaction} for
@@ -226,10 +228,10 @@ covars <- covariates(
 # simulate 50 random covariate values
 xvals <- matrix(runif(50), ncol = 1)
 
-# update the dynamics object and simulate from it
-#   - note that ntime is now captured in the 50 values
-#     of xvals, assuming we pass xvals as an argument
-#     to the covariates functions
+# update the dynamics object and simulate from it.
+#   Note that ntime is now captured in the 50 values
+#   of xvals, assuming we pass xvals as an argument
+#   to the covariates functions
 dyn <- update(dyn, covars)
 sims <- simulate(
   dyn,
@@ -247,18 +249,15 @@ plot(sims)
 #   to its value at time t + 1. The default in aae.pop
 #   uses matrix multiplication of the vital rates matrix
 #   and current population. A simple tweak is to update
-#   with binomial draws.
-#   - note that this also requires a change to the
-#     "tidy_abundances" option so that population abundances
-#     are always integer values.
-options(aae.pop_update = aae.pop:::update_binomial_leslie,
-        aae.pop_tidy_abundances = floor)
-
-# now we can re-simulate the abundances
+#   with binomial draws. Note that this also requires a
+#   change to the "tidy_abundances" option so that population
+#   abundances are always integer values.
 sims <- simulate(
   dyn,
   init = c(50, 20, 10, 10, 5),
   nsim = 100,
+  options = list(update = update_binomial_leslie,
+                 tidy_abundances = floor),
   args = list(covariates = list(x = xvals)),
   args.fn = list(environmental_stochasticity = envstoch_function)
 )

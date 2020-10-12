@@ -1,13 +1,34 @@
-# functions for a single time-step update (matrix %*% vector)
+#' @name updaters
+#' @title Functions for a single time-step update (matrix %*% vector)
+#' @description Define how population abundances are updated from
+#'   one time step to the next. Functions can take any form but will
+#'   only be vectorised across replicates in limited situations.
+NULL
 
-# internal function: update abundances for one time step
+#' @rdname templates
+#'
+#' @export
+#'
+#' @param pop current state of the population
+#' @param mat matrix of vital rates used to update population state
+#'
+#' @details Update abundances with a direct matrix multiplication
+#'   that does not include any form of demographic stochasticity.
+#'   This is the fastest update option and will vectorise across
+#'   replicates if the population matrix is not expanded by
+#'   \code{\link{environmental_stochasticity}} or
+#'   \code{\link{density_dependence}}.
 update_crossprod <- function(pop, mat) {
   tcrossprod(pop, mat)
 }
 
-# internal function: update abundances with a direct RNG draw
-#   that combines update with demographic stochasticity, assuming
-#   Leslie matrix
+#' @rdname templates
+#'
+#' @export
+#'
+#' @details Update abundances with a direct RNG draw
+#   that combines update with demographic stochasticity,
+#   assuming a Leslie matrix.
 update_binomial_leslie <- function(pop, mat) {
 
   if (!all(pop%%1 == 0)) {
@@ -30,11 +51,16 @@ update_binomial_leslie <- function(pop, mat) {
 
 }
 
-# internal function: update abundances with a direct RNG draw
-#   that combines update with demographic stochasticity, allowing
-#   for general matrix forms (slower than Leslie option)
-#
+#' @rdname templates
+#'
 #' @importFrom mc2d rmultinomial
+#'
+#' @export
+#'
+#' @details Update abundances with a direct RNG draw
+#'   that combines update with demographic stochasticity,
+#'   allowing for general matrix forms (slower than
+#'   \code{update_binomial_leslie}).
 update_multinomial <- function(pop, mat) {
 
   if (!all(pop%%1 == 0)) {

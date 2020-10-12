@@ -39,6 +39,8 @@ NULL
 #'       which specifies lambda for Poisson random draws. The default
 #'       initialisation function is defined by
 #'       \code{options()$aae.pop_initialisation}.
+#'    - \code{update} a function to update abundances from one time
+#'       step to the next. Defaults to \code{options()$aae.pop_update}.
 #' @param args named list of lists passing arguments to processes defined
 #'   in \code{object}, including \code{interaction} for
 #'   \code{\link{multispecies}} objects.
@@ -171,10 +173,10 @@ NULL
 #' # simulate 50 random covariate values
 #' xvals <- matrix(runif(50), ncol = 1)
 #'
-#' # update the dynamics object and simulate from it
-#' #   - note that ntime is now captured in the 50 values
-#' #     of xvals, assuming we pass xvals as an argument
-#' #     to the covariates functions
+#' # update the dynamics object and simulate from it.
+#' #   Note that ntime is now captured in the 50 values
+#' #   of xvals, assuming we pass xvals as an argument
+#' #   to the covariates functions
 #' dyn <- update(dyn, covars)
 #' sims <- simulate(
 #'   dyn,
@@ -192,18 +194,15 @@ NULL
 #' #   to its value at time t + 1. The default in aae.pop
 #' #   uses matrix multiplication of the vital rates matrix
 #' #   and current population. A simple tweak is to update
-#' #   with binomial draws.
-#' #   - note that this also requires a change to the
-#' #     "tidy_abundances" option so that population abundances
-#' #     are always integer values.
-#' options(aae.pop_update = aae.pop:::update_binomial_leslie,
-#'         aae.pop_tidy_abundances = floor)
-#'
-#' # now we can re-simulate the abundances
+#' #   with binomial draws. Note that this also requires a
+#' #   change to the "tidy_abundances" option so that population
+#' #   abundances are always integer values.
 #' sims <- simulate(
 #'   dyn,
 #'   init = c(50, 20, 10, 10, 5),
 #'   nsim = 100,
+#'   options = list(update = update_binomial_leslie,
+#'                  tidy_abundances = floor),
 #'   args = list(covariates = list(x = xvals)),
 #'   args.fn = list(environmental_stochasticity = envstoch_function)
 #' )
@@ -227,7 +226,8 @@ simulate.dynamics <- function(object,
     ntime = options()$aae.pop_ntime,
     keep_slices = options()$aae.pop_keep_slices,
     tidy_abundances = options()$aae.pop_tidy_abundances,
-    initialise_args = list(options()$aae.pop_lambda)
+    initialise_args = list(options()$aae.pop_lambda),
+    update = options()$aae.pop_update
   )
   opt[names(options)] <- options
 
@@ -433,12 +433,12 @@ simulate_once <- function(iter, obj, pop_t, opt, args, include_covariates, is_ex
   # single-step update of abundances
   if (is_expanded) {
     pop_tp1 <- t(mapply(
-      options()$aae.pop_update,
+      opt$update,
       lapply(seq_len(opt$replicates), function(i) pop_t[i, ]),
       mat
     ))
   } else {
-    pop_tp1 <- options()$aae.pop_update(pop_t, mat)
+    pop_tp1 <- opt$update(pop_t, mat)
   }
 
   # tweak abundances to add stochastic variation in demographic

@@ -1,8 +1,7 @@
 #' @name templates
 #' @title Use a fully parameterised population dynamics object
 #' @description Use pre-defined population dynamics objects to
-#'   define a matrix model for a species with known parameters,
-#'   optionally including new covariates.
+#'   define a matrix model for a species with known parameters.
 NULL
 
 #' @rdname templates
@@ -11,15 +10,8 @@ NULL
 #'
 #' @param sp string specifying species common name (see details for
 #'   a list of species currently included)
-#' @param params a named list of parameters passed to specific
-#'   templates (e.g. carrying capacity \code{K} for Murray cod)
-#' @param \dots additional objects passed to \code{\link{dynamics}},
-#'   overwriting the default, pre-defined values for these classes.
-#'   Must be one or more of \code{\link{covariates}},
-#'   \code{\link{environmental_stochasticity}},
-#'   \code{\link{demographic_stochasticity}},
-#'   \code{\link{density_dependence}}, or
-#'   \code{\link{density_dependence_n}}
+#' @param \dots additional arguments passed to templates or args
+#'   functions
 #'
 #' @details The \code{get_template} function and associated
 #'   wrapper functions (e.g. \code{murray_cod}) return a collated
@@ -43,20 +35,35 @@ NULL
 #'   If defined in this way, \code{get_template("my_species")} will
 #'   return a compiled dynamics object for my_species.
 #'
+#'   In some cases, additional arguments might need to be passed to
+#'   \code{\link{simulate}}, and it may be useful to define these as
+#'   part of the template. The current setup requires all templates
+#'   to return a dynamics object only. The \code{get_args} function
+#'   has been included to handle this situation Arguments should be
+#'   specified similarly to templates, with \code{args_} followed by
+#'   a species name or identifier (e.g \code{args_my_species}). Arguments
+#'   functions should return a series of named lists for any of
+#'   \code{args}, \code{args.dyn}, or \code{args.fn} (see
+#'   \code{\link{simulate}} for descriptions of these terms).
+#'
 #' @examples
-#' # add
-get_template <- function(sp, params = list(), ...) {
+#' # define a basic model for Murray cod with
+#' #   carrying capacity = 25000
+#' mc <- murray_cod(k = 25000)
+#'
+#' # simulate from this model
+#' sims <- simulate(mc, nsim = 100)
+#'
+#' # plot the simulated values
+#' plot(sims)
+get_template <- function(sp, ...) {
+
+  # unpack dots
+  arg_list <- list(...)
 
   # draw up relevant parameters based on corrected species name
   sp <- parse_species(sp)
-  all_parameters <- do.call(get(paste0("template_", sp)), params)
-
-  # unpack dots and replace defaults if any objects provided
-  arg_list <- list(...)
-  if (length(arg_list) > 0) {
-    arg_types <- sapply(arg_list, function(x) class(x)[1])
-    all_parameters[arg_types] <- arg_list
-  }
+  all_parameters <- do.call(get(paste0("template_", sp)), arg_list)
 
   # return collated dynamics object
   do.call(dynamics, all_parameters)
@@ -67,13 +74,15 @@ get_template <- function(sp, params = list(), ...) {
 #'
 #' @export
 #'
+#' @param k carrying capacity
+#'
 #' @description Alias to return defined template for Murray
 #'   cod. Currently implemented parameters are \code{k}, the
 #'   carrying capacity
 #'
 #' @importFrom stats rnorm
-murray_cod <- function(params = list(), ...) {
-  get_template(sp = "murraycod", params, ...)
+murray_cod <- function(k = 20000, ...) {
+  get_template(sp = "murraycod", k = k, ...)
 }
 
 #' @rdname templates
@@ -86,8 +95,8 @@ murray_cod <- function(params = list(), ...) {
 #'
 #### CHECK IMPORTS BELOW
 #### #' @importFrom stats rnorm
-macquarie_perch <- function(params = list(), ...) {
-  get_template(sp = "macquarieperch", params, ...)
+macquarie_perch <- function(k = 1000, ...) {
+  get_template(sp = "macquarieperch", k = k, ...)
 }
 
 # internal function: define species defaults
@@ -649,7 +658,7 @@ template_commongalaxias <- function() {
 #'
 #' @description Return arguments for a given species
 #'
-get_args <- function(sp, params = list(), ...) {
+get_args <- function(sp, ...) {
 
   # draw up relevant parameters based on corrected species name
   sp <- parse_species(sp)
@@ -664,9 +673,12 @@ get_args <- function(sp, params = list(), ...) {
     mode = "function"
   )
 
+  # collapse dots into a list
+  arg_list <- list(...)
+
   # get arguments if available
   if (available)
-    out <- do.call(get(paste0("args_", sp)), params)
+    out <- do.call(get(paste0("args_", sp)), arg_list)
 
   # return
   out
@@ -675,14 +687,14 @@ get_args <- function(sp, params = list(), ...) {
 
 # internal function: define macquarie perch arguments
 args_macquarieperch <- function(
-  n = c(0, 0, 50, 5),
+  n = c(0, 0, 0, 0),
   start = 1,
-  end = 10,
+  end = 1,
   add = TRUE,
   allee_strength = 1,
-  contributing_min = 0.5,
+  contributing_min = 0.75,
   contributing_max = 1.0,
-  recruit_failure = 0.25) {
+  recruit_failure = 0) {
 
   # helper to define translocation process
   define_translocation <- function(start, end, n_translocate, add = TRUE) {
