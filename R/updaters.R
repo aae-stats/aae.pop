@@ -6,42 +6,62 @@ update_crossprod <- function(pop, mat) {
 }
 
 # internal function: update abundances with a direct RNG draw
-#   that combines update with demographic stochasticity
-update_binomial <- function(pop, mat) {
+#   that combines update with demographic stochasticity, assuming
+#   Leslie matrix
+update_binomial_leslie <- function(pop, mat) {
 
-  # can't work out size of rbinom unless pop is an integer
-  if (!all(pop %% 1 == 0)) {
+  if (!all(pop%%1 == 0)) {
     stop("some abundances are not integers, so cannot be used ",
-         "with update_binomial. Check options()$tidy_abundances ",
+         "with update_binomial_leslie. Check options()$tidy_abundances ",
          "and update with an appropriate method (e.g. floor)",
          call. = FALSE)
   }
 
-  # run internal update on each class individually
-  pop_tp1 <- apply(mat, 1, update_binomial_internal, n = pop)
+  pop_nm1 <- pop[-length(pop)]
 
-  # return outputs
-  pop_tp1
+  vals <- tcrossprod(pop, mat)
+  probs <- vals[-1] / pop_nm1
+  probs[pop_nm1 == 0] <- 0
+
+  c(
+    rpois(1, lambda = vals[1]),
+    rbinom(length(probs), size = pop_nm1, prob = probs)
+  )
 
 }
 
-# internal function: update population abundances with a demographic
-#   stochasticity function based on Poisson draws for reproduction and
-#   Binomial draws for survival
-update_binomial_internal <- function(x, n) {
+# internal function: update abundances with a direct RNG draw
+#   that combines update with demographic stochasticity, allowing
+#   for general matrix forms (slower than Leslie option)
+#
+#' @importFrom mc2d rmultinomial
+update_multinomial <- function(pop, mat) {
 
-  # which classes contribute to class i?
-  source <- x > 0
-
-  # use Poisson if dealing with creation of new individuals,
-  #  Binomial otherwise
-  if (all(x < 1)) {
-    n_tp1 <- sum(rbinom(sum(source), size = n[source], prob = x[source]))
-  } else {
-    n_tp1 <- sum(rpois(sum(source), lambda = (n[source] * x[source])))
+  if (!all(pop%%1 == 0)) {
+    stop("some abundances are not integers, so cannot be used ",
+         "with update_multinomial. Check options()$tidy_abundances ",
+         "and update with an appropriate method (e.g. floor)",
+         call. = FALSE)
   }
 
-  # return
-  n_tp1
+  n <- length(pop)
+
+  recruits <- mat[1, ]
+  recruits[1] <- 0
+  recruits <- rpois(1, lambda = crossprod(recruits, pop))
+
+  mat[reproduction(mat)] <- 0
+
+  # add class for dead individuals
+  mat <- rbind(mat, 1 - colSums(mat))
+
+  out <- matrix(0, nrow = n, ncol = n + 1)
+
+  out <- mc2d::rmultinomial(n, size = pop, prob = t(mat))
+  out <- apply(out[, 1:n], 2, sum)
+
+  out[1] <- out[1] + recruits
+
+  out
 
 }
