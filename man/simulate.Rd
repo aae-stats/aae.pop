@@ -17,7 +17,9 @@
   seed = NULL,
   init = NULL,
   options = list(),
-  args = list()
+  args = list(),
+  args.dyn = NULL,
+  args.fn = NULL
 )
 
 is.simulation(x)
@@ -69,6 +71,14 @@ values are:
 in \code{object}, including \code{interaction} for
 \code{\link{multispecies}} objects.}
 
+\item{args.dyn}{list of time-varying values of \code{args}. Defaults to
+\code{NULL} and requires one element for each generation (specified
+by covariates or with \code{options$ntime}).}
+
+\item{args.fn}{named list of functions evaluating additional values of
+\code{args} based on the matrix and abundances in each generation.
+Defaults to \code{NULL}.}
+
 \item{x}{a simulation or simulation_list object}
 
 \item{\dots}{Additional arguments passed to plot}
@@ -97,9 +107,135 @@ Basic plot methods are provided for \code{simulation} and
 }
 \examples{
 
-# define a population matrix
+# define a population matrix (columns move to rows)
+nstage <- 5
+popmat <- matrix(0, nrow = nstage, ncol = nstage)
+popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
+popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
 
-# define a dynamics objet
+# can extract standard population matrix summary stats
+lambda <- Re(eigen(popmat)$values[1])
 
-# simulate from this
+# define a dynamics object
+dyn <- dynamics(popmat)
+
+# simulate from this (50 time steps, 100 replicates)
+sims <- simulate(dyn, nsim = 100, options = list(ntime = 50))
+
+# plot the simulated trajectories
+plot(sims)
+
+# add some density dependence
+dd <- density_dependence(
+  masks = reproduction(popmat, dims = 4:5),
+  funs = ricker(1000)
+)
+
+# update the dynamics object
+dyn <- update(dyn, dd)
+
+# simulate again
+sims <- simulate(dyn, nsim = 100, options = list(ntime = 50))
+
+# and plot
+plot(sims)
+
+# what if we want to add initial conditions?
+sims <- simulate(
+  dyn,
+  init = c(50, 20, 10, 10, 5),
+  nsim = 100,
+  options = list(ntime = 50),
+)
+
+# and plot again
+plot(sims)
+
+# note that there is only one trajectory now because
+#   this simulation is deterministic.
+#
+# let's change that by adding some environmental stochasticity
+envstoch <- environmental_stochasticity(
+  masks = list(
+    reproduction(popmat, dims = 4:5),
+    transition(popmat)
+  ),
+  funs = list(
+    function(x) rpois(n = length(x), lambda = x),
+    function(x) rmultiunit(n = 1, mean = x, sd = 0.1 * x)
+  )
+)
+
+# update the dynamics object and simulate from it
+dyn <- update(dyn, envstoch)
+sims <- simulate(
+  dyn,
+  init = c(50, 20, 10, 10, 5),
+  nsim = 100,
+  options = list(ntime = 50),
+)
+
+# the rmultiunit draws can be slow but we can speed
+#   this up by calculating them once per generation
+#   instead of once per replicate within each generation
+envstoch <- environmental_stochasticity(
+  masks = list(
+    reproduction(popmat, dims = 4:5),
+    transition(popmat)
+  ),
+  funs = list(
+    function(x, ...) rpois(n = length(x), lambda = x),
+    function(x, mean, sd) {
+      pnorm(mean + sd * rnorm(length(x)))
+    }
+  )
+)
+
+# this requires an argument "function" that takes the
+#   current state of the population model in each
+#   iteration and calculates the correct arguments to
+#   pass to environmental_stochasticty
+envstoch_function <- function(obj, pop, iter) {
+  mat <- obj$matrix
+  if (is.list(mat))
+    mat <- mat[[iter]]
+  out <- unit_to_real(
+    mat[transition(mat)], 0.1 * mat[transition(mat)]
+  )
+  list(mean = out[, 1], sd = out[, 2])
+}
+
+# update the dynamics object and simulate from it
+dyn <- update(dyn, envstoch)
+sims <- simulate(
+  dyn,
+  init = c(50, 20, 10, 10, 5),
+  nsim = 100,
+  args.fn = list(environmental_stochasticity = envstoch_function),
+  options = list(ntime = 50),
+)
+
+# can also add covariates that influence vital rates
+#   e.g., a logistic function
+covars <- covariates(
+  masks = transition(popmat),
+  funs = function(mat, x) mat * (1 / (1 + exp(- 10 * x)))
+)
+
+# simulate 50 random covariate values
+xvals <- matrix(runif(50), ncol = 1)
+
+# update the dynamics object and simulate from it
+#   - note that ntime is now captured in the 50 values
+#     of xvals, assuming we pass xvals as an argument
+#     to the covariates functions
+dyn <- update(dyn, covars)
+sims <- simulate(
+  dyn,
+  init = c(50, 20, 10, 10, 5),
+  nsim = 100,
+  args = list(covariates = list(x = xvals)),
+  args.fn = list(environmental_stochasticity = envstoch_function)
+)
+
 }
