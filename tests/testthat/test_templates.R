@@ -3,7 +3,7 @@ context("templates")
 test_that("templates return working dynamics objects", {
 
   # simulate from a Murray cod object
-  dyn <- murraycod()
+  dyn <- murray_cod()
   sim <- simulate(dyn)
   expect_equal(dim(sim), c(1L, 25L, 51L))
 
