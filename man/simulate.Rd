@@ -15,6 +15,7 @@
   object,
   nsim = 1,
   seed = NULL,
+  ...,
   init = NULL,
   options = list(),
   args = list(),
@@ -43,6 +44,8 @@ is.simulation_list(x)
 
 \item{seed}{optional seed used prior to initialisation and simulation to
 give reproducible results}
+
+\item{\dots}{Additional arguments passed to plot}
 
 \item{init}{an array of initial conditions with one row per replicate and one
 column per population stage. Additionally requires one slice per species if
@@ -80,8 +83,6 @@ by covariates or with \code{options$ntime}).}
 Defaults to \code{NULL}.}
 
 \item{x}{a simulation or simulation_list object}
-
-\item{\dots}{Additional arguments passed to plot}
 
 \item{y}{ignored; included for consistency with plot method}
 

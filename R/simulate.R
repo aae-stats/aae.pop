@@ -16,6 +16,8 @@ NULL
 #' @param nsim the number of replicate simulations (default = 1)
 #' @param seed optional seed used prior to initialisation and simulation to
 #'   give reproducible results
+#' @param \dots ignored; included for consistency with \code{simulate} generic
+#'   method
 #' @param init an array of initial conditions with one row per replicate and one
 #'   column per population stage. Additionally requires one slice per species if
 #'   \code{obj} has been created with \code{\link{multispecies}}. Defaults
@@ -212,6 +214,7 @@ NULL
 simulate.dynamics <- function(object,
                               nsim = 1,
                               seed = NULL,
+                              ...,
                               init = NULL,
                               options = list(),
                               args = list(),

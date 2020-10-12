@@ -16,12 +16,15 @@ rmultiunit(
 )
 }
 \arguments{
-\item{y}{ignored; included for consistency with plot method}
+\item{n}{fd}
 
-\item{class}{integer value specifying which age/stage class to plot.
-Defaults to NULL, in which case the sum of all classes is plotted}
+\item{mean}{df}
 
-\item{\dots}{Additional arguments passed to plot}
+\item{Sigma}{df}
+
+\item{Omega}{df}
+
+\item{perfect_correlation}{df}
 }
 \description{
 Draw random numbers from unusual distributions,

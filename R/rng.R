@@ -123,10 +123,11 @@ unit_to_real_covar <- function(corr, unit_mean, unit_sd, real_params) {
 #'
 #' @export
 #'
-#' @param y ignored; included for consistency with plot method
-#' @param class integer value specifying which age/stage class to plot.
-#'   Defaults to NULL, in which case the sum of all classes is plotted
-#' @param \dots Additional arguments passed to plot
+#' @param n fd
+#' @param mean df
+#' @param Sigma df
+#' @param Omega df
+#' @param perfect_correlation df
 #'
 #' @details Function to simulate values on unit interval with fixed
 #'   mean, sd, and correlation

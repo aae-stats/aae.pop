@@ -48,7 +48,7 @@ Return arguments for a given species
 }
 \details{
 The \code{get_template} function and associated
-  wrapper functions (e.g. \code{murraycod}) return a collated
+  wrapper functions (e.g. \code{murray_cod}) return a collated
   \code{\link{dynamics}} object parameterised with values based
   on existing data sets and published works. Currently implemented
   species are: Murray cod (*Maccullochella peelii*),

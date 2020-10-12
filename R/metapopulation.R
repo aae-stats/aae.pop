@@ -30,9 +30,9 @@ NULL
 #'
 #' @examples
 #' # define some populations
-#' dyn1 <- murraycod()
-#' dyn2 <- murraycod(params = list(k = 15000))
-#' dyn3 <- murraycod(params = list(k = 30000))
+#' dyn1 <- murray_cod()
+#' dyn2 <- murray_cod(params = list(k = 15000))
+#' dyn3 <- murray_cod(params = list(k = 30000))
 #'
 #' # define metapopulation structure with populations
 #' #   1 and 3 dispersing into population 2

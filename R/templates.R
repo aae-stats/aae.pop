@@ -22,7 +22,7 @@ NULL
 #'   \code{\link{density_dependence_n}}
 #'
 #' @details The \code{get_template} function and associated
-#'   wrapper functions (e.g. \code{murraycod}) return a collated
+#'   wrapper functions (e.g. \code{murray_cod}) return a collated
 #'   \code{\link{dynamics}} object parameterised with values based
 #'   on existing data sets and published works. Currently implemented
 #'   species are: Murray cod (*Maccullochella peelii*),
@@ -683,6 +683,36 @@ args_macquarieperch <- function(
   contributing_min = 0.5,
   contributing_max = 1.0,
   recruit_failure = 0.25) {
+
+  # helper to define translocation process
+  define_translocation <- function(start, end, n_translocate, add = TRUE) {
+
+    # set up a sequence of iterations at which individuals are removed
+    iter_seq <- start:end
+
+    # define this as a function
+    translocate <- function(obj, pop, iter) {
+
+      # initialise
+      translocate <- FALSE
+
+      # flag to pass to dens_depend_n
+      if (iter %in% iter_seq & sum(n_translocate) > 0)
+        translocate <- TRUE
+
+      # return
+      list(
+        translocate = translocate,
+        n_translocate = n_translocate,
+        add = add
+      )
+
+    }
+
+    # return
+    translocate
+
+  }
 
   # define an args function so we can pass transformed values to envstoch
   transform_survival <- function(obj, pop, iter) {
