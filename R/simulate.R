@@ -143,7 +143,7 @@ NULL
 #'   mat <- obj$matrix
 #'   if (is.list(mat))
 #'     mat <- mat[[iter]]
-#'   out <- unit_to_real(
+#'   out <- aae.pop:::unit_to_real(
 #'     mat[transition(mat)], 0.1 * mat[transition(mat)]
 #'   )
 #'   list(mean = out[, 1], sd = out[, 2])
@@ -182,6 +182,32 @@ NULL
 #'   args.fn = list(environmental_stochasticity = envstoch_function)
 #' )
 #'
+#' # and can plot these again
+#' plot(sims)
+#'
+#' # a simple way to add demographic stochasticity is to change
+#' #   the "updater" that converts the population at time t
+#' #   to its value at time t + 1. The default in aae.pop
+#' #   uses matrix multiplication of the vital rates matrix
+#' #   and current population. A simple tweak is to update
+#' #   with binomial draws.
+#' #   - note that this also requires a change to the
+#' #     "tidy_abundances" option so that population abundances
+#' #     are always integer values.
+#' options(aae.pop_update = aae.pop:::update_binomial_leslie,
+#'         aae.pop_tidy_abundances = floor)
+#'
+#' # now we can re-simulate the abundances
+#' sims <- simulate(
+#'   dyn,
+#'   init = c(50, 20, 10, 10, 5),
+#'   nsim = 100,
+#'   args = list(covariates = list(x = xvals)),
+#'   args.fn = list(environmental_stochasticity = envstoch_function)
+#' )
+#'
+#' # and can plot these again
+#' plot(sims)
 # nolint start
 simulate.dynamics <- function(object,
                               nsim = 1,
