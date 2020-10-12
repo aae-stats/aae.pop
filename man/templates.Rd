@@ -3,12 +3,18 @@
 \name{templates}
 \alias{templates}
 \alias{get_template}
-\alias{murraycod}
+\alias{murray_cod}
+\alias{macquarie_perch}
+\alias{get_args}
 \title{Use a fully parameterised population dynamics object}
 \usage{
 get_template(sp, params = list(), ...)
 
-murraycod(params = list(), ...)
+murray_cod(params = list(), ...)
+
+macquarie_perch(params = list(), ...)
+
+get_args(sp, params = list(), ...)
 }
 \arguments{
 \item{sp}{string specifying species common name (see details for
@@ -29,6 +35,16 @@ Must be one or more of \code{\link{covariates}},
 Use pre-defined population dynamics objects to
   define a matrix model for a species with known parameters,
   optionally including new covariates.
+
+Alias to return defined template for Murray
+  cod. Currently implemented parameters are \code{k}, the
+  carrying capacity
+
+Alias to return defined template for Macquarie
+  perch. Currently implemented parameters are \code{k}, the
+  carrying capacity
+
+Return arguments for a given species
 }
 \details{
 The \code{get_template} function and associated

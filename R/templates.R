@@ -51,16 +51,6 @@ get_template <- function(sp, params = list(), ...) {
   sp <- parse_species(sp)
   all_parameters <- do.call(get(paste0("template_", sp)), params)
 
-  # define covariates object
-  all_parameters$covariates <- covariates(
-    all_parameters$covariate_masks,
-    all_parameters$covariate_funs
-  )
-
-  # remove cov_masks and cov_funs; not needed beyond this
-  all_parameters$covariate_masks <- NULL
-  all_parameters$covariate_funs <- NULL
-
   # unpack dots and replace defaults if any objects provided
   arg_list <- list(...)
   if (length(arg_list) > 0) {
@@ -77,9 +67,27 @@ get_template <- function(sp, params = list(), ...) {
 #'
 #' @export
 #'
+#' @description Alias to return defined template for Murray
+#'   cod. Currently implemented parameters are \code{k}, the
+#'   carrying capacity
+#'
 #' @importFrom stats rnorm
-murraycod <- function(params = list(), ...) {
+murray_cod <- function(params = list(), ...) {
   get_template(sp = "murraycod", params, ...)
+}
+
+#' @rdname templates
+#'
+#' @export
+#'
+#' @description Alias to return defined template for Macquarie
+#'   perch. Currently implemented parameters are \code{k}, the
+#'   carrying capacity
+#'
+#### CHECK IMPORTS BELOW
+#### #' @importFrom stats rnorm
+macquarie_perch <- function(params = list(), ...) {
+  get_template(sp = "macquarieperch", params, ...)
 }
 
 # internal function: define species defaults
@@ -140,6 +148,10 @@ template_murraycod <- function(k = 20000) {
     mat * (1 / (1 + exp(-0.5 * (x + 10))))
   }
   cov_masks <- transition(mat)
+  covars <- covariates(
+    masks = cov_masks,
+    funs = cov_funs
+  )
 
   # define environmental stochasticity based on known standard deviations of
   #   parameters
@@ -206,8 +218,7 @@ template_murraycod <- function(k = 20000) {
   # return template
   list(
     matrix = mat,
-    covariate_masks = cov_masks,
-    covariate_funs = cov_funs,
+    covariates = covars,
     environmental_stochasticity = envstoch,
     demographic_stochasticity = demostoch,
     density_dependence = dd,
@@ -222,7 +233,7 @@ template_troutcod <- function() {
   # return template
   list(
     matrix = NULL,
-    covariate_functions = NULL,
+    covariates = NULL,
     environmental_stochasticity = NULL,
     demographic_stochasticity = NULL,
     density_dependence = NULL,
@@ -237,7 +248,7 @@ template_goldenperch <- function() {
   # return template
   list(
     matrix = NULL,
-    covariate_functions = NULL,
+    covariates = NULL,
     environmental_stochasticity = NULL,
     demographic_stochasticity = NULL,
     density_dependence = NULL,
@@ -252,7 +263,7 @@ template_silverperch <- function() {
   # return template
   list(
     matrix = NULL,
-    covariate_functions = NULL,
+    covariates = NULL,
     environmental_stochasticity = NULL,
     demographic_stochasticity = NULL,
     density_dependence = NULL,
@@ -262,17 +273,336 @@ template_silverperch <- function() {
 }
 
 # internal function: define species defaults
-template_macquarieperch <- function() {
+template_macquarieperch <- function(k = 1000) {
 
-  # return template
-  list(
-    matrix = NULL,
-    covariate_functions = NULL,
-    environmental_stochasticity = NULL,
-    demographic_stochasticity = NULL,
-    density_dependence = NULL,
-    density_dependence_n = NULL
+  # need some helper functions within template
+  # simulate a vector of perfectly correlated survival values with known mean and sd
+  survival <- function(n, mean, sd, perfect_correlation = TRUE) {
+
+    # how many parameters are we dealing with?
+    npar <- length(mean)
+
+    # simulate random values from a standard normal
+    z_variates <- matrix(rnorm(npar * n), ncol = n)
+
+    # do we want perfectly correlated or uncorrelated?
+    if (perfect_correlation) {
+      out <- t(pnorm(mean + sd %o% z_variates[1, ]))
+    } else {
+      out <- t(pnorm(mean + sweep(z_variates, 1, sd, "*")))
+    }
+
+    # return
+    out
+
+  }
+
+  # simulate a vector of perfectly correlated fecundity values with known mean and sd
+  fecundity <- function(age,
+                        mean,
+                        egg_survival,
+                        larval_survival,
+                        yoy_survival,
+                        n = 1,
+                        sd = NULL,
+                        recruit_failure = 0.25,
+                        contributing_min = 0.5,
+                        contributing_max = 1.0) {
+
+    # is SD provided?
+    if (is.null(sd)) {
+
+      # if not, we want to return the mean fecundity only
+      y1 <- mean$y1
+      y2 <- mean$y2
+      y3 <- mean$y3
+
+    } else {
+
+      # otherwise draw random variates for the three model parameters
+      y1 <- rnorm(n = n, mean = mean$y1, sd = sd$y1)
+      y2 <- rnorm(n = n, mean = mean$y2, sd = sd$y2)
+      y3 <- rnorm(n = n, mean = mean$y3, sd = sd$y3)
+
+    }
+
+    # calculate fecundity
+    y2_term <- exp(y2 %o% age)
+    y1_y2 <- log(
+      43.15 * exp(sweep(y2_term, 1, -y1, "*"))
+    )
+    fec <- exp(sweep(2.295 * y1_y2, 1, y3, "+"))
+
+    # did recruitment fail?
+    recruit_binary <- ifelse(recruit_failure >= runif(1), 0, 1)
+
+    # make contributing a stochastic variables
+    if (contributing_min > contributing_max) {
+      contributing_min <- contributing_max
+      warning(
+        "contributing_min was greater than contributing_max; ",
+        "both values have been set to contributing_max",
+        call. = FALSE
+      )
+    }
+    contributing <- runif(1, min = contributing_min, max = contributing_max)
+
+    # now add in the remaining terms and return
+    fec * contributing * recruit_binary * egg_survival * larval_survival * yoy_survival * 0.5
+
+  }
+
+  # set main parameters (nclass)
+  nclass <- 30
+
+  # define survival parameters
+  survival_params <- list(
+    mean = c(0.13, 0.25, 0.44, 0.56, 0.63, 0.69, 0.72, 0.75, 0.78, 0.79,
+             0.81, 0.82, 0.83, 0.83, 0.84, 0.84, 0.84, 0.85, 0.85, 0.84,
+             0.84, 0.84, 0.83, 0.82, 0.80, 0.78, 0.76, 0.71, 0.63, 0.48),
+    sd = c(0.028, 0.05, 0.09, 0.11, 0.10, 0.10, 0.07, 0.08, 0.08, 0.08,
+           0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08,
+           0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.07, 0.06, 0.05),
+    egg_mean = 0.5,
+    egg_sd = 0.1,
+    larvae_mean = 0.013,
+    larvae_sd = 0.007
   )
+
+  # define parameters for fecundity
+  fecundity_params <- list(
+    mean = list(y1 = 1.68, y2 = -0.302, y3 = 2.886),
+    sd = list(y1 = 0.3, y2 = 0.05, y3 = 0.15)
+  )
+
+  # define fecundity
+  fec_mean <- fecundity(
+    age = 4:30,
+    mean = fecundity_params$mean,
+    egg_survival = survival_params$egg_mean,
+    larval_survival = survival_params$larvae_mean,
+    yoy_survival = survival_params$mean[1],
+    recruit_failure = 0,
+    contributing_min = 1.0,
+    contributing_max = 1.0
+  )
+
+  # define population matrix
+  popmat <- matrix(0, nrow = nclass, ncol = nclass)
+  popmat[transition(popmat, dims = 1:29)] <- survival_params$mean[2:30]
+  popmat[reproduction(popmat, dims = 4:30)] <- fec_mean
+
+  # define density dependence
+  dens_masks <- list(
+    transition(popmat, dims = 4:29),
+    reproduction(popmat, dims = 4:30)
+  )
+  density_fn <- function(mat, pop, ...) {
+    sum_n <- sum(pop[4:30])
+    ifelse(sum_n > k, k / sum_n, 1) * mat
+  }
+  allee_fn <- function(mat, pop, allee_strength = 1, allee_factor = 10, ...) {
+    sum_n <- sum(pop[4:30])
+    allee <- (2 / (1 + exp(-sum_n / (allee_strength * allee_factor)))) - 1
+    mat <- allee * mat
+    mat
+  }
+  dens_fns <- list(
+    density_fn,
+    allee_fn
+  )
+  dens_depend <- density_dependence(
+    masks = dens_masks,
+    funs = dens_fns
+  )
+
+  # define environmental stochasticity
+  fec_envstoch <- function(mat,
+                           egg_mean,
+                           egg_sd,
+                           larvae_mean,
+                           larvae_sd,
+                           yoy_mean,
+                           yoy_sd,
+                           contributing_min = 0.5,
+                           contributing_max = 1.0,
+                           recruit_failure = 0.25,
+                           ...) {
+
+    young_surv <- survival(n = 1,
+                           mean = c(egg_mean, larvae_mean, yoy_mean),
+                           sd = c(egg_sd, larvae_sd, yoy_sd))
+    fecundity(
+      age = 4:30,
+      egg_survival = young_surv[1],
+      larval_survival = young_surv[2],
+      yoy_survival = young_surv[3],
+      mean = fecundity_params$mean,
+      sd = fecundity_params$sd,
+      recruit_failure = recruit_failure,
+      contributing_min = contributing_min,
+      contributing_max = contributing_max
+    )
+  }
+  envstoch_masks <- list(
+    transition(popmat, dims = 1:29),
+    reproduction(popmat, dims = 4:30)
+  )
+  envstoch_fns <- list(
+    function(mat, mean, sd, ...) survival(n = 1, mean = mean, sd = sd),
+    fec_envstoch
+  )
+  envstoch <- environmental_stochasticity(
+    masks = envstoch_masks,
+    funs = envstoch_fns
+  )
+
+  # add density_dependence_n to deal with translocations
+  macperch_dens_depend_n <- function(pop, translocate = FALSE, n_translocate = NULL, add = TRUE, adults = 4:30) {
+
+    # only remove individuals if required
+    if (translocate) {
+
+      # set to zero removed if not specified
+      if (is.null(n_translocate))
+        n_translocate <- rep(0, 4)
+
+      # check there are enough individuals to translocate (if removing)
+      if (sum(pop[adults]) < n_translocate[4] & !add) {
+        n_translocate[4] <- sum(pop[adults])
+        warning("translocation required more adults than ",
+                "were available. Reducing the number of ",
+                "translocated individuals to ",
+                sum(pop[adults]),
+                call. = FALSE)
+      }
+
+      # are we removing?
+      if (!add) {
+
+        # if so, expand n to remove from random age classes
+        n_adult_by_age <- rep(adults, times = pop[adults])
+        adult_idx <- sample.int(
+          length(n_adult_by_age), size = n_translocate[4], replace = FALSE
+        )
+        n_adult <- table(n_adult_by_age[adult_idx])
+
+      } else {
+
+        # otherwise, add to age classes at random
+        n_adult <- table(
+          sample(adults, size = n_translocate[4], replace = TRUE)
+        )
+
+      }
+      n_expanded <- rep(0, length(adults))
+      names(n_expanded) <- as.character(adults)
+      n_expanded[names(n_adult)] <- n_adult
+      n_take <- c(n_translocate[1],
+                  n_translocate[2],
+                  n_translocate[3],
+                  n_expanded)
+
+      # are we adding or removing?
+      if (add)
+        n_take <- -n_take
+
+      # check that there are enough YOY and 1+/2+ individuals to take
+      if (n_take[1] > pop[1]) {
+        n_take[1] <- pop[1]
+        warning("translocation required more YOY than ",
+                "were available; ",
+                "translocation reduced to ",
+                pop[1],
+                " individuals",
+                call. = FALSE)
+      }
+      if (n_take[2] > pop[2]) {
+        n_take[2] <- pop[2]
+        warning("translocation required more 1+ individuals than ",
+                "were available; ",
+                "translocation reduced to ",
+                pop[2],
+                " individuals",
+                call. = FALSE)
+      }
+      if (n_take[3] > pop[3]) {
+        n_take[3] <- pop[3]
+        warning("translocation required more 2+ individuals than ",
+                "were available; ",
+                "translocation reduced to ",
+                pop[3],
+                " individuals",
+                call. = FALSE)
+      }
+
+      # update pop abundances
+      pop <- pop - n_take
+
+    }
+
+    # return
+    pop
+
+  }
+  dens_depend_n <- density_dependence_n(masks = all_classes(popmat),
+                                        funs = macperch_dens_depend_n)
+
+
+  # define covariate effects
+  recruit_effects <- function(mat, x, ...) {
+
+    # effect of spawning-flow magnitude on recruitment
+    # negative effect of Nov/Dec discharge on recruitment
+    log_flow <- log(x$spawning_flow + 0.01)
+    scale_factor <- exp(-0.1 * log_flow - 0.1 * (log_flow ^ 2))
+    scale_factor[scale_factor > 1] <- 1
+    scale_factor[scale_factor < 0] <- 0
+    mat <- mat * scale_factor
+
+    # effect of spawning-flow variability on recruitment
+    # negative effect of Nov/Dec discharge variability on recruitment
+    #   (days with more than 100% change from previous)
+    mat <- mat * exp(-0.05 * x$spawning_variability)
+
+    # negative effect of lake level and increasing temperature on growth of YOY, plus a
+    #   negative effect of increasing (rising) dam height
+    #   - need to translate this to survival or more likely recruitment
+    mat <- mat * (1 / (1 + exp(-0.5 * (x$water_level_change + 10))))
+
+    # return
+    mat
+
+  }
+  adult_effects <- function(mat, x, ...) {
+
+    # positive effect of flow on overall population growth rate
+    #    (based on individuals >= 1 year old)
+    log_flow <- log(x$average_daily_flow + 0.01)
+    scale_factor <- exp(0.3 * log_flow - 0.3 * (log_flow ^ 2))
+    scale_factor[scale_factor > 1] <- 1
+    scale_factor[scale_factor < 0] <- 0
+    mat <- mat * scale_factor
+
+    # return
+    mat
+
+  }
+  covar_funs <- list(
+    recruit_effects,
+    adult_effects
+  )
+  covar_masks <- list(
+    reproduction(popmat),
+    transition(popmat, dims = 4:30)
+  )
+  covars <- covariates(
+    masks = covar_masks,
+    funs = covar_funs
+  )
+
+  # return
+  dynamics(popmat, envstoch, dens_depend, dens_depend_n, covars)
 
 }
 
@@ -282,7 +612,7 @@ template_australiansmelt <- function() {
   # return template
   list(
     matrix = NULL,
-    covariate_functions = NULL,
+    covariates = NULL,
     environmental_stochasticity = NULL,
     demographic_stochasticity = NULL,
     density_dependence = NULL,
@@ -297,12 +627,134 @@ template_commongalaxias <- function() {
   # return template
   list(
     matrix = NULL,
-    covariate_functions = NULL,
+    covariates = NULL,
     environmental_stochasticity = NULL,
     demographic_stochasticity = NULL,
     density_dependence = NULL,
     density_dependence_n = NULL
   )
+
+}
+
+#' @rdname templates
+#'
+#' @export
+#'
+#' @description Return arguments for a given species
+#'
+get_args <- function(sp, params = list(), ...) {
+
+  # draw up relevant parameters based on corrected species name
+  sp <- parse_species(sp)
+
+  # initialise NULL output
+  out <- NULL
+
+  # check if species has arguments available
+  available <- exists(
+    paste0("args_", sp),
+    where = "package:aae.pop",
+    mode = "function"
+  )
+
+  # get arguments if available
+  if (available)
+    out <- do.call(get(paste0("args_", sp)), params)
+
+  # return
+  out
+
+}
+
+# internal function: define macquarie perch arguments
+args_macquarieperch <- function(
+  n = c(0, 0, 50, 5),
+  start = 1,
+  end = 10,
+  add = TRUE,
+  allee_strength = 1,
+  contributing_min = 0.5,
+  contributing_max = 1.0,
+  recruit_failure = 0.25) {
+
+  # define an args function so we can pass transformed values to envstoch
+  transform_survival <- function(obj, pop, iter) {
+
+    sd_vals <- c(
+      0.1, 0.007,
+      0.028, 0.05, 0.09, 0.11, 0.10, 0.10, 0.07, 0.08, 0.08, 0.08,
+      0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08,
+      0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.07, 0.06, 0.05
+    )
+    mat <- obj$matrix
+    if (is.list(mat))
+      mat <- mat[[iter]]
+
+    mean_vals <- c(0.5,     # mean egg survival
+                   0.013,   # mean larval survival
+                   0.13,    # mean YOY survival
+                   mat[transition(mat, dims = 1:29)])
+
+    out <- unit_to_real(
+      unit_mean = mean_vals,
+      unit_sd = sd_vals
+    )
+
+    nmat <- nrow(out)
+
+    # return
+    list(mean = out[4:nmat, 1],
+         sd = out[4:nmat, 2],
+         egg_mean = out[1, 1],
+         egg_sd = out[1, 2],
+         larvae_mean = out[2, 1],
+         larvae_sd = out[2, 2],
+         yoy_mean = out[3, 1],
+         yoy_sd = out[3, 2]
+    )
+
+  }
+
+  # define static elements of each scenario
+  args_list <- list(
+
+    # set as 1 (default) or 2
+    density_dependence = list(allee_strength = allee_strength),
+
+    # set contributing as random uniform on 0.5-1.0 by default
+    # set recruit_failure as 0.25 (default), 0.3, or 0.5
+    environmental_stochasticity = list(
+      contributing_min = contributing_min,
+      contributing_max = contributing_max,
+      recruit_failure = recruit_failure
+    )
+
+  )
+
+  # define functions to update simulate args dynamically
+  #   - environmental stochasticity: necessary to speed up
+  #     transformation of survival from unit to real and back
+  #   - density_dependence_n: necessary to include translocation
+  args_function <- list(
+
+    # to pre-transform unit to real and back
+    environmental_stochasticity = transform_survival,
+
+    # options: 100-600 YOY for 5 or 10 years
+    #          50-125 1+ for 5 or 10 years
+    #          50-100 2+ per year
+    #          5 or 15 adults for 1 or 5 years
+    density_dependence_n = define_translocation(
+      start = start, end = end, n = n, add = add
+    )
+  )
+
+  # return named list of args
+  list(
+    static = args_list,
+    funs = args_function
+  )
+
 
 }
 
