@@ -7,7 +7,7 @@ test_that("templates return working dynamics objects", {
   sim <- simulate(dyn)
   expect_equal(dim(sim), c(1L, 25L, 51L))
 
-  # expect most processed to be defined
+  # expect most processes to be defined
   expect_null(dyn$density_dependence_n)
   expect_equal(class(dyn$covariates), c("covariates", "function"))
   expect_equal(class(dyn$density_dependence), c("density_dependence", "function"))
