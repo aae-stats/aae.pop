@@ -660,7 +660,7 @@ get_args <- function(sp, params = list(), ...) {
   # check if species has arguments available
   available <- exists(
     paste0("args_", sp),
-    where = "package:aae.pop",
+    envir = getNamespace("aae.pop"),
     mode = "function"
   )
 
