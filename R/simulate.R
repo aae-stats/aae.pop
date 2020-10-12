@@ -376,7 +376,7 @@ simulate.dynamics <- function(object,
 
 }
 
-#' @importFrom future.apply future_lapply future_mapply
+#' @importFrom future.apply future_lapply
 # internal function: update a single time step for one species
 simulate_once <- function(iter, obj, pop_t, opt, args, include_covariates, is_expanded = FALSE) {
 

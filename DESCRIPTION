@@ -23,7 +23,10 @@ Depends:
 Imports:
     stats,
     abind,
-    future.apply
+    cubature,
+    future.apply,
+    mc2d,
+    nleqslv
 Suggests:
     knitr,
     DiagrammeR,
