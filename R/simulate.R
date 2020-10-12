@@ -740,6 +740,8 @@ print.simulation_list <- function(x, ...) {
 #'
 #' @export
 #'
+#' @importFrom graphics lines
+#'
 #' @param y ignored; included for consistency with plot method
 #' @param class integer value specifying which age/stage class to plot.
 #'   Defaults to NULL, in which case the sum of all classes is plotted

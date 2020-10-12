@@ -39,6 +39,8 @@ test_that("multispecies objects simulate correctly", {
   # create multispecies object
   mspecies_obj <- multispecies(interactions_test1, interactions_test2, interactions_test3)
 
+  ## NEEDS INITIAL CONDITIONS?
+
   # simulate with aae.pop
   value <- simulate(mspecies_obj, nsim = 10)
 

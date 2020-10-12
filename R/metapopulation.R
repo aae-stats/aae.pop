@@ -564,6 +564,8 @@ is.metapopulation <- function(x) {
 #' @rdname metapopulation
 #'
 #' @export
+#'
+#' @param \dots ignored; included for consistency with print generic
 # nolint start
 print.metapopulation <- function(x, ...) {
   # nolint end

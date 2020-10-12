@@ -125,6 +125,7 @@ unit_to_real_covar <- function(corr, unit_mean, unit_sd, real_params) {
 #'
 #' @param n fd
 #' @param mean df
+#' @param sd df
 #' @param Sigma df
 #' @param Omega df
 #' @param perfect_correlation df

@@ -115,7 +115,7 @@ test_that("metapopulation objects simulate correctly", {
 
   # simulate with aae.pop functions
   metapop_test <- metapopulation(structure_obj5, dynamics_list, dispersal_list)
-  value <- simulate(metapop_test, nsim = 10, init = init_set, opt = list(ntime = 10))
+  value <- simulate(metapop_test, nsim = 10, init = init_set, options = list(ntime = 10))
 
   # simulate manually but with metapopulation$matrix
   target <- array(NA, dim = c(10, 25, 11))

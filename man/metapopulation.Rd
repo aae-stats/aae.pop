@@ -29,6 +29,8 @@ describe movements between populations and can include
 class-specific movements and density-dependent movements}
 
 \item{x}{a metapopulation object}
+
+\item{\dots}{ignored; included for consistency with print generic}
 }
 \description{
 Define population dynamics for multiple populations of

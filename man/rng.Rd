@@ -20,6 +20,8 @@ rmultiunit(
 
 \item{mean}{df}
 
+\item{sd}{df}
+
 \item{Sigma}{df}
 
 \item{Omega}{df}
