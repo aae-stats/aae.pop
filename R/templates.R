@@ -602,7 +602,14 @@ template_macquarieperch <- function(k = 1000) {
   )
 
   # return
-  dynamics(popmat, envstoch, dens_depend, dens_depend_n, covars)
+  list(
+    matrix = popmat,
+    covariates = covars,
+    environmental_stochasticity = envstoch,
+    demographic_stochasticity = NULL,
+    density_dependence = dens_depend,
+    density_dependence_n = dens_depend_n
+  )
 
 }
 
