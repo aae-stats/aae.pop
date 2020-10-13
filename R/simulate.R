@@ -546,7 +546,7 @@ simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args, inclu
       function(j)
         do.call(
           obj$interaction[[i]],
-          c(list(mat, lapply(pop_t, function(i) pop_t[j, ])), args$interaction)
+          c(list(mat, lapply(pop_t, function(x) x[j, ])), args$interaction)
         )
     )
     is_expanded <- TRUE
