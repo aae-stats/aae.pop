@@ -16,17 +16,30 @@ rmultiunit(
 )
 }
 \arguments{
-\item{n}{fd}
+\item{n}{number of random draws to simulate. Each draw is a vector of
+values with length equal to \code{length(mean)} and
+\code{length(sd)} and the resulting output has \code{n} rows
+and \code{length(mean)} columns}
 
-\item{mean}{df}
+\item{mean}{vector of mean values on the unit scale}
 
-\item{sd}{df}
+\item{sd}{vector of positive standard deviations}
 
-\item{Sigma}{df}
+\item{Sigma}{optional covariance matrix with dimensions of
+\code{length(mean)} by \code{length(mean)} defining covariances
+between each pair of values in \code{mean}. Note that only
+the correlation structure is retained from \code{Sigma},
+so that standard deviations are still required}
 
-\item{Omega}{df}
+\item{Omega}{optional correlation matrix with dimensions of
+\code{length(mean)} by \code{length(mean)} defining correlations
+between each pair of values in \code{mean}}
 
-\item{perfect_correlation}{df}
+\item{perfect_correlation}{\code{logical}, if \code{TRUE}
+and \code{Sigma} and \code{Omega} are \code{NULL}, then all
+values in each replicate (row) are perfectly correlated with known
+mean and standard deviation. If \code{FALSE}, then all values
+in each replicate are completely uncorrelated}
 }
 \description{
 Draw random numbers from unusual distributions,

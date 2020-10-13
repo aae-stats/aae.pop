@@ -6,6 +6,88 @@
 #'   means and standard deviations.
 NULL
 
+#' @rdname rng
+#'
+#' @importFrom nleqslv nleqslv
+#' @importFrom cubature hcubature
+#' @importFrom stats pnorm rnorm qnorm dnorm cov2cor uniroot integrate
+#'
+#' @export
+#'
+#' @param n number of random draws to simulate. Each draw is a vector of
+#'   values with length equal to \code{length(mean)} and
+#'   \code{length(sd)} and the resulting output has \code{n} rows
+#'   and \code{length(mean)} columns
+#' @param mean vector of mean values on the unit scale
+#' @param sd vector of positive standard deviations
+#' @param Sigma optional covariance matrix with dimensions of
+#'   \code{length(mean)} by \code{length(mean)} defining covariances
+#'   between each pair of values in \code{mean}. Note that only
+#'   the correlation structure is retained from \code{Sigma},
+#'   so that standard deviations are still required
+#' @param Omega optional correlation matrix with dimensions of
+#'   \code{length(mean)} by \code{length(mean)} defining correlations
+#'   between each pair of values in \code{mean}
+#' @param perfect_correlation \code{logical}, if \code{TRUE}
+#'   and \code{Sigma} and \code{Omega} are \code{NULL}, then all
+#'   values in each replicate (row) are perfectly correlated with known
+#'   mean and standard deviation. If \code{FALSE}, then all values
+#'   in each replicate are completely uncorrelated
+#'
+#' @details Function to simulate values on unit interval with fixed
+#'   mean, sd, and correlation
+rmultiunit <- function(n, mean, sd, Sigma = NULL, Omega = NULL, perfect_correlation = FALSE) {
+
+  # how many parameters are we dealing with?
+  npar <- length(mean)
+
+  # convert covariance to correlation if provided
+  if (!is.null(Sigma) & is.null(Omega))
+    Omega <- cov2cor(Sigma)
+
+  # calculate mean and sd on the real line
+  real_params <- unit_to_real(unit_mean = mean,
+                              unit_sd = sd)
+
+  # calculate covariance if correlation/covariance matrix provided
+  if (!is.null(Omega)) {
+
+    # estimate full covariance matrix on real line
+    Sigma <- unit_to_real_covar(corr = Omega,
+                                unit_mean = mean,
+                                unit_sd = sd,
+                                real_params = real_params)
+
+    # take Cholesky decomposition to get a triangular matrix
+    Sigma_chol <- t(chol(Sigma))
+
+  }
+
+  # simulate random values from a standard normal
+  z_variates <- matrix(rnorm(npar * n), ncol = n)
+
+  # simpler return if correlations not required
+  if (is.null(Omega)) {
+
+    # do we want perfectly correlated or uncorrelated?
+    if (perfect_correlation) {
+      out <- t(pnorm(real_params[, 1] + real_params[, 2] %o% z_variates[1, ]))
+    } else {
+      out <- t(pnorm(real_params[, 1] + sweep(z_variates, 1, real_params[, 2], "*")))
+    }
+
+  } else {
+
+    # combine with correlations and means to give full variates
+    out <- t(pnorm(real_params[, 1] + Sigma_chol %*% z_variates))
+
+  }
+
+  # return
+  out
+
+}
+
 # equation based on the expected mean
 phi_mean <- function(x, y) {
   pnorm(x / sqrt(1 + y ^ 2))
@@ -112,74 +194,5 @@ unit_to_real_covar <- function(corr, unit_mean, unit_sd, real_params) {
   corr[lower.tri(corr)] <- corr[upper.tri(corr)]
   diag(corr) <- 1
   diag(real_params[, 2]) %*% corr %*% diag(real_params[, 2])
-
-}
-
-#' @rdname rng
-#'
-#' @importFrom nleqslv nleqslv
-#' @importFrom cubature hcubature
-#' @importFrom stats pnorm rnorm qnorm dnorm cov2cor uniroot integrate
-#'
-#' @export
-#'
-#' @param n fd
-#' @param mean df
-#' @param sd df
-#' @param Sigma df
-#' @param Omega df
-#' @param perfect_correlation df
-#'
-#' @details Function to simulate values on unit interval with fixed
-#'   mean, sd, and correlation
-rmultiunit <- function(n, mean, sd, Sigma = NULL, Omega = NULL, perfect_correlation = FALSE) {
-
-  # how many parameters are we dealing with?
-  npar <- length(mean)
-
-  # convert covariance to correlation if provided
-  if (!is.null(Sigma) & is.null(Omega))
-    Omega <- cov2cor(Sigma)
-
-  # calculate mean and sd on the real line
-  real_params <- unit_to_real(unit_mean = mean,
-                              unit_sd = sd)
-
-  # calculate covariance if correlation/covariance matrix provided
-  if (!is.null(Omega)) {
-
-    # estimate full covariance matrix on real line
-    Sigma <- unit_to_real_covar(corr = Omega,
-                                unit_mean = mean,
-                                unit_sd = sd,
-                                real_params = real_params)
-
-    # take Cholesky decomposition to get a triangular matrix
-    Sigma_chol <- t(chol(Sigma))
-
-  }
-
-  # simulate random values from a standard normal
-  z_variates <- matrix(rnorm(npar * n), ncol = n)
-
-  # simpler return if correlations not required
-  if (is.null(Omega)) {
-
-    # do we want perfectly correlated or uncorrelated?
-    if (perfect_correlation) {
-      out <- t(pnorm(real_params[, 1] + real_params[, 2] %o% z_variates[1, ]))
-    } else {
-      out <- t(pnorm(real_params[, 1] + sweep(z_variates, 1, real_params[, 2], "*")))
-    }
-
-  } else {
-
-    # combine with correlations and means to give full variates
-    out <- t(pnorm(real_params[, 1] + Sigma_chol %*% z_variates))
-
-  }
-
-  # return
-  out
 
 }

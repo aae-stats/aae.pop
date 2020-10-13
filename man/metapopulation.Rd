@@ -37,12 +37,21 @@ Define population dynamics for multiple populations of
   a single species linked by dispersal (a metapopulation).
 }
 \details{
-To be completed.
+The \code{metapopluation} function connects multiple
+  populations through known dispersal probabilities, handling
+  standardisations of dispersal probabilities (if required) and
+  updating masks and functions for all processes defined within each
+  population. Further details on the definition of dispersal terms
+  are provided in \code{\link{dispersal}}.
 
   Covariates can be included in metapopulation models. The default
-  behaviour is for all populations to share a single set of covariates.
-  A workaround is included in the examples, below, to deal with
-  situations where populations have different sets of covariates.
+  behaviour is for all populations to share a single set of covariates,
+  with covariate associations and masks defined separately for each
+  population. A workaround to the assumption of shared covariates
+  is included in the examples, below. Including covariates on dispersal
+  probabilities requires covariate associations and masks defined
+  on the combined metapopulation model. This approach is possible
+  but currently untested.
 }
 \examples{
 # define some populations
