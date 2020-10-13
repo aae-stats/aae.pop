@@ -93,8 +93,7 @@ murray_cod <- function(k = 20000, ...) {
 #'   perch. Currently implemented parameters are \code{k}, the
 #'   carrying capacity
 #'
-#### CHECK IMPORTS BELOW
-#### #' @importFrom stats rnorm
+#' @importFrom stats pnorm rnorm runif
 macquarie_perch <- function(k = 1000, ...) {
   get_template(sp = "macquarieperch", k = k, ...)
 }
