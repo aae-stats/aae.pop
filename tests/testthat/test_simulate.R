@@ -71,10 +71,10 @@ test_that("simulate returns correct abundances without extra processes", {
     mean(apply(value[, , ntime], 1, sum) /
            apply(value[, , ntime - 1], 1, sum))
   lambda_real <- eigen(mat)$values[1]
-  expect_equal(round(Re(lambda_real), 4),
-               round(lambda_manual, 4))
-  expect_equal(round(Re(lambda_real), 4),
-               round(lambda_value, 4))
+  expect_equal(round(Re(lambda_real), 3),
+               round(lambda_manual, 3))
+  expect_equal(round(Re(lambda_real), 3),
+               round(lambda_value, 3))
 
 })
 

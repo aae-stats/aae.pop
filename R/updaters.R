@@ -5,7 +5,7 @@
 #'   only be vectorised across replicates in limited situations.
 NULL
 
-#' @rdname templates
+#' @rdname updaters
 #'
 #' @export
 #'
@@ -22,7 +22,7 @@ update_crossprod <- function(pop, mat) {
   tcrossprod(pop, mat)
 }
 
-#' @rdname templates
+#' @rdname updaters
 #'
 #' @export
 #'
@@ -51,7 +51,7 @@ update_binomial_leslie <- function(pop, mat) {
 
 }
 
-#' @rdname templates
+#' @rdname updaters
 #'
 #' @importFrom mc2d rmultinomial
 #'
