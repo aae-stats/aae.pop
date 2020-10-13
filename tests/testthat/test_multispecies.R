@@ -49,13 +49,50 @@ test_that("multispecies objects simulate correctly", {
   # simulate with aae.pop
   value <- simulate(mspecies_obj, nsim = nsim, init = init)
 
-  # simulate manually
+  # simulate again with same initial conditions
   target <- simulate(mspecies_obj, nsim = nsim, init = init)
 
   # and compare
-  # expect_equal(value, target)
-  ### NOT CURRENTLY IMPLEMENTED
-  expect_equal(value, value)
+  expect_equal(value, target)
+
+  # now simulate manually
+  all_dyn <- list(dyn_mc1, dyn_mc2, dyn_mc3, dyn_mc4)
+  sp_order <- match(sapply(mspecies_obj$dynamics, function(x) x$hex),
+                    sapply(all_dyn, function(x) x$hex))
+  all_dyn <- all_dyn[sp_order]
+  target <- lapply(
+    value,
+    function(x) array(dim = dim(x))
+  )
+  for (i in seq_along(target)) {
+    target[[i]][, , 1] <- init[, , i]
+  }
+  interaction_pairs <- apply(mspecies_obj$structure, 1, function(x) which(x == 1))
+  for (i in seq_len(dim(value[[1]])[3] - 1)) {
+    for (k in seq_len(nsim)) {
+      for (j in seq_along(all_dyn)) {
+
+        # pull out the baseline matrix for species j
+        mat <- all_dyn[[j]]$matrix
+
+        # add in pairwise interactions
+        if (length(interaction_pairs[[j]]) > 0) {
+          x <- mat[survival(mat)]
+          for (.i in seq_along(interaction_pairs[[j]]))
+            x <- x / (1 + x * sum(target[[interaction_pairs[[j]][.i]]][k, , i]) / 2000)
+          mat[survival(mat)] <- x
+        }
+
+        # update
+        target[[j]][k, , (i + 1)] <- target[[j]][k, , i] %*% t(mat)
+
+      }
+    }
+  }
+  for (i in seq_along(target))
+    class(target[[i]]) <- c("simulation", "array")
+  class(target) <- c("simulation_list", "list")
+  expect_equal(value, target)
 
 })
 
