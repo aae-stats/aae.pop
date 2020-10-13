@@ -38,3 +38,13 @@ Update abundances with a direct RNG draw
   allowing for general matrix forms (slower than
   \code{update_binomial_leslie}).
 }
+\examples{
+# define a basic population
+mc <- murray_cod(k = 15000)
+
+# simulate with the default updater
+sims <- simulate(mc)
+
+# simulate with a multinomial updater
+sims <- simulate(mc, options = list(update = update_multinomial))
+}

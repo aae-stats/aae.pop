@@ -18,6 +18,16 @@ NULL
 #'   replicates if the population matrix is not expanded by
 #'   \code{\link{environmental_stochasticity}} or
 #'   \code{\link{density_dependence}}.
+#'
+#' @examples
+#' # define a basic population
+#' mc <- murray_cod(k = 15000)
+#'
+#' # simulate with the default updater
+#' sims <- simulate(mc)
+#'
+#' # simulate with a multinomial updater
+#' sims <- simulate(mc, options = list(update = update_multinomial))
 update_crossprod <- function(pop, mat) {
   tcrossprod(pop, mat)
 }
