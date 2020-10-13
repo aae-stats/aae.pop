@@ -43,27 +43,11 @@ multispecies <- function(...) {
 
   # and collate these into a list with one element for each species
   interaction <- vector("list", length = length(dynamics))
-  for (i in seq_along(dynamics)) {
-
-    # pull out relevant elements of fn_list
-    idx <- which(sapply(dots, function(x) x$target$hex) == dynamics[[i]]$hex)
-
-    # create function is species i is a target for any other species
-    if (length(idx) > 0) {
-      source_sp <- match(sapply(dots[idx], function(x) x$source$hex), hex_list)
-      interaction[[i]] <- function(x, n, ...) {
-        force(idx)
-        for (j in seq_along(idx))
-          x <- interaction_list[[idx[j]]](x, n[[source_sp[j]]], ...)
-        x
-      }
-    } else {
-      interaction[[i]] <- function(x, n, ...) {
-        identity(x)
-      }
-    }
-
-  }
+  interaction <- lapply(dynamics,
+                        define_interaction,
+                        dots = dots,
+                        hex_list = hex_list,
+                        interaction_list = interaction_list)
 
   # return
   as_multispecies(
@@ -143,6 +127,32 @@ get_unique_dynamics <- function(interactions) {
   }
 
   # return all required dynamics objects
+  out
+
+}
+
+# internal function: define interaction of each species with any other
+#   species
+define_interaction <- function(dyn, dots, hex_list, interaction_list) {
+
+  # pull out relevant elements of fn_list
+  idx <- which(sapply(dots, function(x) x$target$hex) == dyn$hex)
+
+  # create function is species i is a target for any other species
+  if (length(idx) > 0) {
+    source_sp <- match(sapply(dots[idx], function(x) x$source$hex), hex_list)
+    out <- function(x, n, ...) {
+      for (j in seq_along(idx))
+        x <- interaction_list[[idx[j]]](x, n[[source_sp[j]]], ...)
+      x
+    }
+  } else {
+    out <- function(x, n, ...) {
+      identity(x)
+    }
+  }
+
+  # return
   out
 
 }
