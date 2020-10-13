@@ -1,5 +1,5 @@
 #' @name updaters
-#' @title Functions for a single time-step update (matrix %*% vector)
+#' @title Functions for a single time-step update
 #' @description Define how population abundances are updated from
 #'   one time step to the next. Functions can take any form but will
 #'   only be vectorised across replicates in limited situations.

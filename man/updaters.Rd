@@ -5,7 +5,7 @@
 \alias{update_crossprod}
 \alias{update_binomial_leslie}
 \alias{update_multinomial}
-\title{Functions for a single time-step update (matrix %*% vector)}
+\title{Functions for a single time-step update}
 \usage{
 update_crossprod(pop, mat)
 
