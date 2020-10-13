@@ -340,7 +340,8 @@ simulate.dynamics <- function(object,
       initialise,
       obj = object$dynamics,
       init = init,
-      MoreArgs = list(opt = opt, keep_slices = FALSE)
+      MoreArgs = list(opt = opt, keep_slices = FALSE),
+      SIMPLIFY = FALSE
     )
 
     # do we need to create an object to store everything?
@@ -349,7 +350,8 @@ simulate.dynamics <- function(object,
         initialise,
         obj = object$dynamics,
         init = init,
-        MoreArgs = list(opt = opt, keep_slices = opt$keep_slices)
+        MoreArgs = list(opt = opt, keep_slices = opt$keep_slices),
+        SIMPLIFY = FALSE
       )
     }
 
@@ -544,7 +546,7 @@ simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args, inclu
       function(j)
         do.call(
           obj$interaction[[i]],
-          c(list(mat, lapply(seq_len(ncol(pop_t)), function(i) pop_t[j, i])), args$interaction)
+          c(list(mat, lapply(pop_t, function(i) pop_t[j, ])), args$interaction)
         )
     )
     is_expanded <- TRUE
