@@ -19,28 +19,36 @@ NULL
 #' @param \dots ignored; included for consistency with \code{simulate} generic
 #'   method
 #' @param init an array of initial conditions with one row per replicate and one
-#'   column per population stage. Additionally requires one slice per species if
-#'   \code{obj} has been created with \code{\link{multispecies}}. Defaults
+#'   column per population stage. If \code{obj} has been created with
+#'   \code{\link{multispecies}}, initial conditions can be provided as a list or
+#'   array with one element or slice per species, or as a matrix, in which case
+#'   all species are assumed to share the same initial conditions. Defaults
 #'   to \code{NULL}, in which case initial conditions are generated randomly
 #'   according to \code{options()$aae.pop_initialisation}
 #' @param options a named \code{list} of simulation options. Currently accepted
 #'   values are:
+#'
 #'   - \code{ntime} the number of time steps to simulate, ignored if \code{obj}
 #'       includes a \code{\link{covariates}} (default = 50)
+#'
 #'   - \code{keep_slices} \code{logical} defining whether to keep intermediate
 #'       population abundances or (if \code{FALSE}) to return only the final
 #'       time slice
+#'
 #'   - \code{tidy_abundances} a function to handle predicted abundance data
 #'       that may be non-integer. Defaults to \code{identity}; suggested
 #'       alternatives are \code{floor}, \code{round}, or \code{ceiling}
+#'
 #'   - \code{initialise_args} a list of arguments passed to the function
 #'       used to initialise abundance trajectories. Only used if
 #'       \code{init = NULL}. Defaults to \code{options()$aae.pop_lambda},
 #'       which specifies lambda for Poisson random draws. The default
 #'       initialisation function is defined by
 #'       \code{options()$aae.pop_initialisation}.
+#'
 #'    - \code{update} a function to update abundances from one time
 #'       step to the next. Defaults to \code{options()$aae.pop_update}.
+#'
 #' @param args named list of lists passing arguments to processes defined
 #'   in \code{object}, including \code{interaction} for
 #'   \code{\link{multispecies}} objects.
@@ -313,13 +321,47 @@ simulate.dynamics <- function(object,
   # initalise the population with init if provided, following
   #   options()$aae.pop_initialisation otherwise
   if (is.multispecies(object)) {
-    pop_tmp <- lapply(object$dynamics, initialise, opt, init, keep_slices = FALSE)
-    if (opt$keep_slices)
-      pop <- lapply(object$dynamics, initialise, opt, init, keep_slices = opt$keep_slices)
+
+    # check if initials are provided as a list with one element
+    #   per species
+    if (!is.list(init)) {
+
+      # if not, is it an array?
+      if (length(dim(init)) == 3) {
+        init <- lapply(seq_len(dim(init)[3]), function(i) init[, , i])
+      } else { # assume all species shared initial conditions
+        init <- lapply(seq_len(dim(init)[3]), function(i) init)
+      }
+
+    }
+
+    # multispecies model, check dims for each
+    pop_tmp <- mapply(
+      initialise,
+      obj = object$dynamics,
+      init = init,
+      MoreArgs = list(opt = opt, keep_slices = FALSE)
+    )
+
+    # do we need to create an object to store everything?
+    if (opt$keep_slices) {
+      pop <- mapply(
+        initialise,
+        obj = object$dynamics,
+        init = init,
+        MoreArgs = list(opt = opt, keep_slices = opt$keep_slices)
+      )
+    }
+
   } else {
+
+    # single-species model, check dims
     pop_tmp <- initialise(object, opt, init, keep_slices = FALSE)
+
+    # do we need to create an object to store everything?
     if (opt$keep_slices)
       pop <- initialise(object, opt, init, keep_slices = opt$keep_slices)
+
   }
 
   # loop through timesteps, updating population at each timestep
