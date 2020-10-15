@@ -285,7 +285,7 @@ template_macquarieperch <- function(k = 1000) {
 
   # need some helper functions within template
   # simulate a vector of perfectly correlated survival values with known mean and sd
-  survival <- function(n, mean, sd, perfect_correlation = TRUE) {
+  survival_gen <- function(n, mean, sd, perfect_correlation = TRUE) {
 
     # how many parameters are we dealing with?
     npar <- length(mean)
@@ -457,7 +457,7 @@ template_macquarieperch <- function(k = 1000) {
     reproduction(popmat, dims = 4:30)
   )
   envstoch_fns <- list(
-    function(mat, mean, sd, ...) survival(n = 1, mean = mean, sd = sd),
+    function(mat, mean, sd, ...) survival_gen(n = 1, mean = mean, sd = sd),
     fec_envstoch
   )
   envstoch <- environmental_stochasticity(
