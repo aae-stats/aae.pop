@@ -48,15 +48,21 @@ update_binomial_leslie <- function(pop, mat) {
          call. = FALSE)
   }
 
-  pop_nm1 <- pop[-length(pop)]
+  # need a 1 row matrix if pop is a vector
+  if (is.null(dim(pop)))
+    pop <- matrix(pop, nrow = 1)
+
+  # pull out all ages except the last
+  pop_nm1 <- pop[, -ncol(pop), drop = FALSE]
 
   vals <- tcrossprod(pop, mat)
-  probs <- vals[-1] / pop_nm1
+  probs <- vals[, -1] / pop_nm1
   probs[pop_nm1 == 0] <- 0
 
-  c(
-    rpois(1, lambda = vals[1]),
-    rbinom(length(probs), size = pop_nm1, prob = probs)
+  cbind(
+    rpois(nrow(vals), lambda = vals[, 1]),
+    matrix(rbinom(length(probs), size = pop_nm1, prob = probs),
+           nrow = nrow(pop_nm1))
   )
 
 }
@@ -80,24 +86,44 @@ update_multinomial <- function(pop, mat) {
          call. = FALSE)
   }
 
-  n <- length(pop)
+  # need a 1 row matrix if pop is a vector
+  if (is.null(dim(pop)))
+    pop <- matrix(pop, nrow = 1)
+
+  n <- ncol(pop)
 
   recruits <- mat[1, ]
   recruits[1] <- 0
-  recruits <- rpois(1, lambda = crossprod(recruits, pop))
+  recruits <- rpois(nrow(pop), lambda = tcrossprod(recruits, pop))
 
   mat[reproduction(mat)] <- 0
 
   # add class for dead individuals
   mat <- rbind(mat, 1 - colSums(mat))
 
+  # correct if total probs exceed 1 and dead probs are negative
+  mat[mat < 0] <- 0
+
   out <- matrix(0, nrow = n, ncol = n + 1)
 
-  out <- mc2d::rmultinomial(n, size = pop, prob = t(mat))
-  out <- apply(out[, 1:n], 2, sum)
+  out <- t(apply(
+    pop,
+    1,
+    multinomial_internal,
+    n = n,
+    mat = mat
+  ))
 
-  out[1] <- out[1] + recruits
+  out[, 1] <- out[, 1] + recruits
 
   out
+
+}
+
+# internal function: single multinomial draw for one replicate
+multinomial_internal <- function(n, pop, mat) {
+
+  out <- mc2d::rmultinomial(n = n, size = pop, prob = t(mat))
+  apply(out[, 1:n], 2, sum)
 
 }
