@@ -11,10 +11,11 @@ dyn <- dynamics(mat)
 nsim <- 10
 ntime <- 20
 
+init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+
 test_that("updaters give correct outputs", {
 
   # test standard cross product
-  init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
   sim <- simulate(dyn, options = list(update = update_crossprod))
   value <- simulate(
     dyn,
@@ -56,7 +57,7 @@ test_that("updaters give correct outputs", {
                    tidy_abundances = floor,
                    update = update_multinomial)
   )
-  expect_equal(class(value), c("simulate", "array"))
+  expect_equal(class(value), c("simulation", "array"))
 
   # test binomial update
   mat[survival(mat)] <- 0
@@ -69,13 +70,43 @@ test_that("updaters give correct outputs", {
                    tidy_abundances = floor,
                    update = update_binomial_leslie)
   )
-  expect_equal(class(value), c("simulate", "array"))
+  expect_equal(class(value), c("simulation", "array"))
 
 })
 
 
 test_that("updaters error informatively", {
 
+  # binomial updater will not work if values are not integers
+  mat[survival(mat)] <- 0
+  dyn <- dynamics(mat)
+  init_set <- init_set + rnorm(length(init_set))
+  expect_error(
+    simulate(
+      dyn,
+      nsim = nsim,
+      init = init_set,
+      options = list(ntime = ntime,
+                     tidy_abundances = identity,
+                     update = update_binomial_leslie)
+    ),
+    "abundances are not integers"
+  )
+
+  # multinomial updater will not work if values are not integers
+  mat[survival(mat)] <- 0
+  dyn <- dynamics(mat)
+  expect_error(
+    simulate(
+      dyn,
+      nsim = nsim,
+      init = init_set,
+      options = list(ntime = ntime,
+                     tidy_abundances = identity,
+                     update = update_multinomial)
+    ),
+    "abundances are not integers"
+  )
 
 })
 

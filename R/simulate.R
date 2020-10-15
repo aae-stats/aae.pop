@@ -239,6 +239,17 @@ simulate.dynamics <- function(object,
   )
   opt[names(options)] <- options
 
+  # check matrix if Leslie updater is used
+  if (all.equal(opt$update, update_binomial_leslie)) {
+    mat_test <- object$matrix
+    mat_test[transition(mat_test)] <- 0
+    mat_test[reproduction(mat_test)] <- 0
+    if (any(mat_test != 0)) {
+      stop("matrix must be a Leslie matrix to use update_binomial_leslie",
+           call. = FALSE)
+    }
+  }
+
   # set default arguments passed to dynamic processes
   default_args <- list(
     covariates = list(),
