@@ -437,9 +437,9 @@ template_macquarieperch <- function(k = 1000) {
                            recruit_failure = 0.25,
                            ...) {
 
-    young_surv <- survival(n = 1,
-                           mean = c(egg_mean, larvae_mean, yoy_mean),
-                           sd = c(egg_sd, larvae_sd, yoy_sd))
+    young_surv <- survival_gen(n = 1,
+                               mean = c(egg_mean, larvae_mean, yoy_mean),
+                               sd = c(egg_sd, larvae_sd, yoy_sd))
     fecundity(
       age = 4:30,
       egg_survival = young_surv[1],
