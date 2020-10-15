@@ -240,7 +240,7 @@ simulate.dynamics <- function(object,
   opt[names(options)] <- options
 
   # check matrix if Leslie updater is used
-  if (all.equal(opt$update, update_binomial_leslie)) {
+  if (isTRUE(all.equal(update_binomial_leslie, opt$update))) {
     mat_test <- object$matrix
     mat_test[transition(mat_test)] <- 0
     mat_test[reproduction(mat_test)] <- 0
