@@ -4,7 +4,7 @@
 
 You can install the `aae.pop` package from GitHub. To install from GitHub, you'll need to install the `remotes` R package and use the following lines of code:
 
-```{r install-packages, eval = FALSE}
+```
 # install the remotes package if not already installed
 install.packages("remotes")
 
@@ -16,7 +16,7 @@ Once completed, you should be able to load the `aae.pop` package with `library(a
 
 ## Building a basic population model
 
-```{r}
+```
 # load the aae.pop package
 library(aae.pop)
 
