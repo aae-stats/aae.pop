@@ -121,8 +121,8 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-core-functions" class="hasAnchor"><a href="#section-core-functions" class="anchor"></a>Core functions</h2>
-          <p class="section-desc"><p>add description</p></p>
+          <h2 id="section-defining-population-dynamics-models" class="hasAnchor"><a href="#section-defining-population-dynamics-models" class="anchor"></a>Defining population dynamics models</h2>
+          <p class="section-desc"><p>Combine population processes into a population dynamics object</p></p>
         </th>
       </tr>
       
@@ -136,7 +136,20 @@
           <p><code><a href="dynamics.html">dynamics()</a></code> <code><a href="dynamics.html">update(<i>&lt;dynamics&gt;</i>)</a></code> <code><a href="dynamics.html">plot(<i>&lt;dynamics&gt;</i>)</a></code> <code><a href="dynamics.html">is.dynamics()</a></code> <code><a href="dynamics.html">print(<i>&lt;dynamics&gt;</i>)</a></code> </p>
         </td>
         <td><p>Create a population dynamics object</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-simulating-population-dynamics" class="hasAnchor"><a href="#section-simulating-population-dynamics" class="anchor"></a>Simulating population dynamics</h2>
+          <p class="section-desc"><p>Simulate population trajectories from a population dynamics object</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
           <p><code><a href="simulate.html">simulate(<i>&lt;dynamics&gt;</i>)</a></code> <code><a href="simulate.html">is.simulation()</a></code> <code><a href="simulate.html">is.simulation_list()</a></code> <code><a href="simulate.html">print(<i>&lt;simulation&gt;</i>)</a></code> <code><a href="simulate.html">print(<i>&lt;simulation_list&gt;</i>)</a></code> <code><a href="simulate.html">plot(<i>&lt;simulation&gt;</i>)</a></code> <code><a href="simulate.html">plot(<i>&lt;simulation_list&gt;</i>)</a></code> </p>
@@ -146,8 +159,8 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-additional-processes" class="hasAnchor"><a href="#section-additional-processes" class="anchor"></a>Additional processes</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-adding-density-dependence" class="hasAnchor"><a href="#section-adding-density-dependence" class="anchor"></a>Adding density dependence</h2>
+          <p class="section-desc"><p>Add density dependence for a population dynamics object</p></p>
         </th>
       </tr>
       
@@ -161,14 +174,40 @@
           <p><code><a href="density_dependence.html">density_dependence()</a></code> <code><a href="density_dependence.html">density_dependence_n()</a></code> <code><a href="density_dependence.html">beverton_holt()</a></code> <code><a href="density_dependence.html">ricker()</a></code> </p>
         </td>
         <td><p>Specify density dependence in models of population dynamics</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-adding-stochasticity" class="hasAnchor"><a href="#section-adding-stochasticity" class="anchor"></a>Adding stochasticity</h2>
+          <p class="section-desc"><p>Add density demographic or environmental stochasticity to a population dynamics object</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
           <p><code><a href="stochasticity.html">environmental_stochasticity()</a></code> <code><a href="stochasticity.html">demographic_stochasticity()</a></code> </p>
         </td>
         <td><p>Specify environmental and demographic stochasticity in models of
   population dynamics</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-adding-covariates" class="hasAnchor"><a href="#section-adding-covariates" class="anchor"></a>Adding covariates</h2>
+          <p class="section-desc"><p>Add covariates that influence population dynamics</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
           <p><code><a href="covariates.html">covariates()</a></code> </p>
@@ -178,8 +217,8 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-utilities" class="hasAnchor"><a href="#section-utilities" class="anchor"></a>Utilities</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-subsetting-population-matrices" class="hasAnchor"><a href="#section-subsetting-population-matrices" class="anchor"></a>Subsetting population matrices</h2>
+          <p class="section-desc"><p>Extract or update specific components of a population matrix</p></p>
         </th>
       </tr>
       
@@ -193,30 +232,30 @@
           <p><code><a href="masks.html">reproduction()</a></code> <code><a href="masks.html">survival()</a></code> <code><a href="masks.html">transition()</a></code> <code><a href="masks.html">all_cells()</a></code> <code><a href="masks.html">all_classes()</a></code> <code><a href="masks.html">combine()</a></code> </p>
         </td>
         <td><p>Isolate elements of population dynamics models</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-updating-population-abundances" class="hasAnchor"><a href="#section-updating-population-abundances" class="anchor"></a>Updating population abundances</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
           <p><code><a href="updaters.html">update_crossprod()</a></code> <code><a href="updaters.html">update_binomial_leslie()</a></code> <code><a href="updaters.html">update_multinomial()</a></code> </p>
         </td>
         <td><p>Functions for a single time-step update</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="templates.html">get_template()</a></code> <code><a href="templates.html">murray_cod()</a></code> <code><a href="templates.html">macquarie_perch()</a></code> <code><a href="templates.html">get_args()</a></code> </p>
-        </td>
-        <td><p>Use a fully parameterised population dynamics object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rng.html">rmultiunit()</a></code> </p>
-        </td>
-        <td><p>Random number generators not available in existing R
-  packages</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-more-complex-models" class="hasAnchor"><a href="#section-more-complex-models" class="anchor"></a>More complex models</h2>
+          <h2 id="section-adding-metapopulation-structure" class="hasAnchor"><a href="#section-adding-metapopulation-structure" class="anchor"></a>Adding metapopulation structure</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -237,17 +276,11 @@
           <p><code><a href="dispersal.html">dispersal()</a></code> </p>
         </td>
         <td><p>Specify dispersal between populations in a metapopulation model</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="multispecies.html">multispecies()</a></code> <code><a href="multispecies.html">pairwise_interaction()</a></code> <code><a href="multispecies.html">is.multispecies()</a></code> <code><a href="multispecies.html">print(<i>&lt;multispecies&gt;</i>)</a></code> <code><a href="multispecies.html">is.interaction()</a></code> </p>
-        </td>
-        <td><p>Create a population dynamics object with multiple species</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-inference" class="hasAnchor"><a href="#section-inference" class="anchor"></a>Inference</h2>
+          <h2 id="section-modelling-multiple-species" class="hasAnchor"><a href="#section-modelling-multiple-species" class="anchor"></a>Modelling multiple species</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -259,9 +292,35 @@
       <tr>
         
         <td>
-          <p><code><a href="inference.html">inference()</a></code> <code><a href="inference.html">get_parameters()</a></code> <code><a href="inference.html">prior()</a></code> </p>
+          <p><code><a href="multispecies.html">multispecies()</a></code> <code><a href="multispecies.html">pairwise_interaction()</a></code> <code><a href="multispecies.html">is.multispecies()</a></code> <code><a href="multispecies.html">print(<i>&lt;multispecies&gt;</i>)</a></code> <code><a href="multispecies.html">is.interaction()</a></code> </p>
         </td>
-        <td><p>Perform inference on a population dynamics model</p></td>
+        <td><p>Create a population dynamics object with multiple species</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-helpers" class="hasAnchor"><a href="#section-helpers" class="anchor"></a>Helpers</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="rng.html">rmultiunit()</a></code> </p>
+        </td>
+        <td><p>Random number generators not available in existing R
+  packages</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="templates.html">get_template()</a></code> <code><a href="templates.html">murray_cod()</a></code> <code><a href="templates.html">macquarie_perch()</a></code> <code><a href="templates.html">get_args()</a></code> </p>
+        </td>
+        <td><p>Use a fully parameterised population dynamics object</p></td>
       </tr>
     </tbody>
     </table>

@@ -14,34 +14,55 @@ authors:
     href: https://github.com/aae-stats
 
 reference:
-  - title: Core functions
-    desc: add description
+  - title: Defining population dynamics models
+    desc: Combine population processes into a population dynamics object
     contents:
     - dynamics
+
+  - title: Simulating population dynamics
+    desc: Simulate population trajectories from a population dynamics object
+    contents:
     - simulate
 
-  - title: Additional processes
+  - title: Adding density dependence
+    desc: Add density dependence for a population dynamics object
     contents:
     - density_dependence
+
+  - title: Adding stochasticity
+    desc: >
+      Add density demographic or environmental stochasticity to a
+      population dynamics object
+    contents:
     - stochasticity
+
+  - title: Adding covariates
+    desc: Add covariates that influence population dynamics
+    contents:
     - covariates
 
-  - title: Utilities
+  - title: Subsetting population matrices
+    desc: Extract or update specific components of a population matrix
     contents:
     - masks
-    - updaters
-    - templates
-    - rng
 
-  - title: More complex models
+  - title: Updating population abundances
+    contents:
+    - updaters
+
+  - title: Adding metapopulation structure
     contents:
     - metapopulation
     - dispersal
+
+  - title: Modelling multiple species
+    contents:
     - multispecies
 
-  - title: Inference
+  - title: Helpers
     contents:
-    - inference
+    - rng
+    - templates
 
 navbar:
   structure:
