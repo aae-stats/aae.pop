@@ -1,0 +1,18 @@
+---
+title: "Moving beyond default settings in aae.pop"
+author: "Jian Yen"
+date: "13/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Cover things like updaters, adding your own update step or C++ code, etc. Also cover default opts and ways to tweak these (plus reasons to do so).
+
+```{r}
+a <- rnorm(10)
+```

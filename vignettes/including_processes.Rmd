@@ -1,0 +1,50 @@
+---
+title: "Including demographic processes in a population model"
+author: "Jian Yen"
+date: "13/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Work through each of the main processes. Start with a write up of masks.
+
+```{r cars}
+summary(cars)
+```
+
+
+## Building a basic population model
+
+```{r}
+# load the aae.pop package
+library(aae.pop)
+
+# create a basic Leslie matrix for a population with
+#   five age classes
+# the aae.pop package assumes "columns move to rows"
+popmat <- rbind(
+  c(0,    0,    2,    4,    7),  # reproduction from 3-5 year olds
+  c(0.25, 0,    0,    0,    0),  # survival from age 1 to 2
+  c(0,    0.45, 0,    0,    0),  # survival from age 2 to 3
+  c(0,    0,    0.70, 0,    0),  # survival from age 3 to 4
+  c(0,    0,    0,    0.85, 0)   # survival from age 4 to 5
+)
+
+# create a population dynamics object with this matrix
+#   without any additional processes
+popdyn <- dynamics(popmat)
+
+# can plot the model structure if the DiagrammeR package is installed
+plot(popdyn)
+
+# simulate from this model with default (random) initial conditions
+sims <- simulate(popdyn)
+
+# can plot this
+plot(sims, xlab = "Generation", ylab = "Abundance")
+```

@@ -1,6 +1,5 @@
 ## aae.pop: simulating multispecies population dynamics in R
 
-
 ## Installing the package
 
 You can install the `aae.pop` package from GitHub. To install from GitHub, you'll need to install the `remotes` R package and use the following lines of code:
@@ -21,7 +20,29 @@ Once completed, you should be able to load the `aae.pop` package with `library(a
 # load the aae.pop package
 library(aae.pop)
 
-# to be updated
+# create a basic Leslie matrix for a population with
+#   five age classes
+# the aae.pop package assumes "columns move to rows"
+popmat <- rbind(
+  c(0,    0,    2,    4,    7),  # reproduction from 3-5 year olds
+  c(0.25, 0,    0,    0,    0),  # survival from age 1 to 2
+  c(0,    0.45, 0,    0,    0),  # survival from age 2 to 3
+  c(0,    0,    0.70, 0,    0),  # survival from age 3 to 4
+  c(0,    0,    0,    0.85, 0)   # survival from age 4 to 5
+)
+
+# create a population dynamics object with this matrix
+#   without any additional processes
+popdyn <- dynamics(popmat)
+
+# can plot the model structure if the DiagrammeR package is installed
+plot(popdyn)
+
+# simulate from this model with default (random) initial conditions
+sims <- simulate(popdyn)
+
+# can plot this
+plot(sims, xlab = "Generation", ylab = "Abundance")
 ```
 
 The vignettes contain several more detailed examples.

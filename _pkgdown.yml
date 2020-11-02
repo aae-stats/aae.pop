@@ -1,0 +1,44 @@
+url: https://aae-stats.github.io/aae.pop
+
+development:
+  mode: auto
+
+template:
+  params:
+    bootswatch: flatly
+
+authors:
+  Jian Yen:
+    href: https://scholar.google.com.au/citations?user=oEmm1CMAAAAJ&hl=en
+  Applied Aquatic Ecology, Arthur Rylah Institute for Environmental Research:
+    href: https://github.com/aae-stats
+
+reference:
+  - title: Core functions
+    contents:
+    - dynamics
+    - simulate
+    - aae.pop
+
+  - title: Additional processes
+    contents:
+    - density_dependence
+    - stochasticity
+    - covariates
+
+  - title: Utilities
+    contents:
+    - masks
+    - updaters
+    - templates
+    - rng
+
+  - title: More complex models
+    contents:
+    - metapopulation
+    - dispersal
+    - multispecies
+
+  - title: Inference
+    contents:
+    - inference
