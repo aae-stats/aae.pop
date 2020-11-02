@@ -15,10 +15,10 @@ authors:
 
 reference:
   - title: Core functions
+    desc: add description
     contents:
     - dynamics
     - simulate
-    - aae.pop
 
   - title: Additional processes
     contents:
@@ -42,3 +42,26 @@ reference:
   - title: Inference
     contents:
     - inference
+
+navbar:
+  structure:
+    left: [get_started, functions, vignettes, examples]
+    right: [github]
+  components:
+    home: ~
+    reference: ~
+    articles: ~
+    news: ~
+    vignettes:
+      text: vignettes
+      menu:
+      href: articles/index.html
+    get_started:
+      text: get started
+      href: index.html
+    functions:
+      text: functions
+      href: reference/index.html
+    github:
+      icon: fab fa-github
+      href: https://github.com/aae-stats/aae.pop
