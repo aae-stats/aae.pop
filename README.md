@@ -2,7 +2,7 @@
 
 aae.pop is an R package to simulate matrix population models. It's designed to be fast, flexible, and easily adapted to different model structures.
 
-The [website](https://aae-stats.github.io/aae.pop) includes a [quick start guide](), [examples](), [vignettes](), and [package documentation](). 
+The [website](https://aae-stats.github.io/aae.pop) includes a [quick start guide](https://aae-stats.github.io/aae.pop/articles/get_started.html), examples, vignettes, and [package documentation](https://aae-stats.github.io/aae.pop/reference/index.html). 
 You can install the current version of the package from Github:
 
 ``` r

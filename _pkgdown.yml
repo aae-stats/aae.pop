@@ -63,7 +63,6 @@ navbar:
     left: [get_started, functions, vignettes, examples]
     right: [github]
   components:
-    home: ~
     reference: ~
     articles: ~
     news: ~
@@ -82,6 +81,7 @@ navbar:
       - text: "Multiple species"
         href: articles/multiple_species.html
     examples:
+      text: examples
       menu:
       - text: Macquarie perch population model
         href: articles/macperch_example.html
