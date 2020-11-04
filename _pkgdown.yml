@@ -84,8 +84,10 @@ navbar:
     examples:
       text: examples
       menu:
-      - text: Macquarie perch population model
+      - text: Macquarie perch
         href: articles/macperch_example.html
+      - text: Ranking scenarios
+        href: articles/scenarios_example.html
     documentation:
       text: documentation
       href: reference/index.html

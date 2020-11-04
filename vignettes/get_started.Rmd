@@ -12,8 +12,20 @@ library(aae.pop)
 
 ## Installation and setup
 
-You can install the `aae.pop` package from GitHub. To install from GitHub, you'll need the `remotes` R package, which you can install from CRAN with `install.packages("remotes")`. You can then install the `aae.pop` package from Github with `remotes::install_github("aae.stats/aae.pop@master")`. Once completed, you should be able to load the `aae.pop` package with `library(aae.pop)`.
+You can install the `aae.pop` package from GitHub. To install from GitHub, you'll need the `remotes` R package, which you can install from CRAN with:
 
+```{r}
+install.packages("remotes")
+```
+
+You can then install the `aae.pop` package from Github with:
+
+```{r}
+remotes::install_github("aae.stats/aae.pop")
+```
+
+Once completed, you should be able to load the 
+`aae.pop` package with `library(aae.pop)`.
 
 ## Background
 
@@ -94,10 +106,10 @@ With a compiled `dynamics` object, it's relatively straightforward to simulate s
 sims <- simulate(popdyn)
 ```
 
-Simulated trajectories can be plotted using the standard `plot` function in R.
+Simulated trajectories can be plotted using the standard `plot` function in R. This example sets the colour to a medium shade of blue with 90% transparency:
 
 ```{r, dev = "png"}
-plot(sims, xlab = "Generation", ylab = "Abundance")
+plot(sims, col = scales::alpha("2171B5", 0.1))
 ```
 
 #### Changing default settings
@@ -110,6 +122,7 @@ sims <- simulate(popdyn,
                  nsim = 100,
                  init = initials,
                  options = list(ntime = 20))
+plot(sims, col = scales::alpha("2171B5", 0.1))
 ```
 
-Default settings also specify that population updates are calculated as a cross product and that abundances are not rounded in any way in each step, which allows fractional individuals in the population. These are not ideal settings. Changing them is covered in the [*Beyond defaults* vignette](beyond_defaults.html).
+Default settings also specify that population updates are calculated as a cross product and that abundances are not rounded in any way in each step, which allows fractional individuals in the population. These are not ideal settings. Changing them is covered in the [Beyond defaults](beyond_defaults.html) vignette.

@@ -1,0 +1,18 @@
+---
+title: "Passing arguments to demographic processes"
+author: "Jian Yen"
+date: "13/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Cover args, args.dyn, and args.fn. Explain when/why this is useful.
+
+```{r}
+a <- rnorm(10)
+```
