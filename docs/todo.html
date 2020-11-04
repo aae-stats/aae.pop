@@ -78,13 +78,42 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">get started</a>
+  <a href="articles/get_started.html">get started</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    vignettes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="articles/including_processes.html">Including processes</a>
+    </li>
+    <li>
+      <a href="articles/beyond_defaults.html">Beyond defaults</a>
+    </li>
+    <li>
+      <a href="articles/metapopulations.html">Metapopulations</a>
+    </li>
+    <li>
+      <a href="articles/multiple_species.html">Multiple species</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="articles/macperch_example.html">Macquarie perch population model</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="reference/index.html">functions</a>
-</li>
-<li>
-  <a href="articles/index.html">vignettes</a>
+  <a href="reference/index.html">documentation</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -110,46 +139,32 @@
       <h1>NA</h1>
     </div>
 
-<div id="to-do-list-for-aaepop-package" class="section level2">
+<div id="to-do-list-for-aae-pop-package" class="section level2">
 <h2 class="hasAnchor">
-<a href="#to-do-list-for-aaepop-package" class="anchor"></a>To-do list for aae.pop package</h2>
+<a href="#to-do-list-for-aae-pop-package" class="anchor"></a>To-do list for aae.pop package</h2>
 <ul>
 <li>[] update plots with masks to illustrate environmental effects</li>
 <li>[] add basic ABC-style inference? Or more complex MCMC inference? If fast enough, could set up: inference(model, data, target) with an ABC or SMC approach (using existing algorithms). Could potentially use greta approach but would be slow and would require every internal operation to be a greta op.</li>
 <li>[] Think about multisp of metapops. Should work fine with correct masks.</li>
 <li>[] Tidy the rescale dispersal helper; currently very clunky (but seems to work).</li>
-<li>
-<input type="checkbox" disabled checked>
-Replace lapply and mapply calls in simulate with a wrapper or future equivalent so users can specify when to run in parallel. Do this as an option, with separate options for each to avoid slow-downs due to attempts to parallelise over many matrices in single update (processing time &gt; speedup). Trialled but rarely faster to removed to avoid slow-downs when evaluating multiprocess futures for multispecies models (i.e. all share a future, so can’t separate this from the multispecies version).</li>
-<li>
-<input type="checkbox" disabled checked>
-Replace for loop over species with parallelised call to lapply or mapply (messy because of inputs required). Currently not much faster than sequential eval but need to test with more species.</li>
-<li>
-<input type="checkbox" disabled checked>
-add plots for simulation outputs.</li>
-<li>
-<input type="checkbox" disabled checked>
-add tests for metapopulation and dispersal. Could be extended to test dispersal calcs more carefully.</li>
+<li>[x] Replace lapply and mapply calls in simulate with a wrapper or future equivalent so users can specify when to run in parallel. Do this as an option, with separate options for each to avoid slow-downs due to attempts to parallelise over many matrices in single update (processing time &gt; speedup). Trialled but rarely faster to removed to avoid slow-downs when evaluating multiprocess futures for multispecies models (i.e. all share a future, so can’t separate this from the multispecies version).</li>
+<li>[x] Replace for loop over species with parallelised call to lapply or mapply (messy because of inputs required). Currently not much faster than sequential eval but need to test with more species.</li>
+<li>[x] add plots for simulation outputs.</li>
+<li>[x] add tests for metapopulation and dispersal. Could be extended to test dispersal calcs more carefully.</li>
 <li>[] add tests for multispecies and interactions.</li>
 <li>[] add tests of non-standard updaters.</li>
-<li>
-<input type="checkbox" disabled checked>
-Check handling of dots argument in covariates, which is now included in simulate.</li>
+<li>[x] Check handling of dots argument in covariates, which is now included in simulate.</li>
 <li>[] Check covariates functions defined by metapopulation.</li>
 <li>[] Have redefined covariates based on masks. This will be difficult if users want to supply a function that acts on a matrix. Need to think through how this might be handled. Should do_mask keep dims of input? Or perhaps do this optionally (keep_dims = TRUE/FALSE)? Can get around this by specifying dims as an argument to user-defined function (function(mat, x, dims)) and then reformatting based on dims. Add example of this.</li>
 <li>[] Pass arguments correctly in multispecies case; need to allow different arguments to each species.</li>
-<li>
-<input type="checkbox" disabled checked>
-Metapopulation handles covariates poorly in latest version. All pops share same set of covariates, which isn’t ideal. Added example workaround (hacky) to deal with this.</li>
+<li>[x] Metapopulation handles covariates poorly in latest version. All pops share same set of covariates, which isn’t ideal. Added example workaround (hacky) to deal with this.</li>
 <li>[] Add method for dynamic arguments (e.g. dyn.args or dyn_args), either as a list of args for each process or as a function that calculates the args within each generation (this could be a fn_args argument instead?).</li>
 <li>[] Set up aae.pop helpers or templates package to hold species templates and additional functions, such as rmultiunit? Could include here but seems like it adds a lot of weight for minimal use. But not that much weight (just a few scripts worth).</li>
 <li>[] Could use args.dyn argument to pass covariates, evaluate within simulate_once. This will allow lists of args but also might be more difficult to use because would require one list element for each timestep</li>
 <li>[] args.dyn seems incorrect, test it. update_args does not correctly subset the args.dyn elements by the looks of it.</li>
 <li>[] Could pass args.fn as part of the processes themselves, e.g., by passing iter, mat, pop to the processes within simulate_once. Issue with this approach is that it will recalculate fn for every replicate, which isn’t ideal if fn is slow.</li>
 <li>[] Test whether a generic function(x, …) will work with args by ignoring mat, pop, etc. if a named x argument is passed.</li>
-<li>
-<input type="checkbox" disabled checked>
-Test arrays vs lists for speed in simulate_once. Completed. Lists still equivalent or faster.</li>
+<li>[x] Test arrays vs lists for speed in simulate_once. Completed. Lists still equivalent or faster.</li>
 </ul>
 </div>
 

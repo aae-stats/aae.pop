@@ -1,21 +1,18 @@
 ---
 title: "Including demographic processes in a population model"
 author: "Jian Yen"
-date: "13/10/2020"
+date: "4/11/2020"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(aae.pop)
 ```
 
 ## R Markdown
 
 Work through each of the main processes. Start with a write up of masks.
-
-```{r cars}
-summary(cars)
-```
 
 
 ## Building a basic population model
@@ -44,7 +41,4 @@ plot(popdyn)
 
 # simulate from this model with default (random) initial conditions
 sims <- simulate(popdyn)
-
-# can plot this
-plot(sims, xlab = "Generation", ylab = "Abundance")
 ```

@@ -90,14 +90,8 @@ combine <- function(...) {
   UseMethod("combine")
 }
 
-#' @rdname masks
-#'
+# S3 method
 #' @export
-#'
-#' @details something
-#'
-#' @examples
-#' # add
 combine.mask <- function(...) {
 
   # turn dots into a list
@@ -120,8 +114,7 @@ combine.mask <- function(...) {
 
 }
 
-#' @rdname masks
-#'
+# S3 method
 #' @export
 combine.function <- function(...) {
 
@@ -149,8 +142,7 @@ combine.function <- function(...) {
 
 }
 
-#' @rdname masks
-#'
+# S3 method
 #' @export
 combine.default <- function(...) {
 

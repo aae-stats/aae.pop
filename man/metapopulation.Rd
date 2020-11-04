@@ -2,15 +2,9 @@
 % Please edit documentation in R/metapopulation.R
 \name{metapopulation}
 \alias{metapopulation}
-\alias{is.metapopulation}
-\alias{print.metapopulation}
 \title{Create a metapopulation dynamics object}
 \usage{
 metapopulation(structure, dynamics, dispersal)
-
-is.metapopulation(x)
-
-\method{print}{metapopulation}(x, ...)
 }
 \arguments{
 \item{structure}{binary or logical matrix denoting dispersal
@@ -27,10 +21,6 @@ provided, it is recycled over all required populations}
 \code{\link{dispersal}}. \code{dispersal} objects
 describe movements between populations and can include
 class-specific movements and density-dependent movements}
-
-\item{x}{a metapopulation object}
-
-\item{\dots}{ignored; included for consistency with print generic}
 }
 \description{
 Define population dynamics for multiple populations of

@@ -1,61 +1,10 @@
 #' @name templates
-#' @title Use a fully parameterised population dynamics object
+#' @title Parameterised population dynamics objects
 #' @description Use pre-defined population dynamics objects to
 #'   define a matrix model for a species with known parameters.
 NULL
 
-#' @rdname templates
-#'
-#' @export
-#'
-#' @param sp string specifying species common name (see details for
-#'   a list of species currently included)
-#' @param \dots additional arguments passed to templates or args
-#'   functions
-#'
-#' @details The \code{get_template} function and associated
-#'   wrapper functions (e.g. \code{murray_cod}) return a collated
-#'   \code{\link{dynamics}} object parameterised with values based
-#'   on existing data sets and published works. Currently implemented
-#'   species are: Murray cod (*Maccullochella peelii*),
-#'   trout cod (*Maccullochella macquariensis*), golden perch
-#'   (*Macquaria ambigua*), silver perch (*Bidyanus bidyanus*),
-#'   Macquarie perch (*Macquaria australasica*), Australian smelt
-#'   (*Retropinna semonia*), and common galaxias (*Galaxias maculatus*).
-#'
-#'   The \code{get_template} function can be used with user-defined
-#'   templates. Templates must be functions with a name defined by
-#'   \code{template_} followed by a species name or identifier (e.g.
-#'   \code{template_my_species}). These templates must return a named
-#'   list with at least a population matrix model (\code{matrix}), and
-#'   other arguments to pass to \code{\link{dynamics}}. Terms
-#'   specifying \code{covariates} would typically be defined
-#'   in a template with the function only (\code{covariate_functions}),
-#'   so that templates can be used with different covariate sets.
-#'   If defined in this way, \code{get_template("my_species")} will
-#'   return a compiled dynamics object for my_species.
-#'
-#'   In some cases, additional arguments might need to be passed to
-#'   \code{\link{simulate}}, and it may be useful to define these as
-#'   part of the template. The current setup requires all templates
-#'   to return a dynamics object only. The \code{get_args} function
-#'   has been included to handle this situation Arguments should be
-#'   specified similarly to templates, with \code{args_} followed by
-#'   a species name or identifier (e.g \code{args_my_species}). Arguments
-#'   functions should return a series of named lists for any of
-#'   \code{args}, \code{args.dyn}, or \code{args.fn} (see
-#'   \code{\link{simulate}} for descriptions of these terms).
-#'
-#' @examples
-#' # define a basic model for Murray cod with
-#' #   carrying capacity = 25000
-#' mc <- murray_cod(k = 25000)
-#'
-#' # simulate from this model
-#' sims <- simulate(mc, nsim = 100)
-#'
-#' # plot the simulated values
-#' plot(sims)
+# internal method
 get_template <- function(sp, ...) {
 
   # unpack dots
@@ -74,13 +23,39 @@ get_template <- function(sp, ...) {
 #'
 #' @export
 #'
+#' @importFrom stats rnorm
+#'
 #' @param k carrying capacity
 #'
-#' @description Alias to return defined template for Murray
-#'   cod. Currently implemented parameters are \code{k}, the
-#'   carrying capacity
+#' @param \dots additional arguments passed to templates or args
+#'   functions
 #'
-#' @importFrom stats rnorm
+#' @details These functions (e.g. \code{murray_cod}) return a collated
+#'   \code{\link{dynamics}} object parameterised with values based
+#'   on existing data sets and published works. Currently implemented
+#'   species are: Murray cod (*Maccullochella peelii*) and Macquarie
+#'   perch (*Macquaria australasica*).
+#'
+#'   In some cases, additional arguments might need to be passed to
+#'   \code{\link{simulate}}, and it may be useful to define these as
+#'   part of the template. The \code{get_args} function
+#'   handles this situation. Arguments should be
+#'   specified with \code{args_} followed by
+#'   a species name or identifier (e.g \code{args_my_species}).
+#'   Arguments functions should return a series of named lists
+#'   for any of \code{args}, \code{args.dyn}, or \code{args.fn} (see
+#'   \code{\link{simulate}} for descriptions of these terms).
+#'
+#' @examples
+#' # define a basic model for Murray cod with
+#' #   carrying capacity = 25000
+#' mc <- murray_cod(k = 25000)
+#'
+#' # simulate from this model
+#' sims <- simulate(mc, nsim = 100)
+#'
+#' # plot the simulated values
+#' plot(sims)
 murray_cod <- function(k = 20000, ...) {
   get_template(sp = "murraycod", k = k, ...)
 }
@@ -88,10 +63,6 @@ murray_cod <- function(k = 20000, ...) {
 #' @rdname templates
 #'
 #' @export
-#'
-#' @description Alias to return defined template for Macquarie
-#'   perch. Currently implemented parameters are \code{k}, the
-#'   carrying capacity
 #'
 #' @importFrom stats pnorm rnorm runif
 macquarie_perch <- function(k = 1000, ...) {
@@ -654,9 +625,6 @@ template_commongalaxias <- function() {
 #' @rdname templates
 #'
 #' @export
-#'
-#' @description Return arguments for a given species
-#'
 get_args <- function(sp, ...) {
 
   # draw up relevant parameters based on corrected species name

@@ -1,5 +1,5 @@
 #' @name dynamics
-#' @title Create a population dynamics object
+#' @title Create and update population dynamics objects
 #' @description Define population dynamics from a matrix and additional
 #'   objects that determine covariate effects, density dependence, and
 #'   forms of stochasticity.
@@ -105,12 +105,7 @@ dynamics <- function(matrix, ...) {
 #'
 #' @details A compiled \code{dynamics} object can be
 #'   updated to change any of the included processes with
-#'   the \code{update} function. It is possible to replace
-#'   most processes directly (e.g.
-#'   \code{dynamics$density_dependence <- new_density_dependence})
-#'   but this will break in some cases, notably if updating
-#'   the \code{\link{covariates}} process, which requires
-#'   recalculation of the population matrix.
+#'   the \code{update} function.
 update.dynamics <- function(object, ...) {
 
   # collate dots into a list
@@ -149,12 +144,8 @@ update.dynamics <- function(object, ...) {
 
 }
 
-#' @rdname dynamics
-#'
+# S3 plot method
 #' @export
-#'
-#' @param x an object of class \code{dynamics}
-#' @param y ignored
 plot.dynamics <- function(x, y, ...) {
 
   if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
@@ -277,8 +268,7 @@ plot.dynamics <- function(x, y, ...) {
 
 }
 
-#' @rdname dynamics
-#'
+# S3 is method
 #' @export
 # nolint start
 is.dynamics <- function(x) {
@@ -286,8 +276,7 @@ is.dynamics <- function(x) {
   inherits(x, "dynamics")
 }
 
-#' @rdname dynamics
-#'
+# S3 print method
 #' @export
 # nolint start
 print.dynamics <- function(x, ...) {

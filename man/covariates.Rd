@@ -21,13 +21,19 @@ Specify relationship between a vector or matrix of covariates
 \details{
 Masks must be of the same dimension as the population
   dynamics matrix and specify cells influenced by covariates
-  according to \code{funs}. Functions must take at least
-  one arguments, a matrix representing the population
-  dynamics matrix. Functions must return a matrix with
+  according to \code{funs}. Additional details on masks are
+  provided in \code{\link{masks}}.
+
+  Functions must take at least one argument, a matrix
+  representing the population dynamics matrix. Including
+  actual covariates requires a second argument to this
+  function. Functions must return a matrix with
   the same dimensions as the input, modified to reflect the
-  effects of covariates on vital rates. Additional arguments
-  can be passed to \code{funs} and can be specified as
-  \code{args} in \code{\link{simulate}}.
+  effects of covariates on vital rates.
+
+  Additional arguments to functions are supported and can be
+  passed to \code{\link{simulate}} with the \code{args},
+  \code{args.dyn}, or \code{args.fn} arguments.
 }
 \examples{
 # add

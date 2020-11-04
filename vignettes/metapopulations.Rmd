@@ -13,10 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Self-explanatory. Need to cover dispersal masks and handling of processes.
 
-```{r cars}
-summary(cars)
-```
-
 
 ## Building a basic population model
 
@@ -42,6 +38,4 @@ popdyn <- dynamics(popmat)
 # simulate from this model with default (random) initial conditions
 sims <- simulate(popdyn)
 
-# can plot this
-plot(sims, xlab = "Generation", ylab = "Abundance")
 ```

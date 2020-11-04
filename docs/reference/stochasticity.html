@@ -83,13 +83,42 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">get started</a>
+  <a href="../articles/get_started.html">get started</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    vignettes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/including_processes.html">Including processes</a>
+    </li>
+    <li>
+      <a href="../articles/beyond_defaults.html">Beyond defaults</a>
+    </li>
+    <li>
+      <a href="../articles/metapopulations.html">Metapopulations</a>
+    </li>
+    <li>
+      <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/macperch_example.html">Macquarie perch population model</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../reference/index.html">functions</a>
-</li>
-<li>
-  <a href="../articles/index.html">vignettes</a>
+  <a href="../reference/index.html">documentation</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -114,7 +143,7 @@
     <div class="page-header">
     <h1>Specify environmental and demographic stochasticity in models of
   population dynamics</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/aae-stats/aae.pop/blob/master/R/stochasticity.R'><code>R/stochasticity.R</code></a></small>
     <div class="hidden name"><code>stochasticity.Rd</code></div>
     </div>
 
@@ -150,15 +179,18 @@ for each element of <code>masks</code>. See Details</p></td>
   dynamics matrix (in the case of environmental stochasticity)
   or have one element for each class (in the case of demographic
   stochasticity). Masks specify cells influenced by stochasticity
-  according to <code>funs</code>. Functions must have at least one
-  argument, a population dynamics matrix for environmental
+  according to <code>funs</code>. Additional details on masks are provided
+  in <code><a href='masks.html'>masks</a></code>.</p>
+<p>Functions must have at least one argument, a population
+  dynamics matrix for environmental
   stochasticity or a vector of population abundances for
   demographic stochasticity. Functions must return an
   output of the same dimensions as the input,
   modified to reflect the effects of stochasticity on
   vital rates or population abundances.</p>
 <p>Additional arguments to functions are supported and can be
-  passed as the <code></code> to <code><a href='simulate.html'>simulate</a></code>.</p>
+  passed to <code><a href='simulate.html'>simulate</a></code> with the <code>args</code>,
+  <code>args.dyn</code>, or <code>args.fn</code> arguments.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># add</span>

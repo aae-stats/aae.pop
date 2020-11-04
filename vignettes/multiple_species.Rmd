@@ -38,6 +38,4 @@ popdyn <- dynamics(popmat)
 # simulate from this model with default (random) initial conditions
 sims <- simulate(popdyn)
 
-# can plot this
-plot(sims, xlab = "Generation", ylab = "Abundance")
 ```

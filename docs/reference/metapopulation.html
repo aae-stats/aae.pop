@@ -80,13 +80,42 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">get started</a>
+  <a href="../articles/get_started.html">get started</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    vignettes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/including_processes.html">Including processes</a>
+    </li>
+    <li>
+      <a href="../articles/beyond_defaults.html">Beyond defaults</a>
+    </li>
+    <li>
+      <a href="../articles/metapopulations.html">Metapopulations</a>
+    </li>
+    <li>
+      <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/macperch_example.html">Macquarie perch population model</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../reference/index.html">functions</a>
-</li>
-<li>
-  <a href="../articles/index.html">vignettes</a>
+  <a href="../reference/index.html">documentation</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -110,7 +139,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a metapopulation dynamics object</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/aae-stats/aae.pop/blob/master/R/metapopulation.R'><code>R/metapopulation.R</code></a></small>
     <div class="hidden name"><code>metapopulation.Rd</code></div>
     </div>
 
@@ -119,12 +148,7 @@
   a single species linked by dispersal (a metapopulation).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>metapopulation</span><span class='op'>(</span><span class='va'>structure</span>, <span class='va'>dynamics</span>, <span class='va'>dispersal</span><span class='op'>)</span>
-
-<span class='fu'>is.metapopulation</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-
-<span class='co'># S3 method for metapopulation</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>metapopulation</span><span class='op'>(</span><span class='va'>structure</span>, <span class='va'>dynamics</span>, <span class='va'>dispersal</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,14 +173,6 @@ provided, it is recycled over all required populations</p></td>
 <code><a href='dispersal.html'>dispersal</a></code>. <code>dispersal</code> objects
 describe movements between populations and can include
 class-specific movements and density-dependent movements</p></td>
-    </tr>
-    <tr>
-      <th>x</th>
-      <td><p>a metapopulation object</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>ignored; included for consistency with print generic</p></td>
     </tr>
     </table>
 

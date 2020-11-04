@@ -559,22 +559,16 @@ check_survival <- function(mat, nclass, col, idx, timestep = NULL) {
 
 }
 
-#' @rdname metapopulation
-#'
+# S3 method
 #' @export
-#'
-#' @param x a metapopulation object
 # nolint start
 is.metapopulation <- function(x) {
   # nolint end
   inherits(x, "metapopulation")
 }
 
-#' @rdname metapopulation
-#'
+# S3 method
 #' @export
-#'
-#' @param \dots ignored; included for consistency with print generic
 # nolint start
 print.metapopulation <- function(x, ...) {
   # nolint end

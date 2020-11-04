@@ -2,14 +2,11 @@
 % Please edit documentation in R/templates.R
 \name{templates}
 \alias{templates}
-\alias{get_template}
 \alias{murray_cod}
 \alias{macquarie_perch}
 \alias{get_args}
-\title{Use a fully parameterised population dynamics object}
+\title{Parameterised population dynamics objects}
 \usage{
-get_template(sp, ...)
-
 murray_cod(k = 20000, ...)
 
 macquarie_perch(k = 1000, ...)
@@ -17,60 +14,30 @@ macquarie_perch(k = 1000, ...)
 get_args(sp, ...)
 }
 \arguments{
-\item{sp}{string specifying species common name (see details for
-a list of species currently included)}
+\item{k}{carrying capacity}
 
 \item{\dots}{additional arguments passed to templates or args
 functions}
-
-\item{k}{carrying capacity}
 }
 \description{
 Use pre-defined population dynamics objects to
   define a matrix model for a species with known parameters.
-
-Alias to return defined template for Murray
-  cod. Currently implemented parameters are \code{k}, the
-  carrying capacity
-
-Alias to return defined template for Macquarie
-  perch. Currently implemented parameters are \code{k}, the
-  carrying capacity
-
-Return arguments for a given species
 }
 \details{
-The \code{get_template} function and associated
-  wrapper functions (e.g. \code{murray_cod}) return a collated
+These functions (e.g. \code{murray_cod}) return a collated
   \code{\link{dynamics}} object parameterised with values based
   on existing data sets and published works. Currently implemented
-  species are: Murray cod (*Maccullochella peelii*),
-  trout cod (*Maccullochella macquariensis*), golden perch
-  (*Macquaria ambigua*), silver perch (*Bidyanus bidyanus*),
-  Macquarie perch (*Macquaria australasica*), Australian smelt
-  (*Retropinna semonia*), and common galaxias (*Galaxias maculatus*).
-
-  The \code{get_template} function can be used with user-defined
-  templates. Templates must be functions with a name defined by
-  \code{template_} followed by a species name or identifier (e.g.
-  \code{template_my_species}). These templates must return a named
-  list with at least a population matrix model (\code{matrix}), and
-  other arguments to pass to \code{\link{dynamics}}. Terms
-  specifying \code{covariates} would typically be defined
-  in a template with the function only (\code{covariate_functions}),
-  so that templates can be used with different covariate sets.
-  If defined in this way, \code{get_template("my_species")} will
-  return a compiled dynamics object for my_species.
+  species are: Murray cod (*Maccullochella peelii*) and Macquarie
+  perch (*Macquaria australasica*).
 
   In some cases, additional arguments might need to be passed to
   \code{\link{simulate}}, and it may be useful to define these as
-  part of the template. The current setup requires all templates
-  to return a dynamics object only. The \code{get_args} function
-  has been included to handle this situation Arguments should be
-  specified similarly to templates, with \code{args_} followed by
-  a species name or identifier (e.g \code{args_my_species}). Arguments
-  functions should return a series of named lists for any of
-  \code{args}, \code{args.dyn}, or \code{args.fn} (see
+  part of the template. The \code{get_args} function
+  handles this situation. Arguments should be
+  specified with \code{args_} followed by
+  a species name or identifier (e.g \code{args_my_species}).
+  Arguments functions should return a series of named lists
+  for any of \code{args}, \code{args.dyn}, or \code{args.fn} (see
   \code{\link{simulate}} for descriptions of these terms).
 }
 \examples{

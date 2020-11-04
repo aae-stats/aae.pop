@@ -3,20 +3,11 @@
 \name{dynamics}
 \alias{dynamics}
 \alias{update.dynamics}
-\alias{plot.dynamics}
-\alias{is.dynamics}
-\alias{print.dynamics}
-\title{Create a population dynamics object}
+\title{Create and update population dynamics objects}
 \usage{
 dynamics(matrix, ...)
 
 \method{update}{dynamics}(object, ...)
-
-\method{plot}{dynamics}(x, y, ...)
-
-is.dynamics(x)
-
-\method{print}{dynamics}(x, ...)
 }
 \arguments{
 \item{matrix}{a matrix of vital rates specifying transitions between
@@ -32,10 +23,6 @@ Must be one or more of \code{\link{covariates}},
 \code{\link{density_dependence_n}}}
 
 \item{object}{a \code{dynamics} object}
-
-\item{x}{an object of class \code{dynamics}}
-
-\item{y}{ignored}
 }
 \description{
 Define population dynamics from a matrix and additional
@@ -51,12 +38,7 @@ A call to \code{dynamics} defines an object of class
 
 A compiled \code{dynamics} object can be
   updated to change any of the included processes with
-  the \code{update} function. It is possible to replace
-  most processes directly (e.g.
-  \code{dynamics$density_dependence <- new_density_dependence})
-  but this will break in some cases, notably if updating
-  the \code{\link{covariates}} process, which requires
-  recalculation of the population matrix.
+  the \code{update} function.
 }
 \examples{
 # add

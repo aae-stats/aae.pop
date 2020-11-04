@@ -15,34 +15,27 @@ authors:
 
 reference:
   - title: Defining population dynamics models
-    desc: Combine population processes into a population dynamics object
     contents:
     - dynamics
 
   - title: Simulating population dynamics
-    desc: Simulate population trajectories from a population dynamics object
     contents:
     - simulate
 
   - title: Adding density dependence
-    desc: Add density dependence for a population dynamics object
     contents:
     - density_dependence
+    - density_functions
 
   - title: Adding stochasticity
-    desc: >
-      Add density demographic or environmental stochasticity to a
-      population dynamics object
     contents:
     - stochasticity
 
   - title: Adding covariates
-    desc: Add covariates that influence population dynamics
     contents:
     - covariates
 
   - title: Subsetting population matrices
-    desc: Extract or update specific components of a population matrix
     contents:
     - masks
 
@@ -58,6 +51,7 @@ reference:
   - title: Modelling multiple species
     contents:
     - multispecies
+    - pairwise_interaction
 
   - title: Helpers
     contents:
@@ -73,15 +67,26 @@ navbar:
     reference: ~
     articles: ~
     news: ~
+    get_started:
+      text: get started
+      href: articles/get_started.html
     vignettes:
       text: vignettes
       menu:
-      href: articles/index.html
-    get_started:
-      text: get started
-      href: index.html
-    functions:
-      text: functions
+      - text: "Including processes"
+        href: articles/including_processes.html
+      - text: "Beyond defaults"
+        href: articles/beyond_defaults.html
+      - text: "Metapopulations"
+        href: articles/metapopulations.html
+      - text: "Multiple species"
+        href: articles/multiple_species.html
+    examples:
+      menu:
+      - text: Macquarie perch population model
+        href: articles/macperch_example.html
+    documentation:
+      text: documentation
       href: reference/index.html
     github:
       icon: fab fa-github

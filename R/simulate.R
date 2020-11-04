@@ -757,19 +757,15 @@ initialise_poisson <- function(n, args) {
   do.call(rpois, c(list(n), args))
 }
 
-#' @rdname simulate
-#'
+# S3 is method
 #' @export
-#'
-#' @param x a simulation or simulation_list object
 # nolint start
 is.simulation <- function(x) {
   # nolint end
   inherits(x, "simulation")
 }
 
-#' @rdname simulate
-#'
+# S3 is method
 #' @export
 # nolint start
 is.simulation_list <- function(x) {
@@ -777,8 +773,7 @@ is.simulation_list <- function(x) {
   inherits(x, "simulation_list")
 }
 
-#' @rdname simulate
-#'
+# S3 print method
 #' @export
 # nolint start
 print.simulation <- function(x, ...) {
@@ -786,8 +781,7 @@ print.simulation <- function(x, ...) {
   cat(paste0("Simulated population dynamics for a single species\n"))
 }
 
-#' @rdname simulate
-#'
+# S3 print method
 #' @export
 # nolint start
 print.simulation_list <- function(x, ...) {
@@ -795,23 +789,10 @@ print.simulation_list <- function(x, ...) {
   cat(paste0("Simulated population dynamics for ", length(x), " species\n"))
 }
 
-#' @rdname simulate
-#'
+# S3 plot method
 #' @export
 #'
 #' @importFrom graphics lines
-#'
-#' @param y ignored; included for consistency with plot method
-#' @param class integer value specifying which age/stage class to plot.
-#'   Defaults to NULL, in which case the sum of all classes is plotted
-#' @param \dots Additional arguments passed to plot
-#'
-#' @details Basic plot methods are provided for \code{simulation} and
-#'   \code{simulation_list} classes. Plots can present a single class
-#'   or the sum of all classes, and can include one or more species
-#'   for \code{simulation_list} objects. \code{\dots} can be used to
-#'   pass additional arguments to \code{\link[graphics]{plot}} and
-#'   \code{\link[graphics]{lines}}.
 # nolint start
 plot.simulation <- function(x, y, ..., class = NULL) {
   # nolint end
@@ -832,12 +813,8 @@ plot.simulation <- function(x, y, ..., class = NULL) {
 
 }
 
-#' @rdname simulate
-#'
+# S3 plot method
 #' @export
-#'
-#' @param which integer value or vector of integer values specifying
-#'   which species to plot. Defaults to one plot for each species
 # nolint start
 plot.simulation_list <- function(x, y, ..., which = seq_along(x)) {
   # nolint end

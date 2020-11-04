@@ -12,3 +12,4 @@ aae.pop supports flexible specification of population
   See \code{\link{dynamics}} and \code{\link{simulate}} for detailed
   examples of model definition and simulation.
 }
+\keyword{internal}

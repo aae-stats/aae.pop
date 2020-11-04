@@ -20,8 +20,11 @@ NULL
 #'   dynamics matrix (in the case of environmental stochasticity)
 #'   or have one element for each class (in the case of demographic
 #'   stochasticity). Masks specify cells influenced by stochasticity
-#'   according to \code{funs}. Functions must have at least one
-#'   argument, a population dynamics matrix for environmental
+#'   according to \code{funs}. Additional details on masks are provided
+#'   in \code{\link{masks}}.
+#'
+#'   Functions must have at least one argument, a population
+#'   dynamics matrix for environmental
 #'   stochasticity or a vector of population abundances for
 #'   demographic stochasticity. Functions must return an
 #'   output of the same dimensions as the input,
@@ -29,7 +32,8 @@ NULL
 #'   vital rates or population abundances.
 #'
 #'   Additional arguments to functions are supported and can be
-#'   passed as the \code{} to \code{\link{simulate}}.
+#'   passed to \code{\link{simulate}} with the \code{args},
+#'   \code{args.dyn}, or \code{args.fn} arguments.
 #'
 #' @examples
 #' # add

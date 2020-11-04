@@ -8,9 +8,6 @@
 \alias{all_cells}
 \alias{all_classes}
 \alias{combine}
-\alias{combine.mask}
-\alias{combine.function}
-\alias{combine.default}
 \title{Isolate elements of population dynamics models}
 \usage{
 reproduction(matrix, dims = NULL)
@@ -24,12 +21,6 @@ all_cells(matrix, dims = NULL)
 all_classes(matrix, dims = NULL)
 
 combine(...)
-
-\method{combine}{mask}(...)
-
-\method{combine}{`function`}(...)
-
-\method{combine}{default}(...)
 }
 \arguments{
 \item{matrix}{a population dynamics matrix for which
@@ -52,10 +43,7 @@ Helper functions to isolate particular components
 }
 \details{
 To be completed.
-
-something
 }
 \examples{
-# add
 # add
 }

@@ -80,13 +80,42 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">get started</a>
+  <a href="../articles/get_started.html">get started</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    vignettes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/including_processes.html">Including processes</a>
+    </li>
+    <li>
+      <a href="../articles/beyond_defaults.html">Beyond defaults</a>
+    </li>
+    <li>
+      <a href="../articles/metapopulations.html">Metapopulations</a>
+    </li>
+    <li>
+      <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/macperch_example.html">Macquarie perch population model</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../reference/index.html">functions</a>
-</li>
-<li>
-  <a href="../articles/index.html">vignettes</a>
+  <a href="../reference/index.html">documentation</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -110,7 +139,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Simulate single or multispecies population dynamics in R</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/aae-stats/aae.pop/blob/master/R/simulate.R'><code>R/simulate.R</code></a></small>
     <div class="hidden name"><code>simulate.Rd</code></div>
     </div>
 
@@ -130,23 +159,7 @@
   args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
   args.dyn <span class='op'>=</span> <span class='cn'>NULL</span>,
   args.fn <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span>
-
-<span class='fu'>is.simulation</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-
-<span class='fu'>is.simulation_list</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-
-<span class='co'># S3 method for simulation</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for simulation_list</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for simulation</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>...</span>, class <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
-
-<span class='co'># S3 method for simulation_list</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>...</span>, which <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></pre>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,7 +181,8 @@ give reproducible results</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments passed to plot</p></td>
+      <td><p>ignored; included for consistency with <code>simulate</code> generic
+method</p></td>
     </tr>
     <tr>
       <th>init</th>
@@ -219,35 +233,11 @@ by covariates or with <code>options$ntime</code>).</p></td>
 <code>args</code> based on the matrix and abundances in each generation.
 Defaults to <code>NULL</code>.</p></td>
     </tr>
-    <tr>
-      <th>x</th>
-      <td><p>a simulation or simulation_list object</p></td>
-    </tr>
-    <tr>
-      <th>y</th>
-      <td><p>ignored; included for consistency with plot method</p></td>
-    </tr>
-    <tr>
-      <th>class</th>
-      <td><p>integer value specifying which age/stage class to plot.
-Defaults to NULL, in which case the sum of all classes is plotted</p></td>
-    </tr>
-    <tr>
-      <th>which</th>
-      <td><p>integer value or vector of integer values specifying
-which species to plot. Defaults to one plot for each species</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>To be completed.</p>
-<p>Basic plot methods are provided for <code>simulation</code> and
-  <code>simulation_list</code> classes. Plots can present a single class
-  or the sum of all classes, and can include one or more species
-  for <code>simulation_list</code> objects. <code>...</code> can be used to
-  pass additional arguments to <code><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></code> and
-  <code><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -272,7 +262,7 @@ which species to plot. Defaults to one plot for each species</p></td>
 <span class='co'># add some density dependence</span>
 <span class='va'>dd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='density_dependence.html'>density_dependence</a></span><span class='op'>(</span>
   masks <span class='op'>=</span> <span class='fu'><a href='masks.html'>reproduction</a></span><span class='op'>(</span><span class='va'>popmat</span>, dims <span class='op'>=</span> <span class='fl'>4</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>,
-  funs <span class='op'>=</span> <span class='fu'><a href='density_dependence.html'>ricker</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>)</span>
+  funs <span class='op'>=</span> <span class='fu'><a href='density_functions.html'>ricker</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>)</span>
 <span class='op'>)</span>
 
 <span class='co'># update the dynamics object</span>

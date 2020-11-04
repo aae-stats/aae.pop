@@ -3,12 +3,6 @@
 \name{simulate}
 \alias{simulate}
 \alias{simulate.dynamics}
-\alias{is.simulation}
-\alias{is.simulation_list}
-\alias{print.simulation}
-\alias{print.simulation_list}
-\alias{plot.simulation}
-\alias{plot.simulation_list}
 \title{Simulate single or multispecies population dynamics in R}
 \usage{
 \method{simulate}{dynamics}(
@@ -22,18 +16,6 @@
   args.dyn = NULL,
   args.fn = NULL
 )
-
-is.simulation(x)
-
-is.simulation_list(x)
-
-\method{print}{simulation}(x, ...)
-
-\method{print}{simulation_list}(x, ...)
-
-\method{plot}{simulation}(x, y, ..., class = NULL)
-
-\method{plot}{simulation_list}(x, y, ..., which = seq_along(x))
 }
 \arguments{
 \item{object}{a \code{dynamics} object created with
@@ -45,7 +27,8 @@ is.simulation_list(x)
 \item{seed}{optional seed used prior to initialisation and simulation to
 give reproducible results}
 
-\item{\dots}{Additional arguments passed to plot}
+\item{\dots}{ignored; included for consistency with \code{simulate} generic
+method}
 
 \item{init}{an array of initial conditions with one row per replicate and one
 column per population stage. If \code{obj} has been created with
@@ -90,16 +73,6 @@ by covariates or with \code{options$ntime}).}
 \item{args.fn}{named list of functions evaluating additional values of
 \code{args} based on the matrix and abundances in each generation.
 Defaults to \code{NULL}.}
-
-\item{x}{a simulation or simulation_list object}
-
-\item{y}{ignored; included for consistency with plot method}
-
-\item{class}{integer value specifying which age/stage class to plot.
-Defaults to NULL, in which case the sum of all classes is plotted}
-
-\item{which}{integer value or vector of integer values specifying
-which species to plot. Defaults to one plot for each species}
 }
 \description{
 Simulate population dynamics for one or more
@@ -107,13 +80,6 @@ Simulate population dynamics for one or more
 }
 \details{
 To be completed.
-
-Basic plot methods are provided for \code{simulation} and
-  \code{simulation_list} classes. Plots can present a single class
-  or the sum of all classes, and can include one or more species
-  for \code{simulation_list} objects. \code{\dots} can be used to
-  pass additional arguments to \code{\link[graphics]{plot}} and
-  \code{\link[graphics]{lines}}.
 }
 \examples{
 

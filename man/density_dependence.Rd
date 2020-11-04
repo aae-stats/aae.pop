@@ -3,17 +3,11 @@
 \name{density_dependence}
 \alias{density_dependence}
 \alias{density_dependence_n}
-\alias{beverton_holt}
-\alias{ricker}
 \title{Specify density dependence in models of population dynamics}
 \usage{
 density_dependence(masks, funs)
 
 density_dependence_n(masks, funs)
-
-beverton_holt(k)
-
-ricker(k)
 }
 \arguments{
 \item{masks}{a logical matrix or vector (or list of these)
@@ -22,10 +16,6 @@ defining cells affected by \code{funs}. See Details and
 
 \item{funs}{a function or list of functions with one element
 for each element of \code{masks}. See Details}
-
-\item{k}{carrying capacity used to define models of
-density dependence. See details for
-currently implemented models and their parameters.}
 }
 \description{
 Specify density dependence in vital rates
@@ -33,33 +23,43 @@ Specify density dependence in vital rates
   (\code{density_dependence_n}).
 }
 \details{
-Masks must be of the same dimension as the population
-  dynamics matrix and specify cells influenced by density
-  dependence according to \code{funs}. Functions must take at least
-  two arguments, a matrix \code{x} and a vector \code{n}, which
-  represent the population dynamics matrix and the population
-  abundances. Functions must return a matrix with
-  the same dimensions as \code{x}, modified to reflect the
-  effects of current abundances by class (\code{n}) on
-  vital rates. Additional arguments can be passed to
-  \code{funs} and can be specified as \code{args} in
-  \code{\link{simulate}}.
+\code{density_dependence} specifies standard
+  density dependence on vital rates, such as scramble or
+  contest competition or allee effects.
 
-\code{density_dependence_n} is an alternative
+  \code{density_dependence_n} is an alternative
   parameterisation of density dependence that acts directly
-  on population abundances. In this case, \code{masks} are
-  logical vectors with one element for each class and
-  \code{funs} defines a rescaling of population abundances
-  based on the abundances of all classes.
+  on population abundances.
 
-Additional functions are provided to define common
-  forms of density dependence. Currently implemented models
-  are the Ricker model and Beverton-Holt model, both with
-  a single parameter \code{k}.
+  Masks must be of the same dimension as the population
+  dynamics matrix and specify cells influenced by density
+  dependence according to \code{funs}. In the case of
+  \code{density_dependence_n}, \code{masks} are
+  logical vectors with one element for each class.
+  Additional details on masks are provided
+  in \code{\link{masks}}.
+
+  If using \code{density_depenence}, functions must take at
+  least two arguments, a matrix \code{x} and a vector \code{n},
+  which represent the population dynamics matrix and the
+  population abundances. Functions must return a matrix with
+  the same dimensions as \code{x}, modified to reflect the
+  effects of current abundances (\code{n}) on
+  vital rates.
+
+  In the case of \code{density_dependence_n},
+  \code{funs} takes only one argument, the population
+  abundances \code{n} following all other updates in a
+  given iteration/generation. This allows rescaling of
+  population abundances based on total abundance or
+  through more complicated functions that depend
+  on external arguments (e.g., mass mortality events or
+  harvesting).
+
+  Additional arguments to functions are supported and can be
+  passed to \code{\link{simulate}} with the \code{args},
+  \code{args.dyn}, or \code{args.fn} arguments.
 }
 \examples{
-# add
-# add
-# add
 # add
 }

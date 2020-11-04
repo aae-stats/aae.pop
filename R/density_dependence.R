@@ -15,17 +15,42 @@ NULL
 #' @param funs a function or list of functions with one element
 #'   for each element of \code{masks}. See Details
 #'
-#' @details Masks must be of the same dimension as the population
+#' @details \code{density_dependence} specifies standard
+#'   density dependence on vital rates, such as scramble or
+#'   contest competition or allee effects.
+#'
+#'   \code{density_dependence_n} is an alternative
+#'   parameterisation of density dependence that acts directly
+#'   on population abundances.
+#'
+#'   Masks must be of the same dimension as the population
 #'   dynamics matrix and specify cells influenced by density
-#'   dependence according to \code{funs}. Functions must take at least
-#'   two arguments, a matrix \code{x} and a vector \code{n}, which
-#'   represent the population dynamics matrix and the population
-#'   abundances. Functions must return a matrix with
+#'   dependence according to \code{funs}. In the case of
+#'   \code{density_dependence_n}, \code{masks} are
+#'   logical vectors with one element for each class.
+#'   Additional details on masks are provided
+#'   in \code{\link{masks}}.
+#'
+#'   If using \code{density_depenence}, functions must take at
+#'   least two arguments, a matrix \code{x} and a vector \code{n},
+#'   which represent the population dynamics matrix and the
+#'   population abundances. Functions must return a matrix with
 #'   the same dimensions as \code{x}, modified to reflect the
-#'   effects of current abundances by class (\code{n}) on
-#'   vital rates. Additional arguments can be passed to
-#'   \code{funs} and can be specified as \code{args} in
-#'   \code{\link{simulate}}.
+#'   effects of current abundances (\code{n}) on
+#'   vital rates.
+#'
+#'   In the case of \code{density_dependence_n},
+#'   \code{funs} takes only one argument, the population
+#'   abundances \code{n} following all other updates in a
+#'   given iteration/generation. This allows rescaling of
+#'   population abundances based on total abundance or
+#'   through more complicated functions that depend
+#'   on external arguments (e.g., mass mortality events or
+#'   harvesting).
+#'
+#'   Additional arguments to functions are supported and can be
+#'   passed to \code{\link{simulate}} with the \code{args},
+#'   \code{args.dyn}, or \code{args.fn} arguments.
 #'
 #' @examples
 #' # add
@@ -54,16 +79,6 @@ density_dependence <- function(masks, funs) {
 #' @rdname density_dependence
 #'
 #' @export
-#'
-#' @details \code{density_dependence_n} is an alternative
-#'   parameterisation of density dependence that acts directly
-#'   on population abundances. In this case, \code{masks} are
-#'   logical vectors with one element for each class and
-#'   \code{funs} defines a rescaling of population abundances
-#'   based on the abundances of all classes.
-#'
-#' @examples
-#' # add
 density_dependence_n <- function(masks, funs) {
 
   # force evaluation to avoid NULL functions down the line
@@ -83,43 +98,6 @@ density_dependence_n <- function(masks, funs) {
   }
 
   as_density_dependence_n(fn)
-
-}
-
-#' @rdname density_dependence
-#'
-#' @export
-#'
-#' @param k carrying capacity used to define models of
-#'   density dependence. See details for
-#'   currently implemented models and their parameters.
-#'
-#' @details Additional functions are provided to define common
-#'   forms of density dependence. Currently implemented models
-#'   are the Ricker model and Beverton-Holt model, both with
-#'   a single parameter \code{k}.
-#'
-#' @examples
-#' # add
-beverton_holt <- function(k) {
-
-  function(x, n) {
-    x / (1 + x * sum(n) / k)
-  }
-
-}
-
-#' @rdname density_dependence
-#'
-#' @export
-#'
-#' @examples
-#' # add
-ricker <- function(k) {
-
-  function(x, n) {
-    x * exp(1 - sum(n) / k) / exp(1)
-  }
 
 }
 

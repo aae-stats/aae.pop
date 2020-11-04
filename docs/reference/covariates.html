@@ -80,13 +80,42 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">get started</a>
+  <a href="../articles/get_started.html">get started</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    vignettes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/including_processes.html">Including processes</a>
+    </li>
+    <li>
+      <a href="../articles/beyond_defaults.html">Beyond defaults</a>
+    </li>
+    <li>
+      <a href="../articles/metapopulations.html">Metapopulations</a>
+    </li>
+    <li>
+      <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/macperch_example.html">Macquarie perch population model</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../reference/index.html">functions</a>
-</li>
-<li>
-  <a href="../articles/index.html">vignettes</a>
+  <a href="../reference/index.html">documentation</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -110,7 +139,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Specify covariate dependence in models of population dynamics</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/aae-stats/aae.pop/blob/master/R/covariates.R'><code>R/covariates.R</code></a></small>
     <div class="hidden name"><code>covariates.Rd</code></div>
     </div>
 
@@ -141,13 +170,17 @@ for each element of <code>masks</code>. See Details</p></td>
 
     <p>Masks must be of the same dimension as the population
   dynamics matrix and specify cells influenced by covariates
-  according to <code>funs</code>. Functions must take at least
-  one arguments, a matrix representing the population
-  dynamics matrix. Functions must return a matrix with
+  according to <code>funs</code>. Additional details on masks are
+  provided in <code><a href='masks.html'>masks</a></code>.</p>
+<p>Functions must take at least one argument, a matrix
+  representing the population dynamics matrix. Including
+  actual covariates requires a second argument to this
+  function. Functions must return a matrix with
   the same dimensions as the input, modified to reflect the
-  effects of covariates on vital rates. Additional arguments
-  can be passed to <code>funs</code> and can be specified as
-  <code>args</code> in <code><a href='simulate.html'>simulate</a></code>.</p>
+  effects of covariates on vital rates.</p>
+<p>Additional arguments to functions are supported and can be
+  passed to <code><a href='simulate.html'>simulate</a></code> with the <code>args</code>,
+  <code>args.dyn</code>, or <code>args.fn</code> arguments.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># add</span>

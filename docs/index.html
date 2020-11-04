@@ -40,13 +40,42 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">get started</a>
+  <a href="articles/get_started.html">get started</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    vignettes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/including_processes.html">Including processes</a>
+    </li>
+    <li>
+      <a href="articles/beyond_defaults.html">Beyond defaults</a>
+    </li>
+    <li>
+      <a href="articles/metapopulations.html">Metapopulations</a>
+    </li>
+    <li>
+      <a href="articles/multiple_species.html">Multiple species</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/macperch_example.html">Macquarie perch population model</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="reference/index.html">functions</a>
-</li>
-<li>
-  <a href="articles/index.html">vignettes</a>
+  <a href="reference/index.html">documentation</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -68,60 +97,30 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-
-<div id="aaepop-simulating-multispecies-population-dynamics-in-r" class="section level2">
+<div id="aae-pop-population-dynamics-models-in-r" class="section level2">
 <h2 class="hasAnchor">
-<a href="#aaepop-simulating-multispecies-population-dynamics-in-r" class="anchor"></a>aae.pop: simulating multispecies population dynamics in R</h2>
+<a href="#aae-pop-population-dynamics-models-in-r" class="anchor"></a>aae.pop: population dynamics models in R</h2>
+<p>aae.pop is an R package to simulate matrix population models. It’s designed to be fast, flexible, and easily adapted to different model structures.</p>
+<p>The <a href="https://aae-stats.github.io/aae.pop">website</a> includes a <a href="">quick start guide</a>, <a href="">examples</a>, <a href="">vignettes</a>, and <a href="">package documentation</a>. You can install the current version of the package from Github:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"aae.stats/aae.pop@master"</span><span class="op">)</span></pre></div>
+<!-- badges: start -->
+
+<!-- badges: end -->
 </div>
-<div id="installing-the-package" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installing-the-package" class="anchor"></a>Installing the package</h2>
-<p>You can install the <code>aae.pop</code> package from GitHub. To install from GitHub, you’ll need to install the <code>remotes</code> R package and use the following lines of code:</p>
-<pre><code><a href="https://rdrr.io/r/utils/install.packages.html"># install the remotes package if not already installed
-install.packages("remotes")
-
-# install the aae.pop package from GitHub
-remotes::install_github("aae.stats/aae.pop@master")</a></code></pre>
-<p>Once completed, you should be able to load the <code>aae.pop</code> package with <code>library(aae.pop)</code>.</p>
-</div>
-<div id="building-a-basic-population-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#building-a-basic-population-model" class="anchor"></a>Building a basic population model</h2>
-<pre><code># load the aae.pop package
-library(aae.pop)
-
-# create a basic Leslie matrix for a population with
-#   five age classes
-# the aae.pop package assumes "columns move to rows"
-popmat &lt;- rbind(
-  c(0,    0,    2,    4,    7),  # reproduction from 3-5 year olds
-  c(0.25, 0,    0,    0,    0),  # survival from age 1 to 2
-  c(0,    0.45, 0,    0,    0),  # survival from age 2 to 3
-  c(0,    0,    0.70, 0,    0),  # survival from age 3 to 4
-  c(0,    0,    0,    0.85, 0)   # survival from age 4 to 5
-)
-
-# create a population dynamics object with this matrix
-#   without any additional processes
-popdyn &lt;- dynamics(popmat)
-
-# can plot the model structure if the DiagrammeR package is installed
-plot(popdyn)
-
-# simulate from this model with default (random) initial conditions
-sims &lt;- simulate(popdyn)
-
-# can plot this
-plot(sims, xlab = "Generation", ylab = "Abundance")</code></pre>
-<p>The vignettes contain several more detailed examples.</p>
-<p>Please leave feedback, bug reports or feature requests at the GitHub <a href="https://github.com/aae-stats/aae.pop/issues">issues page</a>.</p>
-<p><a href="https://travis-ci.org/aae-stats/aae.pop"><img src="https://travis-ci.org/aae-stats/aae.pop.svg?branch=master" alt="build status"></a> <a href="https://codecov.io/github/aae-stats/aae.pop?branch=master"><img src="https://codecov.io/github/aae-stats/aae.pop/coverage.svg?branch=master" alt="codecov.io"></a> <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="license"></a></p>
-</div>
-
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/aae-stats/aae.pop/">https://​github.com/​aae-stats/​aae.pop/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/aae-stats/aae.pop/issues">https://​github.com/​aae-stats/​aae.pop/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li>Apache License 2.0</li>
@@ -135,7 +134,15 @@ plot(sims, xlab = "Generation", ylab = "Abundance")</code></pre>
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://travis-ci.org/aae-stats/aae.pop"><img src="https://travis-ci.org/aae-stats/aae.pop.svg?branch=master" alt="build status"></a></li>
+<li><a href="https://codecov.io/github/aae-stats/aae.pop?branch=master"><img src="https://codecov.io/github/aae-stats/aae.pop/coverage.svg?branch=master" alt="codecov.io"></a></li>
+<li><a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="license"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 

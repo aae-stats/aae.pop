@@ -81,13 +81,42 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">get started</a>
+  <a href="../articles/get_started.html">get started</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    vignettes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/including_processes.html">Including processes</a>
+    </li>
+    <li>
+      <a href="../articles/beyond_defaults.html">Beyond defaults</a>
+    </li>
+    <li>
+      <a href="../articles/metapopulations.html">Metapopulations</a>
+    </li>
+    <li>
+      <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/macperch_example.html">Macquarie perch population model</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../reference/index.html">functions</a>
-</li>
-<li>
-  <a href="../articles/index.html">vignettes</a>
+  <a href="../reference/index.html">documentation</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -111,7 +140,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a population dynamics object with multiple species</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/aae-stats/aae.pop/blob/master/R/multispecies.R'><code>R/multispecies.R</code></a></small>
     <div class="hidden name"><code>multispecies.Rd</code></div>
     </div>
 
@@ -121,16 +150,7 @@
   defined pairwise interactions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>multispecies</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
-
-<span class='fu'>pairwise_interaction</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>source</span>, <span class='va'>masks</span>, <span class='va'>funs</span><span class='op'>)</span>
-
-<span class='fu'>is.multispecies</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-
-<span class='co'># S3 method for multispecies</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='fu'>is.interaction</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>multispecies</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,35 +160,8 @@
       <td><p><code>pairwise_interaction</code> objects defining
 a set of pairwise interactions between species</p></td>
     </tr>
-    <tr>
-      <th>target</th>
-      <td><p>population whose vital rates are affected by the
-pairwise interaction</p></td>
-    </tr>
-    <tr>
-      <th>source</th>
-      <td><p>population whose abundances affect the vital rates
-of <code>target</code></p></td>
-    </tr>
-    <tr>
-      <th>masks</th>
-      <td><p>masks defining which vital rates are influenced by
-each function</p></td>
-    </tr>
-    <tr>
-      <th>funs</th>
-      <td><p>functions that take vital rates and abundances of the
-<code>source</code> population as inputs and return scaled vital rates</p></td>
-    </tr>
-    <tr>
-      <th>x</th>
-      <td><p>a multispecies or interaction object</p></td>
-    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To be completed.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

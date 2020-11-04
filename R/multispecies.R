@@ -3,9 +3,6 @@
 #' @description Define population dynamics for multiple species from
 #'   a set of single-species \code{\link{dynamics}} objects and
 #'   defined pairwise interactions.
-NULL
-
-#' @rdname multispecies
 #'
 #' @export
 #'
@@ -59,7 +56,11 @@ multispecies <- function(...) {
 
 }
 
-#' @rdname multispecies
+#' @name pairwise_interaction
+#' @title Specify interactions between two species
+#' @description Define population dynamics for multiple species from
+#'   a set of single-species \code{\link{dynamics}} objects and
+#'   defined pairwise interactions.
 #'
 #' @export
 #'
@@ -157,19 +158,15 @@ define_interaction <- function(dyn, dots, hex_list, interaction_list) {
 
 }
 
-#' @rdname multispecies
-#'
+# S3 method
 #' @export
-#'
-#' @param x a multispecies or interaction object
 # nolint start
 is.multispecies <- function(x) {
   # nolint end
   inherits(x, "multispecies")
 }
 
-#' @rdname multispecies
-#'
+# S3 method
 #' @export
 # nolint start
 print.multispecies <- function(x, ...) {
@@ -177,8 +174,7 @@ print.multispecies <- function(x, ...) {
   cat(paste0("Multispecies population dynamics object\n"))
 }
 
-#' @rdname multispecies
-#'
+# S3 method
 #' @export
 # nolint start
 is.interaction <- function(x) {

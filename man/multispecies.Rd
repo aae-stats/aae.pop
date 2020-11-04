@@ -2,45 +2,16 @@
 % Please edit documentation in R/multispecies.R
 \name{multispecies}
 \alias{multispecies}
-\alias{pairwise_interaction}
-\alias{is.multispecies}
-\alias{print.multispecies}
-\alias{is.interaction}
 \title{Create a population dynamics object with multiple species}
 \usage{
 multispecies(...)
-
-pairwise_interaction(target, source, masks, funs)
-
-is.multispecies(x)
-
-\method{print}{multispecies}(x, ...)
-
-is.interaction(x)
 }
 \arguments{
 \item{\dots}{\code{pairwise_interaction} objects defining
 a set of pairwise interactions between species}
-
-\item{target}{population whose vital rates are affected by the
-pairwise interaction}
-
-\item{source}{population whose abundances affect the vital rates
-of \code{target}}
-
-\item{masks}{masks defining which vital rates are influenced by
-each function}
-
-\item{funs}{functions that take vital rates and abundances of the
-\code{source} population as inputs and return scaled vital rates}
-
-\item{x}{a multispecies or interaction object}
 }
 \description{
 Define population dynamics for multiple species from
   a set of single-species \code{\link{dynamics}} objects and
   defined pairwise interactions.
-}
-\details{
-To be completed.
 }
