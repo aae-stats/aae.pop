@@ -804,12 +804,30 @@ plot.simulation <- function(x, y, ..., class = NULL) {
   }
   xplot <- seq_len(ncol(yplot))
   ylims <- range(yplot)
-  plot(yplot[1, ] ~ xplot,
-       ylim = ylims,
-       type = "l",
-       ...)
-  for (i in seq_len(nrow(yplot))[-1])
-    lines(yplot[i, ] ~ xplot, ...)
+
+  args <- list(...)
+  plot_defaults <- list(
+    x = xplot,
+    y = yplot[1, ],
+    bty = "l",
+    xlab = "Generation",
+    ylab = "Abundance",
+    las = 1,
+    type = "l",
+    ylim = ylims
+  )
+  plot_defaults[names(args)] <- args
+  lines_defaults <- list(
+    lwd = 1
+  )
+  lines_defaults[names(args)] <- args
+
+  do.call(plot, plot_defaults)
+
+  for (i in seq_len(nrow(yplot))[-1]) {
+    lines_tmp <- c(lines_defaults, list(x = xplot, y = yplot[i, ]))
+    do.call(lines, lines_tmp)
+  }
 
 }
 
