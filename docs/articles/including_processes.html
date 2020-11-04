@@ -94,8 +94,7 @@
 
       
 
-      </header><script src="including_processes_files/htmlwidgets-1.5.1/htmlwidgets.js"></script><script src="including_processes_files/viz-1.8.2/viz.js"></script><link href="including_processes_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
-<script src="including_processes_files/grViz-binding-1.0.6.1/grViz.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Including demographic processes in a population model</h1>
@@ -110,39 +109,150 @@
 
     
     
-<div id="r-markdown" class="section level2">
+<div id="demographic-processes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#r-markdown" class="anchor"></a>R Markdown</h2>
-<p>Work through each of the main processes. Start with a write up of masks.</p>
+<a href="#demographic-processes" class="anchor"></a>Demographic processes?</h2>
+<p>This is a broad term that could mean many things. <code>aae.pop</code> focuses on four main processes:</p>
+<ul>
+<li><p>demographic stochasticity: random variation in the outcomes of individual processes (e.g. birth, death), resulting in variation in population abundances.</p></li>
+<li><p>environmental stochasticity: random variation in external conditions, resulting in variation in the vital rates (i.e., the population matrix).</p></li>
+<li><p>density dependence: variation in vital rates or population outcomes that depends on the abundance of the population. Density dependence can be negative (e.g., due to limited resources) or positive (e.g., Allee effects).</p></li>
+<li><p>covariate effects: the influence of covariates on the population matrix. In <code>aae.pop</code>, covariate effects are included primarily to allow the population matrix to change through time in response to external factors (e.g., weather, habitat availability).</p></li>
+</ul>
+<p>Two additional processes, <em>dispersal</em> and <em>interspecific interactions</em>, are covered in the <a href="metapopulations.html">Metapopulations</a> and <a href="multiple_species.html">Multiple species</a> vignettes.</p>
 </div>
-<div id="building-a-basic-population-model" class="section level2">
+<div id="an-aside-masks" class="section level2">
 <h2 class="hasAnchor">
-<a href="#building-a-basic-population-model" class="anchor"></a>Building a basic population model</h2>
+<a href="#an-aside-masks" class="anchor"></a>An aside: <code>mask</code>s</h2>
+<p>The processes above are unlikely to have consistent effects across all vital rates or all classes in a population. To deal with this, <code>aae.pop</code> is built around a concept of <em>masks</em>. Masks are used to select specific elements of the population matrix, and only these elements are altered by a given process.</p>
+<p>Masks are paired with functions when defining all of the above processes. Masks tell R which cells to target, functions tell R what to do to these cells.</p>
+<p>Several helper functions are included to define common masks. These include the <code>reproduction</code>, <code>survival</code>, and <code>transition</code> regions of the matrix discussed in the <a href="get_started.html">getting started</a> vignette, as well as masks to select an entire population matrix (<code>all_cells</code>) or abundance vector (<code>all_classes</code>).</p>
+<p>The <code>mask</code>s defined in <code>aae.pop</code> return a <code>TRUE</code>/<code>FALSE</code> matrix or vector that selects the required cells. Masks are defined in this way because <code>aae.pop</code> flattens the population matrix in all internal calculations, which breaks cell-based subsetting (i.e., the <code>[i, j]</code> R notation will not work). It is possible (but not advised) to work around this. The discussion <a href="#nomask">below</a> covers how to work around masks and why this might not be a good idea.</p>
+</div>
+<div id="back-to-demographic-processes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#back-to-demographic-processes" class="anchor"></a>Back to demographic processes</h2>
+<div id="a-basic-model" class="section level4">
+<h4 class="hasAnchor">
+<a href="#a-basic-model" class="anchor"></a>A basic model</h4>
+<p>Let’s start with the basic model used in the <a href="get_started.html">getting started</a> vignette. This was a Leslie matrix with five age classes, with individuals reproducing from ages 3-5.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># load the aae.pop package</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://aae-stats/github.io/aae.pop">aae.pop</a></span><span class="op">)</span>
-
-<span class="co"># create a basic Leslie matrix for a population with</span>
-<span class="co">#   five age classes</span>
-<span class="co"># the aae.pop package assumes "columns move to rows"</span>
 <span class="va">popmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span>
   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">2</span>,    <span class="fl">4</span>,    <span class="fl">7</span><span class="op">)</span>,  <span class="co"># reproduction from 3-5 year olds</span>
   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 1 to 2</span>
   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0.45</span>, <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 2 to 3</span>
   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0.70</span>, <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 3 to 4</span>
   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0.85</span>, <span class="fl">0</span><span class="op">)</span>   <span class="co"># survival from age 4 to 5</span>
-<span class="op">)</span>
+<span class="op">)</span></pre></div>
+<p>This is sufficient to start simulating population dynamics, using the <code>dynamics</code> and <code>simulate</code> functions. However, adding additional processes requires a few more steps first.</p>
+</div>
+<div id="demographic-stochasticity" class="section level4">
+<h4 class="hasAnchor">
+<a href="#demographic-stochasticity" class="anchor"></a>Demographic stochasticity</h4>
+<p>Random variation in individual outcomes is a key feature of most population models. This variation is most important (and influential) when populations are small, so that a few small events (e.g., several individuals failing to reproduce) can have a big effect on population outcomes.</p>
+<p>Demographic stochasticity will be defined here with a single <code>mask</code> and its corresponding <code>function</code>. The simplest form of demographic stochasticity in this case is Poisson variation around the expected number of individuals in the next generation. This can be coded up as:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="va">demostoch_mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/masks.html">all_classes</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span> <span class="co"># affects all classes</span>
+<span class="va">demostoch_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, lambda <span class="op">=</span> <span class="va">x</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
+<p>Here, the <code>mask</code> selects all classes in the population vector and the <code>function</code> takes this vector <code>x</code> and returns random Poisson variates with mean equal to <code>x</code>.</p>
+<p>The <code>mask</code>/<code>function</code> pair can be combined into a single object with the <code>demographic_stochasticity</code> function.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="va">demostoch</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stochasticity.html">demographic_stochasticity</a></span><span class="op">(</span>
+  masks <span class="op">=</span> <span class="va">demostoch_mask</span>,
+  funs <span class="op">=</span> <span class="va">demostoch_fn</span>
+<span class="op">)</span></pre></div>
+<p>The resulting <code>demostoch</code> object can be passed directly to <code>dynamics</code>, along with the population matrix. In turn, this creates a <code>dynamics</code> object that can be used in <code>simulate</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="co"># create population dynamics object</span>
+<span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span>, <span class="va">demostoch</span><span class="op">)</span>
 
-<span class="co"># create a population dynamics object with this matrix</span>
-<span class="co">#   without any additional processes</span>
-<span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span>
+<span class="co"># simulate population dynamics</span>
+<span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
-<span class="co"># can plot the model structure if the DiagrammeR package is installed</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">popdyn</span><span class="op">)</span></pre></div>
-<div id="htmlwidget-de0c4d6b7d0625a0f08f" style="width:700px;height:432.632880098888px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-de0c4d6b7d0625a0f08f">{"x":{"diagram":"digraph {\n\ngraph [layout = \"dot\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       rankdir = \"LR\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Age 1\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"2\" [label = \"Age 2\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"3\" [label = \"Age 3\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"4\" [label = \"Age 4\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"5\" [label = \"Age 5\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n\"1\"->\"2\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"2\"->\"3\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"3\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"3\"->\"4\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"4\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"4\"->\"5\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"5\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co"># simulate from this model with default (random) initial conditions</span>
-<span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span><span class="op">)</span></pre></div>
+<span class="co"># plot the population trajectories</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, xlab <span class="op">=</span> <span class="st">"Generation"</span>, ylab <span class="op">=</span> <span class="st">"Abundance"</span><span class="op">)</span></pre></div>
+<p><img src="including_processes_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+</div>
+<div id="environmental-stochasticity" class="section level4">
+<h4 class="hasAnchor">
+<a href="#environmental-stochasticity" class="anchor"></a>Environmental Stochasticity</h4>
+<p>Environmental stochasticity will be defined here with two <code>mask</code>s and their corresponding <code>function</code>s. The simplest form of variation in reproduction is Poisson variation around the expected number of new individuals. This can be coded up as:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="va">reproduction_mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/masks.html">reproduction</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="co"># only ages 3-5 reproduce</span>
+<span class="va">reproduction_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, lambda <span class="op">=</span> <span class="va">x</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
+<p>Here, the <code>mask</code> selects the reproductive output of age classes 3 to 5 in the population matrix and the <code>function</code> takes this vector <code>x</code> and returns random Poisson variates with mean equal to <code>x</code>.</p>
+<p>The second <code>mask</code>/<code>function</code> pair will add variation in survival outcomes. In this case, a simple form of variation is to add or subtract some small value from the survival probabilities. This can be coded up as:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="va">transition_mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/masks.html">transition</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span> <span class="co"># all classes this time</span>
+<span class="va">transition_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+  
+  <span class="co"># add a random deviation to x</span>
+  <span class="va">deviation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, min <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, max <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>
+  <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">+</span> <span class="va">deviation</span>
+  
+  <span class="co"># make sure the result isn't negative or greater than 1</span>
+  <span class="va">x</span><span class="op">[</span><span class="va">x</span> <span class="op">&lt;</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span>
+  <span class="va">x</span><span class="op">[</span><span class="va">x</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span>
+  
+  <span class="co"># return the value</span>
+  <span class="va">x</span>
+  
+<span class="op">}</span></pre></div>
+<p>Here, the <code>mask</code> selects all elements on the sub-diagonal of the population matrix, and the <code>function</code> takes some vector <code>x</code> and returns a new value with a deviation between -0.1 and 0.1. There is one extra check in the function to make sure that the new probabilities are still probabilities (i.e., still between 0 and 1).</p>
+<p>These two <code>mask</code>/<code>function</code> pairs can be combined into a single object with the <code>environmental_stochasticity</code> function.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="va">envstoch</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stochasticity.html">environmental_stochasticity</a></span><span class="op">(</span>
+  masks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">reproduction_mask</span>, <span class="va">transition_mask</span><span class="op">)</span>,
+  funs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">reproduction_fn</span>, <span class="va">transition_fn</span><span class="op">)</span>
+<span class="op">)</span></pre></div>
+<p>The resulting <code>envstoch</code> object can be passed directly to <code>dynamics</code>, along with the population matrix. In turn, this creates a <code>dynamics</code> object that can be used in <code>simulate</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="co"># create population dynamics object</span>
+<span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span>, <span class="va">envstoch</span><span class="op">)</span>
+
+<span class="co"># simulate population dynamics</span>
+<span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+
+<span class="co"># plot the population trajectories</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, xlab <span class="op">=</span> <span class="st">"Generation"</span>, ylab <span class="op">=</span> <span class="st">"Abundance"</span><span class="op">)</span></pre></div>
+<p><img src="including_processes_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p>It is easy to include both environmental and demographic stochasticity in the same model. The <code>dynamics</code> call simply needs both <code>envstoch</code> and <code>demostoch</code> objects:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="co"># create population dynamics object</span>
+<span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span>, <span class="va">envstoch</span>, <span class="va">demostoch</span><span class="op">)</span>
+
+<span class="co"># simulate population dynamics</span>
+<span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+
+<span class="co"># plot the population trajectories</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, xlab <span class="op">=</span> <span class="st">"Generation"</span>, ylab <span class="op">=</span> <span class="st">"Abundance"</span><span class="op">)</span></pre></div>
+<p><img src="including_processes_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+</div>
+<div id="density-dependence" class="section level4">
+<h4 class="hasAnchor">
+<a href="#density-dependence" class="anchor"></a>Density dependence</h4>
+<p>ADD</p>
+</div>
+<div id="a-different-form-of-density-dependence" class="section level4">
+<h4 class="hasAnchor">
+<a href="#a-different-form-of-density-dependence" class="anchor"></a>A different form of density dependence</h4>
+<p>ADD</p>
+</div>
+<div id="covariates" class="section level4">
+<h4 class="hasAnchor">
+<a href="#covariates" class="anchor"></a>Covariates</h4>
+<p>ADD</p>
+</div>
+</div>
+<div id="nomask" class="section level2">
+<h2 class="hasAnchor">
+<a href="#nomask" class="anchor"></a>What if I don’t want to use masks?</h2>
+<p>Why this is hard (and a bad idea unless literally operating on the whole matrix at once).</p>
+<p>Workaround for passing dims to functions.</p>
 </div>
   </div>
 
