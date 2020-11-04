@@ -63,6 +63,7 @@ navbar:
     left: [get_started, functions, vignettes, examples]
     right: [github]
   components:
+    home: ~
     reference: ~
     articles: ~
     news: ~
