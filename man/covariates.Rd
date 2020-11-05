@@ -2,9 +2,12 @@
 % Please edit documentation in R/covariates.R
 \name{covariates}
 \alias{covariates}
+\alias{format_covariates}
 \title{Specify covariate dependence in models of population dynamics}
 \usage{
 covariates(masks, funs)
+
+format_covariates(x, aux = NULL, names = NULL)
 }
 \arguments{
 \item{masks}{a logical matrix or vector (or list of these)
@@ -13,6 +16,15 @@ defining cells affected by \code{funs}. See Details and
 
 \item{funs}{a function or list of functions with one element
 for each element of \code{masks}. See Details}
+
+\item{x}{a vector, matrix, or data.frame of time-varying
+covariate values with one element or row per time step}
+
+\item{aux}{additional, static arguments to be passed to
+a covariates function}
+
+\item{names}{optional vector of names for each covariate
+included in \code{x}}
 }
 \description{
 Specify relationship between a vector or matrix of covariates
@@ -24,16 +36,21 @@ Masks must be of the same dimension as the population
   according to \code{funs}. Additional details on masks are
   provided in \code{\link{masks}}.
 
-  Functions must take at least one argument, a matrix
-  representing the population dynamics matrix. Including
-  actual covariates requires a second argument to this
-  function. Functions must return a matrix with
-  the same dimensions as the input, modified to reflect the
+  Functions must take at least one argument, a vector or matrix
+  representing the masked elements of the population dynamics
+  matrix. Incorporating covariate values requires a second
+  argument. Functions must return a vector or matrix with the
+  same dimensions as the input, modified to reflect the
   effects of covariates on vital rates.
 
   Additional arguments to functions are supported and can be
   passed to \code{\link{simulate}} with the \code{args},
   \code{args.dyn}, or \code{args.fn} arguments.
+
+  \code{format_covariates} is a helper function
+  that takes covariates and auxiliary values as inputs and
+  returns a correctly formatted list that can be passed
+  as \code{args} to \code{simulate}.
 }
 \examples{
 # add

@@ -1,9 +1,10 @@
 #' @name covariates
-#'
 #' @title Specify covariate dependence in models of population dynamics
-#'
 #' @description Specify relationship between a vector or matrix of covariates
 #'   and vital rates.
+NULL
+
+#' @rdname covariates
 #'
 #' @export
 #'
@@ -18,16 +19,21 @@
 #'   according to \code{funs}. Additional details on masks are
 #'   provided in \code{\link{masks}}.
 #'
-#'   Functions must take at least one argument, a matrix
-#'   representing the population dynamics matrix. Including
-#'   actual covariates requires a second argument to this
-#'   function. Functions must return a matrix with
-#'   the same dimensions as the input, modified to reflect the
+#'   Functions must take at least one argument, a vector or matrix
+#'   representing the masked elements of the population dynamics
+#'   matrix. Incorporating covariate values requires a second
+#'   argument. Functions must return a vector or matrix with the
+#'   same dimensions as the input, modified to reflect the
 #'   effects of covariates on vital rates.
 #'
 #'   Additional arguments to functions are supported and can be
 #'   passed to \code{\link{simulate}} with the \code{args},
 #'   \code{args.dyn}, or \code{args.fn} arguments.
+#'
+#'   \code{format_covariates} is a helper function
+#'   that takes covariates and auxiliary values as inputs and
+#'   returns a correctly formatted list that can be passed
+#'   as \code{args} to \code{simulate}.
 #'
 #' @examples
 #' # add
@@ -52,6 +58,47 @@ covariates <- function(masks, funs) {
 
   # return
   as_covariates(fn)
+
+}
+
+#' @rdname covariates
+#'
+#' @export
+#'
+#' @param x a vector, matrix, or data.frame of time-varying
+#'   covariate values with one element or row per time step
+#' @param aux additional, static arguments to be passed to
+#'   a covariates function
+#' @param names optional vector of names for each covariate
+#'   included in \code{x}
+#'
+format_covariates <- function(x, aux = NULL, names = NULL) {
+
+  # is x a vector or matrix/data.frame?
+  if (is.null(dim(x)))
+    x <- matrix(x, ncol = 1)
+
+  # add names if required
+  if (!is.null(names)) {
+    if (length(names) != ncol(x)) {
+      stop("names must contain one value for each column of x",
+           call. = FALSE)
+    }
+    colnames(x) <- names
+  }
+
+  # turn x into a data.frame
+  x <- list(data.frame(x))
+
+  # do we need to add auxiliary variables?
+  if (!is.null(aux)) {
+    if (!is.list(aux))
+      aux <- list(aux)
+    x <- c(x, aux)
+  }
+
+  # return
+  x
 
 }
 
