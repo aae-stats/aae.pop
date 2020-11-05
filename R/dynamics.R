@@ -281,7 +281,11 @@ is.dynamics <- function(x) {
 # nolint start
 print.dynamics <- function(x, ...) {
   # nolint end
-  cat(paste0("Population dynamics object for ", x$nspecies, " species\n"))
+  nsp <- x$nspecies
+  if (is.null(nsp))
+    nsp <- "a single"
+
+  cat(paste0("Population dynamics object for ", nsp, " species\n"))
 }
 
 # internal function: set dynamics class
