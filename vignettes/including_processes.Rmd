@@ -86,7 +86,7 @@ popdyn <- dynamics(popmat, demostoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.1))
 ```
 
 #### Environmental Stochasticity
@@ -143,7 +143,7 @@ popdyn <- dynamics(popmat, envstoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.1))
 ```
 
 It is easy to include both environmental and demographic stochasticity in the same model. The `dynamics` call simply needs both `envstoch` and `demostoch` objects:
@@ -156,12 +156,23 @@ popdyn <- dynamics(popmat, envstoch, demostoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.1))
 ```
 
 #### Density dependence
 
-ADD
+Density dependence is the effects of population abundances on vital rates or individual outcomes. The most common form of density dependence in population ecology is *negative density dependence*, that is, a reduction in vital rates with increases in population abundance. Negative density dependence is typically reflected in changes in reproduction due to, for example, increased competition for resources resulting in high mortality of new individuals.
+
+Density dependence can be included in exactly the same way as environmental stochasticity: a `mask` tells R which cells in the population matrix are affected by abundances and a `function` tells R what to do with these cells. In this case, the `function` can see the vital rates but also the abundances in each population class.
+
+```{r}
+reproduction_mask <- reproduction(popmat, dims = 3:5) # only ages 3-5 reproduce
+reproduction_fn <- function(x) {
+  rpois(length(x), lambda = x)
+}
+```
+
+There are other forms of density dependence. Positive. And negative can affect adults etc. All use same approach (but see following section for exception).
 
 #### A different form of density dependence
 

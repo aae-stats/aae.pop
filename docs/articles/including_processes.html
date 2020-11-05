@@ -69,7 +69,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/macperch_example.html">Macquarie perch population model</a>
+      <a href="../articles/macperch_example.html">Macquarie perch</a>
+    </li>
+    <li>
+      <a href="../articles/scenarios_example.html">Ranking scenarios</a>
     </li>
   </ul>
 </li>
@@ -172,7 +175,7 @@
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># plot the population trajectories</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, xlab <span class="op">=</span> <span class="st">"Generation"</span>, ylab <span class="op">=</span> <span class="st">"Abundance"</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div id="environmental-stochasticity" class="section level4">
@@ -218,7 +221,7 @@
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># plot the population trajectories</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, xlab <span class="op">=</span> <span class="st">"Generation"</span>, ylab <span class="op">=</span> <span class="st">"Abundance"</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>It is easy to include both environmental and demographic stochasticity in the same model. The <code>dynamics</code> call simply needs both <code>envstoch</code> and <code>demostoch</code> objects:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
@@ -229,7 +232,7 @@
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># plot the population trajectories</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, xlab <span class="op">=</span> <span class="st">"Generation"</span>, ylab <span class="op">=</span> <span class="st">"Abundance"</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div id="density-dependence" class="section level4">

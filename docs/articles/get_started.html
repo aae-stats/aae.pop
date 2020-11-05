@@ -69,7 +69,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/macperch_example.html">Macquarie perch population model</a>
+      <a href="../articles/macperch_example.html">Macquarie perch</a>
+    </li>
+    <li>
+      <a href="../articles/scenarios_example.html">Ranking scenarios</a>
     </li>
   </ul>
 </li>
@@ -113,7 +116,13 @@
 <div id="installation-and-setup" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation-and-setup" class="anchor"></a>Installation and setup</h2>
-<p>You can install the <code>aae.pop</code> package from GitHub. To install from GitHub, you’ll need the <code>remotes</code> R package, which you can install from CRAN with <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("remotes")</a></code>. You can then install the <code>aae.pop</code> package from Github with <code><a href="https://rdrr.io/pkg/remotes/man/install_github.html">remotes::install_github("aae.stats/aae.pop@master")</a></code>. Once completed, you should be able to load the <code>aae.pop</code> package with <code><a href="https://aae-stats/github.io/aae.pop">library(aae.pop)</a></code>.</p>
+<p>You can install the <code>aae.pop</code> package from GitHub. To install from GitHub, you’ll need the <code>remotes</code> R package, which you can install from CRAN with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></pre></div>
+<p>You can then install the <code>aae.pop</code> package from Github with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"aae-stats/aae.pop"</span><span class="op">)</span></pre></div>
+<p>Once completed, you should be able to load the <code>aae.pop</code> package with <code><a href="https://aae-stats/github.io/aae.pop">library(aae.pop)</a></code>.</p>
 </div>
 <div id="background" class="section level2">
 <h2 class="hasAnchor">
@@ -150,7 +159,7 @@
 <h4 class="hasAnchor">
 <a href="#the-population-matrix" class="anchor"></a>The population matrix</h4>
 <p>A good place to start is with a basic population matrix and no other processes. For example, a Leslie matrix with five age classes can be specified as:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
+<div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="va">popmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span>
   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">2</span>,    <span class="fl">4</span>,    <span class="fl">7</span><span class="op">)</span>,  <span class="co"># reproduction from 3-5 year olds</span>
   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 1 to 2</span>
@@ -159,7 +168,7 @@
   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0.85</span>, <span class="fl">0</span><span class="op">)</span>   <span class="co"># survival from age 4 to 5</span>
 <span class="op">)</span></pre></div>
 <p>Using the terminology above, this same matrix could be specified as:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
+<div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="va">new_offspring</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">7</span><span class="op">)</span>
 <span class="va">transition_probabilities</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.45</span>, <span class="fl">0.70</span>, <span class="fl">0.85</span><span class="op">)</span>
 <span class="va">popmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="fl">5</span>, ncol <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
@@ -171,35 +180,37 @@
 <h4 class="hasAnchor">
 <a href="#creating-a-population-dynamics-object" class="anchor"></a>Creating a population <code>dynamics</code> object</h4>
 <p>Once the population matrix is defined, it can be compiled into a <code>dynamics</code> object with the following code:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
+<div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span></pre></div>
 <p>It is possible to plot the population dynamics object to visualise the transitions and structure this implies. This requires the <code>DiagrammeR</code> package. Visualising population structures can be a useful way to check the model has been specified correctly, and these plots are easier to communicate than a giant matrix.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
+<div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">popdyn</span><span class="op">)</span></pre></div>
-<div id="htmlwidget-011a0a437525719bc5c2" style="width:700px;height:432.632880098888px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-011a0a437525719bc5c2">{"x":{"diagram":"digraph {\n\ngraph [layout = \"dot\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       rankdir = \"LR\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Age 1\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"2\" [label = \"Age 2\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"3\" [label = \"Age 3\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"4\" [label = \"Age 4\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"5\" [label = \"Age 5\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n\"1\"->\"2\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"2\"->\"3\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"3\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"3\"->\"4\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"4\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"4\"->\"5\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"5\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5e72a008414bd2677d89" style="width:700px;height:432.632880098888px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5e72a008414bd2677d89">{"x":{"diagram":"digraph {\n\ngraph [layout = \"dot\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       rankdir = \"LR\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Age 1\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"2\" [label = \"Age 2\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"3\" [label = \"Age 3\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"4\" [label = \"Age 4\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"5\" [label = \"Age 5\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n\"1\"->\"2\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"2\"->\"3\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"3\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"3\"->\"4\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"4\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"4\"->\"5\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"5\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="simulating-population-trajectories" class="section level4">
 <h4 class="hasAnchor">
 <a href="#simulating-population-trajectories" class="anchor"></a>Simulating population trajectories</h4>
 <p>With a compiled <code>dynamics</code> object, it’s relatively straightforward to simulate some population trajectories (with default settings):</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
+<div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span><span class="op">)</span></pre></div>
-<p>Simulated trajectories can be plotted using the standard <code>plot</code> function in R.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, xlab <span class="op">=</span> <span class="st">"Generation"</span>, ylab <span class="op">=</span> <span class="st">"Abundance"</span><span class="op">)</span></pre></div>
-<p><img src="get_started_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p>Simulated trajectories can be plotted using the standard <code>plot</code> function in R. This example sets the colour to a medium shade of blue with 90% transparency:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
+<p><img src="get_started_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
 <div id="changing-default-settings" class="section level4">
 <h4 class="hasAnchor">
 <a href="#changing-default-settings" class="anchor"></a>Changing default settings</h4>
 <p>The default settings simulate a single trajectory with 50 time steps, from random initial conditions (Poisson draws with <span class="math inline">\(\lambda = 10\)</span>). These settings can be changed directly in the call to <code>simulate</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
+<div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="va">initials</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">50</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span>  <span class="co"># some initial conditions</span>
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>,
                  nsim <span class="op">=</span> <span class="fl">100</span>,
                  init <span class="op">=</span> <span class="va">initials</span>,
-                 options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ntime <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></pre></div>
+                 options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ntime <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
+<p><img src="get_started_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>Default settings also specify that population updates are calculated as a cross product and that abundances are not rounded in any way in each step, which allows fractional individuals in the population. These are not ideal settings. Changing them is covered in the <a href="beyond_defaults.html">Beyond defaults</a> vignette.</p>
 </div>
 </div>

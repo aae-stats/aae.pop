@@ -6,7 +6,7 @@ The [website](https://aae-stats.github.io/aae.pop) includes a [quick start guide
 You can install the current version of the package from Github:
 
 ``` r
-remotes::install_github("aae.stats/aae.pop")
+remotes::install_github("aae-stats/aae.pop")
 ```
 
 <!-- badges: start -->
