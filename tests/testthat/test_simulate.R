@@ -97,6 +97,16 @@ test_that("simulate returns correct abundances with covariates", {
   class(target) <- c("simulation", "array")
   expect_equal(target, value)
 
+  # test again with format_covariates
+  value <- simulate(
+    dyn,
+    nsim = nsim,
+    init = init_set,
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(covariates = format_covariates(xsim))
+  )
+  expect_equal(target, value)
+
 })
 
 test_that("simulate returns correct abundances with density dependence and covariates", {
