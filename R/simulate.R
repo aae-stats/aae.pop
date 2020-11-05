@@ -419,7 +419,7 @@ simulate.dynamics <- function(object,
 
   # do we want to keep intermediate abundances or just the final step?
   if (!opt$keep_slices)
-    pop <- as.array(pop_tmp)
+    pop <- pop_tmp
 
   # set appropriate class for outputs
   if (is.multispecies(object)) {
@@ -846,7 +846,10 @@ plot.simulation_list <- function(x, y, ..., which = seq_along(x)) {
 
 # internal function: set simulation class
 as_simulation <- function(x) {
-  as_class(x, name = "simulation", type = "array")
+  type <- "array"
+  if (is.matrix(x))
+    type <- "matrix"
+  as_class(x, name = "simulation", type = type)
 }
 
 # internal function: set simulation class
