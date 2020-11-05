@@ -6,14 +6,18 @@
 \alias{ricker}
 \title{Common forms of density dependence}
 \usage{
-beverton_holt(k)
+beverton_holt(k, exclude = NULL)
 
-ricker(k)
+ricker(k, exclude = NULL)
 }
 \arguments{
 \item{k}{carrying capacity used to define models of
 density dependence. See details for
 currently implemented models and their parameters.}
+
+\item{exclude}{vector of classes to exclude from calculation
+of total population density. Defaults to NULL, in which
+case all classes are used}
 }
 \description{
 Use pre-defined forms of density dependence
