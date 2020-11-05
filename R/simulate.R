@@ -419,7 +419,7 @@ simulate.dynamics <- function(object,
 
   # do we want to keep intermediate abundances or just the final step?
   if (!opt$keep_slices)
-    pop <- array(pop_tmp)
+    pop <- as.array(pop_tmp)
 
   # set appropriate class for outputs
   if (is.multispecies(object)) {
