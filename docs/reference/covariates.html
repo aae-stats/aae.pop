@@ -152,7 +152,9 @@
   and vital rates.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>covariates</span><span class='op'>(</span><span class='va'>masks</span>, <span class='va'>funs</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>covariates</span><span class='op'>(</span><span class='va'>masks</span>, <span class='va'>funs</span><span class='op'>)</span>
+
+<span class='fu'>format_covariates</span><span class='op'>(</span><span class='va'>x</span>, aux <span class='op'>=</span> <span class='cn'>NULL</span>, names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,6 +170,21 @@ defining cells affected by <code>funs</code>. See Details and
       <td><p>a function or list of functions with one element
 for each element of <code>masks</code>. See Details</p></td>
     </tr>
+    <tr>
+      <th>x</th>
+      <td><p>a vector, matrix, or data.frame of time-varying
+covariate values with one element or row per time step</p></td>
+    </tr>
+    <tr>
+      <th>aux</th>
+      <td><p>additional, static arguments to be passed to
+a covariates function</p></td>
+    </tr>
+    <tr>
+      <th>names</th>
+      <td><p>optional vector of names for each covariate
+included in <code>x</code></p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -176,15 +193,19 @@ for each element of <code>masks</code>. See Details</p></td>
   dynamics matrix and specify cells influenced by covariates
   according to <code>funs</code>. Additional details on masks are
   provided in <code><a href='masks.html'>masks</a></code>.</p>
-<p>Functions must take at least one argument, a matrix
-  representing the population dynamics matrix. Including
-  actual covariates requires a second argument to this
-  function. Functions must return a matrix with
-  the same dimensions as the input, modified to reflect the
+<p>Functions must take at least one argument, a vector or matrix
+  representing the masked elements of the population dynamics
+  matrix. Incorporating covariate values requires a second
+  argument. Functions must return a vector or matrix with the
+  same dimensions as the input, modified to reflect the
   effects of covariates on vital rates.</p>
 <p>Additional arguments to functions are supported and can be
   passed to <code><a href='simulate.html'>simulate</a></code> with the <code>args</code>,
   <code>args.dyn</code>, or <code>args.fn</code> arguments.</p>
+<p><code>format_covariates</code> is a helper function
+  that takes covariates and auxiliary values as inputs and
+  returns a correctly formatted list that can be passed
+  as <code>args</code> to <code>simulate</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># add</span>

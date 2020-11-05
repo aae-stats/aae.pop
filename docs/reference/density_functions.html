@@ -152,9 +152,9 @@
   based on common density-dependence functions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>beverton_holt</span><span class='op'>(</span><span class='va'>k</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>beverton_holt</span><span class='op'>(</span><span class='va'>k</span>, exclude <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>ricker</span><span class='op'>(</span><span class='va'>k</span><span class='op'>)</span></pre>
+<span class='fu'>ricker</span><span class='op'>(</span><span class='va'>k</span>, exclude <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,6 +164,12 @@
       <td><p>carrying capacity used to define models of
 density dependence. See details for
 currently implemented models and their parameters.</p></td>
+    </tr>
+    <tr>
+      <th>exclude</th>
+      <td><p>vector of classes to exclude from calculation
+of total population density. Defaults to NULL, in which
+case all classes are used</p></td>
     </tr>
     </table>
 
