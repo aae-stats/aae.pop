@@ -1,19 +1,98 @@
 ---
 title: "Moving beyond default settings in aae.pop"
 author: "Jian Yen"
-date: "13/10/2020"
+date: "5/11/2020"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(aae.pop)
+
+# set up a basic population dynamics object to demonstrate examples below
+popmat <- rbind(
+  c(0,    0,    2,    4,    7),  # reproduction from 3-5 year olds
+  c(0.25, 0,    0,    0,    0),  # survival from age 1 to 2
+  c(0,    0.45, 0,    0,    0),  # survival from age 2 to 3
+  c(0,    0,    0.70, 0,    0),  # survival from age 3 to 4
+  c(0,    0,    0,    0.85, 0)   # survival from age 4 to 5
+)
+demostoch_mask <- all_classes(popmat) # affects all classes
+demostoch_fn <- function(x) {
+  rpois(length(x), lambda = x)
+}
+demostoch <- demographic_stochasticity(
+  masks = demostoch_mask,
+  funs = demostoch_fn
+)
+popdyn <- dynamics(popmat, demostoch)
 ```
 
-## R Markdown
+## Introduction
 
-Cover things like updaters, adding your own update step or C++ code, etc. Also cover default opts and ways to tweak these (plus reasons to do so). Initial conidtions.
-Setting seeds.
+`aae.pop` sets default options to speed the process of defining and simulating population dynamics. These defaults are acceptable in some cases but are unlikely to suit all applications. This vignette covers the primary settings and some useful alternatives.
+
+## `simulate` settings
+
+The `simulate` function has several relatively intuitive settings:
+
+- nsim: the number of replicate simulations to run. The default is 1. Increasing this value makes sense if including any form of variation, such as demographic or environmental stochasticity or multiple initial conditions.
+
+- seed: the random seed used to initialise any random draws. Defaults to `NULL`, in which case the seed from the current workspace is used. Change this value if reproducible results are required.
+
+- options: these are the basic settings that control how `simulate` works. Several more-complex settings are described in [Updaters](#updaters) and [Initial conditions](#initials), below.
+    - ntime: number of time steps to simulate. Defaults to 50 and is ignored if covariates are included in a model.
+    - keep_slices: should `simulate` return every intermediate time step? Defaults to `TRUE`, set to `FALSE` if only the final time step is required. This will reduce memory use, which is helpful for large models.
+    - tidy_abundances: what happens to abundances after each iteration? Defaults to `identity`, which means that abundances are left unchanged, potentially as decimal values. A common alternative is `floor`, which will round down to the nearest integer, implying that fractional individuals cannot exist. Can be replaced with any function that takes in a vector and returns a vector of the the same size (e.g., `ceiling`, `round`).
+
+
+All of the above settings can be changed directly in a call to `simulate`. Note that `options` is a named list, so a modified call to `simulate` might look like:
 
 ```{r}
-a <- rnorm(10)
+sims <- simulate(
+  popdyn,
+  nsim = 100,
+  seed = 123,
+  options = list(ntime = 30, keep_slices = FALSE, tidy_abundances = floor)
+)
 ```
+
+Alternatively, if certain settings need to be updated for all simulations in a project, it might be easier to change these at a deeper level through the `options` function in R. Specifically, `ntime`, `keep_slices`, and `tidy_abundances` are all set as options and can be updated with:
+
+```{r, eval = FALSE}
+# ntime
+options(aae.pop_ntime = 30)
+
+# keep_slices
+options(aae.pop_keep_slices = FALSE)
+
+# tidy_abundances
+options(aae.pop_tidy_abundances = floor)
+```
+
+## Initial conditions {#initals}
+
+Setting initial conditions is a really important part of population dynamics modelling. The default initial conditions in `aae.pop` are random Poisson draws with a mean of 10. This is very simplistic, and assumes that a model will be run for many generations and that transient dynamics are not of interest.
+
+The default initial conditions can be changed in several ways. First, the mean of the Poisson distribution can be changed with 
+
+
+More sensible initial conditions can be passed to `simulate` with the `init` argument. Initial conditions can be specified as a vector with one element per population class or as a matrix (or array) with one row per replicate and one column per population class. If specified as a vector and `nsim` is greater than 1, the initial conditions are assumed to be the same in all replicates.
+
+initialise_args
+
+   set default initialisation method
+  options(aae.pop_initialisation = initialise_poisson,
+          aae.pop_lambda = 10)
+
+
+## Updaters {#updaters}
+update_crossprod
+update_binomial_leslie
+update_multinomial
+   set update type for single-step updates
+  options(aae.pop_update = update_crossprod)
+
+
+## Roll your own
+Particularly updaters

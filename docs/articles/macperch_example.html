@@ -72,7 +72,7 @@
       <a href="../articles/macperch_example.html">Macquarie perch</a>
     </li>
     <li>
-      <a href="../articles/scenarios_example.html">Ranking scenarios</a>
+      <a href="../articles/scenarios_example.html">Comparing scenarios</a>
     </li>
   </ul>
 </li>
@@ -103,7 +103,7 @@
       <h1 data-toc-skip>Population dynamics of Macquarie perch</h1>
                         <h4 class="author">Jian Yen</h4>
             
-            <h4 class="date">13/10/2020</h4>
+            <h4 class="date">5/11/2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/master/vignettes/macperch_example.Rmd"><code>vignettes/macperch_example.Rmd</code></a></small>
       <div class="hidden name"><code>macperch_example.Rmd</code></div>
@@ -112,36 +112,13 @@
 
     
     
-<div id="r-markdown" class="section level2">
+<div id="introduction" class="section level2">
 <h2 class="hasAnchor">
-<a href="#r-markdown" class="anchor"></a>R Markdown</h2>
-<p>Demonstrate density_dependence_n and stocking example.</p>
-<p>Demonstrate how to hack the covariates functions.</p>
-</div>
-<div id="building-a-basic-population-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#building-a-basic-population-model" class="anchor"></a>Building a basic population model</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># load the aae.pop package</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://aae-stats/github.io/aae.pop">aae.pop</a></span><span class="op">)</span>
-
-<span class="co"># create a basic Leslie matrix for a population with</span>
-<span class="co">#   five age classes</span>
-<span class="co"># the aae.pop package assumes "columns move to rows"</span>
-<span class="va">popmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">2</span>,    <span class="fl">4</span>,    <span class="fl">7</span><span class="op">)</span>,  <span class="co"># reproduction from 3-5 year olds</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 1 to 2</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0.45</span>, <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 2 to 3</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0.70</span>, <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 3 to 4</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0.85</span>, <span class="fl">0</span><span class="op">)</span>   <span class="co"># survival from age 4 to 5</span>
-<span class="op">)</span>
-
-<span class="co"># create a population dynamics object with this matrix</span>
-<span class="co">#   without any additional processes</span>
-<span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span>
-
-<span class="co"># simulate from this model with default (random) initial conditions</span>
-<span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span><span class="op">)</span></pre></div>
+<a href="#introduction" class="anchor"></a>Introduction</h2>
+<p>This example builds a model of Macquarie perch population dynamics to illustrate several advanced features of <code>aae.pop</code>. Specifically, this example demonstrates the use of multiple <code>args</code> terms in <code>simulate</code>, complex forms of density dependence, and the use of the <code>args.fn</code> option in <code>simulate</code>.</p>
+<p>Demonstrate density_dependence_n and stocking or fishing effects.</p>
+<p>Demonstrate positive density dependence.</p>
+<p>Demonstrate environmental stochasticity with update_binomial and args.dyn.</p>
 </div>
   </div>
 

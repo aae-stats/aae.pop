@@ -86,7 +86,7 @@ navbar:
       menu:
       - text: Macquarie perch
         href: articles/macperch_example.html
-      - text: Ranking scenarios
+      - text: Comparing scenarios
         href: articles/scenarios_example.html
     documentation:
       text: documentation

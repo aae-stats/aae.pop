@@ -146,11 +146,11 @@ sims <- simulate(popdyn, nsim = 100)
 plot(sims, col = scales::alpha("#2171B5", 0.1))
 ```
 
-It is easy to include both environmental and demographic stochasticity in the same model. The `dynamics` call simply needs both `envstoch` and `demostoch` objects:
+It is easy to include both environmental and demographic stochasticity in the same model. The `dynamics` call simply needs both `envstoch` and `demostoch` objects. This is a case where the `update` function comes in handy. Rather than re-defining the population dynamics object, the existing version of `popdyn` (which included `popmat` and `envstoch`) can simply be updated to include `demostoch`:
 
 ```{r, dev = "png"}
-# create population dynamics object
-popdyn <- dynamics(popmat, envstoch, demostoch)
+# update population dynamics object
+popdyn <- update(popdyn, demostoch)
 
 # simulate population dynamics
 sims <- simulate(popdyn, nsim = 100)
@@ -176,8 +176,8 @@ dd <- density_dependence(
   funs = ricker(k = 40, exclude = 1:2)      # set k based on adult abundances
 )
 
-# create population dynamics object
-popdyn <- dynamics(popmat, envstoch, demostoch, dd)
+# update the population dynamics object to include density dependence
+popdyn <- update(popdyn, dd)
 
 # simulate population dynamics
 sims <- simulate(popdyn, nsim = 100)
@@ -204,7 +204,7 @@ dd_n <- density_dependence_n(
                                            #   90 % of adult population
 )
 
-# create population dynamics object
+# create a new population dynamics object
 popdyn <- dynamics(popmat, envstoch, demostoch, dd_n)
 
 # simulate population dynamics
@@ -260,21 +260,21 @@ The `mask`/`function` is central to `aae.pop`. This approach allows multiple fun
 
 There might be situations where the entire population matrix does need to be modified by a given process. This is still supported in `aae.pop` through the `all_cells` `mask`. However, it isn't possible to subset the matrix within a `function` using R's standard `[i, j]` notation. This is because the functions within `aae.pop` receive a flattened (and masked) version of the population matrix, which actually looks like:
 
-```{r, echo = FALSE}
+```{r}
 # reproduction mask
 popmat[reproduction(popmat, dims = 3:5)]
 ```
 
 or 
 
-```{r, echo = FALSE}
+```{r}
 # transition mask
 popmat[transition(popmat)]
 ```
 
 or
 
-```{r, echo = FALSE}
+```{r}
 # all elements
 popmat[all_cells(popmat)]
 ```

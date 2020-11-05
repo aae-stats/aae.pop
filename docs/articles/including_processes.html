@@ -72,7 +72,7 @@
       <a href="../articles/macperch_example.html">Macquarie perch</a>
     </li>
     <li>
-      <a href="../articles/scenarios_example.html">Ranking scenarios</a>
+      <a href="../articles/scenarios_example.html">Comparing scenarios</a>
     </li>
   </ul>
 </li>
@@ -223,10 +223,10 @@
 <span class="co"># plot the population trajectories</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
-<p>It is easy to include both environmental and demographic stochasticity in the same model. The <code>dynamics</code> call simply needs both <code>envstoch</code> and <code>demostoch</code> objects:</p>
+<p>It is easy to include both environmental and demographic stochasticity in the same model. The <code>dynamics</code> call simply needs both <code>envstoch</code> and <code>demostoch</code> objects. This is a case where the <code>update</code> function comes in handy. Rather than re-defining the population dynamics object, the existing version of <code>popdyn</code> (which included <code>popmat</code> and <code>envstoch</code>) can simply be updated to include <code>demostoch</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="co"># create population dynamics object</span>
-<span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span>, <span class="va">envstoch</span>, <span class="va">demostoch</span><span class="op">)</span>
+<span class="co"># update population dynamics object</span>
+<span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html">update</a></span><span class="op">(</span><span class="va">popdyn</span>, <span class="va">demostoch</span><span class="op">)</span>
 
 <span class="co"># simulate population dynamics</span>
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
@@ -249,8 +249,8 @@
   funs <span class="op">=</span> <span class="fu"><a href="../reference/density_functions.html">ricker</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">40</span>, exclude <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>      <span class="co"># set k based on adult abundances</span>
 <span class="op">)</span>
 
-<span class="co"># create population dynamics object</span>
-<span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span>, <span class="va">envstoch</span>, <span class="va">demostoch</span>, <span class="va">dd</span><span class="op">)</span>
+<span class="co"># update the population dynamics object to include density dependence</span>
+<span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html">update</a></span><span class="op">(</span><span class="va">popdyn</span>, <span class="va">dd</span><span class="op">)</span>
 
 <span class="co"># simulate population dynamics</span>
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
@@ -274,7 +274,7 @@
                                            <span class="co">#   90 % of adult population</span>
 <span class="op">)</span>
 
-<span class="co"># create population dynamics object</span>
+<span class="co"># create a new population dynamics object</span>
 <span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span>, <span class="va">envstoch</span>, <span class="va">demostoch</span>, <span class="va">dd_n</span><span class="op">)</span>
 
 <span class="co"># simulate population dynamics</span>
@@ -327,14 +327,23 @@
 <a href="#nomask" class="anchor"></a>What if I don’t want to use masks?</h2>
 <p>The <code>mask</code>/<code>function</code> is central to <code>aae.pop</code>. This approach allows multiple functions to be combined into a single term and makes it easier to keep track of (and update) individual functions or masks. A secondary reason for this approach is computational. Rarely will any demographic processes act on the entire population matrix. When dealing with large matrices (e.g., 50-100 classes), it’s much more efficient to pass small parts of the matrix than the entire matrix.</p>
 <p>There might be situations where the entire population matrix does need to be modified by a given process. This is still supported in <code>aae.pop</code> through the <code>all_cells</code> <code>mask</code>. However, it isn’t possible to subset the matrix within a <code>function</code> using R’s standard <code>[i, j]</code> notation. This is because the functions within <code>aae.pop</code> receive a flattened (and masked) version of the population matrix, which actually looks like:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="co"># reproduction mask</span>
+<span class="va">popmat</span><span class="op">[</span><span class="fu"><a href="../reference/masks.html">reproduction</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></pre></div>
 <pre><code>## [1] 2 4 7</code></pre>
 <p>or</p>
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="co"># transition mask</span>
+<span class="va">popmat</span><span class="op">[</span><span class="fu"><a href="../reference/masks.html">transition</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span><span class="op">]</span></pre></div>
 <pre><code>## [1] 0.25 0.45 0.70 0.85</code></pre>
 <p>or</p>
+<div class="sourceCode" id="cb17"><pre class="downlit">
+<span class="co"># all elements</span>
+<span class="va">popmat</span><span class="op">[</span><span class="fu"><a href="../reference/masks.html">all_cells</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span><span class="op">]</span></pre></div>
 <pre><code>##  [1] 0.00 0.25 0.00 0.00 0.00 0.00 0.00 0.45 0.00 0.00 2.00 0.00 0.00 0.70 0.00
 ## [16] 4.00 0.00 0.00 0.00 0.85 7.00 0.00 0.00 0.00 0.00</code></pre>
 <p>If it’s essential to use <code>[i, j]</code> subsetting inside a function, a workaround is to reconstruct the matrix within the function by passing the dimensions through the <code>args</code> argument in <code>simulate</code>. This might look a bit like:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit">
+<div class="sourceCode" id="cb19"><pre class="downlit">
 <span class="co"># define a function</span>
 <span class="va">no_mask_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">dim</span><span class="op">)</span> <span class="op">{</span>
   
