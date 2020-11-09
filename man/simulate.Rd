@@ -79,7 +79,7 @@ Simulate population dynamics for one or more
   species defined by \code{\link{dynamics}} objects.
 }
 \details{
-To be completed.
+Includes plot and subset methods
 }
 \examples{
 

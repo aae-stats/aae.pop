@@ -59,7 +59,7 @@ NULL
 #'   \code{args} based on the matrix and abundances in each generation.
 #'   Defaults to \code{NULL}.
 #'
-#' @details To be completed.
+#' @details Includes plot and subset methods
 #'
 #' @examples
 #'
@@ -755,6 +755,25 @@ update_args <- function(args, dyn, fn, obj, pop, iter) {
 #' @importFrom stats rpois
 initialise_poisson <- function(n, args) {
   do.call(rpois, c(list(n), args))
+}
+
+# S3 subset method
+#' @export
+# nolint start
+subset.simulation <- function(x, subset, ...) {
+  # nolint end
+  x <- x[, subset, ]
+  as_simulation(x)
+}
+
+# S3 subset method
+#' @export
+# nolint start
+subset.simulation_list <- function(x, subset, ...) {
+  # nolint end
+  for (i in seq_along(x))
+    x[[i]] <- x[[i]][, subset, ]
+  as_simulation_list(x)
 }
 
 # S3 is method
