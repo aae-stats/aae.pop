@@ -29,17 +29,17 @@ Once completed, you should be able to load the
 
 ## Background
 
-#### Population models
+### Population models
 
 The `aae.pop` package requires elementary knowledge of population models. A comprehensive reference is Hal Caswell's *Matrix Population Models* (2nd edition, 2001, Sinauer Associates, Sunderland). Searching for examples of *population viability analysis*, *population demographic models*, or *matrix population models* will bring up many alternative references.
 
-#### Matrix structures
+### Matrix structures
 
 `aae.pop` is designed for generic matrix models and makes minimal assumptions about model structure or purpose. However, there are still some assumptions built into the different functions and documentation. The most important is the layout of the population matrix itself. `aae.pop` assumes that *columns move to rows*. For example, a value in the second row and first column of a matrix will specify a transition from stage 1 (column 1) to stage 2 (row 2), that is, column 1 moves to row 2. This is a common layout in population ecology but is not standard in all disciplines.
 
 There are two population structures used frequently in population ecology: the *Leslie matrix* (age based) and the *Lefkovitch matrix* (life-stage based). A Leslie matrix classifies into age classes, with transitions restricted to reproduction or survival to the next age class. A Lefkovitch matrix classifies individuals into life stages, with transitions restricted to reproduction, survival to the next life stage, or survival but remaining in the same life stage. `aae.pop` includes several helper functions designed specifically for these two model types. These are described in the [Including processes](including_processes.html) and [Beyond defaults](beyond_defaults.html) vignettes.
 
-#### Terminology
+### Terminology
 
 `aae.pop` uses three terms to help specify common model structures: *reproduction*, *survival*, and *transition*. These are defined as follows:
 
@@ -58,7 +58,7 @@ Of course, matrix population models can have values anywhere in a matrix, and `a
 
 The central functions in `aae.pop` are `dynamics` and `simulate`. The `dynamics` function wraps up a population matrix and any specified processes into a single object. The `simulate` function takes this object and generates population projections.
 
-#### The population matrix
+### The population matrix
 
 A good place to start is with a basic population matrix and no other processes. For example, a Leslie matrix with five age classes can be specified as:
 
@@ -84,7 +84,7 @@ popmat[transition(popmat)] <- transition_probabilities
 
 Although this looks fairly unwieldy in this case, these helper terms can be useful with large matrices.
 
-#### Creating a population `dynamics` object
+### Creating a population `dynamics` object
 
 Once the population matrix is defined, it can be compiled into a `dynamics` object with the following code:
 
@@ -98,7 +98,7 @@ It is possible to plot the population dynamics object to visualise the transitio
 plot(popdyn)
 ```
 
-#### Simulating population trajectories
+### Simulating population trajectories
 
 With a compiled `dynamics` object, it's relatively straightforward to simulate some population trajectories (with default settings):
 
@@ -112,7 +112,7 @@ Simulated trajectories can be plotted using the standard `plot` function in R. T
 plot(sims, col = "#2171B5")
 ```
 
-#### Changing default settings
+### Changing default settings
 
 The default settings simulate a single trajectory with 50 time steps, from random initial conditions (Poisson draws with $\lambda = 10$). These settings can be changed directly in the call to `simulate`:
 

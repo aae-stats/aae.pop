@@ -127,20 +127,20 @@
 <div id="background" class="section level2">
 <h2 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h2>
-<div id="population-models" class="section level4">
-<h4 class="hasAnchor">
-<a href="#population-models" class="anchor"></a>Population models</h4>
+<div id="population-models" class="section level3">
+<h3 class="hasAnchor">
+<a href="#population-models" class="anchor"></a>Population models</h3>
 <p>The <code>aae.pop</code> package requires elementary knowledge of population models. A comprehensive reference is Hal Caswell’s <em>Matrix Population Models</em> (2nd edition, 2001, Sinauer Associates, Sunderland). Searching for examples of <em>population viability analysis</em>, <em>population demographic models</em>, or <em>matrix population models</em> will bring up many alternative references.</p>
 </div>
-<div id="matrix-structures" class="section level4">
-<h4 class="hasAnchor">
-<a href="#matrix-structures" class="anchor"></a>Matrix structures</h4>
+<div id="matrix-structures" class="section level3">
+<h3 class="hasAnchor">
+<a href="#matrix-structures" class="anchor"></a>Matrix structures</h3>
 <p><code>aae.pop</code> is designed for generic matrix models and makes minimal assumptions about model structure or purpose. However, there are still some assumptions built into the different functions and documentation. The most important is the layout of the population matrix itself. <code>aae.pop</code> assumes that <em>columns move to rows</em>. For example, a value in the second row and first column of a matrix will specify a transition from stage 1 (column 1) to stage 2 (row 2), that is, column 1 moves to row 2. This is a common layout in population ecology but is not standard in all disciplines.</p>
 <p>There are two population structures used frequently in population ecology: the <em>Leslie matrix</em> (age based) and the <em>Lefkovitch matrix</em> (life-stage based). A Leslie matrix classifies into age classes, with transitions restricted to reproduction or survival to the next age class. A Lefkovitch matrix classifies individuals into life stages, with transitions restricted to reproduction, survival to the next life stage, or survival but remaining in the same life stage. <code>aae.pop</code> includes several helper functions designed specifically for these two model types. These are described in the <a href="including_processes.html">Including processes</a> and <a href="beyond_defaults.html">Beyond defaults</a> vignettes.</p>
 </div>
-<div id="terminology" class="section level4">
-<h4 class="hasAnchor">
-<a href="#terminology" class="anchor"></a>Terminology</h4>
+<div id="terminology" class="section level3">
+<h3 class="hasAnchor">
+<a href="#terminology" class="anchor"></a>Terminology</h3>
 <p><code>aae.pop</code> uses three terms to help specify common model structures: <em>reproduction</em>, <em>survival</em>, and <em>transition</em>. These are defined as follows:</p>
 <ul>
 <li><p>reproduction: any transition to the first class (first row), assumed to exclude the first column (i.e., new individuals can’t reproduce).</p></li>
@@ -155,9 +155,9 @@
 <h2 class="hasAnchor">
 <a href="#building-a-basic-population-model" class="anchor"></a>Building a basic population model</h2>
 <p>The central functions in <code>aae.pop</code> are <code>dynamics</code> and <code>simulate</code>. The <code>dynamics</code> function wraps up a population matrix and any specified processes into a single object. The <code>simulate</code> function takes this object and generates population projections.</p>
-<div id="the-population-matrix" class="section level4">
-<h4 class="hasAnchor">
-<a href="#the-population-matrix" class="anchor"></a>The population matrix</h4>
+<div id="the-population-matrix" class="section level3">
+<h3 class="hasAnchor">
+<a href="#the-population-matrix" class="anchor"></a>The population matrix</h3>
 <p>A good place to start is with a basic population matrix and no other processes. For example, a Leslie matrix with five age classes can be specified as:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="va">popmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span>
@@ -176,21 +176,21 @@
 <span class="va">popmat</span><span class="op">[</span><span class="fu"><a href="../reference/masks.html">transition</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">transition_probabilities</span></pre></div>
 <p>Although this looks fairly unwieldy in this case, these helper terms can be useful with large matrices.</p>
 </div>
-<div id="creating-a-population-dynamics-object" class="section level4">
-<h4 class="hasAnchor">
-<a href="#creating-a-population-dynamics-object" class="anchor"></a>Creating a population <code>dynamics</code> object</h4>
+<div id="creating-a-population-dynamics-object" class="section level3">
+<h3 class="hasAnchor">
+<a href="#creating-a-population-dynamics-object" class="anchor"></a>Creating a population <code>dynamics</code> object</h3>
 <p>Once the population matrix is defined, it can be compiled into a <code>dynamics</code> object with the following code:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span></pre></div>
 <p>It is possible to plot the population dynamics object to visualise the transitions and structure this implies. This requires the <code>DiagrammeR</code> package. Visualising population structures can be a useful way to check the model has been specified correctly, and these plots are easier to communicate than a giant matrix.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">popdyn</span><span class="op">)</span></pre></div>
-<div id="htmlwidget-611f5b2477e463464ac9" style="width:700px;height:432.632880098888px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-611f5b2477e463464ac9">{"x":{"diagram":"digraph {\n\ngraph [layout = \"dot\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       rankdir = \"LR\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Age 1\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"2\" [label = \"Age 2\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"3\" [label = \"Age 3\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"4\" [label = \"Age 4\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"5\" [label = \"Age 5\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n\"1\"->\"2\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"2\"->\"3\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"3\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"3\"->\"4\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"4\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"4\"->\"5\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"5\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c14f8a363b03ed7400e6" style="width:700px;height:432.632880098888px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c14f8a363b03ed7400e6">{"x":{"diagram":"digraph {\n\ngraph [layout = \"dot\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       rankdir = \"LR\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Age 1\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"2\" [label = \"Age 2\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"3\" [label = \"Age 3\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"4\" [label = \"Age 4\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"5\" [label = \"Age 5\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n\"1\"->\"2\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"2\"->\"3\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"3\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"3\"->\"4\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"4\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"4\"->\"5\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"5\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
-<div id="simulating-population-trajectories" class="section level4">
-<h4 class="hasAnchor">
-<a href="#simulating-population-trajectories" class="anchor"></a>Simulating population trajectories</h4>
+<div id="simulating-population-trajectories" class="section level3">
+<h3 class="hasAnchor">
+<a href="#simulating-population-trajectories" class="anchor"></a>Simulating population trajectories</h3>
 <p>With a compiled <code>dynamics</code> object, it’s relatively straightforward to simulate some population trajectories (with default settings):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span><span class="op">)</span></pre></div>
@@ -199,9 +199,9 @@
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="st">"#2171B5"</span><span class="op">)</span></pre></div>
 <p><img src="get_started_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
-<div id="changing-default-settings" class="section level4">
-<h4 class="hasAnchor">
-<a href="#changing-default-settings" class="anchor"></a>Changing default settings</h4>
+<div id="changing-default-settings" class="section level3">
+<h3 class="hasAnchor">
+<a href="#changing-default-settings" class="anchor"></a>Changing default settings</h3>
 <p>The default settings simulate a single trajectory with 50 time steps, from random initial conditions (Poisson draws with <span class="math inline">\(\lambda = 10\)</span>). These settings can be changed directly in the call to <code>simulate</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="va">initials</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">50</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span>  <span class="co"># some initial conditions</span>
