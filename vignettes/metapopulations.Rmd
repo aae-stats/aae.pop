@@ -8,13 +8,6 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(aae.pop)
-popmat <- rbind(
-  c(0,    0,    2,    4,    7),  # reproduction from 3-5 year olds
-  c(0.25, 0,    0,    0,    0),  # survival from age 1 to 2
-  c(0,    0.45, 0,    0,    0),  # survival from age 2 to 3
-  c(0,    0,    0.70, 0,    0),  # survival from age 3 to 4
-  c(0,    0,    0,    0.85, 0)   # survival from age 4 to 5
-)
 ```
 
 ## Background
@@ -138,7 +131,9 @@ kern <- matrix(c(0, 0, 0, 0.3), nrow = 2)
 dispersal_simple <- dispersal(kernel = kern, proportion = TRUE)
 ```
 
-The `kernel` is a matrix with two rows and two columns, and the 0.3 in the bottom-right corner specifies the 30 % of surviving adults that move from one population to another. The argument `proportion` determines whether this 30 % of moving individuals is a proportion of all surviving adults or is an absolute value. Setting `proportion = TRUE` addresses the situation where the 30 % of moving adults are taken from the total pool of surviving adults, thereby reducing the within-population survival by 30 %. This setup is sufficient to specify a one-direction movement between populations; an additional `dispersal` term is required to specify the reverse transition. In `aae.pop`, these `dispersal` terms can be combined in a list, stored in column-major order following the metapopulation `structure`. This means that one `dispersal` object must be provided for each link in the `structure`, working through the columns from left-to-right (i.e., all links in column 1, all links in column 2, and so on). In this simplistic example, the same `dispersal` term can be used for both links:
+The `kernel` is a matrix with two rows and two columns, and the 0.3 in the bottom-right corner specifies the 30 % of surviving adults that move from one population to another. The argument `proportion` determines whether this 30 % of moving individuals is a proportion of all surviving adults or is an absolute value. Setting `proportion = TRUE` addresses the situation where the 30 % of moving adults are taken from the total pool of surviving adults, thereby reducing the within-population survival by 30 %.
+
+This setup is sufficient to specify a one-direction movement between populations; an additional `dispersal` term is required to specify the reverse transition. In `aae.pop`, these `dispersal` terms can be combined in a list, stored in column-major order following the metapopulation `structure`. This means that one `dispersal` object must be provided for each link in the `structure`, working through the columns from left-to-right (i.e., all links in column 1, all links in column 2, and so on). In this simplistic example, the same `dispersal` term can be used for both links:
 
 ```{r}
 dispersal_simple <- list(dispersal_simple, dispersal_simple)
@@ -172,10 +167,53 @@ With `metapopulation_simple` defined in this way, simulating population dynamics
 
 ```{r, dev = "png"}
 sims <- simulate(metapopulation_simple, nsim = 100)
-plot(subset(sims, 1:2), col = scales::alpha("#2171B5", 0.1))
-plot(subset(sims, 3:4), col = scales::alpha("#2171B5", 0.1))
+plot(subset(sims, 1:2), col = scales::alpha("#2171B5", 0.1), main = "Population 1")
+plot(subset(sims, 3:4), col = scales::alpha("#2171B5", 0.1), main = "Population 2")
 ```
 
+A more complicated metapopulation structure might consider the population introduced in the [Getting started](get_started.html) vignette, which had five age classes. Coupling this with the five-population `structure` shown above demonstrates a more realistic metapopulation. Note that specifying this metapopulation manually would require a matrix with 25 rows and 25 columns, with each dispersal and proportional change in survival calculated individually. Using `aae.pop` still takes a few lines of code but many of the calculations are now handled automatically:
+
+```{r, dev = "png"}
+# define population matrix
+popmat <- rbind(
+  c(0,    0,    2,    4,    7),  # reproduction from 3-5 year olds
+  c(0.25, 0,    0,    0,    0),  # survival from age 1 to 2
+  c(0,    0.45, 0,    0,    0),  # survival from age 2 to 3
+  c(0,    0,    0.70, 0,    0),  # survival from age 3 to 4
+  c(0,    0,    0,    0.85, 0)   # survival from age 4 to 5
+)
+
+# define metapopulation structure
+mp_str <- matrix(0, nrow = 5, ncol = 5)
+mp_str[1, 2] <- mp_str[3, 2] <- mp_str[5, 4] <- mp_str[4, 1] <- mp_str[3, 1] <- mp_str[2, 4] <- 1
+
+# define dispersal, assume all dispersal links are the same
+mp_kern <- matrix(0, nrow = 5, ncol = 5)
+mp_kern[3, 4] <- mp_kern[4, 5] <- 0.2  # adults can move once per year with 20 % probability
+mp_disp <- dispersal(kernel = mp_kern, proportion = TRUE)
+
+# define metapopulation
+mp <- metapopulation(
+  structure = mp_str,
+  dynamics = lapply(1:5, function(x) dynamics(popmat)),   # five populations, all identical rates
+  dispersal = lapply(1:6, function(x) mp_disp)  # six transitions in mp_str, all identical
+)
+
+# simulate
+sims <- simulate(mp, nsim = 100)
+
+# plot
+plot(sims, col = scales::alpha("#2171B5", 0.1), main = "All populations")
+```
+
+With five populations, each with five classes, the simulated values now have 25 total classes. These are stored in order of the five populations defined in the `dynamics` argument to `metapopulation`, so classes 1 to 5 are the first population, 6 to 10 are the second population, and so on. These can be extracted and plotted with the `subset` function:
+
+```{r, dev = "png"}
+plot(subset(sims, 1:5), col = scales::alpha("#2171B5", 0.1), main = "Population 1")
+plot(subset(sims, 21:25), col = scales::alpha("#2171B5", 0.1), main = "Population 5")
+```
+
+These plots illustrate the effects of metapopulation dynamics: population 1 loses more individuals than it gains and is in decline, whereas population 5 only gains individuals and is on an upward trajectory as a result.
 
 ## What happens to within-population processes?
 
@@ -187,12 +225,62 @@ A by-product of this setup is that processes (with the exception of dispersal) a
 
 ### A complication: covariates {#covarissues}
 
-Why is this messy? (taking advantage of matrix methods used for single pops)
+The `metapopulation` function is designed to make metapopulation dynamics as similar as possible to single-population dynamics, which takes full advantage of the methods in `simulate` for (relatively) fast and flexible models. One complication is that `simulate` does not explicitly allow separate covariate sequences for each population. This is a relatively common scenario given that metapopulations typically span multiple spatial locations, and this section illustrates a possible workaround. An additional example of this approach is included in the `metapopulation` documentation (accessible by typing `?metapopulation` into the R console). A more elegant solution is a focus for future development of `aae.pop`.
 
-What can we do? (example in docs)
+Using the simplified, two-population example above, this workaround involves combining two sequences of covariates into a single `matrix` (or `data.frame`), then subsetting this combined `matrix` within the `covariates` functions for each individual poplation.
+
+```{r, dev = "png"}
+# define two covariate sequences and combine them into a data.frame
+covar_seq1 <- runif(20, min = 0.5, max = 1.0)
+covar_seq2 <- runif(20, min = 0.75, max = 1.0)
+covar_seq <- data.frame(pop1 = covar_seq1, pop2 = covar_seq2)
+
+# define covariate responses for each population, pulling out
+#   the appropriate covariate sequence in each
+covar_fn1 <- function(mat, x) {
+  mat * x$pop1
+}
+covar_fn2 <- function(mat, x) {
+  mat * x$pop2
+}
+
+# define the covariates object for each population
+covar1 <- covariates(masks = transition(popmat_simple), funs = covar_fn1)
+covar2 <- covariates(masks = transition(popmat_simple), funs = covar_fn2)
+
+# create a population dynamics object for each population
+dynamics_simple1 <- dynamics(popmat_simple, covar1)
+dynamics_simple2 <- dynamics(popmat_simple, covar2)
+
+# turn this into a metapopulation
+metapopulation_simple <- metapopulation(
+  structure = structure_simple,
+  dynamics = list(dynamics_simple1, dynamics_simple2),
+  dispersal = dispersal_simple
+)
+
+# simulate
+sims <- simulate(
+  metapopulation_simple,
+  nsim = 100,
+  args = list(covariates = format_covariates(covar_seq))
+)
+
+# plot
+plot(sims, col = scales::alpha("#2171B5", 0.1), main = "With population-specific covariates")
+```
+
+This example uses a named `data.frame` to store the covariate sequences for both populations but this approach could use any number of covariates and any form of subsetting or indexing of covariates within the covariate functions.
 
 ## More on dispersal {#advanceddispersal}
 
-Definitions of stochasticity and density dependence for metapopulations.
+The `dispersal` function, used above to define class-specific movements between two populations, also allows density dependence and stochasticity in these movements. These two processes are useful to account for scenarios where individual decisions to move depend on the number of individuals in the source or receiving population, and when outcomes of movement decisions are stochastic due to, for example, mortality risk during movement. Specification of density dependence and stochasticity in dispersal uses the same `mask`/`function` approach demonstrated in the [Including processes](including_processes.html) vignette.
 
-Example.
+### Stochasticity
+
+Example to be added.
+
+### Density dependence
+
+Example to be added.
+(density: nsource is first arg, ndestination is second arg.)
