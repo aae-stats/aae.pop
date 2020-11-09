@@ -176,13 +176,17 @@ provided, it is recycled over all required populations</p></td>
       <td><p>object created with
 <code><a href='dispersal.html'>dispersal</a></code>. <code>dispersal</code> objects
 describe movements between populations and can include
-class-specific movements and density-dependent movements</p></td>
+class-specific movements and density-dependent movements.
+<code>dispersal</code> objects must be a list with one element for each
+link in <code>structure</code>. These links are interpreted in
+column-major order, so that <code>dispersal</code> objects
+must be ordered by links in column 1, then column 2, and so on</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The <code>metapopluation</code> function connects multiple
+    <p>The <code>metapopulation</code> function connects multiple
   populations through known dispersal probabilities, handling
   standardisations of dispersal probabilities (if required) and
   updating masks and functions for all processes defined within each

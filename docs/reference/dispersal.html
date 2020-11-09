@@ -166,11 +166,13 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>kernel</th>
-      <td><p>binary or logical matrix identifying transitions
-among classes when moving between two populations. Matrix
-structure is the same as population dynamics matrices used
-in <code><a href='dynamics.html'>dynamics</a></code>, so a <code>1</code> or <code>TRUE</code>
-in cell (a, b) denotes a transition from class b to class a</p></td>
+      <td><p>numeric matrix specifying the probability of
+specific classes moving between two populations. Matrices
+have the same columns-move-to-rows structure as in
+the population dynamics matrices described in
+<code><a href='dynamics.html'>dynamics</a></code>, so a non-zero value in cell (a, b)
+denotes a transition from class b in the source population
+to class a in the receiving population</p></td>
     </tr>
     <tr>
       <th>stochasticity_masks</th>
