@@ -8,11 +8,13 @@ NULL
 #'
 #' @export
 #'
-#' @param kernel binary or logical matrix identifying transitions
-#'   among classes when moving between two populations. Matrix
-#'   structure is the same as population dynamics matrices used
-#'   in \code{\link{dynamics}}, so a \code{1} or \code{TRUE}
-#'   in cell (a, b) denotes a transition from class b to class a
+#' @param kernel numeric matrix specifying the probability of
+#'   specific classes moving between two populations. Matrices
+#'   have the same columns-move-to-rows structure as in
+#'   the population dynamics matrices described in
+#'   \code{\link{dynamics}}, so a non-zero value in cell (a, b)
+#'   denotes a transition from class b in the source population
+#'   to class a in the receiving population
 #' @param stochasticity_masks a logical matrix or list of logical matrices
 #'   defining cells affected by \code{stochasticity_funs}.
 #'   See Details and \code{\link{masks}}

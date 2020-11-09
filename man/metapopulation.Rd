@@ -20,7 +20,11 @@ provided, it is recycled over all required populations}
 \item{dispersal}{object created with
 \code{\link{dispersal}}. \code{dispersal} objects
 describe movements between populations and can include
-class-specific movements and density-dependent movements}
+class-specific movements and density-dependent movements.
+\code{dispersal} objects must be a list with one element for each
+link in \code{structure}. These links are interpreted in
+column-major order, so that \code{dispersal} objects
+must be ordered by links in column 1, then column 2, and so on}
 }
 \description{
 Define population dynamics for multiple populations of
