@@ -255,7 +255,9 @@ template_silverperch <- function() {
 template_macquarieperch <- function(k = 1000) {
 
   # need some helper functions within template
-  # simulate a vector of perfectly correlated survival values with known mean and sd
+  #
+  # simulate a vector of perfectly correlated
+  #   survival values with known mean and sd
   survival_gen <- function(n, mean, sd, perfect_correlation = TRUE) {
 
     # how many parameters are we dealing with?
@@ -276,7 +278,8 @@ template_macquarieperch <- function(k = 1000) {
 
   }
 
-  # simulate a vector of perfectly correlated fecundity values with known mean and sd
+  # simulate a vector of perfectly correlated
+  #   fecundity values with known mean and sd
   fecundity <- function(age,
                         mean,
                         egg_survival,
@@ -327,7 +330,13 @@ template_macquarieperch <- function(k = 1000) {
     contributing <- runif(1, min = contributing_min, max = contributing_max)
 
     # now add in the remaining terms and return
-    fec * contributing * recruit_binary * egg_survival * larval_survival * yoy_survival * 0.5
+    fec *
+      contributing *
+      recruit_binary *
+      egg_survival *
+      larval_survival *
+      yoy_survival *
+      0.5
 
   }
 
@@ -437,7 +446,13 @@ template_macquarieperch <- function(k = 1000) {
   )
 
   # add density_dependence_n to deal with translocations
-  macperch_dens_depend_n <- function(pop, translocate = FALSE, n_translocate = NULL, add = TRUE, adults = 4:30) {
+  macperch_dens_depend_n <- function(
+    pop,
+    translocate = FALSE,
+    n_translocate = NULL,
+    add = TRUE,
+    adults = 4:30
+  ) {
 
     # only remove individuals if required
     if (translocate) {
@@ -544,9 +559,9 @@ template_macquarieperch <- function(k = 1000) {
     #   (days with more than 100% change from previous)
     mat <- mat * exp(-0.05 * x$spawning_variability)
 
-    # negative effect of lake level and increasing temperature on growth of YOY, plus a
+    # negative effect of lake level and increasing
+    #   temperature on growth of YOY, plus a
     #   negative effect of increasing (rising) dam height
-    #   - need to translate this to survival or more likely recruitment
     mat <- mat * (1 / (1 + exp(-0.5 * (x$water_level_change + 10))))
 
     # return

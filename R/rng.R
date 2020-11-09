@@ -36,14 +36,25 @@ NULL
 #'
 #' @details Function to simulate values on unit interval with fixed
 #'   mean, sd, and correlation
-rmultiunit <- function(n, mean, sd, Sigma = NULL, Omega = NULL, perfect_correlation = FALSE) {
+# nolint start
+rmultiunit <- function(
+  n,
+  mean,
+  sd,
+  Sigma = NULL,
+  Omega = NULL,
+  perfect_correlation = FALSE
+) {
+  # nolint end
 
   # how many parameters are we dealing with?
   npar <- length(mean)
 
   # convert covariance to correlation if provided
+  # nolint start
   if (!is.null(Sigma) & is.null(Omega))
     Omega <- cov2cor(Sigma)
+  # nolint end
 
   # calculate mean and sd on the real line
   real_params <- unit_to_real(unit_mean = mean,
@@ -53,6 +64,7 @@ rmultiunit <- function(n, mean, sd, Sigma = NULL, Omega = NULL, perfect_correlat
   if (!is.null(Omega)) {
 
     # estimate full covariance matrix on real line
+    # nolint start
     Sigma <- unit_to_real_covar(corr = Omega,
                                 unit_mean = mean,
                                 unit_sd = sd,
@@ -60,6 +72,7 @@ rmultiunit <- function(n, mean, sd, Sigma = NULL, Omega = NULL, perfect_correlat
 
     # take Cholesky decomposition to get a triangular matrix
     Sigma_chol <- t(chol(Sigma))
+    # nolint end
 
   }
 
@@ -73,7 +86,9 @@ rmultiunit <- function(n, mean, sd, Sigma = NULL, Omega = NULL, perfect_correlat
     if (perfect_correlation) {
       out <- t(pnorm(real_params[, 1] + real_params[, 2] %o% z_variates[1, ]))
     } else {
-      out <- t(pnorm(real_params[, 1] + sweep(z_variates, 1, real_params[, 2], "*")))
+      out <- t(pnorm(
+        real_params[, 1] + sweep(z_variates, 1, real_params[, 2], "*"))
+      )
     }
 
   } else {
@@ -133,7 +148,10 @@ rho_int <- function(x, mean_i, mean_j, sd_i, sd_j, rho, rho2) {
     pnorm(mean_i + sd_i * x[1, ]) *
       pnorm(mean_j + sd_j * x[2, ]) *
       (1 / (2 * pi * sqrt(1 - rho2))) *
-      exp(-(1 / (2 * (1 - rho2))) * (x[1, ] ^ 2 - 2 * rho * x[1, ] * x[2, ] + x[2, ] ^ 2)),
+      exp(
+        -(1 / (2 * (1 - rho2))) *
+          (x[1, ] ^ 2 - 2 * rho * x[1, ] * x[2, ] + x[2, ] ^ 2)
+      ),
     ncol = ncol(x)
   )
 }
@@ -157,13 +175,19 @@ f_x <- function(x, fn, arg) {
   )
 
   # return the calculated equation based on the expected correlation
-  int_value$integral - (arg["pi"] * arg["pj"] + arg["rij"] * arg["si"] * arg["sj"])
+  int_value$integral -
+    (arg["pi"] * arg["pj"] + arg["rij"] * arg["si"] * arg["sj"])
 
 }
 
 # wrap up the root finder into a tidier function
 root_finder <- function(arg, f, fn, interval = c(-0.05, 0.05), extend = "yes") {
-  uniroot(f = f, interval = interval, extendInt = extend, fn = fn, arg = arg)$root
+  uniroot(
+    f = f,
+    interval = interval,
+    extendInt = extend,
+    fn = fn,
+    arg = arg)$root
 }
 
 # function to calculate covariance on real line

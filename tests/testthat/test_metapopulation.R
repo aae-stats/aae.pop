@@ -23,7 +23,9 @@ dispersal_list <- list(dispersal_obj, dispersal_obj)
 
 # define dynamics objects for all populations
 dynamics_obj <- dynamics(mat)
-dynamics_list <- list(dynamics_obj, dynamics_obj, dynamics_obj, dynamics_obj, dynamics_obj)
+dynamics_list <- list(
+  dynamics_obj, dynamics_obj, dynamics_obj, dynamics_obj, dynamics_obj
+)
 
 test_that("metapopulation returns correct output matrix", {
 
@@ -66,7 +68,9 @@ test_that("metapopulation returns correct output matrix", {
   expect_equal(mat_remain, matrix(0, nrow = 25, ncol = 25))
 
   # repeat main check with 3-pop metapopulation
-  metapop_test <- metapopulation(structure_obj3, dynamics_list[1:3], dispersal_list)
+  metapop_test <- metapopulation(
+    structure_obj3, dynamics_list[1:3], dispersal_list
+  )
 
   # check that diagonal band is correct
   for (i in seq_len(metapop_test$npopulation)) {
@@ -115,7 +119,9 @@ test_that("metapopulation objects simulate correctly", {
 
   # simulate with aae.pop functions
   metapop_test <- metapopulation(structure_obj5, dynamics_list, dispersal_list)
-  value <- simulate(metapop_test, nsim = 10, init = init_set, options = list(ntime = 10))
+  value <- simulate(
+    metapop_test, nsim = 10, init = init_set, options = list(ntime = 10)
+  )
 
   # simulate manually but with metapopulation$matrix
   target <- array(NA, dim = c(10, 25, 11))
@@ -150,26 +156,43 @@ test_that("metapopulation objects simulate correctly", {
 
 })
 
-test_that("metapopulation errors informatively when structure or dispersal are inappropriate", {
+test_that("metapopulation errors informatively when
+           structure or dispersal are inappropriate", {
 
   # dispersal must have one element for each dispersal marked in structure
-  expect_error(metapopulation(structure_obj5, dynamics_list, dispersal_list[1:4]),
-               "dispersal must have one element for each")
+  expect_error(
+    metapopulation(
+      structure_obj5, dynamics_list, dispersal_list[1:4]
+    ),
+    "dispersal must have one element for each"
+  )
 
   # dispersal must have one element for each dispersal marked in structure
-  expect_error(metapopulation(structure_obj5, dynamics_list, dispersal_list[1]),
-               "dispersal must have one element for each")
+  expect_error(
+    metapopulation(structure_obj5, dynamics_list, dispersal_list[1]),
+    "dispersal must have one element for each"
+  )
 
   # dims of structure must match number of dynamics objects
-  expect_error(metapopulation(structure_obj3, dynamics_list[1:5], dispersal_list),
-               "dynamics must be a single dynamics object or a list of dynamics")
+  expect_error(
+    metapopulation(structure_obj3, dynamics_list[1:5], dispersal_list),
+    "dynamics must be a single dynamics object or a list of dynamics"
+  )
 
   # structure isn't a matrix
-  expect_error(metapopulation(list(structure_obj3), dynamics_list[1:3], dispersal_list),
-               "structure must be a matrix")
+  expect_error(
+    metapopulation(
+      list(structure_obj3), dynamics_list[1:3], dispersal_list
+    ),
+    "structure must be a matrix"
+  )
 
   # structure isn't a square matrix
-  expect_error(metapopulation(structure_obj3[1:2, ], dynamics_list[1:3], dispersal_list),
-               "structure must be a square matrix")
+  expect_error(
+    metapopulation(
+      structure_obj3[1:2, ], dynamics_list[1:3], dispersal_list
+    ),
+    "structure must be a square matrix"
+  )
 
 })

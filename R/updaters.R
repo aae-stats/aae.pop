@@ -41,7 +41,7 @@ update_crossprod <- function(pop, mat) {
 #   assuming a Leslie matrix.
 update_binomial_leslie <- function(pop, mat) {
 
-  if (!all(pop%%1 == 0)) {
+  if (!all((pop %% 1) == 0)) {
     stop("some abundances are not integers, so cannot be used ",
          "with update_binomial_leslie. Check options()$tidy_abundances ",
          "and update with an appropriate method (e.g. floor)",
@@ -79,7 +79,7 @@ update_binomial_leslie <- function(pop, mat) {
 #'   \code{update_binomial_leslie}).
 update_multinomial <- function(pop, mat) {
 
-  if (!all(pop%%1 == 0)) {
+  if (!all((pop %% 1) == 0)) {
     stop("some abundances are not integers, so cannot be used ",
          "with update_multinomial. Check options()$tidy_abundances ",
          "and update with an appropriate method (e.g. floor)",

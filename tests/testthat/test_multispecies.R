@@ -16,14 +16,22 @@ dyn_mc1 <- dynamics(mat)
 dyn_mc2 <- dynamics(mat)
 dyn_mc3 <- dynamics(mat)
 dyn_mc4 <- dynamics(mat)
-interactions_test1 <- pairwise_interaction(dyn_mc1, dyn_mc2, multispecies_mask, multispecies_fun)
-interactions_test2 <- pairwise_interaction(dyn_mc1, dyn_mc3, multispecies_mask, multispecies_fun)
-interactions_test3 <- pairwise_interaction(dyn_mc3, dyn_mc4, multispecies_mask, multispecies_fun)
+interactions_test1 <- pairwise_interaction(
+  dyn_mc1, dyn_mc2, multispecies_mask, multispecies_fun
+)
+interactions_test2 <- pairwise_interaction(
+  dyn_mc1, dyn_mc3, multispecies_mask, multispecies_fun
+)
+interactions_test3 <- pairwise_interaction(
+  dyn_mc3, dyn_mc4, multispecies_mask, multispecies_fun
+)
 
 test_that("multispecies object has correct dynamics elements", {
 
   # create multispecies object
-  mspecies_obj <- multispecies(interactions_test1, interactions_test2, interactions_test3)
+  mspecies_obj <- multispecies(
+    interactions_test1, interactions_test2, interactions_test3
+  )
 
   # check dynamics one by one (should have 1-4, not necessarily in that order)
   #  match based on hex
@@ -37,7 +45,9 @@ test_that("multispecies objects simulate correctly", {
   # not a full test because test_simulate.R covers identical use of simulate
 
   # create multispecies object
-  mspecies_obj <- multispecies(interactions_test1, interactions_test2, interactions_test3)
+  mspecies_obj <- multispecies(
+    interactions_test1, interactions_test2, interactions_test3
+  )
 
   # how many replicates are we simulating?
   nsim <- 10
@@ -67,7 +77,9 @@ test_that("multispecies objects simulate correctly", {
   for (i in seq_along(target)) {
     target[[i]][, , 1] <- init[, , i]
   }
-  interaction_pairs <- apply(mspecies_obj$structure, 1, function(x) which(x == 1))
+  interaction_pairs <- apply(
+    mspecies_obj$structure, 1, function(x) which(x == 1)
+  )
   for (i in seq_len(dim(value[[1]])[3] - 1)) {
     for (k in seq_len(nsim)) {
       for (j in seq_along(all_dyn)) {
@@ -78,8 +90,14 @@ test_that("multispecies objects simulate correctly", {
         # add in pairwise interactions
         if (length(interaction_pairs[[j]]) > 0) {
           x <- mat[survival(mat)]
-          for (.i in seq_along(interaction_pairs[[j]]))
-            x <- x / (1 + x * sum(target[[interaction_pairs[[j]][.i]]][k, , i]) / 2000)
+          for (.i in seq_along(interaction_pairs[[j]])) {
+            x <- x /
+              (1 +
+                 x *
+                 sum(target[[interaction_pairs[[j]][.i]]][k, , i]) /
+                 2000
+              )
+          }
           mat[survival(mat)] <- x
         }
 

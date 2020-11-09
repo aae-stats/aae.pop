@@ -16,7 +16,9 @@ test_that("rng functions work as expected", {
   expect_true(all(abs(sd_test - sd_vals) < 1e-2))
 
   # test with perfect correlations
-  value <- rmultiunit(n = 10000, mean = mean_vals, sd = sd_vals, perfect_correlation = TRUE)
+  value <- rmultiunit(
+    n = 10000, mean = mean_vals, sd = sd_vals, perfect_correlation = TRUE
+  )
   mean_test <- apply(value, 2, mean)
   sd_test <- apply(value, 2, sd)
   expect_true(all(abs(mean_test - mean_vals) < 1e-2))
@@ -44,7 +46,13 @@ test_that("rng functions work as expected", {
   expect_true(all(abs(cor(value) - omega) < 1e-2))
 
   # test behaviour if conflicting arguments provided
-  value <- rmultiunit(n = 100000, mean = mean_vals, sd = sd_vals, Omega = omega, perfect_correlation = TRUE)
+  value <- rmultiunit(
+    n = 100000,
+    mean = mean_vals,
+    sd = sd_vals,
+    Omega = omega,
+    perfect_correlation = TRUE
+  )
   mean_test <- apply(value, 2, mean)
   sd_test <- apply(value, 2, sd)
   expect_true(all(abs(mean_test - mean_vals) < 1e-2))
@@ -56,7 +64,11 @@ test_that("rng functions work as expected", {
                  "is not a multiple")
   expect_warning(rmultiunit(10, mean = c(0.5, 0.5), sd = c(0.2, 0.2, 0.2)),
                  "is not a multiple")
-  expect_error(rmultiunit(n = 10, mean = rep(0.5, 3), sd = rep(0.2, 3), Sigma = sigma),
-               "subscript out of bounds")
+  expect_error(
+    rmultiunit(
+      n = 10, mean = rep(0.5, 3), sd = rep(0.2, 3), Sigma = sigma
+    ),
+    "subscript out of bounds"
+  )
 
 })

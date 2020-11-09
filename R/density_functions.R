@@ -47,4 +47,3 @@ ricker <- function(k, exclude = NULL) {
   }
 
 }
-

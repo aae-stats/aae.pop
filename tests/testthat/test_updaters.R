@@ -109,5 +109,3 @@ test_that("updaters error informatively", {
   )
 
 })
-
-

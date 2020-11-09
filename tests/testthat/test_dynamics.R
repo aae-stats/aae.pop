@@ -41,7 +41,8 @@ rescale_mask <- all_classes(mat)
 rescale_fn <- function(x) 200 * (x / sum(x))
 resc <- density_dependence_n(rescale_mask, rescale_fn)
 
-test_that("dynamics object returns correct processes for different combinations of processes", {
+test_that("dynamics object returns correct processes
+           for different combinations of processes", {
 
   # test basic dynamics object with no additional processes
   dyn_obj <- dynamics(mat)
@@ -142,7 +143,10 @@ test_that("dynamics objects can be updated", {
   new_mat[survival(new_mat)] <- plogis(10) * new_mat[survival(new_mat)]
   expect_equal(dyn_new$covariates(dyn_new$matrix, 10), new_mat)
   new_fn <- function(mat, x) mat + x
-  dyn_new <- update(dyn_new, covariates(masks = survival(dyn_new$matrix), funs = new_fn))
+  dyn_new <- update(
+    dyn_new,
+    covariates(masks = survival(dyn_new$matrix), funs = new_fn)
+  )
   new_mat <- dyn_new$matrix
   new_mat[survival(new_mat)] <- 0.01 + new_mat[survival(new_mat)]
   expect_equal(dyn_new$covariates(dyn_new$matrix, 0.01), new_mat)
@@ -174,7 +178,8 @@ test_that("dynamics object errors informatively with unsuitable processes", {
   # multiples of the same two processes
   expect_error(
     dynamics(mat, dd, dd, demostoch, demostoch),
-    "Multiple objects provided for the following processes: demographic_stochasticity, and density_dependence"
+    paste0("Multiple objects provided for the following processes:",
+           " demographic_stochasticity, and density_dependence")
   )
 
 })

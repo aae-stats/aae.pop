@@ -83,9 +83,18 @@ NULL
 #' new_fn3 <- function(mat, x) {
 #'   mat * (1 / (1 + exp(-0.5 * (x[3] + 10))))
 #' }
-#' dyn1 <- update(dyn1, covariates(masks = transition(dyn1$matrix), funs = new_fn1))
-#' dyn2 <- update(dyn2, covariates(masks = transition(dyn2$matrix), funs = new_fn2))
-#' dyn3 <- update(dyn3, covariates(masks = transition(dyn3$matrix), funs = new_fn3))
+#' dyn1 <- update(
+#'   dyn1,
+#'   covariates(masks = transition(dyn1$matrix), funs = new_fn1)
+#' )
+#' dyn2 <- update(
+#'   dyn2,
+#'   covariates(masks = transition(dyn2$matrix), funs = new_fn2)
+#' )
+#' dyn3 <- update(
+#'   dyn3,
+#'   covariates(masks = transition(dyn3$matrix), funs = new_fn3)
+#' )
 #'
 #' # (re)create metapopulation object
 #' mc_meta <- metapopulation(mc_structure, list(dyn1, dyn2, dyn3), mc_dispersal)
@@ -283,8 +292,12 @@ check_structure <- function(x) {
     x <- x > 0
 
   # is structure now logical?
-  if (!all(x %in% c(TRUE, FALSE)))
-      stop("structure must be binary (0/1) or logical (TRUE/FALSE)", call. = FALSE)
+  if (!all(x %in% c(TRUE, FALSE))) {
+    stop(
+      "structure must be binary (0/1) or logical (TRUE/FALSE)",
+      call. = FALSE
+    )
+  }
 
   # remove diag if included
   if (any(diag(x)))
@@ -306,12 +319,21 @@ check_structure <- function(x) {
 # internal function: check dispersal object
 check_dispersal <- function(x, n) {
 
-  if (missing(x))
-    stop("dispersal must be provided to define a metapopulation", call. = FALSE)
+  if (missing(x)) {
+    stop(
+      "dispersal must be provided to define a metapopulation",
+      call. = FALSE
+    )
+  }
 
   # check dispersal is OK
-  if (length(x) != n)
-    stop("dispersal must have one element for each non-zero element of structure", call. = FALSE)
+  if (length(x) != n) {
+    stop(
+      "dispersal must have one element for each non-zero",
+      " element of structure",
+      call. = FALSE
+    )
+  }
 
   # and convert dispersal to list if needed
   if (n == 1 & class(x)[1] == "dispersal")
@@ -328,8 +350,12 @@ check_dynamics <- function(dyn_list) {
 
   # do all elements have the same number of classes?
   classes <- sapply(dyn_list, function(x) x$nclass)
-  if (length(unique(classes)) != 1)
-    stop("all populations in dynamics must have the same number of classes", call. = FALSE)
+  if (length(unique(classes)) != 1) {
+    stop(
+      "all populations in dynamics must have the same number of classes",
+      call. = FALSE
+    )
+  }
 
   # check covariates
   covars <- check_processes(dyn_list, type = "covariates")
@@ -402,11 +428,17 @@ add_dispersal <- function(mat,
     # loop if we have a list of matrices (i.e. if covariates are included)
     if (is.list(mat)) {
 
-      # work out which cells we need to update (all matrices should have identical dims)
+      # work out which cells we need to update
+      #   (all matrices should have identical dims)
       idx <- metapop_idx(mat[[1]], nclass, from = str_cols[i], to = str_rows[i])
 
       # and add in dispersal bits
-      mat <- lapply(mat, do_mask, mask = idx, fun = function(x) dispersal[[i]]$kernel)
+      mat <- lapply(
+        mat,
+        do_mask,
+        mask = idx,
+        fun = function(x) dispersal[[i]]$kernel
+      )
 
     } else {
 
@@ -439,7 +471,9 @@ add_dispersal <- function(mat,
 
       survival_issue <- lapply(
         seq_along(mat),
-        function(j) check_survival(mat[[j]], nclass, str_cols[i], idx, timestep = j)
+        function(j) check_survival(
+          mat[[j]], nclass, str_cols[i], idx, timestep = j
+        )
       )
       issue <- sapply(survival_issue, function(x) x$issue)
       classes <- unlist(lapply(survival_issue, function(x) x$classes))
@@ -576,7 +610,11 @@ is.metapopulation <- function(x) {
 # nolint start
 print.metapopulation <- function(x, ...) {
   # nolint end
-  cat(paste0("Metapopulation dynamics object with ", x$npopulation, " populations\n"))
+  cat(paste0(
+    "Metapopulation dynamics object with ",
+    x$npopulation,
+    " populations\n"
+  ))
 }
 
 # internal function: set metapopulation class
