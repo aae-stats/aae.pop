@@ -46,7 +46,8 @@ dispersal <- function(kernel,
                       proportion = FALSE) {
 
   # check kernel
-  kernel <- check_structure(kernel)
+  if (nrow(kernel) != ncol(kernel))
+    stop("kernel must be a square matrix", call. = FALSE)
 
   # define functions to calculate stochasticity for each element
   stoch_fn <- NULL
@@ -91,42 +92,6 @@ dispersal <- function(kernel,
 
   # and return as dispersal object
   as_dispersal(dispersal)
-
-}
-
-# internal function: check the structure matrix is OK
-check_structure <- function(x) {
-
-  # is structure actually a matrix?
-  if (!is.matrix(x))
-    stop("structure must be a matrix", call. = FALSE)
-
-  # structure must be a square matrix
-  if (nrow(x) != ncol(x))
-    stop("structure must be a square matrix", call. = FALSE)
-
-  # convert binary matrix to logical
-  if (all(x %in% c(0, 1)))
-    x <- x > 0
-
-  # is structure now logical?
-  if (!all(x %in% c(TRUE, FALSE)))
-    stop("structure must be binary (0/1) or logical (TRUE/FALSE)", call. = FALSE)
-
-  # remove diag if included
-  if (any(diag(x)))
-    diag(x) <- FALSE
-
-  # how many populations are included?
-  npop <- nrow(x)
-
-  # how many dispersal elements exist?
-  ndispersal <- sum(x[upper.tri(x)]) + sum(x[lower.tri(x)])
-
-  # return list of key information
-  list(npop = npop,
-       ndispersal = ndispersal,
-       structure = x)
 
 }
 
