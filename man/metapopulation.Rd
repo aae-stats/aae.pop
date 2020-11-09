@@ -4,9 +4,14 @@
 \alias{metapopulation}
 \title{Create a metapopulation dynamics object}
 \usage{
-metapopulation(dynamics, dispersal)
+metapopulation(structure, dynamics, dispersal)
 }
 \arguments{
+\item{structure}{binary or logical matrix denoting dispersal
+links between populations. Columns move to rows, so a \code{1} or
+\code{TRUE} in cell (a, b) denotes movement from population b
+to population a}
+
 \item{dynamics}{a \code{\link{dynamics}} object or list of dynamics objects
 with one element for each population (each column/row of
 \code{structure}). If a single dynamics object is
@@ -59,7 +64,7 @@ mc_dispersal2 <- dispersal(dispersal_matrix, proportion = FALSE)
 mc_dispersal <- list(mc_dispersal1, mc_dispersal2)
 
 # create metapopulation object
-mc_meta <- metapopulation(list(dyn1, dyn2, dyn3), mc_dispersal)
+mc_meta <- metapopulation(mc_structure, list(dyn1, dyn2, dyn3), mc_dispersal)
 
 # simulate without covariates
 sims <- simulate(mc_meta, nsim = 2)
@@ -85,7 +90,7 @@ dyn2 <- update(dyn2, covariates(masks = transition(dyn2$matrix), funs = new_fn2)
 dyn3 <- update(dyn3, covariates(masks = transition(dyn3$matrix), funs = new_fn3))
 
 # (re)create metapopulation object
-mc_meta <- metapopulation(list(dyn1, dyn2, dyn3), mc_dispersal)
+mc_meta <- metapopulation(mc_structure, list(dyn1, dyn2, dyn3), mc_dispersal)
 
 # and simulate with one column of predictors for each population
 xsim <- matrix(rnorm(60), ncol = 3)

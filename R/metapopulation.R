@@ -21,7 +21,7 @@ NULL
 #'   describe movements between populations and can include
 #'   class-specific movements and density-dependent movements
 #'
-#' @details The \code{metapopluation} function connects multiple
+#' @details The \code{metapopulation} function connects multiple
 #'   populations through known dispersal probabilities, handling
 #'   standardisations of dispersal probabilities (if required) and
 #'   updating masks and functions for all processes defined within each
