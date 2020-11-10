@@ -78,23 +78,22 @@ dispersal <- function(kernel,
   dens_fn <- NULL
   if (!is.null(density_masks)) {
     if (is.list(density_masks)) {
-      dens_fn <- function(x, nsource, ndestination, ...) {
+      dens_fn <- function(x, n, ...) {
         for (i in seq_along(density_masks)) {
           x <- do_mask(
             x,
             density_masks[[i]],
             density_funs[[i]],
-            nsource,
-            ndestination,
+            n,
             ...
           )
         }
         x
       }
     } else {
-      dens_fn <- function(x, nsource, ndestination, ...) {
+      dens_fn <- function(x, n, ...) {
         do_mask(
-          x, density_masks, density_funs, nsource, ndestination, ...
+          x, density_masks, density_funs, n, ...
         )
       }
     }
