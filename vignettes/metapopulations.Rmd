@@ -1,7 +1,7 @@
 ---
 title: "Working with metapopulations"
 author: "Jian Yen"
-date: "9/11/2020"
+date: "10/11/2020"
 output: html_document
 ---
 
@@ -267,7 +267,7 @@ sims <- simulate(
 )
 
 # plot
-plot(sims, col = scales::alpha("#2171B5", 0.1), main = "With population-specific covariates")
+plot(sims, col = scales::alpha("#2171B5", 0.1), main = "Population-specific covariates")
 ```
 
 This example uses a named `data.frame` to store the covariate sequences for both populations but this approach could use any number of covariates and any form of subsetting or indexing of covariates within the covariate functions.
@@ -278,9 +278,95 @@ The `dispersal` function, used above to define class-specific movements between 
 
 ### Stochasticity
 
-Example to be added.
+It is highly likely that dispersal outcomes are stochastic due to unpredictable movements by individuals and increased mortality during and following dispersal. Stochasticity is supported in the definition of `dispersal` objects with a `mask`/`function` pair that identifies the relevant classes and form of stochasticity. Extending the simplified example from above, this might look like:
+
+```{r, dev = "png"}
+# define a mask that is TRUE whenever the dispersal kernel is non-zero
+stoch_mask <- kern > 0
+
+# define a stochastic dispersal function (small change in probability)
+stoch_fun <- function(x) {
+  rmultiunit(length(x), mean = x, sd = 0.05)
+}
+
+# using the kernel defined earlier (30 % probability of adults moving)
+dispersal_simple <- dispersal(
+  kernel = kern,
+  stochasticity_masks = stoch_mask,
+  stochasticity_funs = stoch_fun,
+  proportion = TRUE
+)
+
+# dispersal is one-directional, so need one dispersal object for each population
+dispersal_simple <- list(dispersal_simple, dispersal_simple)
+
+# define metapopulation using the dynamics and structure objects defined above
+metapopulation_simple <- metapopulation(
+  structure = structure_simple,
+  dynamics = list(dynamics_simple, dynamics_simple),
+  dispersal = dispersal_simple
+)
+
+# simulate
+sims <- simulate(metapopulation_simple, nsim = 100)
+
+# plot
+plot(sims, col = scales::alpha("#2171B5", 0.1), main = "Stochastic dispersal")
+```
 
 ### Density dependence
 
-Example to be added.
-(density: nsource is first arg, ndestination is second arg.)
+Density dependence might influence dispersal through individual decisions to move or remain based on the number of individuals in the current (source) or future (destination) population. More broadly, the abundances of source or destination populations might influence survival outcomes following dispersal due to levels of competition or other density-dependent stressors (e.g., disease). These types of processes can be included in a metapopulation model through the `density_masks` and `density_funs` arguments to `dispersal`.
+
+The current implementation of density-dependent dispersal is linked the entire metapopulation vector, so can depend on the abundances of any or all of the sub-populations. The downside of this approach is that indexing of this vector has to be done manually in the definition of `density_funs`. This indexing depends on the order of populations within the metapopulation (as defined by the `dynamics` argument to `metapopulation`), recalling that each population has one element for each class. An example might illustrate the inclusion of density-dependent dispersal most clearly:
+
+```{r, dev = "png"}
+# define a mask that is TRUE whenever the dispersal kernel is non-zero
+#   (this is the same as for stochasticity and this mask 
+#    could be used for both)
+dd_mask <- kern > 0
+
+# define Ricker type density dependence based on the abundance in the
+#    destination population (recall n is a vector of two classes per
+#    population, so elements 1 and 2 are population 1 and elements
+#    3 and 4 are population 2)
+dd_fun1 <- function(x, n) {
+  # dispersing from population 1 to 2
+  x * exp(1 - sum(n[3:4]) / 20) / exp(1) 
+}
+dd_fun2 <- function(x, n) {
+  # dispersing from population 2 to 1
+  x * exp(1 - sum(n[1:2]) / 20) / exp(1)
+}
+
+# using the kernel defined earlier (30 % of surviving adults moving),
+#    add density masks and functions for each population
+dispersal_simple1 <- dispersal(
+  kernel = kern,
+  density_masks = dd_mask,
+  density_funs = dd_fun1,
+  proportion = TRUE
+)
+dispersal_simple2 <- dispersal(
+  kernel = kern,
+  density_masks = dd_mask,
+  density_funs = dd_fun2,
+  proportion = TRUE
+)
+
+# combine the dispersal objects for both populations
+dispersal_simple <- list(dispersal_simple1, dispersal_simple2)
+
+# define metapopulation using the dynamics and structure objects defined above
+metapopulation_simple <- metapopulation(
+  structure = structure_simple,
+  dynamics = list(dynamics_simple, dynamics_simple),
+  dispersal = dispersal_simple
+)
+
+# simulate
+sims <- simulate(metapopulation_simple, nsim = 100)
+
+# plot
+plot(sims, col = scales::alpha("#2171B5", 0.1), main = "Density-dependent dispersal")
+```

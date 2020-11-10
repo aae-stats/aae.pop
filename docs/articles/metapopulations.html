@@ -103,7 +103,7 @@
       <h1 data-toc-skip>Working with metapopulations</h1>
                         <h4 class="author">Jian Yen</h4>
             
-            <h4 class="date">9/11/2020</h4>
+            <h4 class="date">10/11/2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/master/vignettes/metapopulations.Rmd"><code>vignettes/metapopulations.Rmd</code></a></small>
       <div class="hidden name"><code>metapopulations.Rmd</code></div>
@@ -337,7 +337,7 @@
 <span class="op">)</span>
 
 <span class="co"># plot</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"With population-specific covariates"</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"Population-specific covariates"</span><span class="op">)</span></pre></div>
 <p><img src="metapopulations_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <p>This example uses a named <code>data.frame</code> to store the covariate sequences for both populations but this approach could use any number of covariates and any form of subsetting or indexing of covariates within the covariate functions.</p>
 </div>
@@ -349,12 +349,96 @@
 <div id="stochasticity" class="section level3">
 <h3 class="hasAnchor">
 <a href="#stochasticity" class="anchor"></a>Stochasticity</h3>
-<p>Example to be added.</p>
+<p>It is highly likely that dispersal outcomes are stochastic due to unpredictable movements by individuals and increased mortality during and following dispersal. Stochasticity is supported in the definition of <code>dispersal</code> objects with a <code>mask</code>/<code>function</code> pair that identifies the relevant classes and form of stochasticity. Extending the simplified example from above, this might look like:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit">
+<span class="co"># define a mask that is TRUE whenever the dispersal kernel is non-zero</span>
+<span class="va">stoch_mask</span> <span class="op">&lt;-</span> <span class="va">kern</span> <span class="op">&gt;</span> <span class="fl">0</span>
+
+<span class="co"># define a stochastic dispersal function (small change in probability)</span>
+<span class="va">stoch_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="../reference/rng.html">rmultiunit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, mean <span class="op">=</span> <span class="va">x</span>, sd <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co"># using the kernel defined earlier (30 % probability of adults moving)</span>
+<span class="va">dispersal_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dispersal.html">dispersal</a></span><span class="op">(</span>
+  kernel <span class="op">=</span> <span class="va">kern</span>,
+  stochasticity_masks <span class="op">=</span> <span class="va">stoch_mask</span>,
+  stochasticity_funs <span class="op">=</span> <span class="va">stoch_fun</span>,
+  proportion <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span>
+
+<span class="co"># dispersal is one-directional, so need one dispersal object for each population</span>
+<span class="va">dispersal_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">dispersal_simple</span>, <span class="va">dispersal_simple</span><span class="op">)</span>
+
+<span class="co"># define metapopulation using the dynamics and structure objects defined above</span>
+<span class="va">metapopulation_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metapopulation.html">metapopulation</a></span><span class="op">(</span>
+  structure <span class="op">=</span> <span class="va">structure_simple</span>,
+  dynamics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">dynamics_simple</span>, <span class="va">dynamics_simple</span><span class="op">)</span>,
+  dispersal <span class="op">=</span> <span class="va">dispersal_simple</span>
+<span class="op">)</span>
+
+<span class="co"># simulate</span>
+<span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">metapopulation_simple</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+
+<span class="co"># plot</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"Stochastic dispersal"</span><span class="op">)</span></pre></div>
+<p><img src="metapopulations_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 </div>
 <div id="density-dependence" class="section level3">
 <h3 class="hasAnchor">
 <a href="#density-dependence" class="anchor"></a>Density dependence</h3>
-<p>Example to be added. (density: nsource is first arg, ndestination is second arg.)</p>
+<p>Density dependence might influence dispersal through individual decisions to move or remain based on the number of individuals in the current (source) or future (destination) population. More broadly, the abundances of source or destination populations might influence survival outcomes following dispersal due to levels of competition or other density-dependent stressors (e.g., disease). These types of processes can be included in a metapopulation model through the <code>density_masks</code> and <code>density_funs</code> arguments to <code>dispersal</code>.</p>
+<p>The current implementation of density-dependent dispersal is linked the entire metapopulation vector, so can depend on the abundances of any or all of the sub-populations. The downside of this approach is that indexing of this vector has to be done manually in the definition of <code>density_funs</code>. This indexing depends on the order of populations within the metapopulation (as defined by the <code>dynamics</code> argument to <code>metapopulation</code>), recalling that each population has one element for each class. An example might illustrate the inclusion of density-dependent dispersal most clearly:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit">
+<span class="co"># define a mask that is TRUE whenever the dispersal kernel is non-zero</span>
+<span class="co">#   (this is the same as for stochasticity and this mask </span>
+<span class="co">#    could be used for both)</span>
+<span class="va">dd_mask</span> <span class="op">&lt;-</span> <span class="va">kern</span> <span class="op">&gt;</span> <span class="fl">0</span>
+
+<span class="co"># define Ricker type density dependence based on the abundance in the</span>
+<span class="co">#    destination population (recall n is a vector of two classes per</span>
+<span class="co">#    population, so elements 1 and 2 are population 1 and elements</span>
+<span class="co">#    3 and 4 are population 2)</span>
+<span class="va">dd_fun1</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">n</span><span class="op">)</span> <span class="op">{</span>
+  <span class="co"># dispersing from population 1 to 2</span>
+  <span class="va">x</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">20</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> 
+<span class="op">}</span>
+<span class="va">dd_fun2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">n</span><span class="op">)</span> <span class="op">{</span>
+  <span class="co"># dispersing from population 2 to 1</span>
+  <span class="va">x</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">20</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co"># using the kernel defined earlier (30 % of surviving adults moving),</span>
+<span class="co">#    add density masks and functions for each population</span>
+<span class="va">dispersal_simple1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dispersal.html">dispersal</a></span><span class="op">(</span>
+  kernel <span class="op">=</span> <span class="va">kern</span>,
+  density_masks <span class="op">=</span> <span class="va">dd_mask</span>,
+  density_funs <span class="op">=</span> <span class="va">dd_fun1</span>,
+  proportion <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span>
+<span class="va">dispersal_simple2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dispersal.html">dispersal</a></span><span class="op">(</span>
+  kernel <span class="op">=</span> <span class="va">kern</span>,
+  density_masks <span class="op">=</span> <span class="va">dd_mask</span>,
+  density_funs <span class="op">=</span> <span class="va">dd_fun2</span>,
+  proportion <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span>
+
+<span class="co"># combine the dispersal objects for both populations</span>
+<span class="va">dispersal_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">dispersal_simple1</span>, <span class="va">dispersal_simple2</span><span class="op">)</span>
+
+<span class="co"># define metapopulation using the dynamics and structure objects defined above</span>
+<span class="va">metapopulation_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metapopulation.html">metapopulation</a></span><span class="op">(</span>
+  structure <span class="op">=</span> <span class="va">structure_simple</span>,
+  dynamics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">dynamics_simple</span>, <span class="va">dynamics_simple</span><span class="op">)</span>,
+  dispersal <span class="op">=</span> <span class="va">dispersal_simple</span>
+<span class="op">)</span>
+
+<span class="co"># simulate</span>
+<span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">metapopulation_simple</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+
+<span class="co"># plot</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"Density-dependent dispersal"</span><span class="op">)</span></pre></div>
+<p><img src="metapopulations_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 </div>
 </div>
   </div>
