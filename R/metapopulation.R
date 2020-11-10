@@ -133,7 +133,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
   str_rows <- row(structure$structure)[structure$structure]
   str_cols <- col(structure$structure)[structure$structure]
   metapop_matrix <- add_dispersal(
-    metapop_matrix, str_rows, str_cols, dispersal, dyn_check$nclass
+    metapop_matrix, str_rows, str_cols, dispersal$dispersal, dyn_check$nclass
   )
 
   # define masks for each population
@@ -178,7 +178,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
   # add in environmental stochasticity if included in any populations
   envstoch <- NULL
-  if (any(dyn_check$envstoch)) {
+  if (any(dyn_check$envstoch) | any(dispersal$stochasticity)) {
 
     # pull out functions for all populations
     env_funs <- lapply(dynamics, function(x) x$environmental_stochasticity)
@@ -188,7 +188,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
     env_funs <- env_funs[dyn_check$envstoch]
 
     # add in stochasticity for dispersal terms (if included)
-    dispersal_stoch <- lapply(dispersal, function(x) x$stochasticity)
+    dispersal_stoch <- lapply(dispersal$dispersal, function(x) x$stochasticity)
 
     # add non-NULL elements to masks and funs
     missing <- sapply(dispersal_stoch, is.null)
@@ -218,7 +218,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
   # expand density dependence if included
   dens_depend <- NULL
-  if (any(dyn_check$dens_depend)) {
+  if (any(dyn_check$dens_depend) | any(dispersal$density)) {
 
     # pull out functions for all populations
     dens_funs <- lapply(dynamics, function(x) x$density_dependence)
@@ -228,7 +228,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
     dens_funs <- dens_funs[dyn_check$dens_depend]
 
     # add in stochasticity for dispersal terms (if included)
-    dispersal_dens <- lapply(dispersal, function(x) x$density)
+    dispersal_dens <- lapply(dispersal$dispersal, function(x) x$density)
 
     # add non-NULL elements to masks and funs
     missing <- sapply(dispersal_dens, is.null)
@@ -339,8 +339,13 @@ check_dispersal <- function(x, n) {
   if (n == 1 & class(x)[1] == "dispersal")
     x <- list(x)
 
+  stochasticity <- check_processes(x, type = "stochasticity")
+  density <- check_processes(x, type = "density")
+
   # return checked and formatted output
-  x
+  list(
+    dispersal = x, stochasticity = stochasticity, density = density
+  )
 
 }
 

@@ -49,18 +49,26 @@ dispersal <- function(kernel,
   if (nrow(kernel) != ncol(kernel))
     stop("kernel must be a square matrix", call. = FALSE)
 
+  # force evaluation to avoid NULL functions down the line
+  force(stochasticity_masks)
+  force(stochasticity_funs)
+  force(density_masks)
+  force(density_funs)
+
   # define functions to calculate stochasticity for each element
   stoch_fn <- NULL
   if (!is.null(stochasticity_masks)) {
     if (is.list(stochasticity_masks)) {
-      stoch_fn <- function(x) {
+      stoch_fn <- function(x, ...) {
         for (i in seq_along(stochasticity_masks))
-          x <- do_mask(x, stochasticity_masks[[i]], stochasticity_funs[[i]])
+          x <- do_mask(
+            x, stochasticity_masks[[i]], stochasticity_funs[[i]], ...
+          )
         x
       }
     } else {
-      stoch_fn <- function(x) {
-        do_mask(x, stochasticity_masks, stochasticity_funs)
+      stoch_fn <- function(x, ...) {
+        do_mask(x, stochasticity_masks, stochasticity_funs, ...)
       }
     }
   }
@@ -70,17 +78,24 @@ dispersal <- function(kernel,
   dens_fn <- NULL
   if (!is.null(density_masks)) {
     if (is.list(density_masks)) {
-      dens_fn <- function(x, nsource, ndestination) {
+      dens_fn <- function(x, nsource, ndestination, ...) {
         for (i in seq_along(density_masks)) {
           x <- do_mask(
-            x, density_masks[[i]], density_funs[[i]], nsource, ndestination
+            x,
+            density_masks[[i]],
+            density_funs[[i]],
+            nsource,
+            ndestination,
+            ...
           )
         }
         x
       }
     } else {
-      dens_fn <- function(x, nsource, ndestination) {
-        do_mask(x, density_masks, density_funs, nsource, ndestination)
+      dens_fn <- function(x, nsource, ndestination, ...) {
+        do_mask(
+          x, density_masks, density_funs, nsource, ndestination, ...
+        )
       }
     }
   }
