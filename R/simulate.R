@@ -341,7 +341,8 @@ simulate.dynamics <- function(object,
       if (length(dim(init)) == 3) {
         init <- lapply(seq_len(dim(init)[3]), function(i) init[, , i])
       } else { # assume all species shared initial conditions
-        init <- lapply(seq_len(dim(init)[3]), function(i) init)
+               #   (possibly NULL)
+        init <- lapply(seq_len(object$nspecies), function(i) init)
       }
 
     }
