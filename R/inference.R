@@ -93,7 +93,8 @@ get_parameters <- function(dynamics, args = list()) {
 #' @param distribution xff
 #' @param \dots additional arguments passed to \code{distribution}
 #'
-#' @details PROBABLY BETTER TO DEFINE UPDATEABLE DEFAULTS FROM A DYNAMICS OBJECT?
+#' @details PROBABLY BETTER TO DEFINE UPDATEABLE DEFAULTS
+#'   FROM A DYNAMICS OBJECT?
 #'
 #' @examples
 #' # add

@@ -149,7 +149,7 @@ rho_int <- function(x, mean_i, mean_j, sd_i, sd_j, rho, rho2) {
       pnorm(mean_j + sd_j * x[2, ]) *
       (1 / (2 * pi * sqrt(1 - rho2))) *
       exp(
-        -(1 / (2 * (1 - rho2))) *
+        - (1 / (2 * (1 - rho2))) *
           (x[1, ] ^ 2 - 2 * rho * x[1, ] * x[2, ] + x[2, ] ^ 2)
       ),
     ncol = ncol(x)
