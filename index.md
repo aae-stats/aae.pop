@@ -1,13 +1,16 @@
 ## aae.pop: population dynamics models in R
 
-aae.pop is a plug-and-play tool to simulate matrix population models. It's designed to be fast, flexible, and easily adapted to different model structures.
+aae.pop is a plug-and-play tool to simulate matrix population models. It's designed to be fast, flexible, and easily adapted to different model structures, including [complex demographic processes](articles/including_processes.html), [metapopulations](articles/metapopulations.html), and [multispecies models](articles/multiple_species.html).
 
 This website includes a [quick start guide](articles/get_started.html), examples, vignettes, and [package documentation](reference/index.html). 
+
 You can install the current version of the package from Github:
 
 ``` r
 remotes::install_github("aae-stats/aae.pop")
 ```
+
+
 
 <!-- badges: start -->
 
