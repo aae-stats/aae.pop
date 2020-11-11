@@ -52,7 +52,8 @@ Return parameters from a dynamics object in format
   \code{\link{density_dependence}}, and
   \code{\link{density_dependence_n}}, in that order.
 
-PROBABLY BETTER TO DEFINE UPDATEABLE DEFAULTS FROM A DYNAMICS OBJECT?
+PROBABLY BETTER TO DEFINE UPDATEABLE DEFAULTS
+  FROM A DYNAMICS OBJECT?
 }
 \examples{
 # add

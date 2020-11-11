@@ -3,6 +3,10 @@
 \name{rng}
 \alias{rng}
 \alias{rmultiunit}
+\alias{rmultiunit_from_real}
+\alias{runit_from_real}
+\alias{runit}
+\alias{unit_to_real}
 \title{Random number generators not available in existing R
   packages}
 \usage{
@@ -14,6 +18,20 @@ rmultiunit(
   Omega = NULL,
   perfect_correlation = FALSE
 )
+
+rmultiunit_from_real(
+  n,
+  mean_real,
+  sd_real = NULL,
+  Sigma_chol = NULL,
+  perfect_correlation = FALSE
+)
+
+runit_from_real(n, mean_real, sd_real)
+
+runit(n, mean, sd)
+
+unit_to_real(unit_mean, unit_sd)
 }
 \arguments{
 \item{n}{number of random draws to simulate. Each draw is a vector of
@@ -40,6 +58,20 @@ and \code{Sigma} and \code{Omega} are \code{NULL}, then all
 values in each replicate (row) are perfectly correlated with known
 mean and standard deviation. If \code{FALSE}, then all values
 in each replicate are completely uncorrelated}
+
+\item{mean_real}{vector of mean values converted to real-line
+equivalents}
+
+\item{sd_real}{vector of standard deviations converted to
+real-line equivalents}
+
+\item{Sigma_chol}{Cholesky decomposition of covariance
+matrix converted to real-line equivalent}
+
+\item{unit_mean}{vector of mean values on the unit interval}
+
+\item{unit_sd}{vector of standard deviations on the unit
+interval}
 }
 \description{
 Draw random numbers from unusual distributions,
@@ -47,6 +79,26 @@ Draw random numbers from unusual distributions,
   means and standard deviations.
 }
 \details{
-Function to simulate values on unit interval with fixed
-  mean, sd, and correlation
+The r*unit family of functions support simulation of values
+  on the unit interval based on a known mean, sd, and correlation
+  structure. \code{runit} and \code{runit_from_real} are vectorised
+  univariate functions, and \code{rmultiunit} and
+  \code{rmultiunit_from_real} are multivariate versions of these
+  same functions. \code{runit} and \code{rmultiunit} provide
+  simulated values on the unit line with specified means, standard
+  deviations, and correlation/covariance structure (in the case of
+  \code{rmultiunit}).
+
+  The *_from_real versions of these functions are helpers
+  that use pre-transformed estimates of parameters on the real
+  line, calculated with \code{unit_to_real}. These functions
+  are exported because \code{unit_to_real}, called within
+  \code{runit} and \code{rmultiunit}, is slow. Separating
+  this into a separate step allows less frequent calculations
+  of this transformation using the \code{args.fn} or
+  \code{args.dyn} options in \code{\link{simulate}}.
+
+  \code{unit_to_real} converts means and standard deviations
+  from their values on the unit line to their equivalent
+  values on the real line.
 }

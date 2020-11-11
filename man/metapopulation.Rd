@@ -89,9 +89,18 @@ new_fn2 <- function(mat, x) {
 new_fn3 <- function(mat, x) {
   mat * (1 / (1 + exp(-0.5 * (x[3] + 10))))
 }
-dyn1 <- update(dyn1, covariates(masks = transition(dyn1$matrix), funs = new_fn1))
-dyn2 <- update(dyn2, covariates(masks = transition(dyn2$matrix), funs = new_fn2))
-dyn3 <- update(dyn3, covariates(masks = transition(dyn3$matrix), funs = new_fn3))
+dyn1 <- update(
+  dyn1,
+  covariates(masks = transition(dyn1$matrix), funs = new_fn1)
+)
+dyn2 <- update(
+  dyn2,
+  covariates(masks = transition(dyn2$matrix), funs = new_fn2)
+)
+dyn3 <- update(
+  dyn3,
+  covariates(masks = transition(dyn3$matrix), funs = new_fn3)
+)
 
 # (re)create metapopulation object
 mc_meta <- metapopulation(mc_structure, list(dyn1, dyn2, dyn3), mc_dispersal)
