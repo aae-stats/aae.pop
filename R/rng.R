@@ -34,8 +34,28 @@ NULL
 #'   mean and standard deviation. If \code{FALSE}, then all values
 #'   in each replicate are completely uncorrelated
 #'
-#' @details Function to simulate values on unit interval with fixed
-#'   mean, sd, and correlation
+#' @details The r*unit family of functions support simulation of values
+#'   on the unit interval based on a known mean, sd, and correlation
+#'   structure. \code{runit} and \code{runit_from_real} are vectorised
+#'   univariate functions, and \code{rmultiunit} and
+#'   \code{rmultiunit_from_real} are multivariate versions of these
+#'   same functions. \code{runit} and \code{rmultiunit} provide
+#'   simulated values on the unit line with specified means, standard
+#'   deviations, and correlation/covariance structure (in the case of
+#'   \code{rmultiunit}).
+#'
+#'   The *_from_real versions of these functions are helpers
+#'   that use pre-transformed estimates of parameters on the real
+#'   line, calculated with \code{unit_to_real}. These functions
+#'   are exported because \code{unit_to_real}, called within
+#'   \code{runit} and \code{rmultiunit}, is slow. Separating
+#'   this into a separate step allows less frequent calculations
+#'   of this transformation using the \code{args.fn} or
+#'   \code{args.dyn} options in \code{\link{simulate}}.
+#'
+#'   \code{unit_to_real} converts means and standard deviations
+#'   from their values on the unit line to their equivalent
+#'   values on the real line.
 # nolint start
 rmultiunit <- function(
   n,
@@ -103,6 +123,118 @@ rmultiunit <- function(
 
 }
 
+#' @rdname rng
+#'
+#' @export
+#'
+#' @param mean_real vector of mean values converted to real-line
+#'   equivalents
+#' @param sd_real vector of standard deviations converted to
+#'   real-line equivalents
+#' @param Sigma_chol Cholesky decomposition of covariance
+#'   matrix converted to real-line equivalent
+#'
+# nolint start
+rmultiunit_from_real <- function(
+  n,
+  mean_real,
+  sd_real = NULL,
+  Sigma_chol = NULL,
+  perfect_correlation = FALSE
+) {
+  # nolint end
+
+  # need one of sd_real or Sigma_chol
+  if (is.null(sd_real) & is.null(Sigma_chol)) {
+    stop("one of sd_real or Sigma_chol must be provided ",
+         "to rmultiunit_from_real",
+         call. = FALSE)
+  }
+
+  # how many parameters are we dealing with?
+  npar <- length(mean_real)
+
+  # simulate random values from a standard normal
+  z_variates <- matrix(rnorm(npar * n), ncol = n)
+
+  # simpler return if correlations not required
+  if (is.null(Sigma_chol)) {
+
+    # do we want perfectly correlated or uncorrelated?
+    if (perfect_correlation) {
+      out <- t(pnorm(mean_real + sd_real %o% z_variates[1, ]))
+    } else {
+      out <- t(pnorm(
+        mean_real + sweep(z_variates, 1, sd_real, "*"))
+      )
+    }
+
+  } else {
+
+    # combine with correlations and means to give full variates
+    out <- t(pnorm(mean_real + Sigma_chol %*% z_variates))
+
+  }
+
+  # return
+  out
+
+}
+
+#' @rdname rng
+#'
+#' @export
+#'
+# nolint start
+runit_from_real <- function(n, mean_real, sd_real) {
+  # nolint end
+
+  # simulate random values from a standard normal
+  z_variates <- rnorm(n)
+
+  # do we want perfectly correlated or uncorrelated?
+  out <- pnorm(mean_real + z_variates * sd_real)
+
+  # return
+  out
+
+}
+
+#' @rdname rng
+#'
+#' @export
+#'
+# nolint start
+runit <- function(n, mean, sd) {
+  # nolint end
+
+  # calculate mean and sd on the real line
+  real_params <- unit_to_real(unit_mean = mean,
+                              unit_sd = sd)
+
+  # simulate random values from a standard normal
+  z_variates <- rnorm(n)
+
+  # do we want perfectly correlated or uncorrelated?
+  out <- pnorm(real_params[, 1] + z_variates * real_params[, 2])
+
+  # return
+  out
+
+}
+
+#' @rdname rng
+#'
+#' @export
+#'
+#' @param unit_mean vector of mean values on the unit interval
+#' @param unit_sd vector of standard deviations on the unit
+#'   interval
+#'
+unit_to_real <- function(unit_mean, unit_sd) {
+  t(apply(cbind(unit_mean, unit_sd), 1, solve_nl, fn = f_xy))
+}
+
 # equation based on the expected mean
 phi_mean <- function(x, y) {
   pnorm(x / sqrt(1 + y ^ 2))
@@ -135,11 +267,6 @@ solve_nl <- function(x, fn, ...) {
                    s = x[2],
                    ...)$x
 
-}
-
-# function to calculate mean and sd on real line
-unit_to_real <- function(unit_mean, unit_sd) {
-  t(apply(cbind(unit_mean, unit_sd), 1, solve_nl, fn = f_xy))
 }
 
 # integrand to define correlation coefficients
