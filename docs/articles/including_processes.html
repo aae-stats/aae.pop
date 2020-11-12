@@ -325,7 +325,7 @@
 <div id="nomask" class="section level2">
 <h2 class="hasAnchor">
 <a href="#nomask" class="anchor"></a>What if I don’t want to use masks?</h2>
-<p>The <code>mask</code>/<code>function</code> is central to <code>aae.pop</code>. This approach allows multiple functions to be combined into a single term and makes it easier to keep track of (and update) individual functions or masks. A secondary reason for this approach is computational. Rarely will any demographic processes act on the entire population matrix. When dealing with large matrices (e.g., 50-100 classes), it’s much more efficient to pass small parts of the matrix than the entire matrix.</p>
+<p>The <code>mask</code>/<code>function</code> approach is central to <code>aae.pop</code>. This approach allows multiple functions to be combined into a single term and makes it easier to keep track of (and update) individual functions or masks. A secondary reason for this approach is computational. Rarely will any demographic processes act on the entire population matrix. When dealing with large matrices (e.g., 50-100 classes), it’s much more efficient to pass small parts of the matrix than the entire matrix.</p>
 <p>There might be situations where the entire population matrix does need to be modified by a given process. This is still supported in <code>aae.pop</code> through the <code>all_cells</code> <code>mask</code>. However, it isn’t possible to subset the matrix within a <code>function</code> using R’s standard <code>[i, j]</code> notation. This is because the functions within <code>aae.pop</code> receive a flattened (and masked) version of the population matrix, which actually looks like:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit">
 <span class="co"># reproduction mask</span>

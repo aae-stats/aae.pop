@@ -256,7 +256,7 @@ It is assumed that covariates can be passed as a vector, matrix, or data.frame, 
 
 ## What if I don't want to use masks? {#nomask}
 
-The `mask`/`function` is central to `aae.pop`. This approach allows multiple functions to be combined into a single term and makes it easier to keep track of (and update) individual functions or masks. A secondary reason for this approach is computational. Rarely will any demographic processes act on the entire population matrix. When dealing with large matrices (e.g., 50-100 classes), it's much more efficient to pass small parts of the matrix than the entire matrix.
+The `mask`/`function` approach is central to `aae.pop`. This approach allows multiple functions to be combined into a single term and makes it easier to keep track of (and update) individual functions or masks. A secondary reason for this approach is computational. Rarely will any demographic processes act on the entire population matrix. When dealing with large matrices (e.g., 50-100 classes), it's much more efficient to pass small parts of the matrix than the entire matrix.
 
 There might be situations where the entire population matrix does need to be modified by a given process. This is still supported in `aae.pop` through the `all_cells` `mask`. However, it isn't possible to subset the matrix within a `function` using R's standard `[i, j]` notation. This is because the functions within `aae.pop` receive a flattened (and masked) version of the population matrix, which actually looks like:
 

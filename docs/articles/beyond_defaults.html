@@ -286,7 +286,7 @@
 ## {
 ##     tcrossprod(pop, mat)
 ## }
-## &lt;bytecode: 0x7f8c1195a7d0&gt;
+## &lt;bytecode: 0x7fccf8203980&gt;
 ## &lt;environment: namespace:aae.pop&gt;</code></pre>
 <p>The <code>update_binomial_leslie</code> function is slightly more complicated and includes a check for integer abundances and then uses a mix of Poisson (for reproduction) and Binomial draws (for survival):</p>
 <pre><code>## function (pop, mat) 
@@ -306,9 +306,9 @@
 ##     cbind(rpois(nrow(vals), lambda = vals[, 1]), matrix(rbinom(length(probs), 
 ##         size = pop_nm1, prob = probs), nrow = nrow(pop_nm1)))
 ## }
-## &lt;bytecode: 0x7f8c15850dc8&gt;
+## &lt;bytecode: 0x7fccf95592a8&gt;
 ## &lt;environment: namespace:aae.pop&gt;</code></pre>
-<p>The primary reason to change the updater is speed. Although <code>update_crossprod</code> is relatively fast compared to other R methods, it is highly likely that other methods can be sped up through, for example, the use of C++ matrix libraries (e.g., <code>RcppEigen</code> and <code>RcppArmadillo</code>). The final updater to use is best determined through benchmarking of alternative updaters. Keep in mind that <code>aae.pop</code> is built for flexibility and R compatibility rather then speed <em>per se</em>. If speed is the primary limitation or concern, a better approach might involve coding the entire simulation process in C++ or similar (e.g., Julia).</p>
+<p>The primary reason to change the updater is speed. Although <code>update_crossprod</code> is relatively fast compared to other R methods, it is highly likely that other methods can be sped up through, for example, the use of C++ matrix libraries (e.g., with <code>RcppEigen</code> and <code>RcppArmadillo</code>). The final updater to use is best determined through benchmarking of alternative updaters. Keep in mind that <code>aae.pop</code> is built for flexibility and R compatibility rather then speed <em>per se</em>. If speed is the primary limitation or concern, a better approach might involve coding the entire simulation process in C++ or similar (e.g., Julia).</p>
 </div>
 </div>
   </div>

@@ -164,7 +164,21 @@
   Sigma <span class='op'>=</span> <span class='cn'>NULL</span>,
   Omega <span class='op'>=</span> <span class='cn'>NULL</span>,
   perfect_correlation <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span>
+
+<span class='fu'>rmultiunit_from_real</span><span class='op'>(</span>
+  <span class='va'>n</span>,
+  <span class='va'>mean_real</span>,
+  sd_real <span class='op'>=</span> <span class='cn'>NULL</span>,
+  Sigma_chol <span class='op'>=</span> <span class='cn'>NULL</span>,
+  perfect_correlation <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
+
+<span class='fu'>runit_from_real</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean_real</span>, <span class='va'>sd_real</span><span class='op'>)</span>
+
+<span class='fu'>runit</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean</span>, <span class='va'>sd</span><span class='op'>)</span>
+
+<span class='fu'>unit_to_real</span><span class='op'>(</span><span class='va'>unit_mean</span>, <span class='va'>unit_sd</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -206,12 +220,54 @@ values in each replicate (row) are perfectly correlated with known
 mean and standard deviation. If <code>FALSE</code>, then all values
 in each replicate are completely uncorrelated</p></td>
     </tr>
+    <tr>
+      <th>mean_real</th>
+      <td><p>vector of mean values converted to real-line
+equivalents</p></td>
+    </tr>
+    <tr>
+      <th>sd_real</th>
+      <td><p>vector of standard deviations converted to
+real-line equivalents</p></td>
+    </tr>
+    <tr>
+      <th>Sigma_chol</th>
+      <td><p>Cholesky decomposition of covariance
+matrix converted to real-line equivalent</p></td>
+    </tr>
+    <tr>
+      <th>unit_mean</th>
+      <td><p>vector of mean values on the unit interval</p></td>
+    </tr>
+    <tr>
+      <th>unit_sd</th>
+      <td><p>vector of standard deviations on the unit
+interval</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Function to simulate values on unit interval with fixed
-  mean, sd, and correlation</p>
+    <p>The r*unit family of functions support simulation of values
+  on the unit interval based on a known mean, sd, and correlation
+  structure. <code>runit</code> and <code>runit_from_real</code> are vectorised
+  univariate functions, and <code>rmultiunit</code> and
+  <code>rmultiunit_from_real</code> are multivariate versions of these
+  same functions. <code>runit</code> and <code>rmultiunit</code> provide
+  simulated values on the unit line with specified means, standard
+  deviations, and correlation/covariance structure (in the case of
+  <code>rmultiunit</code>).</p>
+<p>The *_from_real versions of these functions are helpers
+  that use pre-transformed estimates of parameters on the real
+  line, calculated with <code>unit_to_real</code>. These functions
+  are exported because <code>unit_to_real</code>, called within
+  <code>runit</code> and <code>rmultiunit</code>, is slow. Separating
+  this into a separate step allows less frequent calculations
+  of this transformation using the <code>args.fn</code> or
+  <code>args.dyn</code> options in <code><a href='simulate.html'>simulate</a></code>.</p>
+<p><code>unit_to_real</code> converts means and standard deviations
+  from their values on the unit line to their equivalent
+  values on the real line.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
