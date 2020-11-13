@@ -3,15 +3,16 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   beyond_defaults: beyond_defaults.html
+  forecasting_example: forecasting_example.html
   get_started: get_started.html
   including_processes: including_processes.html
   macperch_example: macperch_example.html
   metapopulations: metapopulations.html
+  model_checking: model_checking.html
   multiple_species: multiple_species.html
   passing_arguments: passing_arguments.html
-  prediction_validation: prediction_validation.html
   scenarios_example: scenarios_example.html
-last_built: 2020-11-12T04:02Z
+last_built: 2020-11-13T01:16Z
 urls:
   reference: https://aae-stats.github.io/aae.pop/reference
   article: https://aae-stats.github.io/aae.pop/articles

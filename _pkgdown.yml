@@ -84,9 +84,9 @@ navbar:
     examples:
       text: examples
       menu:
-      - text: Macquarie perch
+      - text: "Macquarie perch"
         href: articles/macperch_example.html
-      - text: Comparing scenarios
+      - text: "Comparing scenarios"
         href: articles/scenarios_example.html
     documentation:
       text: documentation

@@ -55,6 +55,9 @@
     <loc>https://aae-stats.github.io/aae.pop/articles/beyond_defaults.html</loc>
   </url>
   <url>
+    <loc>https://aae-stats.github.io/aae.pop/articles/forecasting_example.html</loc>
+  </url>
+  <url>
     <loc>https://aae-stats.github.io/aae.pop/articles/get_started.html</loc>
   </url>
   <url>
@@ -67,13 +70,13 @@
     <loc>https://aae-stats.github.io/aae.pop/articles/metapopulations.html</loc>
   </url>
   <url>
+    <loc>https://aae-stats.github.io/aae.pop/articles/model_checking.html</loc>
+  </url>
+  <url>
     <loc>https://aae-stats.github.io/aae.pop/articles/multiple_species.html</loc>
   </url>
   <url>
     <loc>https://aae-stats.github.io/aae.pop/articles/passing_arguments.html</loc>
-  </url>
-  <url>
-    <loc>https://aae-stats.github.io/aae.pop/articles/prediction_validation.html</loc>
   </url>
   <url>
     <loc>https://aae-stats.github.io/aae.pop/articles/scenarios_example.html</loc>
