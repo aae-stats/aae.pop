@@ -416,25 +416,25 @@
 <a href="#interpreting-the-outputs" class="anchor"></a>Interpreting the outputs</h3>
 <p>The quasi-extinction estimates can be interpreted directly for each population under each of the nine scenarios:</p>
 <pre><code>##        habitat       fishing population 1 population 2 population 3
-## 1 restore_none regulate_none         0.96         0.92         0.93
-## 2  restore_one regulate_none         0.96         0.91         0.92
-## 3  restore_two regulate_none         0.96         0.91         0.93
-## 4 restore_none  regulate_two         0.00         0.01         0.93
-## 5  restore_one  regulate_two         0.00         0.01         0.93
-## 6  restore_two  regulate_two         0.00         0.01         0.93
+## 1 restore_none regulate_none         0.91         0.88         0.94
+## 2  restore_one regulate_none         0.90         0.87         0.94
+## 3  restore_two regulate_none         0.91         0.87         0.94
+## 4 restore_none  regulate_two         0.00         0.00         0.94
+## 5  restore_one  regulate_two         0.00         0.00         0.94
+## 6  restore_two  regulate_two         0.00         0.00         0.94
 ## 7 restore_none  regulate_all         0.05         0.05         0.05
-## 8  restore_one  regulate_all         0.04         0.06         0.06
-## 9  restore_two  regulate_all         0.05         0.05         0.06
+## 8  restore_one  regulate_all         0.04         0.04         0.05
+## 9  restore_two  regulate_all         0.04         0.04         0.04
 ##   population 4
-## 1         0.94
-## 2         0.94
-## 3         0.94
-## 4         0.95
-## 5         0.95
-## 6         0.94
-## 7         0.04
-## 8         0.04
-## 9         0.04</code></pre>
+## 1         0.96
+## 2         0.96
+## 3         0.96
+## 4         0.96
+## 5         0.96
+## 6         0.96
+## 7         0.06
+## 8         0.05
+## 9         0.05</code></pre>
 <p>These results highlight an interesting pattern. Fishing regulation clearly has a major impact on population trajectories, with a complete ban on fishing reducing extinction risk almost to zero in regulated populations. However, the remaining (unregulated) populations still have relatively high quasi-extinction risks. This highlights a conceptual challenge when results are spread over multiple populations: how much is an individual population worth?</p>
 <p>It’s possible to dig into this with some additional summary statistics that augment the population-level estimates of quasi-extinction risk:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
@@ -458,25 +458,25 @@
 <span class="va">all_persist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">pr_persist</span>, <span class="fl">1</span>, <span class="va">prod</span><span class="op">)</span></pre></div>
 <p>These outputs give a more-complete picture of the relative risk under each of the nine scenarios:</p>
 <pre><code>##   Habitat action Fishing action Average risk Geometric average risk
-## 1   restore_none  regulate_none         0.94                   0.94
-## 2    restore_one  regulate_none         0.94                   0.93
-## 3    restore_two  regulate_none         0.94                   0.94
-## 4   restore_none   regulate_two         0.47                   0.05
-## 5    restore_one   regulate_two         0.47                   0.05
-## 6    restore_two   regulate_two         0.47                   0.05
+## 1   restore_none  regulate_none         0.92                   0.92
+## 2    restore_one  regulate_none         0.92                   0.92
+## 3    restore_two  regulate_none         0.92                   0.92
+## 4   restore_none   regulate_two         0.48                   0.03
+## 5    restore_one   regulate_two         0.48                   0.04
+## 6    restore_two   regulate_two         0.48                   0.04
 ## 7   restore_none   regulate_all         0.05                   0.05
 ## 8    restore_one   regulate_all         0.05                   0.05
-## 9    restore_two   regulate_all         0.05                   0.05
+## 9    restore_two   regulate_all         0.04                   0.04
 ##   Pr(at least one extinct) Pr(at least one persist) Pr(all persist)
-## 1                     1.00                     0.23            0.00
-## 2                     1.00                     0.24            0.00
-## 3                     1.00                     0.23            0.00
+## 1                     1.00                     0.28            0.00
+## 2                     1.00                     0.29            0.00
+## 3                     1.00                     0.28            0.00
 ## 4                     1.00                     1.00            0.00
 ## 5                     1.00                     1.00            0.00
 ## 6                     1.00                     1.00            0.00
-## 7                     0.18                     1.00            0.82
-## 8                     0.18                     1.00            0.82
-## 9                     0.18                     1.00            0.82</code></pre>
+## 7                     0.19                     1.00            0.81
+## 8                     0.17                     1.00            0.83
+## 9                     0.16                     1.00            0.84</code></pre>
 <p>These outputs provide a clearer picture of the relative risks of the different scenarios, supporting decisions based on priorities for a single versus multiple populations. In this case, there is little justification for investment in habitat restoration but plenty of reason to invest in regulating fishing. A focus on persistence of a single population doesn’t distinguish the two fishing actions (partial or complete ban), yet a focus on maintaining all populations indicates that partial regulation across all locations is likely to be a much more effective strategy, reducing the risk that any one of the populations will become extinct.</p>
 <p>Many variants of these summaries exist, such as probabilities that 2 or more populations persist, average extinction risk weighted by a measure of a population’s value, or metrics based on expected genetic or functional diversity under each scenarios.</p>
 <p>The outputs of this modelling approach might support a recommendation in their own right, or might guide the development of alternative management actions, such as more-nuanced fishing regulations or more extensive habitat restoration scenarios. Alternatively, model outputs might highlight flaws in model construction. For example, if habitat restoration is known to be more effective than indicated by the results above, this might indicate knowledge gaps that limit the current model’s applicability.</p>
@@ -485,14 +485,350 @@
 <div id="speeding-up-simulations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#speeding-up-simulations" class="anchor"></a>Speeding up simulations</h2>
+<p>The models above require many repeated simulations. This section outlines two ways to speed up simulations when comparing many scenarios. Both methods are relatively complex to set up and may only give marginal improvements (or no improvement at all), so are not recommended as default approaches in <code>aae.pop</code>.</p>
 <div id="running-in-parallel" class="section level3">
 <h3 class="hasAnchor">
 <a href="#running-in-parallel" class="anchor"></a>Running in parallel</h3>
+<p>Importantly, the simulations of different scenarios are entirely independent of one another, which makes this an <em>embarrassingly parallel</em> problem. What this means is that the simulations can be split up and run simultaneously, assuming sufficient cores and memory.</p>
+<p>The <code>future</code> and <code>future.apply</code> R packages make it easy to deal with embarrassingly parallel problems in R. These packages allow users to set up a general problem statement to be evaluated in a <em>future</em> that can be specified (and changed) when actually running the code. Practically, this means writing one bit of code that can be used with several possible <em>futures</em>, including a personal computer with one or more cores, a cloud compute server, a large HPC system, or spread across multiple nodes in a distributed compute system. This is especially useful because the code can be developed and tested on a local computer before being sent off to a more-powerful system for extended model runs.</p>
+<p>One trick to (easily) running embarrassingly parallel problems in R is the use of <code>_apply</code> statements (e.g. <code>sapply</code>, <code>lapply</code>) in place of <code>for</code> loops when the contents of the loop does not depend on previous iterations. This process can be slightly confusing at first but, in its simplest form, simply requires wrapping the contents of the loop in a function and then passing this function to <code>lapply</code> or <code>sapply</code>.</p>
+<p>In R, the first step is to wrap main steps of the <code>for</code> loop in a function:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="co"># need a function that takes `scenarios` as input and</span>
+<span class="co">#   spits out the simulation outputs</span>
+<span class="va">run_scenario</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span>
+  <span class="va">scenario</span>,
+  <span class="va">popdyn</span>,
+  <span class="va">habitat</span>,
+  <span class="va">fishing</span>,
+  <span class="va">habitat_extent</span>, 
+  <span class="va">initial_abundance</span>,
+  <span class="va">ntime</span>, 
+  <span class="va">nsim</span>
+<span class="op">)</span> <span class="op">{</span>
+  
+  <span class="co"># pull out the relevant actions</span>
+  <span class="co">#  scenario is now a vector with two elements, habitat and fishing</span>
+  <span class="va">hab_tmp</span> <span class="op">&lt;-</span> <span class="va">habitat</span><span class="op">[</span><span class="va">scenario</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="op">]</span>
+  <span class="va">fish_tmp</span> <span class="op">&lt;-</span> <span class="va">fishing</span><span class="op">[</span><span class="va">scenario</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="op">]</span>
+  
+  <span class="co"># define habitat extent taking into account restoration</span>
+  <span class="va">extent_tmp</span> <span class="op">&lt;-</span><span class="fu">restore</span><span class="op">(</span>
+    n <span class="op">=</span> <span class="va">hab_tmp</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
+    amount <span class="op">=</span> <span class="va">hab_tmp</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,
+    current <span class="op">=</span> <span class="va">habitat_extent</span>,
+    ntime <span class="op">=</span> <span class="va">ntime</span>
+  <span class="op">)</span>
+  
+  <span class="co"># the populations are independent, so can be run simultaneously </span>
+  <span class="co">#   with lapply, mapply, or with a for loop</span>
+  <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">popdyn</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">sims</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span>
+      <span class="va">popdyn</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span>,
+      nsim <span class="op">=</span> <span class="va">nsim</span>,
+      init <span class="op">=</span> <span class="va">initial_abundance</span><span class="op">[</span>, <span class="va">j</span><span class="op">]</span>,
+      args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+        covariates <span class="op">=</span> <span class="fu"><a href="../reference/covariates.html">format_covariates</a></span><span class="op">(</span><span class="va">extent_tmp</span><span class="op">[</span>, <span class="va">j</span><span class="op">]</span><span class="op">)</span>,
+        density_dependence_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>remove <span class="op">=</span> <span class="va">fish_tmp</span><span class="op">[</span><span class="va">j</span><span class="op">]</span><span class="op">)</span>
+      <span class="op">)</span>
+    <span class="op">)</span>    
+  <span class="op">}</span>
+  
+  <span class="co"># summarise the trajectories and return these values</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span>
+    <span class="va">sims</span>, 
+    <span class="va">calculate_quasi_extinction</span>,
+    threshold <span class="op">=</span> <span class="fl">10</span>,     <span class="co"># the quasi-extinction level</span>
+    subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>,       <span class="co"># focus on adults</span>
+    include <span class="op">=</span> <span class="cn">TRUE</span>      <span class="co"># less than or equal to threshold</span>
+  <span class="op">)</span>
+  
+<span class="op">}</span></pre></div>
+<p>This function can be passed to one of the functions in the <code>future.apply</code> package, which provides versions of R’s standard <code>apply</code> functions that work with the <code>future</code> package. This example uses the <code>multisession</code> evaluation future, which will work on Windows or Unix-like systems (including OSX), and launches multiple R sessions running in parallel. The default number of sessions launched by <code>multisession</code> can be viewed with the <code>availableCores()</code> function and changed by specifying a <code>workers</code> argument in <code>multisession</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="co"># load the package</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/future.apply">future.apply</a></span><span class="op">)</span>
+
+<span class="co"># set the evaluation future, may require the R package library</span>
+<span class="co">#   (can be viewed with .libPaths()) to be passed directly with </span>
+<span class="co">#   the `rscript_libs` option if using network drives</span>
+<span class="fu">plan</span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span>
+
+<span class="co"># use `apply` to evaluate the run_scenario function once </span>
+<span class="co">#   for each scenario, running up to availableCores()</span>
+<span class="co">#   scenarios in parallel</span>
+<span class="va">quasi_ext_parallel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/future.apply/man/future_apply.html">future_apply</a></span><span class="op">(</span>
+  <span class="va">scenarios</span>,                    <span class="co"># matrix/data.frame of scenaios</span>
+  MARGIN <span class="op">=</span> <span class="fl">1</span>,                   <span class="co"># margin of scenarios to iterate over, 1 is rows, 2 is columns</span>
+  FUN <span class="op">=</span> <span class="va">run_scenario</span>,           <span class="co"># function to call on each row of scenarios</span>
+  popdyn <span class="op">=</span> <span class="va">popdyn</span>,              <span class="co"># other arguments to FUN</span>
+  habitat <span class="op">=</span> <span class="va">habitat</span>,
+  fishing <span class="op">=</span> <span class="va">fishing</span>,
+  habitat_extent <span class="op">=</span> <span class="va">habitat_extent</span>, 
+  initial_abundance <span class="op">=</span> <span class="va">initial_abundance</span>,
+  ntime <span class="op">=</span> <span class="va">ntime</span>, 
+  nsim <span class="op">=</span> <span class="va">nsim</span>,
+  future.seed <span class="op">=</span> <span class="cn">TRUE</span>            <span class="co"># tells future that there are RNG calls in run_scenario</span>
+<span class="op">)</span><span class="op">)</span>
+
+<span class="co"># it can be useful to reset the evaluation future, both to </span>
+<span class="co">#   avoid unexpected behaviour within the main R session</span>
+<span class="co">#   and to shut down any background workers. The sequential</span>
+<span class="co">#   evaluation is the default R behaviour (not running anything</span>
+<span class="co">#   in parallel)</span>
+<span class="fu">plan</span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span></pre></div>
+<p>This generates outputs similar to those above:</p>
+<pre><code>##        habitat       fishing population 1 population 2 population 3
+## 1 restore_none regulate_none         0.92         0.88         0.94
+## 2  restore_one regulate_none         0.91         0.88         0.94
+## 3  restore_two regulate_none         0.91         0.87         0.94
+## 4 restore_none  regulate_two         0.00         0.00         0.94
+## 5  restore_one  regulate_two         0.00         0.00         0.94
+## 6  restore_two  regulate_two         0.00         0.00         0.94
+## 7 restore_none  regulate_all         0.05         0.05         0.05
+## 8  restore_one  regulate_all         0.04         0.05         0.05
+## 9  restore_two  regulate_all         0.05         0.05         0.05
+##   population 4
+## 1         0.96
+## 2         0.96
+## 3         0.96
+## 4         0.96
+## 5         0.96
+## 6         0.96
+## 7         0.06
+## 8         0.05
+## 9         0.05</code></pre>
+<p>The quasi-extinction estimates will not be identical to those above because this example does not set a seed. Even with a seed, this example is unlikely to generate the same results as above because the scenarios are evaluated in parallel in separate R sessions, which introduces multiple RNG streams and changes the order of execution of scenarios.</p>
+<p>This example demonstrates one way in which scenarios can be run in parallel. An alternative in this case would be to run the internal loop (over each population) in parallel, either leaving the outer loop as a <code>for</code> loop or running both in parallel. The benefits of these different approaches will depend on two things: the computing setup available and the relative runtime of each step. The computing setup will determine how many different things can be run simultaneously (typically limited by number of cores or amount of memory). Relative runtime matters because there is some overhead to running things in parallel. This overhead can slow things sufficiently that there is no benefit and sometimes a cost to running really quick bits of code in parallel. In general, at least on a personal computer, running more time-consuming bits of code in parallel is the best choice.</p>
 </div>
 <div id="not-so-meta-populations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#not-so-meta-populations" class="anchor"></a>Not-so-meta populations</h3>
-<p>This document is yet to explore one option: running all four populations as a <code>metapopulation</code> with no dispersal. Although this method has computational benefits, it requires separate fishing and restoration functions with distinct arguments for each population.</p>
+<p>There is one less-obvious option for simulations of multiple, independent populations: running all populations as a single <code>metapopulation</code> with no dispersal. This method has computational benefits because the calculations within <code>simulate</code> are vectorised, which can make operations on one big matrix faster than repeating those operations on multiple, smaller matrices. Howevever, this is a complex method to set up primarily because the <code>mask</code>/<code>function</code> approach used in <code>aae.pop</code> does not yet work neatly with metapopulations.</p>
+<p>Setting up a <code>metapopulation</code> for this purpose requires redefinition of the <code>density_dependence_n</code> and <code>covariates</code> processes because both of these were not set up to handle arguments for multiple populations simultaneously. The first step is to define the base <code>metapopulation</code> dynamics object:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="co"># define a population model for each of the four populations</span>
+<span class="co">#   but without the density_dependence_n or covariates components,</span>
+<span class="co">#   which will be redefined below</span>
+<span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="va">npop</span><span class="op">)</span>,
+  <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span>
+    <span class="fu">envstoch</span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span>,
+    <span class="va">envstoch</span>,
+    <span class="va">demostoch</span>,
+    <span class="va">dd</span>
+  <span class="op">)</span>
+<span class="op">)</span>
+
+<span class="co"># define a dummy metapopulation structure with one</span>
+<span class="co">#   "dispersal" link</span>
+<span class="va">metapopstr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="fl">4</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<span class="va">metapopstr</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span>
+
+<span class="co"># define a dummy dispersal link that has zero probability</span>
+<span class="co">#   of any movements</span>
+<span class="va">dispersal_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="fl">5</span>, ncol <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
+<span class="va">disp_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dispersal.html">dispersal</a></span><span class="op">(</span><span class="va">dispersal_matrix</span><span class="op">)</span>
+
+<span class="co"># combine this into a metapopulation object</span>
+<span class="va">metapopdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metapopulation.html">metapopulation</a></span><span class="op">(</span><span class="va">metapopstr</span>, <span class="va">popdyn</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">disp_tmp</span><span class="op">)</span><span class="op">)</span></pre></div>
+<p>The second step involves redefining the <code>density_dependence_n</code> and <code>covariates</code> processes to use masks that identify the correct elements of the metapopulation vector (which now has 20 elements, 5 for each population) and to use functions that select the correct arguments for each population. The latter approach is also demonstrated in the <a href="metapopulations.html">Metapopulation</a> vignette and in the help file for the <code>metapopulations</code> function.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="co"># wrapper function to define the removals function for each</span>
+<span class="co">#   population (specified with idx)</span>
+<span class="va">define_removals</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">idx</span><span class="op">)</span> <span class="op">{</span>
+  
+  <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">remove</span><span class="op">)</span> <span class="op">{</span>
+    
+    <span class="co"># add some stochasticity in the number of removals</span>
+    <span class="va">remove</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span><span class="op">(</span><span class="fl">1</span>, lambda <span class="op">=</span> <span class="va">remove</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span>
+  
+    <span class="co"># check that there are enough individuals to remove,</span>
+    <span class="co">#   only remove up to sum(n) individuals</span>
+    <span class="kw">if</span> <span class="op">(</span><span class="va">remove</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span>
+      <span class="va">remove</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>
+    
+    <span class="co"># work out which age classes to remove, sampled</span>
+    <span class="co">#   randomly up to the total available in each</span>
+    <span class="co">#   age class</span>
+    <span class="va">n_available</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, times <span class="op">=</span> <span class="va">n</span><span class="op">)</span>
+    <span class="va">removal_idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span><span class="op">(</span>
+      <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">n_available</span><span class="op">)</span>, size <span class="op">=</span> <span class="va">remove</span>, replace <span class="op">=</span> <span class="cn">FALSE</span>
+    <span class="op">)</span>
+    
+    <span class="co"># expand this into a vector of removals by age class</span>
+    <span class="va">remove</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">n_available</span><span class="op">[</span><span class="va">removal_idx</span><span class="op">]</span><span class="op">)</span>
+    <span class="va">remove_expanded</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">remove_expanded</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>
+    <span class="va">remove_expanded</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">remove</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">remove</span>
+    
+    <span class="co"># and return updated abundances</span>
+    <span class="va">n</span> <span class="op">-</span> <span class="va">remove_expanded</span>
+    
+  <span class="op">}</span>
+  
+<span class="op">}</span>
+
+<span class="co"># combine the masks for adults of each population with</span>
+<span class="co">#   the removals function defined for populations 1-4</span>
+<span class="va">dd_n</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/density_dependence.html">density_dependence_n</a></span><span class="op">(</span>
+  masks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/masks.html">all_classes</a></span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, dims <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/masks.html">all_classes</a></span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, dims <span class="op">=</span> <span class="fl">8</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/masks.html">all_classes</a></span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, dims <span class="op">=</span> <span class="fl">13</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/masks.html">all_classes</a></span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, dims <span class="op">=</span> <span class="fl">18</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span>,
+  funs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    <span class="fu">define_removals</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
+    <span class="fu">define_removals</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,
+    <span class="fu">define_removals</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>,
+    <span class="fu">define_removals</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">)</span>
+
+<span class="co"># wrapper function to define the reproduction covariate effects</span>
+<span class="co">#   for each population (specified with idx)</span>
+<span class="va">define_reprod_effects</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">idx</span><span class="op">)</span> <span class="op">{</span>
+
+  <span class="kw">function</span><span class="op">(</span><span class="va">mat</span>, <span class="va">x</span>, <span class="va">alpha</span> <span class="op">=</span> <span class="fl">0.1</span>, <span class="va">beta</span> <span class="op">=</span> <span class="fl">4</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+
+    <span class="co"># define a nonlinear effect of habitat</span>
+    <span class="va">scale_factor</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">alpha</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span> <span class="va">beta</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+    
+    <span class="co"># return re-scaled survival values</span>
+    <span class="va">mat</span> <span class="op">*</span> <span class="va">scale_factor</span>
+    
+  <span class="op">}</span>
+  
+<span class="op">}</span>
+
+<span class="co"># wrapper function to define the survival covariate effects</span>
+<span class="co">#   for each population (specified with idx)</span>
+<span class="va">define_surv_effects</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">idx</span><span class="op">)</span> <span class="op">{</span>
+
+  <span class="kw">function</span><span class="op">(</span><span class="va">mat</span>, <span class="va">x</span>, <span class="va">alpha</span> <span class="op">=</span> <span class="fl">0.05</span>, <span class="va">beta</span> <span class="op">=</span> <span class="fl">10</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+    
+    <span class="co"># define a nonlinear effect of habitat</span>
+    <span class="va">scale_factor</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">alpha</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span> <span class="va">beta</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+    
+    <span class="co"># return re-scaled survival values</span>
+    <span class="va">mat</span> <span class="op">*</span> <span class="va">scale_factor</span>
+    
+  <span class="op">}</span>
+  
+<span class="op">}</span>
+
+<span class="co"># helper function to define a reproduction mask for each</span>
+<span class="co">#   population (specified with idx)</span>
+<span class="va">define_reprod_mask</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mat</span>, <span class="va">idx</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">idy</span> <span class="op">&lt;-</span> <span class="fl">5</span> <span class="op">*</span> <span class="op">(</span><span class="va">idx</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/row.html">row</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span> <span class="op">==</span> <span class="op">(</span><span class="va">idy</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">&amp;</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/col.html">col</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span> <span class="op">%in%</span> <span class="op">(</span><span class="fl">3</span><span class="op">:</span><span class="fl">5</span> <span class="op">+</span> <span class="va">idy</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co"># define masks for reproduction and transitions for each</span>
+<span class="co">#   population</span>
+<span class="va">covar_masks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="fu">define_reprod_mask</span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, <span class="fl">1</span><span class="op">)</span>,
+  <span class="fu">define_reprod_mask</span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, <span class="fl">2</span><span class="op">)</span>,
+  <span class="fu">define_reprod_mask</span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, <span class="fl">3</span><span class="op">)</span>,
+  <span class="fu">define_reprod_mask</span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, <span class="fl">4</span><span class="op">)</span>,
+  <span class="fu"><a href="../reference/masks.html">transition</a></span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,
+  <span class="fu"><a href="../reference/masks.html">transition</a></span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, dims <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>,
+  <span class="fu"><a href="../reference/masks.html">transition</a></span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, dims <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span>,
+  <span class="fu"><a href="../reference/masks.html">transition</a></span><span class="op">(</span><span class="va">metapopdyn</span><span class="op">$</span><span class="va">matrix</span>, dims <span class="op">=</span> <span class="fl">16</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="co"># combine reproduction and survival covariate effects into</span>
+<span class="co">#   a list</span>
+<span class="va">covar_funs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="fu">define_reprod_effects</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
+  <span class="fu">define_reprod_effects</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,
+  <span class="fu">define_reprod_effects</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>,
+  <span class="fu">define_reprod_effects</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>,
+  <span class="fu">define_surv_effects</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
+  <span class="fu">define_surv_effects</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,
+  <span class="fu">define_surv_effects</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>,
+  <span class="fu">define_surv_effects</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="co"># collate into a single covariates object</span>
+<span class="va">covars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covariates.html">covariates</a></span><span class="op">(</span>
+  masks <span class="op">=</span> <span class="va">covar_masks</span>,
+  funs <span class="op">=</span> <span class="va">covar_funs</span>
+<span class="op">)</span></pre></div>
+<p>The final step is to update the <code>metapopulation</code> dynamics object with the new <code>density_dependence_n</code> and <code>covariates</code> objects and use this to simulate (meta)population trajectories under each scenario.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="co"># update the metapopulation dynamics object</span>
+<span class="va">metapopdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html">update</a></span><span class="op">(</span><span class="va">metapopdyn</span>, <span class="va">dd_n</span>, <span class="va">covars</span><span class="op">)</span>
+
+<span class="co"># create a new initial abundance vector that has the same</span>
+<span class="co">#   values as above but is a vector rather than matrix</span>
+<span class="va">initial_abundance_meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">initial_abundance</span><span class="op">)</span>
+
+<span class="co"># loop through each scenario</span>
+<span class="va">quasi_ext_metapop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">scenarios</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="va">npop</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">scenarios</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  
+  <span class="co"># pull out the relevant actions</span>
+  <span class="va">hab_tmp</span> <span class="op">&lt;-</span> <span class="va">habitat</span><span class="op">[</span><span class="va">scenarios</span><span class="op">$</span><span class="va">habitat</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">]</span>
+  <span class="va">fish_tmp</span> <span class="op">&lt;-</span> <span class="va">fishing</span><span class="op">[</span><span class="va">scenarios</span><span class="op">$</span><span class="va">fishing</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">]</span>
+  
+  <span class="co"># define habitat extent taking into account restoration</span>
+  <span class="va">extent_tmp</span> <span class="op">&lt;-</span><span class="fu">restore</span><span class="op">(</span>
+    n <span class="op">=</span> <span class="va">hab_tmp</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
+    amount <span class="op">=</span> <span class="va">hab_tmp</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,
+    current <span class="op">=</span> <span class="va">habitat_extent</span>,
+    ntime <span class="op">=</span> <span class="va">ntime</span>
+  <span class="op">)</span>
+  
+  <span class="co"># only simulating a single metapopulation this time</span>
+  <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span>
+    <span class="va">metapopdyn</span>,
+    nsim <span class="op">=</span> <span class="va">nsim</span>,
+    init <span class="op">=</span> <span class="va">initial_abundance_meta</span>,
+    args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+      covariates <span class="op">=</span> <span class="fu"><a href="../reference/covariates.html">format_covariates</a></span><span class="op">(</span><span class="va">extent_tmp</span><span class="op">)</span>,
+      density_dependence_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>remove <span class="op">=</span> <span class="va">fish_tmp</span><span class="op">)</span>
+    <span class="op">)</span>
+  <span class="op">)</span>    
+  
+  <span class="co"># summarise the trajectories, with one step first to</span>
+  <span class="co">#   subset the populations back into their own objects</span>
+  <span class="va">sims_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span>
+    <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,
+    <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="op">(</span><span class="fl">5</span> <span class="op">*</span> <span class="op">(</span><span class="va">i</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="fl">5</span> <span class="op">*</span> <span class="va">i</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span>
+  <span class="va">quasi_ext_metapop</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span>
+    <span class="va">sims_list</span>,
+    <span class="va">calculate_quasi_extinction</span>,
+    threshold <span class="op">=</span> <span class="fl">10</span>,     <span class="co"># the quasi-extinction level</span>
+    subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>,       <span class="co"># focus on adults</span>
+    include <span class="op">=</span> <span class="cn">TRUE</span>      <span class="co"># less than or equal to threshold</span>
+  <span class="op">)</span>
+  
+<span class="op">}</span></pre></div>
+<p>As before, the quasi-extinction estimates can be interpreted directly for each population under each of the nine scenarios. These values will differ from those shown above because this example does not set a RNG seed.</p>
+<pre><code>##        habitat       fishing population 1 population 2 population 3
+## 1 restore_none regulate_none         0.96         0.97         0.96
+## 2  restore_one regulate_none         0.96         0.97         0.96
+## 3  restore_two regulate_none         0.96         0.97         0.96
+## 4 restore_none  regulate_two         0.02         0.59         0.96
+## 5  restore_one  regulate_two         0.02         0.61         0.96
+## 6  restore_two  regulate_two         0.02         0.60         0.96
+## 7 restore_none  regulate_all         0.90         0.94         0.93
+## 8  restore_one  regulate_all         0.90         0.94         0.93
+## 9  restore_two  regulate_all         0.90         0.94         0.93
+##   population 4
+## 1         0.97
+## 2         0.97
+## 3         0.97
+## 4         0.97
+## 5         0.97
+## 6         0.97
+## 7         0.93
+## 8         0.93
+## 9         0.93</code></pre>
 </div>
 </div>
   </div>

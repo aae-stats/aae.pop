@@ -1,7 +1,7 @@
 ---
 title: "Comparing scenarios with population models"
 author: "Jian Yen"
-date: "13/11/2020"
+date: "18/11/2020"
 output: html_document
 ---
 
@@ -411,10 +411,344 @@ Many variants of these summaries exist, such as probabilities that 2 or more pop
 
 The outputs of this modelling approach might support a recommendation in their own right, or might guide the development of alternative management actions, such as more-nuanced fishing regulations or more extensive habitat restoration scenarios. Alternatively, model outputs might highlight flaws in model construction. For example, if habitat restoration is known to be more effective than indicated by the results above, this might indicate knowledge gaps that limit the current model's applicability.
 
+
 ## Speeding up simulations
+
+The models above require many repeated simulations. This section outlines two ways to speed up simulations when comparing many scenarios. Both methods are relatively complex to set up and may only give marginal improvements (or no improvement at all), so are not recommended as default approaches in `aae.pop`.
 
 ### Running in parallel
 
+Importantly, the simulations of different scenarios are entirely independent of one another, which makes this an *embarrassingly parallel* problem. What this means is that the simulations can be split up and run simultaneously, assuming sufficient cores and memory.
+
+The `future` and `future.apply` R packages make it easy to deal with embarrassingly parallel problems in R. These packages allow users to set up a general problem statement to be evaluated in a *future* that can be specified (and changed) when actually running the code. Practically, this means writing one bit of code that can be used with several possible *futures*, including a personal computer with one or more cores, a cloud compute server, a large HPC system, or spread across multiple nodes in a distributed compute system. This is especially useful because the code can be developed and tested on a local computer before being sent off to a more-powerful system for extended model runs.
+
+One trick to (easily) running embarrassingly parallel problems in R is the use of `_apply` statements (e.g. `sapply`, `lapply`) in place of `for` loops when the contents of the loop does not depend on previous iterations. This process can be slightly confusing at first but, in its simplest form, simply requires wrapping the contents of the loop in a function and then passing this function to `lapply` or `sapply`.
+
+In R, the first step is to wrap main steps of the `for` loop in a function:
+
+```{r}
+# need a function that takes `scenarios` as input and
+#   spits out the simulation outputs
+run_scenario <- function(
+  scenario,
+  popdyn,
+  habitat,
+  fishing,
+  habitat_extent, 
+  initial_abundance,
+  ntime, 
+  nsim
+) {
+  
+  # pull out the relevant actions
+  #  scenario is now a vector with two elements, habitat and fishing
+  hab_tmp <- habitat[scenario[1], ]
+  fish_tmp <- fishing[scenario[2], ]
+  
+  # define habitat extent taking into account restoration
+  extent_tmp <-restore(
+    n = hab_tmp[1],
+    amount = hab_tmp[2],
+    current = habitat_extent,
+    ntime = ntime
+  )
+  
+  # the populations are independent, so can be run simultaneously 
+  #   with lapply, mapply, or with a for loop
+  sims <- list()
+  for (j in seq_along(popdyn)) {
+    sims[[j]] <- simulate(
+      popdyn[[j]],
+      nsim = nsim,
+      init = initial_abundance[, j],
+      args = list(
+        covariates = format_covariates(extent_tmp[, j]),
+        density_dependence_n = list(remove = fish_tmp[j])
+      )
+    )    
+  }
+  
+  # summarise the trajectories and return these values
+  sapply(
+    sims, 
+    calculate_quasi_extinction,
+    threshold = 10,     # the quasi-extinction level
+    subset = 3:5,       # focus on adults
+    include = TRUE      # less than or equal to threshold
+  )
+  
+}
+
+
+```
+
+This function can be passed to one of the functions in the `future.apply` package, which provides versions of R's standard `apply` functions that work with the `future` package. This example uses the `multisession` evaluation future, which will work on Windows or Unix-like systems (including OSX), and launches multiple R sessions running in parallel. The default number of sessions launched by `multisession` can be viewed with the `availableCores()` function and changed by specifying a `workers` argument in `multisession`.
+
+```{r, warning = FALSE, message = FALSE}
+# load the package
+library(future.apply)
+
+# set the evaluation future, may require the R package library
+#   (can be viewed with .libPaths()) to be passed directly with 
+#   the `rscript_libs` option if using network drives
+plan(multisession)
+
+# use `apply` to evaluate the run_scenario function once 
+#   for each scenario, running up to availableCores()
+#   scenarios in parallel
+quasi_ext_parallel <- t(future_apply(
+  scenarios,                    # matrix/data.frame of scenaios
+  MARGIN = 1,                   # margin of scenarios to iterate over, 1 is rows, 2 is columns
+  FUN = run_scenario,           # function to call on each row of scenarios
+  popdyn = popdyn,              # other arguments to FUN
+  habitat = habitat,
+  fishing = fishing,
+  habitat_extent = habitat_extent, 
+  initial_abundance = initial_abundance,
+  ntime = ntime, 
+  nsim = nsim,
+  future.seed = TRUE            # tells future that there are RNG calls in run_scenario
+))
+
+# it can be useful to reset the evaluation future, both to 
+#   avoid unexpected behaviour within the main R session
+#   and to shut down any background workers. The sequential
+#   evaluation is the default R behaviour (not running anything
+#   in parallel)
+plan(sequential)
+```
+
+This generates outputs similar to those above:
+
+```{r, echo = FALSE}
+out <- cbind(scenarios, round(quasi_ext_parallel, 2))
+colnames(out) <- c("habitat", "fishing", paste("population", 1:4, sep = " "))
+print(out)
+```
+
+The quasi-extinction estimates will not be identical to those above because this example does not set a seed. Even with a seed, this example is unlikely to generate the same results as above because the scenarios are evaluated in parallel in separate R sessions, which introduces multiple RNG streams and changes the order of execution of scenarios.
+
+This example demonstrates one way in which scenarios can be run in parallel. An alternative in this case would be to run the internal loop (over each population) in parallel, either leaving the outer loop as a `for` loop or running both in parallel. The benefits of these different approaches will depend on two things: the computing setup available and the relative runtime of each step. The computing setup will determine how many different things can be run simultaneously (typically limited by number of cores or amount of memory). Relative runtime matters because there is some overhead to running things in parallel. This overhead can slow things sufficiently that there is no benefit and sometimes a cost to running really quick bits of code in parallel. In general, at least on a personal computer, running more time-consuming bits of code in parallel is the best choice.
+
 ### Not-so-meta populations
 
-This document is yet to explore one option: running all four populations as a `metapopulation` with no dispersal. Although this method has computational benefits, it requires separate fishing and restoration functions with distinct arguments for each population.
+There is one less-obvious option for simulations of multiple, independent populations: running all populations as a single `metapopulation` with no dispersal. This method has computational benefits because the calculations within `simulate` are vectorised, which can make operations on one big matrix faster than repeating those operations on multiple, smaller matrices. Howevever, this is a complex method to set up primarily because the `mask`/`function` approach used in `aae.pop` does not yet work neatly with metapopulations.
+
+Setting up a `metapopulation` for this purpose requires redefinition of the `density_dependence_n` and `covariates` processes because both of these were not set up to handle arguments for multiple populations simultaneously. The first step is to define the base `metapopulation` dynamics object:
+
+```{r}
+# define a population model for each of the four populations
+#   but without the density_dependence_n or covariates components,
+#   which will be redefined below
+popdyn <- lapply(
+  seq_len(npop),
+  function(i) dynamics(
+    envstoch(popmat),
+    envstoch,
+    demostoch,
+    dd
+  )
+)
+
+# define a dummy metapopulation structure with one
+#   "dispersal" link
+metapopstr <- matrix(0, nrow = 4, ncol = 4)
+metapopstr[1, 2] <- 1
+
+# define a dummy dispersal link that has zero probability
+#   of any movements
+dispersal_matrix <- matrix(0, nrow = 5, ncol = 5)
+disp_tmp <- dispersal(dispersal_matrix)
+
+# combine this into a metapopulation object
+metapopdyn <- metapopulation(metapopstr, popdyn, list(disp_tmp))
+```
+
+The second step involves redefining the `density_dependence_n` and `covariates` processes to use masks that identify the correct elements of the metapopulation vector (which now has 20 elements, 5 for each population) and to use functions that select the correct arguments for each population. The latter approach is also demonstrated in the [Metapopulation](metapopulations.html) vignette and in the help file for the `metapopulations` function.
+
+```{r}
+# wrapper function to define the removals function for each
+#   population (specified with idx)
+define_removals <- function(idx) {
+  
+  function(n, remove) {
+    
+    # add some stochasticity in the number of removals
+    remove <- rpois(1, lambda = remove[idx])
+  
+    # check that there are enough individuals to remove,
+    #   only remove up to sum(n) individuals
+    if (remove > sum(n))
+      remove <- sum(n)
+    
+    # work out which age classes to remove, sampled
+    #   randomly up to the total available in each
+    #   age class
+    n_available <- rep(3:5, times = n)
+    removal_idx <- sample.int(
+      length(n_available), size = remove, replace = FALSE
+    )
+    
+    # expand this into a vector of removals by age class
+    remove <- table(n_available[removal_idx])
+    remove_expanded <- rep(0, 3)
+    names(remove_expanded) <- as.character(3:5)
+    remove_expanded[names(remove)] <- remove
+    
+    # and return updated abundances
+    n - remove_expanded
+    
+  }
+  
+}
+
+# combine the masks for adults of each population with
+#   the removals function defined for populations 1-4
+dd_n <- density_dependence_n(
+  masks = list(
+    all_classes(metapopdyn$matrix, dims = 3:5),
+    all_classes(metapopdyn$matrix, dims = 8:10),
+    all_classes(metapopdyn$matrix, dims = 13:15),
+    all_classes(metapopdyn$matrix, dims = 18:20)),
+  funs = list(
+    define_removals(1),
+    define_removals(2),
+    define_removals(3),
+    define_removals(4)
+  )
+)
+
+# wrapper function to define the reproduction covariate effects
+#   for each population (specified with idx)
+define_reprod_effects <- function(idx) {
+
+  function(mat, x, alpha = 0.1, beta = 4, ...) {
+
+    # define a nonlinear effect of habitat
+    scale_factor <- 1 / (1 + alpha * exp(- beta * unlist(x)[idx]))
+    
+    # return re-scaled survival values
+    mat * scale_factor
+    
+  }
+  
+}
+
+# wrapper function to define the survival covariate effects
+#   for each population (specified with idx)
+define_surv_effects <- function(idx) {
+
+  function(mat, x, alpha = 0.05, beta = 10, ...) {
+    
+    # define a nonlinear effect of habitat
+    scale_factor <- 1 / (1 + alpha * exp(- beta * unlist(x)[idx]))
+    
+    # return re-scaled survival values
+    mat * scale_factor
+    
+  }
+  
+}
+
+# helper function to define a reproduction mask for each
+#   population (specified with idx)
+define_reprod_mask <- function(mat, idx) {
+  idy <- 5 * (idx - 1)
+  row(mat) == (idy + 1) &
+    col(mat) %in% (3:5 + idy)
+}
+
+# define masks for reproduction and transitions for each
+#   population
+covar_masks <- list(
+  define_reprod_mask(metapopdyn$matrix, 1),
+  define_reprod_mask(metapopdyn$matrix, 2),
+  define_reprod_mask(metapopdyn$matrix, 3),
+  define_reprod_mask(metapopdyn$matrix, 4),
+  transition(metapopdyn$matrix, dims = 1:5),
+  transition(metapopdyn$matrix, dims = 6:10),
+  transition(metapopdyn$matrix, dims = 11:15),
+  transition(metapopdyn$matrix, dims = 16:20)
+)
+
+# combine reproduction and survival covariate effects into
+#   a list
+covar_funs <- list(
+  define_reprod_effects(1),
+  define_reprod_effects(2),
+  define_reprod_effects(3),
+  define_reprod_effects(4),
+  define_surv_effects(1),
+  define_surv_effects(2),
+  define_surv_effects(3),
+  define_surv_effects(4)
+)
+
+# collate into a single covariates object
+covars <- covariates(
+  masks = covar_masks,
+  funs = covar_funs
+)
+```
+
+The final step is to update the `metapopulation` dynamics object with the new `density_dependence_n` and `covariates` objects and use this to simulate (meta)population trajectories under each scenario.
+
+```{r}
+# update the metapopulation dynamics object
+metapopdyn <- update(metapopdyn, dd_n, covars)
+
+# create a new initial abundance vector that has the same
+#   values as above but is a vector rather than matrix
+initial_abundance_meta <- c(initial_abundance)
+
+# loop through each scenario
+quasi_ext_metapop <- matrix(NA, nrow = nrow(scenarios), ncol = npop)
+for (i in seq_len(nrow(scenarios))) {
+  
+  # pull out the relevant actions
+  hab_tmp <- habitat[scenarios$habitat[i], ]
+  fish_tmp <- fishing[scenarios$fishing[i], ]
+  
+  # define habitat extent taking into account restoration
+  extent_tmp <-restore(
+    n = hab_tmp[1],
+    amount = hab_tmp[2],
+    current = habitat_extent,
+    ntime = ntime
+  )
+  
+  # only simulating a single metapopulation this time
+  sims <- simulate(
+    metapopdyn,
+    nsim = nsim,
+    init = initial_abundance_meta,
+    args = list(
+      covariates = format_covariates(extent_tmp),
+      density_dependence_n = list(remove = fish_tmp)
+    )
+  )    
+  
+  # summarise the trajectories, with one step first to
+  #   subset the populations back into their own objects
+  sims_list <- lapply(
+    1:4,
+    function(i) subset(sims, subset = (5 * (i - 1) + 1):(5 * i))
+  )
+  quasi_ext_metapop[i, ] <- sapply(
+    sims_list,
+    calculate_quasi_extinction,
+    threshold = 10,     # the quasi-extinction level
+    subset = 3:5,       # focus on adults
+    include = TRUE      # less than or equal to threshold
+  )
+  
+}
+```
+
+As before, the quasi-extinction estimates can be interpreted directly for each population under each of the nine scenarios. These values will differ from those shown above because this example does not set a RNG seed.
+
+```{r, echo = FALSE}
+out <- cbind(scenarios, round(quasi_ext_metapop, 2))
+colnames(out) <- c("habitat", "fishing", paste("population", 1:4, sep = " "))
+print(out)
+```
