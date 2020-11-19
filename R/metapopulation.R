@@ -262,7 +262,6 @@ metapopulation <- function(structure, dynamics, dispersal) {
     npopulation = structure$npop,
     nspecies = 1,
     hex = hex_id(),
-    base_matrix = lapply(dynamics, function(x) x$base_matrix),
     matrix = metapop_matrix,
     covariates = covars,
     environmental_stochasticity = envstoch,
