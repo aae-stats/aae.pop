@@ -95,7 +95,7 @@ density_dependence <- function(masks, funs, nmask = NULL) {
 
     fn <- function(x, n, ...) {
       for (i in seq_along(masks))
-        x <- do_mask(x, masks[[i]], funs[[i]], n[nmasks[[i]]], ...)
+        x <- do_mask(x, masks[[i]], funs[[i]], n[nmask[[i]]], ...)
       x
     }
   } else {
