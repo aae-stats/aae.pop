@@ -225,6 +225,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
     # pull out non-NULL elements only
     dens_masks <- mat_masks[dyn_check$dens_depend]
+    nmasks <- pop_masks[dyn_check$dens_depend]
     dens_funs <- dens_funs[dyn_check$dens_depend]
 
     # add in stochasticity for dispersal terms (if included)
@@ -233,10 +234,21 @@ metapopulation <- function(structure, dynamics, dispersal) {
     # add non-NULL elements to masks and funs
     missing <- sapply(dispersal_dens, is.null)
     dens_masks <- c(dens_masks, dispersal_masks[!missing])
+    nmasks <- c(
+      nmasks,
+      lapply(
+        seq_len(sum(!missing)),
+        function(x) rep(TRUE, nrow(metapop_matrix))
+      )
+    )
     dens_funs <- c(dens_funs, dispersal_dens[!missing])
 
     # create full environmental stochasticity component
-    dens_depend <- density_dependence(dens_masks, dens_funs)
+    dens_depend <- density_dependence(
+      dens_masks,
+      dens_funs,
+      nmasks
+    )
 
   }
 

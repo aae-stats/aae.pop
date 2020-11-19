@@ -14,6 +14,11 @@ NULL
 #'   \code{\link{masks}}
 #' @param funs a function or list of functions with one element
 #'   for each element of \code{masks}. See Details
+#' @param nmask logical vector or list of vectors defining
+#'   elements of the popualtion vector affected by each
+#'   mask-function pair. Intended primarily for internal
+#'   use when scaling up processes in
+#'   \code{\link{metapopulation}}
 #'
 #' @details \code{density_dependence} specifies standard
 #'   density dependence on vital rates, such as scramble or
@@ -54,20 +59,25 @@ NULL
 #'
 #' @examples
 #' # add
-density_dependence <- function(masks, funs) {
+density_dependence <- function(masks, funs, nmask = NULL) {
 
   # force evaluation to avoid NULL functions down the line
   force(masks)
   force(funs)
+  force(nmask)
 
   if (is.list(masks)) {
     fn <- function(x, n, ...) {
+      if (!is.null(nmask))
+        n <- n[nmask]
       for (i in seq_along(masks))
         x <- do_mask(x, masks[[i]], funs[[i]], n, ...)
       x
     }
   } else {
     fn <- function(x, n, ...) {
+      if (!is.null(nmask))
+        n <- n[nmask]
       do_mask(x, masks, funs, n, ...)
     }
   }
