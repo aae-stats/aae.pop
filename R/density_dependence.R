@@ -66,20 +66,43 @@ density_dependence <- function(masks, funs, nmask = NULL) {
   force(funs)
   force(nmask)
 
+  # populate nmask if not specified
+  if (is.null(nmask)) {
+    if (is.list(masks)) {
+    nmask <- lapply(
+      masks, function(x) rep(TRUE, nrow(x))
+    )
+    } else {
+      nmask <- rep(TRUE, nrow(masks))
+    }
+  }
+
   if (is.list(masks)) {
+
+    # check nmask and funs have enough elements
+    if (!is.null(nmask)) {
+      if (length(masks) != length(nmask)) {
+        stop("must be one element of nmask ",
+             "for each element of masks",
+             call. = FALSE)
+      }
+    }
+    if (length(masks) != length(funs)) {
+      stop("must be one element of funs ",
+           "for each element of masks",
+           call. = FALSE)
+    }
+
     fn <- function(x, n, ...) {
-      if (!is.null(nmask))
-        n <- n[nmask]
       for (i in seq_along(masks))
-        x <- do_mask(x, masks[[i]], funs[[i]], n, ...)
+        x <- do_mask(x, masks[[i]], funs[[i]], n[nmasks[[i]]], ...)
       x
     }
   } else {
     fn <- function(x, n, ...) {
-      if (!is.null(nmask))
-        n <- n[nmask]
-      do_mask(x, masks, funs, n, ...)
+      do_mask(x, masks, funs, n[nmask], ...)
     }
+
   }
 
   as_density_dependence(fn)

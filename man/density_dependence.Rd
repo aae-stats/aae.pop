@@ -5,7 +5,7 @@
 \alias{density_dependence_n}
 \title{Specify density dependence in models of population dynamics}
 \usage{
-density_dependence(masks, funs)
+density_dependence(masks, funs, nmask = NULL)
 
 density_dependence_n(masks, funs)
 }
@@ -16,6 +16,12 @@ defining cells affected by \code{funs}. See Details and
 
 \item{funs}{a function or list of functions with one element
 for each element of \code{masks}. See Details}
+
+\item{nmask}{logical vector or list of vectors defining
+elements of the popualtion vector affected by each
+mask-function pair. Intended primarily for internal
+use when scaling up processes in
+\code{\link{metapopulation}}}
 }
 \description{
 Specify density dependence in vital rates
