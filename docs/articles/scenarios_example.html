@@ -103,7 +103,7 @@
       <h1 data-toc-skip>Comparing scenarios with population models</h1>
                         <h4 class="author">Jian Yen</h4>
             
-            <h4 class="date">13/11/2020</h4>
+            <h4 class="date">18/11/2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/master/vignettes/scenarios_example.Rmd"><code>vignettes/scenarios_example.Rmd</code></a></small>
       <div class="hidden name"><code>scenarios_example.Rmd</code></div>
@@ -325,7 +325,7 @@
 <span class="co"># set up some basic parameters</span>
 <span class="va">npop</span> <span class="op">&lt;-</span> <span class="fl">4</span>      <span class="co"># how many populations?</span>
 <span class="va">ntime</span> <span class="op">&lt;-</span> <span class="fl">50</span>    <span class="co"># how many years to simulate?</span>
-<span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">1000</span>   <span class="co"># how many replicates?</span>
+<span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">100</span>   <span class="co"># how many replicates?</span>
 
 <span class="co"># simulate current habitat extent (between 20 % and 60 %)</span>
 <span class="va">habitat_extent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">npop</span>, min <span class="op">=</span> <span class="fl">0.2</span>, max <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span>
@@ -416,25 +416,25 @@
 <a href="#interpreting-the-outputs" class="anchor"></a>Interpreting the outputs</h3>
 <p>The quasi-extinction estimates can be interpreted directly for each population under each of the nine scenarios:</p>
 <pre><code>##        habitat       fishing population 1 population 2 population 3
-## 1 restore_none regulate_none         0.91         0.88         0.94
-## 2  restore_one regulate_none         0.90         0.87         0.94
-## 3  restore_two regulate_none         0.91         0.87         0.94
-## 4 restore_none  regulate_two         0.00         0.00         0.94
-## 5  restore_one  regulate_two         0.00         0.00         0.94
-## 6  restore_two  regulate_two         0.00         0.00         0.94
-## 7 restore_none  regulate_all         0.05         0.05         0.05
-## 8  restore_one  regulate_all         0.04         0.04         0.05
-## 9  restore_two  regulate_all         0.04         0.04         0.04
+## 1 restore_none regulate_none         0.95         0.95         0.96
+## 2  restore_one regulate_none         0.94         0.96         0.97
+## 3  restore_two regulate_none         0.95         0.95         0.97
+## 4 restore_none  regulate_two         0.00         0.00         0.97
+## 5  restore_one  regulate_two         0.00         0.00         0.97
+## 6  restore_two  regulate_two         0.00         0.00         0.97
+## 7 restore_none  regulate_all         0.06         0.06         0.68
+## 8  restore_one  regulate_all         0.04         0.04         0.68
+## 9  restore_two  regulate_all         0.09         0.06         0.65
 ##   population 4
 ## 1         0.96
-## 2         0.96
+## 2         0.97
 ## 3         0.96
-## 4         0.96
-## 5         0.96
+## 4         0.97
+## 5         0.97
 ## 6         0.96
-## 7         0.06
-## 8         0.05
-## 9         0.05</code></pre>
+## 7         0.55
+## 8         0.45
+## 9         0.53</code></pre>
 <p>These results highlight an interesting pattern. Fishing regulation clearly has a major impact on population trajectories, with a complete ban on fishing reducing extinction risk almost to zero in regulated populations. However, the remaining (unregulated) populations still have relatively high quasi-extinction risks. This highlights a conceptual challenge when results are spread over multiple populations: how much is an individual population worth?</p>
 <p>It’s possible to dig into this with some additional summary statistics that augment the population-level estimates of quasi-extinction risk:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
@@ -458,25 +458,25 @@
 <span class="va">all_persist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">pr_persist</span>, <span class="fl">1</span>, <span class="va">prod</span><span class="op">)</span></pre></div>
 <p>These outputs give a more-complete picture of the relative risk under each of the nine scenarios:</p>
 <pre><code>##   Habitat action Fishing action Average risk Geometric average risk
-## 1   restore_none  regulate_none         0.92                   0.92
-## 2    restore_one  regulate_none         0.92                   0.92
-## 3    restore_two  regulate_none         0.92                   0.92
+## 1   restore_none  regulate_none         0.96                   0.96
+## 2    restore_one  regulate_none         0.96                   0.96
+## 3    restore_two  regulate_none         0.96                   0.96
 ## 4   restore_none   regulate_two         0.48                   0.03
-## 5    restore_one   regulate_two         0.48                   0.04
+## 5    restore_one   regulate_two         0.48                   0.00
 ## 6    restore_two   regulate_two         0.48                   0.04
-## 7   restore_none   regulate_all         0.05                   0.05
-## 8    restore_one   regulate_all         0.05                   0.05
-## 9    restore_two   regulate_all         0.04                   0.04
+## 7   restore_none   regulate_all         0.34                   0.19
+## 8    restore_one   regulate_all         0.30                   0.15
+## 9    restore_two   regulate_all         0.33                   0.20
 ##   Pr(at least one extinct) Pr(at least one persist) Pr(all persist)
-## 1                     1.00                     0.28            0.00
-## 2                     1.00                     0.29            0.00
-## 3                     1.00                     0.28            0.00
+## 1                     1.00                     0.16            0.00
+## 2                     1.00                     0.16            0.00
+## 3                     1.00                     0.15            0.00
 ## 4                     1.00                     1.00            0.00
 ## 5                     1.00                     1.00            0.00
 ## 6                     1.00                     1.00            0.00
-## 7                     0.19                     1.00            0.81
-## 8                     0.17                     1.00            0.83
-## 9                     0.16                     1.00            0.84</code></pre>
+## 7                     0.87                     1.00            0.13
+## 8                     0.84                     1.00            0.16
+## 9                     0.86                     1.00            0.14</code></pre>
 <p>These outputs provide a clearer picture of the relative risks of the different scenarios, supporting decisions based on priorities for a single versus multiple populations. In this case, there is little justification for investment in habitat restoration but plenty of reason to invest in regulating fishing. A focus on persistence of a single population doesn’t distinguish the two fishing actions (partial or complete ban), yet a focus on maintaining all populations indicates that partial regulation across all locations is likely to be a much more effective strategy, reducing the risk that any one of the populations will become extinct.</p>
 <p>Many variants of these summaries exist, such as probabilities that 2 or more populations persist, average extinction risk weighted by a measure of a population’s value, or metrics based on expected genetic or functional diversity under each scenarios.</p>
 <p>The outputs of this modelling approach might support a recommendation in their own right, or might guide the development of alternative management actions, such as more-nuanced fishing regulations or more extensive habitat restoration scenarios. Alternatively, model outputs might highlight flaws in model construction. For example, if habitat restoration is known to be more effective than indicated by the results above, this might indicate knowledge gaps that limit the current model’s applicability.</p>
@@ -580,25 +580,25 @@
 <span class="fu">plan</span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span></pre></div>
 <p>This generates outputs similar to those above:</p>
 <pre><code>##        habitat       fishing population 1 population 2 population 3
-## 1 restore_none regulate_none         0.92         0.88         0.94
-## 2  restore_one regulate_none         0.91         0.88         0.94
-## 3  restore_two regulate_none         0.91         0.87         0.94
-## 4 restore_none  regulate_two         0.00         0.00         0.94
-## 5  restore_one  regulate_two         0.00         0.00         0.94
-## 6  restore_two  regulate_two         0.00         0.00         0.94
-## 7 restore_none  regulate_all         0.05         0.05         0.05
-## 8  restore_one  regulate_all         0.04         0.05         0.05
-## 9  restore_two  regulate_all         0.05         0.05         0.05
+## 1 restore_none regulate_none         0.95         0.95         0.97
+## 2  restore_one regulate_none         0.95         0.95         0.97
+## 3  restore_two regulate_none         0.95         0.95         0.97
+## 4 restore_none  regulate_two         0.00         0.00         0.97
+## 5  restore_one  regulate_two         0.00         0.00         0.97
+## 6  restore_two  regulate_two         0.00         0.00         0.97
+## 7 restore_none  regulate_all         0.08         0.04         0.67
+## 8  restore_one  regulate_all         0.06         0.04         0.69
+## 9  restore_two  regulate_all         0.05         0.04         0.66
 ##   population 4
 ## 1         0.96
 ## 2         0.96
-## 3         0.96
+## 3         0.97
 ## 4         0.96
 ## 5         0.96
 ## 6         0.96
-## 7         0.06
-## 8         0.05
-## 9         0.05</code></pre>
+## 7         0.50
+## 8         0.42
+## 9         0.51</code></pre>
 <p>The quasi-extinction estimates will not be identical to those above because this example does not set a seed. Even with a seed, this example is unlikely to generate the same results as above because the scenarios are evaluated in parallel in separate R sessions, which introduces multiple RNG streams and changes the order of execution of scenarios.</p>
 <p>This example demonstrates one way in which scenarios can be run in parallel. An alternative in this case would be to run the internal loop (over each population) in parallel, either leaving the outer loop as a <code>for</code> loop or running both in parallel. The benefits of these different approaches will depend on two things: the computing setup available and the relative runtime of each step. The computing setup will determine how many different things can be run simultaneously (typically limited by number of cores or amount of memory). Relative runtime matters because there is some overhead to running things in parallel. This overhead can slow things sufficiently that there is no benefit and sometimes a cost to running really quick bits of code in parallel. In general, at least on a personal computer, running more time-consuming bits of code in parallel is the best choice.</p>
 </div>
@@ -606,20 +606,20 @@
 <h3 class="hasAnchor">
 <a href="#not-so-meta-populations" class="anchor"></a>Not-so-meta populations</h3>
 <p>There is one less-obvious option for simulations of multiple, independent populations: running all populations as a single <code>metapopulation</code> with no dispersal. This method has computational benefits because the calculations within <code>simulate</code> are vectorised, which can make operations on one big matrix faster than repeating those operations on multiple, smaller matrices. Howevever, this is a complex method to set up primarily because the <code>mask</code>/<code>function</code> approach used in <code>aae.pop</code> does not yet work neatly with metapopulations.</p>
-<p>Setting up a <code>metapopulation</code> for this purpose requires redefinition of the <code>density_dependence_n</code> and <code>covariates</code> processes because both of these were not set up to handle arguments for multiple populations simultaneously. The first step is to define the base <code>metapopulation</code> dynamics object:</p>
+<p>Setting up a <code>metapopulation</code> for this purpose requires redefinition of the <code>density_dependence_n</code> and <code>covariates</code> processes because neither of these was set up to handle arguments for multiple populations simultaneously. The first step is to define the base <code>metapopulation</code> dynamics object:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="co"># define a population model for each of the four populations</span>
+<span class="co"># define a population model for each of the four populations in popdyn</span>
 <span class="co">#   but without the density_dependence_n or covariates components,</span>
 <span class="co">#   which will be redefined below</span>
+<span class="va">popmat_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">popdyn</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">matrix</span><span class="op">)</span>
 <span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="va">npop</span><span class="op">)</span>,
-  <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span>
-    <span class="fu">envstoch</span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span>,
-    <span class="va">envstoch</span>,
-    <span class="va">demostoch</span>,
-    <span class="va">dd</span>
-  <span class="op">)</span>
+  <span class="va">popmat_list</span>,
+  <span class="va">dynamics</span>,
+  <span class="va">envstoch</span>,
+  <span class="va">demostoch</span>,
+  <span class="va">dd</span>
 <span class="op">)</span>
+
 
 <span class="co"># define a dummy metapopulation structure with one</span>
 <span class="co">#   "dispersal" link</span>
@@ -793,6 +793,7 @@
     <span class="op">)</span>
   <span class="op">)</span>    
   
+  
   <span class="co"># summarise the trajectories, with one step first to</span>
   <span class="co">#   subset the populations back into their own objects</span>
   <span class="va">sims_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span>
@@ -810,25 +811,25 @@
 <span class="op">}</span></pre></div>
 <p>As before, the quasi-extinction estimates can be interpreted directly for each population under each of the nine scenarios. These values will differ from those shown above because this example does not set a RNG seed.</p>
 <pre><code>##        habitat       fishing population 1 population 2 population 3
-## 1 restore_none regulate_none         0.96         0.97         0.96
-## 2  restore_one regulate_none         0.96         0.97         0.96
-## 3  restore_two regulate_none         0.96         0.97         0.96
-## 4 restore_none  regulate_two         0.02         0.59         0.96
-## 5  restore_one  regulate_two         0.02         0.61         0.96
-## 6  restore_two  regulate_two         0.02         0.60         0.96
-## 7 restore_none  regulate_all         0.90         0.94         0.93
-## 8  restore_one  regulate_all         0.90         0.94         0.93
-## 9  restore_two  regulate_all         0.90         0.94         0.93
+## 1 restore_none regulate_none         0.94         0.96         0.97
+## 2  restore_one regulate_none         0.95         0.96         0.97
+## 3  restore_two regulate_none         0.94         0.96         0.96
+## 4 restore_none  regulate_two         0.00         0.00         0.97
+## 5  restore_one  regulate_two         0.00         0.00         0.97
+## 6  restore_two  regulate_two         0.00         0.00         0.97
+## 7 restore_none  regulate_all         0.06         0.05         0.67
+## 8  restore_one  regulate_all         0.05         0.05         0.72
+## 9  restore_two  regulate_all         0.08         0.05         0.65
 ##   population 4
 ## 1         0.97
-## 2         0.97
-## 3         0.97
-## 4         0.97
-## 5         0.97
-## 6         0.97
-## 7         0.93
-## 8         0.93
-## 9         0.93</code></pre>
+## 2         0.96
+## 3         0.96
+## 4         0.96
+## 5         0.96
+## 6         0.96
+## 7         0.60
+## 8         0.54
+## 9         0.53</code></pre>
 </div>
 </div>
   </div>

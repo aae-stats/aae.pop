@@ -154,7 +154,7 @@
   (<code>density_dependence_n</code>).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>density_dependence</span><span class='op'>(</span><span class='va'>masks</span>, <span class='va'>funs</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>density_dependence</span><span class='op'>(</span><span class='va'>masks</span>, <span class='va'>funs</span>, nmask <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='fu'>density_dependence_n</span><span class='op'>(</span><span class='va'>masks</span>, <span class='va'>funs</span><span class='op'>)</span></pre>
 
@@ -171,6 +171,14 @@ defining cells affected by <code>funs</code>. See Details and
       <th>funs</th>
       <td><p>a function or list of functions with one element
 for each element of <code>masks</code>. See Details</p></td>
+    </tr>
+    <tr>
+      <th>nmask</th>
+      <td><p>logical vector or list of vectors defining
+elements of the popualtion vector affected by each
+mask-function pair. Intended primarily for internal
+use when scaling up processes in
+<code><a href='metapopulation.html'>metapopulation</a></code></p></td>
     </tr>
     </table>
 

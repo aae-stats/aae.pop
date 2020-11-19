@@ -270,7 +270,7 @@ calculate_quasi_extinction <- function(popsim, threshold, subset = NULL, include
 # set up some basic parameters
 npop <- 4      # how many populations?
 ntime <- 50    # how many years to simulate?
-nsim <- 1000   # how many replicates?
+nsim <- 100   # how many replicates?
 
 # simulate current habitat extent (between 20 % and 60 %)
 habitat_extent <- runif(n = npop, min = 0.2, max = 0.6)
@@ -521,9 +521,9 @@ plan(sequential)
 This generates outputs similar to those above:
 
 ```{r, echo = FALSE}
-out <- cbind(scenarios, round(quasi_ext_parallel, 2))
-colnames(out) <- c("habitat", "fishing", paste("population", 1:4, sep = " "))
-print(out)
+out_parallel <- cbind(scenarios, round(quasi_ext_parallel, 2))
+colnames(out_parallel) <- c("habitat", "fishing", paste("population", 1:4, sep = " "))
+print(out_parallel)
 ```
 
 The quasi-extinction estimates will not be identical to those above because this example does not set a seed. Even with a seed, this example is unlikely to generate the same results as above because the scenarios are evaluated in parallel in separate R sessions, which introduces multiple RNG streams and changes the order of execution of scenarios.
@@ -534,21 +534,21 @@ This example demonstrates one way in which scenarios can be run in parallel. An 
 
 There is one less-obvious option for simulations of multiple, independent populations: running all populations as a single `metapopulation` with no dispersal. This method has computational benefits because the calculations within `simulate` are vectorised, which can make operations on one big matrix faster than repeating those operations on multiple, smaller matrices. Howevever, this is a complex method to set up primarily because the `mask`/`function` approach used in `aae.pop` does not yet work neatly with metapopulations.
 
-Setting up a `metapopulation` for this purpose requires redefinition of the `density_dependence_n` and `covariates` processes because both of these were not set up to handle arguments for multiple populations simultaneously. The first step is to define the base `metapopulation` dynamics object:
+Setting up a `metapopulation` for this purpose requires redefinition of the `density_dependence_n` and `covariates` processes because neither of these was set up to handle arguments for multiple populations simultaneously. The first step is to define the base `metapopulation` dynamics object:
 
 ```{r}
-# define a population model for each of the four populations
+# define a population model for each of the four populations in popdyn
 #   but without the density_dependence_n or covariates components,
 #   which will be redefined below
+popmat_list <- lapply(popdyn, function(x) x$matrix)
 popdyn <- lapply(
-  seq_len(npop),
-  function(i) dynamics(
-    envstoch(popmat),
-    envstoch,
-    demostoch,
-    dd
-  )
+  popmat_list,
+  dynamics,
+  envstoch,
+  demostoch,
+  dd
 )
+
 
 # define a dummy metapopulation structure with one
 #   "dispersal" link
@@ -728,6 +728,7 @@ for (i in seq_len(nrow(scenarios))) {
     )
   )    
   
+  
   # summarise the trajectories, with one step first to
   #   subset the populations back into their own objects
   sims_list <- lapply(
@@ -748,7 +749,7 @@ for (i in seq_len(nrow(scenarios))) {
 As before, the quasi-extinction estimates can be interpreted directly for each population under each of the nine scenarios. These values will differ from those shown above because this example does not set a RNG seed.
 
 ```{r, echo = FALSE}
-out <- cbind(scenarios, round(quasi_ext_metapop, 2))
-colnames(out) <- c("habitat", "fishing", paste("population", 1:4, sep = " "))
-print(out)
+out_metapop <- cbind(scenarios, round(quasi_ext_metapop, 2))
+colnames(out_metapop) <- c("habitat", "fishing", paste("population", 1:4, sep = " "))
+print(out_metapop)
 ```

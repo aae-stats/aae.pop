@@ -55,6 +55,9 @@
     <loc>https://aae-stats.github.io/aae.pop/articles/beyond_defaults.html</loc>
   </url>
   <url>
+    <loc>https://aae-stats.github.io/aae.pop/articles/dynamic_environments.html</loc>
+  </url>
+  <url>
     <loc>https://aae-stats.github.io/aae.pop/articles/forecasting_example.html</loc>
   </url>
   <url>
@@ -80,5 +83,8 @@
   </url>
   <url>
     <loc>https://aae-stats.github.io/aae.pop/articles/scenarios_example.html</loc>
+  </url>
+  <url>
+    <loc>https://aae-stats.github.io/aae.pop/articles/summarising_trajectories.html</loc>
   </url>
 </urlset>
