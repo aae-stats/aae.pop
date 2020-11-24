@@ -273,10 +273,6 @@ template_macquarieperch <- function(
   system = "lake"               # define covariate type by system
 ) {
 
-  # for evaluation of unevaluated arguments
-  force(k)
-  force(reproductive)
-
   # set default system
   if (length(system) > 1)
     system <- system[1]
@@ -307,7 +303,6 @@ template_macquarieperch <- function(
     recruit_failure = 0.25,
     contributing_min = 0.5,
     contributing_max = 1.0,
-    reproductive = reproductive,
     ...
   ) {
 
