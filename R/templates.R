@@ -281,8 +281,11 @@ template_macquarieperch <- function(
   if (!system %in% c("lake", "river"))
     stop("system must be one of lake or river", call. = FALSE)
 
-  # define a survival function, adding dots to soak up extra arguments within simulate
-  survival_gen <- function(mat, mean_real, sd_real, perfect_correlation = TRUE, ...) {
+  # define a survival function, adding dots to soak up extra
+  #    arguments within simulate
+  survival_gen <- function(
+    mat, mean_real, sd_real, perfect_correlation = TRUE, ...
+  ) {
     rmultiunit_from_real(
       n = 1,
       mean_real = mean_real,
@@ -291,8 +294,9 @@ template_macquarieperch <- function(
     )
   }
 
-  # define a reproduction function, being careful with argument names to avoid conflicts
-  #   with any arguments in survival_gen, which would then require multiple different
+  # define a reproduction function, being careful with argument
+  #   names to avoid conflicts with any arguments in
+  #   survival_gen, which would then require multiple different
   #   arguments with the same name in simulate
   reproduction_gen <- function(
     mat,
@@ -306,7 +310,8 @@ template_macquarieperch <- function(
     ...
   ) {
 
-    # generate stochastic values for early life survival (eggs, larvae, young-of-year)
+    # generate stochastic values for early life
+    #   survival (eggs, larvae, young-of-year)
     early_surv <- rmultiunit_from_real(n = 1, mean = early_mean, sd = early_sd)
 
     # otherwise draw random variates for the three model parameters
@@ -487,7 +492,9 @@ template_macquarieperch <- function(
     recruit_effects <- list(recruit_effects, recruit_effects_river)
     recruit_masks <- list(recruit_masks, reproduction(popmat))
     survival_effects <- list(survival_effects, survival_effects_river)
-    survival_masks <- list(survival_masks, transition(popmat, dims = reproductive))
+    survival_masks <- list(
+      survival_masks, transition(popmat, dims = reproductive)
+    )
 
   }
 
@@ -497,9 +504,11 @@ template_macquarieperch <- function(
     funs = list(recruit_effects, survival_effects)
   )
 
+  # nolint start
   # print a message to ensure args are included
   message('Arguments are required to simulate Macquarie perch dynamics.\n',
           'Default arguments can be accessed with get_args("macquarie_perch").')
+  # nolint end
 
   # return
   list(
