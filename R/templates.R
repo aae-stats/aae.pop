@@ -628,7 +628,7 @@ args_macquarieperch <- function(
       list(
         n_yoy = n[[1]][iter],
         n_twoplus = n[[2]][iter],
-        n_yoy = n[[3]][iter],
+        n_adult = n[[3]][iter],
         add = add
       )
 
