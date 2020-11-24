@@ -359,7 +359,7 @@ template_macquarieperch <- function(
     prod(c(0.5, 0.013, 0.13))    # add early life survival
 
   # define population matrix
-  nclass <- length(survival_params) + 1
+  nclass <- length(survival_mean) + 1
   popmat <- matrix(0, nrow = nclass, ncol = nclass)
   popmat[transition(popmat)] <- survival_mean
   popmat[reproduction(popmat, dims = reproductive)] <- reproduction_mean

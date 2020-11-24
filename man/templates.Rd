@@ -9,7 +9,7 @@
 \usage{
 murray_cod(k = 20000, ...)
 
-macquarie_perch(k = 1000, ...)
+macquarie_perch(k = 1000, reproductive = 3:30, system = "lake", ...)
 
 get_args(sp, ...)
 }
@@ -18,6 +18,13 @@ get_args(sp, ...)
 
 \item{\dots}{additional arguments passed to templates or args
 functions}
+
+\item{reproductive}{integer vector specifying reproductive
+age classes or stages in the population matrix}
+
+\item{system}{ecosystem type defining elements of population
+dynamics. Currently implemented for \code{macquarie_perch},
+which has different covariate effects in lakes and rivers}
 }
 \description{
 Use pre-defined population dynamics objects to
