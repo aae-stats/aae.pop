@@ -472,31 +472,33 @@ template_macquarieperch <- function(
   )
 
   # define covariate effects on recruitment in all systems
-  recruit_effects <- function(mat, x, ...) {
+  recruit_effects <- list(
+    function(mat, x, ...) {
 
-    # effect of spawning-flow magnitude on recruitment
-    # negative effect of Nov/Dec discharge on recruitment
-    log_flow <- log(x$spawning_flow + 0.01)
-    scale_factor <- exp(-0.1 * log_flow - 0.1 * (log_flow ^ 2))
-    scale_factor[scale_factor > 1] <- 1
-    scale_factor[scale_factor < 0] <- 0
-    mat <- mat * scale_factor
+      # effect of spawning-flow magnitude on recruitment
+      # negative effect of Nov/Dec discharge on recruitment
+      log_flow <- log(x$spawning_flow + 0.01)
+      scale_factor <- exp(-0.1 * log_flow - 0.1 * (log_flow ^ 2))
+      scale_factor[scale_factor > 1] <- 1
+      scale_factor[scale_factor < 0] <- 0
+      mat <- mat * scale_factor
 
-    # effect of spawning-flow variability on recruitment
-    # negative effect of Nov/Dec discharge variability on recruitment
-    #   (days with more than 100% change from previous)
-    mat <- mat * exp(-0.05 * x$spawning_variability)
+      # effect of spawning-flow variability on recruitment
+      # negative effect of Nov/Dec discharge variability on recruitment
+      #   (days with more than 100% change from previous)
+      mat <- mat * exp(-0.05 * x$spawning_variability)
 
-    # return
-    mat
+      # return
+      mat
 
-  }
+    }
+  )
 
   # define covariate effects on adult survival in all systems
   survival_effects <- NULL
 
   # define covariate masks in all systems
-  recruit_masks <- reproduction(popmat)
+  recruit_masks <- list(reproduction(popmat))
   survival_masks <- NULL
 
   # add system-specific covariate effects
@@ -508,8 +510,8 @@ template_macquarieperch <- function(
     }
 
     # update effects and masks
-    recruit_effects <- list(recruit_effects, recruit_effects_lake)
-    recruit_masks <- list(recruit_masks, reproduction(popmat))
+    recruit_effects <- c(recruit_effects, list(recruit_effects_lake))
+    recruit_masks <- c(recruit_masks, list(reproduction(popmat)))
 
   }
   if (system == "river") {
@@ -536,19 +538,19 @@ template_macquarieperch <- function(
     }
 
     # update effects and masks
-    recruit_effects <- list(recruit_effects, recruit_effects_river)
-    recruit_masks <- list(recruit_masks, reproduction(popmat))
-    survival_effects <- list(survival_effects, survival_effects_river)
-    survival_masks <- list(
-      survival_masks, transition(popmat, dims = reproductive)
+    recruit_effects <- c(recruit_effects, list(recruit_effects_river))
+    recruit_masks <- c(recruit_masks, list(reproduction(popmat)))
+    survival_effects <- c(survival_effects, list(survival_effects_river))
+    survival_masks <- c(
+      survival_masks, list(transition(popmat, dims = reproductive))
     )
 
   }
 
   # compile covariates process
   covars <- covariates(
-    masks = list(recruit_masks, survival_masks),
-    funs = list(recruit_effects, survival_effects)
+    masks = c(recruit_masks, survival_masks),
+    funs = c(recruit_effects, survival_effects)
   )
 
   # nolint start
