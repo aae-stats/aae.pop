@@ -707,7 +707,7 @@ args_macquarieperch <- function(
       mat <- mat[[iter]]
 
     # wrap up all survival means and SDs, including early life
-    #  (this allows a single call to `unit_to_real`, which is slow)
+    #  (this allows a single call to unit_to_real, which is slow)
     survival_mean <- c(
       0.5, 0.013, 0.13,     # early life
       mat[transition(mat)]  # from population matrix in current time step
