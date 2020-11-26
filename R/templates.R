@@ -525,7 +525,7 @@ template_macquarieperch <- function(
     survival_effects_river <- function(mat, x, ...) {
 
       # positive effect of flow on overall population growth rate
-      #    (based on individuals >= 1 year old)
+      #    (based on individuals 1 year or older)
       log_flow <- log(x$average_daily_flow + 0.01)
       scale_factor <- exp(0.3 * log_flow - 0.3 * (log_flow ^ 2))
       scale_factor[scale_factor > 1] <- 1
