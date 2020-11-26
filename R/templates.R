@@ -486,7 +486,7 @@ template_macquarieperch <- function(
       # effect of spawning-flow variability on recruitment
       # negative effect of Nov/Dec discharge variability on recruitment
       #   (days with more than 100% change from previous)
-      mat <- mat * exp(-0.01 * x$spawning_variabx`ility)
+      mat <- mat * exp(-0.01 * x$spawning_variability)
 
       # return
       mat
