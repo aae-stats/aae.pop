@@ -490,7 +490,7 @@ template_macquarieperch <- function(
       # effect of spawning-flow variability on recruitment
       # negative effect of Nov/Dec discharge variability on recruitment
       #   (days with more than 100% change from previous)
-      mat <- mat * exp(-variability_par * x$spawning_variability)
+      mat <- mat * exp(-variability_param * x$spawning_variability)
 
       # return
       mat
@@ -509,7 +509,9 @@ template_macquarieperch <- function(
   if (system == "lake") {
 
     # negative effect of rising lake level on YOY
-    recruit_effects_lake <- function(mat, x, ..., recruit_param = -0.5, shift = 10) {
+    recruit_effects_lake <- function(
+      mat, x, ..., recruit_param = -0.5, shift = 10
+    ) {
       mat * (1 / (1 + exp(-recruit_param * (x$water_level_change + shift))))
     }
 
@@ -521,12 +523,16 @@ template_macquarieperch <- function(
   if (system == "river") {
 
     # negative effect of rising river level on YOY
-    recruit_effects_river <- function(mat, x, ..., recruit_param = -0.01, shift = 200) {
+    recruit_effects_river <- function(
+      mat, x, ..., recruit_param = -0.01, shift = 200
+    ) {
       mat * (1 / (1 + exp(recruit_param * (x$river_height_change + shift))))
     }
 
     # negative effect of low flows on adult survival
-    survival_effects_river <- function(mat, x, ..., survival_param = c(0.01, -0.01)) {
+    survival_effects_river <- function(
+      mat, x, ..., survival_param = c(0.01, -0.01)
+    ) {
 
       # positive effect of flow on overall population growth rate
       #    (based on individuals 1 year or older)
