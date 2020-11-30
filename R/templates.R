@@ -473,12 +473,16 @@ template_macquarieperch <- function(
 
   # define covariate effects on recruitment in all systems
   recruit_effects <- list(
-    function(mat, x, ...) {
+    function(
+      mat, x, ..., spawning_param = c(-0.01, -0.05), variability_param = -0.003
+    ) {
 
       # effect of spawning-flow magnitude on recruitment
       # negative effect of Nov/Dec discharge on recruitment
       log_flow <- log(x$spawning_flow + 0.01)
-      scale_factor <- exp(-0.01 * log_flow - 0.05 * (log_flow ^ 2))
+      scale_factor <- exp(
+        spawning_param[1] * log_flow + spawning_param[2] * (log_flow ^ 2)
+      )
       scale_factor[scale_factor > 1] <- 1
       scale_factor[scale_factor < 0] <- 0
       mat <- mat * scale_factor
@@ -486,7 +490,7 @@ template_macquarieperch <- function(
       # effect of spawning-flow variability on recruitment
       # negative effect of Nov/Dec discharge variability on recruitment
       #   (days with more than 100% change from previous)
-      mat <- mat * exp(-0.01 * x$spawning_variability)
+      mat <- mat * exp(-variability_par * x$spawning_variability)
 
       # return
       mat
@@ -505,8 +509,8 @@ template_macquarieperch <- function(
   if (system == "lake") {
 
     # negative effect of rising lake level on YOY
-    recruit_effects_lake <- function(mat, x, ...) {
-      mat * (1 / (1 + exp(-0.5 * (x$water_level_change + 10))))
+    recruit_effects_lake <- function(mat, x, ..., recruit_param = -0.5, shift = 10) {
+      mat * (1 / (1 + exp(-recruit_param * (x$water_level_change + shift))))
     }
 
     # update effects and masks
@@ -517,8 +521,8 @@ template_macquarieperch <- function(
   if (system == "river") {
 
     # negative effect of rising river level on YOY
-    recruit_effects_river <- function(mat, x, ..., recruit_param = -0.01) {
-      mat * (1 / (1 + exp(recruit_param * (x$river_height_change + 200))))
+    recruit_effects_river <- function(mat, x, ..., recruit_param = -0.01, shift = 200) {
+      mat * (1 / (1 + exp(recruit_param * (x$river_height_change + shift))))
     }
 
     # negative effect of low flows on adult survival
