@@ -517,17 +517,19 @@ template_macquarieperch <- function(
   if (system == "river") {
 
     # negative effect of rising river level on YOY
-    recruit_effects_river <- function(mat, x, ...) {
-      mat * (1 / (1 + exp(-0.01 * (x$river_height_change + 200))))
+    recruit_effects_river <- function(mat, x, ..., recruit_param = -0.01) {
+      mat * (1 / (1 + exp(recruit_param * (x$river_height_change + 200))))
     }
 
     # negative effect of low flows on adult survival
-    survival_effects_river <- function(mat, x, ...) {
+    survival_effects_river <- function(mat, x, ..., survival_param = c(0.01, -0.01)) {
 
       # positive effect of flow on overall population growth rate
       #    (based on individuals 1 year or older)
       log_flow <- log(x$average_daily_flow + 0.01)
-      scale_factor <- exp(0.3 * log_flow - 0.3 * (log_flow ^ 2))
+      scale_factor <- exp(
+        survival_param[1] * log_flow + survival_param[2] * (log_flow ^ 2)
+      )
       scale_factor[scale_factor > 1] <- 1
       scale_factor[scale_factor < 0] <- 0
       mat <- mat * scale_factor
