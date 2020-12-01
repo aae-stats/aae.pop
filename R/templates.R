@@ -418,7 +418,7 @@ template_macquarieperch <- function(
   # define density dependence, only affects adult survival
   #   and reproductive stages
   density_masks <- list(
-    transition(popmat, dims = reproductive),
+    transition(popmat, dims = 2:30),
     reproduction(popmat, dims = reproductive)
   )
 
@@ -554,7 +554,7 @@ template_macquarieperch <- function(
     recruit_masks <- c(recruit_masks, list(reproduction(popmat)))
     survival_effects <- c(survival_effects, list(survival_effects_river))
     survival_masks <- c(
-      survival_masks, list(transition(popmat, dims = reproductive))
+      survival_masks, list(transition(popmat, dims = 2:30))
     )
 
   }
