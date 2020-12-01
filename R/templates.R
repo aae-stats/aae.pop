@@ -474,7 +474,7 @@ template_macquarieperch <- function(
   # define covariate effects on recruitment in all systems
   recruit_effects <- list(
     function(
-      mat, x, ..., spawning_param = c(-0.01, -0.05), variability_param = -0.003
+      mat, x, spawning_param = c(-0.01, -0.05), variability_param = -0.003, ...
     ) {
 
       # effect of spawning-flow magnitude on recruitment
@@ -510,7 +510,7 @@ template_macquarieperch <- function(
 
     # negative effect of rising lake level on YOY
     recruit_effects_lake <- function(
-      mat, x, ..., recruit_param = -0.5, shift = 10
+      mat, x, recruit_param = -0.5, shift = 10, ...
     ) {
       mat * (1 / (1 + exp(-recruit_param * (x$water_level_change + shift))))
     }
@@ -524,14 +524,14 @@ template_macquarieperch <- function(
 
     # negative effect of rising river level on YOY
     recruit_effects_river <- function(
-      mat, x, ..., recruit_param = -0.01, shift = 200
+      mat, x, recruit_param = -0.01, shift = 200, ...
     ) {
       mat * (1 / (1 + exp(recruit_param * (x$river_height_change + shift))))
     }
 
     # negative effect of low flows on adult survival
     survival_effects_river <- function(
-      mat, x, ..., survival_param = c(0.01, -0.01)
+      mat, x, survival_param = c(0.2, -0.2), ...
     ) {
 
       # positive effect of flow on overall population growth rate
