@@ -317,7 +317,8 @@ template_silverperch <- function() {
 template_macquarieperch <- function(
   k = 1000,                     # adult female carrying capacity
   reproductive = 3:30,          # reproductive age classes
-  system = "lake"               # define covariate type by system
+  system = "lake",              # define covariate type by system
+  genetic_factor = 1.0          # define change in early survival
 ) {
 
   # set default system
@@ -406,8 +407,8 @@ template_macquarieperch <- function(
     2.295 *
       log(43.15 * exp(- 1.68 * exp(-0.302 * reproductive))) +
       2.886) *
-    0.5 *                        # 50:50 sex ratio
-    prod(c(0.5, 0.013, 0.13))    # add early life survival
+    0.5 *                                       # 50:50 sex ratio
+    prod(genetic_factor * c(0.5, 0.013, 0.13))  # add early life survival
 
   # define population matrix
   nclass <- length(survival_mean) + 1
@@ -653,7 +654,8 @@ args_macquarieperch <- function(
   allee_strength = 1,
   contributing_min = 0.75,
   contributing_max = 1.0,
-  recruit_failure = 0
+  recruit_failure = 0,
+  genetic_factor = 1.0
 ) {
 
   # expand n, start, end if required
@@ -709,6 +711,8 @@ args_macquarieperch <- function(
 
   }
 
+  early_surv <- c(0.5, 0.013, 0.13)
+
   # helper to calculate real-valued parameters for survival
   #   simulation
   transform_survival <- function(obj, pop, iter) {
@@ -721,8 +725,8 @@ args_macquarieperch <- function(
     # wrap up all survival means and SDs, including early life
     #  (this allows a single call to unit_to_real, which is slow)
     survival_mean <- c(
-      0.5, 0.013, 0.13,     # early life
-      mat[transition(mat)]  # from population matrix in current time step
+      genetic_factor * early_surv,  # early life survival with gene mixing
+      mat[transition(mat)]    # from population matrix in current time step
     )
     survival_sd <- c(
       0.1, 0.007, 0.028,  # early life
