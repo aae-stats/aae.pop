@@ -87,8 +87,8 @@ format_covariates <- function(x, aux = NULL, names = NULL) {
     colnames(x) <- names
   }
 
-  # turn x into a data.frame
-  x <- list(data.frame(x))
+  # turn x into a list with one element per row/timestep
+  x <- list(lapply(x, function(.x) .x[i, ]))
 
   # do we need to add auxiliary variables?
   if (!is.null(aux)) {

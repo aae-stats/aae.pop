@@ -51,13 +51,24 @@ NULL
 #'
 #' @param args named list of lists passing arguments to processes defined
 #'   in \code{object}, including \code{interaction} for
-#'   \code{\link{multispecies}} objects.
-#' @param args.dyn list of time-varying values of \code{args}. Defaults to
-#'   \code{NULL} and requires one element for each generation (specified
-#'   by covariates or with \code{options$ntime}).
-#' @param args.fn named list of functions evaluating additional values of
+#'   \code{\link{multispecies}} objects. Lists (up to one per process)
+#'   can contain a mix of static, dynamic, and function arguments.
+#'   Dynamic arguments must be lists with one element per time step.
+#'   Function arguments must be functions that calculate arguments
+#'   dynamically in each generation based on from the population dynamics
+#'   object, population abundances, and time step in each generation.
+#'   All other classes (e.g., single values, matrices, data frames)
+#'   are treated as static arguments
+#' @param args.dyn this argument is deprecated. List of time-varying
+#'   values of \code{args}. Defaults to \code{NULL} and requires one
+#'   element for each generation (specified by covariates or with
+#'   \code{options$ntime}). Dynamic arguments can now be passed directly
+#'   to \code{args}
+#' @param args.fn this argument is deprecated.
+#'   Named list of functions evaluating additional values of
 #'   \code{args} based on the matrix and abundances in each generation.
-#'   Defaults to \code{NULL}.
+#'   Defaults to \code{NULL}. Function arguments can now be passed
+#'   directly to \code{args}
 #'
 #' @details Includes plot and subset methods
 #'
@@ -259,10 +270,61 @@ simulate.dynamics <- function(object,
     density_dependence_n = list(),
     interaction = list()
   )
-  default_args[names(args)] <- args
 
-  # store a copy of the defaults to reset if changed dynamically below
-  static_args <- default_args
+  # set an identity covariates function if no covariate arguments
+  #   provided
+  if (is.null(args$covariates))
+    object <- use_identity_covariates(object)
+
+  # set identity covariates if args provided and covariates process
+  #   is missing
+  if (is.multispecies(object)) {
+
+    # do any species have missing covariates?
+    no_covariates <- sapply(
+      object$dynamics, function(x) is.null(x$covariates)
+    )
+
+    # if so, fill with identity covariates
+    if (any(no_covariates)) {
+      object[no_covariates] <- lapply(
+        object[no_covariates],
+        use_identity_covariates
+      )
+    }
+
+  } else {
+
+    if (is.null(object$dynamics$covariates))
+      object$dynamics$covariates <- use_identity_covariates(object)
+
+  }
+
+  # classify user args by type
+  args <- classify_args(args)
+
+  # check args
+  if (!is.null(args.dyn) | !is.null(args.fn)) {
+    warning("args.dyn and args.fn are deprecated; ",
+            "dynamic and function arguments can be ",
+            "included directly in args",
+            call. = FALSE)
+  }
+
+  # set static args here
+  default_args[names(args)] <- args$static
+
+  # calculate ntime from dynamic args if provided and
+  #   check for consistency among dynamic args
+  n_dyn_args <- lapply(args$dyn, length)
+  if (any(length(n_dyn_args) > 0)) {
+    n_dyn_args <- n_dyn_args[n_dyn_args > 0]
+    if (length(unique(n_dyn_args)) > 1) {
+      stop("all dynamic (list) arguments must have the same length",
+           call. = FALSE)
+    }
+    opt$ntime <- unique(n_dyn_args)
+  }
 
   # add nsim into options
   opt$replicates <- nsim
@@ -277,55 +339,6 @@ simulate.dynamics <- function(object,
     r_seed <- get(".Random.seed", envir = .GlobalEnv)
     on.exit(assign(".Random.seed", r_seed, envir = .GlobalEnv))
     set.seed(seed)
-
-  }
-
-  # are covariates included?
-  include_covariates <- length(default_args$covariates) > 0
-
-  # expand matrix and use the number of covariate values instead
-  #   of fixed ntime if covariates are provided
-  if (is.multispecies(object)) {
-
-    if (include_covariates) {
-
-      # expand covariate matrix for each species if needed
-      for (i in seq_len(object$nspecies)) {
-        object$dynamics[[i]]$matrix <- expand_matrix(
-          object$dynamics[[i]], default_args$covariates
-        )
-      }
-
-      # are any matrices not expanded (no covariates)?
-      not_expanded <- sapply(object$dynamics, function(x) is.matrix(x$matrix))
-
-      # how many time steps?
-      idx <- which(!not_expanded)[1]
-      opt$ntime <- length(object$dynamics[[idx]]$matrix)
-
-      # expand others to match ntime if needed
-      if (any(not_expanded)) {
-        for (i in which(not_expanded)) {
-          object$dynamics[[i]]$matrix <- lapply(
-            seq_len(opt$ntime),
-            function(i) object$dynamics[[i]]$matrix
-          )
-        }
-      }
-
-    }
-
-  } else {
-
-    if (include_covariates) {
-
-      # expand covariate matrix if covariates included
-      object$matrix <- expand_matrix(object, default_args$covariates)
-
-      # how many time steps?
-      opt$ntime <- length(object$matrix)
-
-    }
 
   }
 
@@ -383,9 +396,9 @@ simulate.dynamics <- function(object,
 
     # update args if required
     default_args <- update_args(
-      args = static_args,
-      dyn = args.dyn,
-      fn = args.fn,
+      args = args$static,
+      dyn = args$dyn,
+      fn = args$fn,
       obj = object,
       pop = pop_tmp,
       iter = i
@@ -398,8 +411,7 @@ simulate.dynamics <- function(object,
         object,
         pop_tmp,
         opt = opt,
-        args = default_args,
-        include_covariates = include_covariates
+        args = default_args
       )
       if (opt$keep_slices) {
         pop <- mapply(
@@ -414,8 +426,7 @@ simulate.dynamics <- function(object,
         object,
         pop_tmp,
         opt = opt,
-        args = default_args,
-        include_covariates = include_covariates
+        args = default_args
       )
       if (opt$keep_slices)
         pop[, , i + 1] <- pop_tmp
@@ -443,14 +454,23 @@ simulate.dynamics <- function(object,
 #' @importFrom future.apply future_lapply
 # internal function: update a single time step for one species
 simulate_once <- function(
-  iter, obj, pop_t, opt, args, include_covariates, is_expanded = FALSE
+  iter, obj, pop_t, opt, args, is_expanded = FALSE
 ) {
 
-  # matrix will be a list if expanded over covariates
-  if (include_covariates) {
-    mat <- obj$matrix[[iter]]
+  # calculate covariate-altered matrix
+  if (is_expanded) {
+    mat <- lapply(
+      mat,
+      function(x) do.call(
+        obj$covariates,
+        c(list(x), args$covariates)
+      )
+    )
   } else {
-    mat <- obj$matrix
+    mat <- do.call(
+      obj$covariates,
+      c(list(obj$matrix), args$covariates)
+    )
   }
 
   # keep pop_t as a matrix if replicates == 1
@@ -556,14 +576,13 @@ simulate_once_multispecies <- function(iter,
                                        obj,
                                        pop_t,
                                        opt,
-                                       args,
-                                       include_covariates) {
+                                       args) {
 
   # vectorised update for all species
   pop_tp1 <- future_lapply(
     seq_len(obj$nspecies),
     simulate_multispecies_internal,
-    iter, obj, pop_t, opt, args, include_covariates
+    iter, obj, pop_t, opt, args
   )
 
   # return tidied abundances (e.g. rounded or floored values)
@@ -574,21 +593,11 @@ simulate_once_multispecies <- function(iter,
 # internal function: update one species in a multispecies simulation
 #   (to vectorise simulate_once_multispecies)
 simulate_multispecies_internal <- function(
-  i, iter, obj, pop_t, opt, args, include_covariates
+  i, iter, obj, pop_t, opt, args
 ) {
 
   # pull out relevant object
   dynamics <- obj$dynamics[[i]]
-
-  # matrix will be a list if expanded over covariates
-  if (include_covariates) {
-    mat <- dynamics$matrix[[iter]]
-  } else {
-    mat <- dynamics$matrix
-  }
-
-  # and turn off covariates flag so subsetting isn't repeated
-  include_covariates <- FALSE
 
   # rescale matrix according to interspecific interactions
   #   setting a flag to change update step accordingly
@@ -615,7 +624,6 @@ simulate_multispecies_internal <- function(
     pop_t[[i]],
     opt,
     args,
-    include_covariates,
     is_expanded = is_expanded
   )
 
@@ -741,33 +749,77 @@ expand_dims <- function(init, replicates) {
 
 }
 
-# internal function: expand matrix to include covariates at each time step
-expand_matrix <- function(obj, args) {
+# internal function: set identity covariates function if covariates
+#   are not used
+use_identity_covariates <- function(obj) {
 
-  if (!is.null(obj$covariates)) {
+  # define identity covariates function
+  identity_mask <- ifelse(
+    is.multispecies(obj),
+    obj$dynamics[[1]]$matrix,
+    obj$dynamics$matrix
+  )
+  identity_covariates <- covariates(
+    masks = identity_mask,
+    funs = identity
+  )
 
-    # how many covariate observations do we have?
-    ncov <- nrow(args[[1]])
-
-    # expand with covariates if included, passing
-    #   one row of first argument for each time step
-    matrix <- lapply(
-      seq_len(ncov),
-      function(i) do.call(
-        obj$covariates,
-        c(list(obj$matrix), list(args[[1]][i, ]), args[-1])
+  # loop over species if multispecies, single
+  #   update otherwise
+  if (is.multispecies(obj)) {
+    for (i in seq_len(obj$nspecies)) {
+      obj$dynamics <- lapply(
+        obj$dynamics,
+        update,
+        identity_covariates
       )
-    )
-
+    }
   } else {
-
-    # replicate matrix identically otherwise
-    matrix <- obj$matrix
-
+    object$dynamics <- update(obj$dynamics, identity_covariates)
   }
 
   # return
-  matrix
+  obj
+
+}
+
+
+# internal function: split arguments based on type
+classify_args <- function(args) {
+
+  # which arguments are static?
+  static <- lapply(args, extract_args, type = "static")
+
+  # which arguments are dynamic?
+  dyn <- lapply(args, extract_args, type = "dynamic")
+
+  # which arguments are functions?
+  fn <- lapply(args, extract_args, type = "function")
+
+  # and return list of arguments by type
+  list(static = static, dyn = dyn, fn = fn)
+
+}
+
+# internal function: extract arguments by type
+extract_args <- function(x, type) {
+
+  # work out classes
+  type <- lapply(x, class)
+
+  # extract by type:
+  #    dynamic if list
+  #    function if function,
+  #    static otherwise
+  if (type == "static")
+    x <- x[!type %in% c("list", "function")]
+  if (type == "dynamic")
+    x <- x[type == "list"]
+  if (type == "function")
+    x <- x[type == "function"]
+
+  # return
+  x
 
 }
 
