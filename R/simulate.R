@@ -295,8 +295,8 @@ simulate.dynamics <- function(object,
 
   } else {
 
-    if (is.null(object$dynamics$covariates))
-      object$dynamics$covariates <- use_identity_covariates(object)
+    if (is.null(object$covariates))
+      object$covariates <- use_identity_covariates(object)
 
   }
 
@@ -801,22 +801,23 @@ classify_args <- function(args) {
 
 }
 
-# internal function: extract arguments by type
+# internal function: extract arguments by type for each
+#   process
 extract_args <- function(x, type) {
 
   # work out classes
-  type <- lapply(x, class)
+  arg_class <- sapply(x, class)
 
   # extract by type:
   #    dynamic if list
   #    function if function,
   #    static otherwise
   if (type == "static")
-    x <- x[!type %in% c("list", "function")]
+    x <- x[!arg_class %in% c("list", "function")]
   if (type == "dynamic")
-    x <- x[type == "list"]
+    x <- x[arg_class == "list"]
   if (type == "function")
-    x <- x[type == "function"]
+    x <- x[arg_class == "function"]
 
   # return
   x
