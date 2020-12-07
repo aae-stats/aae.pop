@@ -757,7 +757,7 @@ use_identity_covariates <- function(obj) {
   identity_mask <- ifelse(
     is.multispecies(obj),
     obj$dynamics[[1]]$matrix,
-    obj$dynamics$matrix
+    obj$matrix
   )
   identity_covariates <- covariates(
     masks = identity_mask,
@@ -775,7 +775,7 @@ use_identity_covariates <- function(obj) {
       )
     }
   } else {
-    object$dynamics <- update(obj$dynamics, identity_covariates)
+    obj <- update(obj, identity_covariates)
   }
 
   # return
