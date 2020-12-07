@@ -64,15 +64,26 @@ according to \code{options()$aae.pop_initialisation}}
 
 \item{args}{named list of lists passing arguments to processes defined
 in \code{object}, including \code{interaction} for
-\code{\link{multispecies}} objects.}
+\code{\link{multispecies}} objects. Lists (up to one per process)
+can contain a mix of static, dynamic, and function arguments.
+Dynamic arguments must be lists with one element per time step.
+Function arguments must be functions that calculate arguments
+dynamically in each generation based on from the population dynamics
+object, population abundances, and time step in each generation.
+All other classes (e.g., single values, matrices, data frames)
+are treated as static arguments}
 
-\item{args.dyn}{list of time-varying values of \code{args}. Defaults to
-\code{NULL} and requires one element for each generation (specified
-by covariates or with \code{options$ntime}).}
+\item{args.dyn}{this argument is deprecated. List of time-varying
+values of \code{args}. Defaults to \code{NULL} and requires one
+element for each generation (specified by covariates or with
+\code{options$ntime}). Dynamic arguments can now be passed directly
+to \code{args}}
 
-\item{args.fn}{named list of functions evaluating additional values of
+\item{args.fn}{this argument is deprecated.
+Named list of functions evaluating additional values of
 \code{args} based on the matrix and abundances in each generation.
-Defaults to \code{NULL}.}
+Defaults to \code{NULL}. Function arguments can now be passed
+directly to \code{args}}
 }
 \description{
 Simulate population dynamics for one or more
