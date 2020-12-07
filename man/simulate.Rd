@@ -71,7 +71,9 @@ Function arguments must be functions that calculate arguments
 dynamically in each generation based on from the population dynamics
 object, population abundances, and time step in each generation.
 All other classes (e.g., single values, matrices, data frames)
-are treated as static arguments}
+are treated as static arguments. Covariates contained in numeric
+vectors, matrices, or data frames can be formatted as dynamic
+arguments with the \code{format_covariates} function}
 
 \item{args.dyn}{this argument is deprecated. List of time-varying
 values of \code{args}. Defaults to \code{NULL} and requires one

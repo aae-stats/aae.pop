@@ -88,7 +88,7 @@ format_covariates <- function(x, aux = NULL, names = NULL) {
   }
 
   # turn x into a list with one element per row/timestep
-  x <- list(lapply(x, function(.x) .x[i, ]))
+  x <- list(lapply(seq_len(nrow(x)), function(i) x[i, ]))
 
   # do we need to add auxiliary variables?
   if (!is.null(aux)) {
