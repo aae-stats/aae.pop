@@ -316,8 +316,8 @@ simulate.dynamics <- function(object,
 
   # calculate ntime from dynamic args if provided and
   #   check for consistency among dynamic args
-  n_dyn_args <- lapply(args$dyn, length)
-  if (any(length(n_dyn_args) > 0)) {
+  n_dyn_args <- sapply(args$dyn, length)
+  if (any(n_dyn_args > 0)) {
     n_dyn_args <- n_dyn_args[n_dyn_args > 0]
     if (length(unique(n_dyn_args)) > 1) {
       stop("all dynamic (list) arguments must have the same length",
@@ -845,8 +845,10 @@ update_args <- function(args, dyn, fn, obj, pop, iter) {
 
     # update accordingly
     for (i in seq_along(fn_exist)) {
-      fn_eval <- fn[[i]](obj, pop, iter)
-      args[[fn_exist[i]]] <- c(args[[fn_exist[i]]], fn_eval)
+      for (j in seq_along(fn[[i]])) {
+        fn_eval <- fn[[i]][[j]](obj, pop, iter)
+        args[[fn_exist[i]]] <- c(args[[fn_exist[i]]], fn_eval)
+      }
     }
 
   }
