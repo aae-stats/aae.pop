@@ -312,7 +312,7 @@ simulate.dynamics <- function(object,
   }
 
   # set static args here
-  default_args[names(args)] <- args$static
+  default_args[names(args$static)] <- args$static
 
   # calculate ntime from dynamic args if provided and
   #   check for consistency among dynamic args
