@@ -827,7 +827,7 @@ extract_args <- function(x, type) {
 # internal function: update arguments based on the current generation
 update_args <- function(args, dyn, fn, obj, pop, iter) {
 
-  if (!is.null(dyn)) {
+  if (any(sapply(dyn, length) > 0)) {
 
     # check which exist
     dyn_exist <- names(dyn)
@@ -838,7 +838,7 @@ update_args <- function(args, dyn, fn, obj, pop, iter) {
 
   }
 
-  if (!is.null(fn)) {
+  if (any(sapply(fn, length) > 0)) {
 
     # check which exist
     fn_exist <- names(fn)
