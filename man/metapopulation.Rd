@@ -107,5 +107,9 @@ mc_meta <- metapopulation(mc_structure, list(dyn1, dyn2, dyn3), mc_dispersal)
 
 # and simulate with one column of predictors for each population
 xsim <- matrix(rnorm(60), ncol = 3)
-sims <- simulate(mc_meta, nsim = 2, args = list(covariates = list(x = xsim)))
+sims <- simulate(
+  mc_meta,
+  nsim = 2,
+  args = list(covariates = format_covariates(xsim))
+)
 }
