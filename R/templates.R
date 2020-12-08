@@ -360,7 +360,9 @@ template_macquarieperch <- function(
 
     # generate stochastic values for early life
     #   survival (eggs, larvae, young-of-year)
-    early_surv <- rmultiunit_from_real(n = 1, mean = early_mean, sd = early_sd)
+    early_surv <- rmultiunit_from_real(
+      n = 1, mean_real = early_mean, sd_real = early_sd
+    )
 
     # otherwise draw random variates for the three model parameters
     y1 <- rnorm(n = 1, mean = fec_mean[1], sd = fec_sd[1])
@@ -455,9 +457,9 @@ template_macquarieperch <- function(
   # use density_dependence_n to include stocking or
   #   translocations (removals)
   dd_n_masks <- list(
-    all_classes(popmat, dim = 1),
-    all_classes(popmat, dim = 2),
-    all_classes(popmat, dim = reproductive)
+    all_classes(popmat, dims = 1),
+    all_classes(popmat, dims = 2),
+    all_classes(popmat, dims = reproductive)
   )
   dd_n_fns <- list(
     function(pop, n_yoy, ...)

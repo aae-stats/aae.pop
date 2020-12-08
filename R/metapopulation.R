@@ -70,7 +70,11 @@ NULL
 #' # simulate with shared covariates
 #' #  (uses pre-defined Murray cod covariate function)
 #' xsim <- matrix(rnorm(20), ncol = 1)
-#' sims <- simulate(mc_meta, nsim = 2, args = list(covariates = list(x = xsim)))
+#' sims <- simulate(
+#'   mc_meta,
+#'   nsim = 2,
+#'   args = list(covariates = format_covariates(xsim))
+#' )
 #'
 #' # simulate with separate covariates
 #' #  (requires re-definition of Murray cod covariate function)

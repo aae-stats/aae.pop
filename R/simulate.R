@@ -762,6 +762,7 @@ expand_dims <- function(init, replicates) {
 
 # internal function: set identity covariates function if covariates
 #   are not used
+#' @importFrom stats update
 use_identity_covariates <- function(obj) {
 
   # define identity covariates function
