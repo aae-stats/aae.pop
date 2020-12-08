@@ -180,7 +180,7 @@ NULL
 #'   dyn,
 #'   init = c(50, 20, 10, 10, 5),
 #'   nsim = 100,
-#'   args.fn = list(environmental_stochasticity = envstoch_function),
+#'   args = list(environmental_stochasticity = list(envstoch_function)),
 #'   options = list(ntime = 50),
 #' )
 #'
@@ -203,8 +203,10 @@ NULL
 #'   dyn,
 #'   init = c(50, 20, 10, 10, 5),
 #'   nsim = 100,
-#'   args = list(covariates = list(x = xvals)),
-#'   args.fn = list(environmental_stochasticity = envstoch_function)
+#'   args = list(
+#'     covariates = format_covariates(xvals),
+#'     environmental_stochasticity = list(envstoch_function)
+#'   )
 #' )
 #'
 #' # and can plot these again
@@ -224,8 +226,10 @@ NULL
 #'   nsim = 100,
 #'   options = list(update = update_binomial_leslie,
 #'                  tidy_abundances = floor),
-#'   args = list(covariates = list(x = xvals)),
-#'   args.fn = list(environmental_stochasticity = envstoch_function)
+#'   args = list(
+#'     covariates = format_covariates(xvals),
+#'     environmental_stochasticity = list(envstoch_function)
+#'   )
 #' )
 #'
 #' # and can plot these again
