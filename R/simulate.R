@@ -471,7 +471,7 @@ simulate_once <- function(
   # calculate covariate-altered matrix
   if (is_expanded) {
     mat <- lapply(
-      mat,
+      obj$matrix,
       function(x) do.call(
         obj$covariates,
         c(list(x), args$covariates)
