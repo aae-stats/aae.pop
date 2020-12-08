@@ -610,6 +610,9 @@ simulate_multispecies_internal <- function(
   # pull out relevant object
   dynamics <- obj$dynamics[[i]]
 
+  # and matrix
+  mat <- dynamics$matrix
+
   # rescale matrix according to interspecific interactions
   #   setting a flag to change update step accordingly
   is_expanded <- FALSE
