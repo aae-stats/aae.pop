@@ -88,7 +88,7 @@ test_that("simulate returns correct abundances with covariates", {
     nsim = nsim,
     init = init_set,
     options = list(ntime = ntime, tidy_abundances = floor),
-    args = list(covariates = list(matrix(xsim, ncol = 1)))
+    args = list(covariates = list(lapply(seq_len(length(xsim)), function(i) xsim[i])))
   )
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
@@ -123,7 +123,7 @@ test_that("simulate returns correct abundances
     nsim = nsim,
     init = init_set,
     options = list(ntime = ntime, tidy_abundances = floor),
-    args = list(covariates = list(matrix(xsim, ncol = 1)))
+    args = list(covariates = format_covariates(xsim))
   )
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
@@ -161,7 +161,7 @@ test_that("simulate returns correct abundances with
     nsim = nsim,
     init = init_set,
     options = list(ntime = ntime, tidy_abundances = floor),
-    args = list(covariates = list(matrix(xsim, ncol = 1)))
+    args = list(covariates = format_covariates(xsim))
   )
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
@@ -186,7 +186,7 @@ test_that("simulate returns correct abundances with demographic
     nsim = nsim,
     init = init_set,
     options = list(ntime = ntime, tidy_abundances = floor),
-    args = list(covariates = list(matrix(xsim, ncol = 1)))
+    args = list(covariates = format_covariates(xsim))
   )
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
@@ -213,7 +213,7 @@ test_that("simulate returns correct abundances with
     nsim = nsim,
     init = init_set,
     options = list(ntime = ntime, tidy_abundances = floor),
-    args = list(covariates = list(matrix(xsim, ncol = 1)))
+    args = list(covariates = format_covariates(xsim))
   )
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
@@ -352,7 +352,7 @@ test_that("simulate returns reproducible outputs when seed is set", {
     seed = 123,
     init = init_set,
     options = list(ntime = ntime, tidy_abundances = floor),
-    args = list(covariates = list(matrix(xsim, ncol = 1)))
+    args = list(covariates = format_covariates(xsim))
   )
   target <- simulate(
     dyn,
@@ -360,7 +360,7 @@ test_that("simulate returns reproducible outputs when seed is set", {
     seed = 123,
     init = init_set,
     options = list(ntime = ntime, tidy_abundances = floor),
-    args = list(covariates = list(matrix(xsim, ncol = 1)))
+    args = list(covariates = format_covariates(xsim))
   )
   expect_equal(target, value)
 
@@ -371,7 +371,7 @@ test_that("simulate returns reproducible outputs when seed is set", {
     seed = 124,
     init = init_set,
     options = list(ntime = ntime, tidy_abundances = floor),
-    args = list(covariates = list(matrix(xsim, ncol = 1)))
+    args = list(covariates = format_covariates(xsim))
   )
   expect_false(all(target == value))
 

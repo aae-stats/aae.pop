@@ -26,7 +26,7 @@ test_that("templates return working dynamics objects", {
   # simulate from a Murray cod object
   dyn <- macquarie_perch()
   arg <- get_args("macquarie_perch")
-  sim <- simulate(dyn, args = arg$static, args.fn = arg$funs)
+  sim <- simulate(dyn, args = arg)
   expect_equal(dim(sim), c(1L, 30L, 51L))
 
   # expect most processes to be defined

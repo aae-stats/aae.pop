@@ -754,38 +754,29 @@ args_macquarieperch <- function(
 
   }
 
-  # define static elements of each scenario
-  args_list <- list(
+  # return named list of args
+  list(
 
     # set as 1 (default) or 2
     density_dependence = list(allee_strength = allee_strength),
 
     # set contributing as random uniform on 0.75-1.0 by default
     # set recruit_failure at 0 by default
+    # add function to pre-transform unit to real and back
     environmental_stochasticity = list(
       contributing_min = contributing_min,
       contributing_max = contributing_max,
-      recruit_failure = recruit_failure
-    )
-
-  )
-
-  # define functions to update simulate args dynamically
-  args_function <- list(
-
-    # to pre-transform unit to real and back
-    environmental_stochasticity = transform_survival,
+      recruit_failure = recruit_failure,
+      transform_survival
+    ),
 
     # to include additions or removals of individuals
-    density_dependence_n = define_removals(
-      start = start, end = end, n = n, add = add
+    density_dependence_n = list(
+      define_removals(
+        start = start, end = end, n = n, add = add
+      )
     )
-  )
 
-  # return named list of args
-  list(
-    static = args_list,
-    funs = args_function
   )
 
 }
