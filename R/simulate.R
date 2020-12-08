@@ -837,7 +837,9 @@ update_args <- function(args, dyn, fn, obj, pop, iter) {
     # update accordingly
     for (i in seq_along(dyn_exist)) {
       for (j in seq_along(dyn[[i]])) {
-        args[[dyn_exist[i]]] <- c(args[[dyn_exist[i]]], dyn[[i]][[j]])
+        args[[dyn_exist[i]]] <- c(
+          args[[dyn_exist[i]]], dyn[[i]][[j]][[iter]]
+        )
       }
     }
 
