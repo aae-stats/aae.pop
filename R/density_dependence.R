@@ -15,7 +15,7 @@ NULL
 #' @param funs a function or list of functions with one element
 #'   for each element of \code{masks}. See Details
 #' @param nmask logical vector or list of vectors defining
-#'   elements of the popualtion vector affected by each
+#'   elements of the population vector affected by each
 #'   mask-function pair. Intended primarily for internal
 #'   use when scaling up processes in
 #'   \code{\link{metapopulation}}

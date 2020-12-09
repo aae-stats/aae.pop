@@ -3,66 +3,73 @@ context("masks")
 # set up: define a population matrix
 mat <- matrix(1:25, ncol = 5)
 
+# version of R determines class of matrices
+if (R.version$major > 3) {
+  expected_class <- c("mask", "matrix", "array")
+} else {
+  expected_class <- c("mask", "matrix")
+}
+
 test_that("mask definitions are correct", {
 
   # reproduction without dims
   value <- reproduction(mat)
   target <- row(mat) == 1 & col(mat) > 1
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # reproduction with consecutive dims
   value <- reproduction(mat, dims = 4:5)
   target <- row(mat) == 1 & col(mat) > 3
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # reproduction with non-consecutive dims
   value <- reproduction(mat, dims = c(2, 5))
   target <- row(mat) == 1 & col(mat) %in% c(2, 5)
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # survival without dims
   value <- survival(mat)
   target <- row(mat) == col(mat)
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # survival with consecutive dims
   value <- survival(mat, dims = 3:5)
   target <- row(mat) == col(mat) & col(mat) > 2
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # survival with non-consecutive dims
   value <- survival(mat, dims = c(1, 3, 4))
   target <- row(mat) == col(mat) & col(mat) %in% c(1, 3, 4)
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # transition without dims
   value <- transition(mat)
   target <- row(mat) == col(mat) + 1
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # transition with consecutive dims
   value <- transition(mat, dims = 3:4)
   target <- row(mat) == col(mat) + 1 & col(mat) > 2
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # transition with non-consecutive dims
   value <- transition(mat, dims = c(1, 3, 4))
   target <- row(mat) == col(mat) + 1 & col(mat) %in% c(1, 3, 4)
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # all_cells (dims ignored)
   value <- all_cells(mat)
   target <- !is.na(mat)
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # all_cells with and without dims should be identical
@@ -72,19 +79,19 @@ test_that("mask definitions are correct", {
   # all_classes without dims
   value <- all_classes(mat)
   target <- matrix(!is.na(seq_len(ncol(mat))), ncol = 1)
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # all_classes with consecutive dims
   value <- all_classes(mat, dims = 4:5)
   target <- row(target) > 3
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
   # all_classes with non-consecutive dims
   value <- all_classes(mat, dims = c(2, 5))
   target <- matrix(row(value) %in% c(2, 5), ncol = 1)
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equal(value, target)
 
 })
@@ -98,7 +105,7 @@ test_that("masks combine correctly as matrices", {
   value <- combine(mask1, mask2)
   target <- row(mat) == col(mat) |
     (row(mat) == 1 & col(mat) > 3)
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equivalent(value, target)
 
 })
@@ -108,7 +115,7 @@ test_that("masks combine correctly as functions", {
   # create a mask function from two separate fns
   value <- combine(reproduction, survival)(mat)
   target <- row(mat) == col(mat) | row(mat) == 1
-  class(target) <- c("mask", "matrix", "array")
+  class(target) <- expected_class
   expect_equivalent(value, target)
 
 })

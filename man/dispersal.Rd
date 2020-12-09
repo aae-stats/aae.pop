@@ -39,14 +39,14 @@ one element for each element of \code{density_masks}.
 See Details}
 
 \item{proportion}{logical indicating whether \code{kernel}
-is specified in absolute probabilites or as a proportion
+is specified in absolute probabilities or as a proportion
 of the source population (defaults to \code{FALSE}).
 If \code{TRUE}, values in \code{kernel} are calculated as
 a proportion of the total probability an individual
 exits that class at any given time step}
 }
 \description{
-Specify disperal between populations, including stochasticity
+Specify dispersal between populations, including stochasticity
   and density dependence in dispersal parameters
 }
 \details{

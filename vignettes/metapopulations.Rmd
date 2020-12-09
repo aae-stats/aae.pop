@@ -14,7 +14,7 @@ library(aae.pop)
 
 `aae.pop` has a built-in method to define a metapopulation from multiple populations. This is based on the most-general definition of a metapopulation: populations of the same species connected by dispersal. Defining a metapopulation requires `dynamics` objects for multiple populations, a `structure` that defines movements between populations, and a `dispersal` object, which is a new class of object used to specify in detail the movements between populations.
 
-This vignette introduces `structure` and `dispersal` objects and explains how population processes (e.g., demograhic stochasticity) are handled in metapopulations.
+This vignette introduces `structure` and `dispersal` objects and explains how population processes (e.g., demographic stochasticity) are handled in metapopulations.
 
 
 ## Defining a metapopulation
@@ -122,7 +122,7 @@ In this example, individuals from population 1 move to populations 3 and 4, indi
 
 ### Dispersal
 
-Defining the structure of a metapopulation is the first step towards simulating metapopulation dynamics. However, this definition of structure is biologically vague. It specifies which populations are connected and the direction of those connectons, but doesn't specify which classes *within* populations are moving and how frequently. `dispersal` objects specify the probability of a transition between specific source and receiver classes, whether these transitions are density dependent, and any stochasticity in the transitions. `dispersal` objects are one-directional, which means a separate `dispersal` object is required for each link in the `structure` matrix.
+Defining the structure of a metapopulation is the first step towards simulating metapopulation dynamics. However, this definition of structure is biologically vague. It specifies which populations are connected and the direction of those connections, but doesn't specify which classes *within* populations are moving and how frequently. `dispersal` objects specify the probability of a transition between specific source and receiver classes, whether these transitions are density dependent, and any stochasticity in the transitions. `dispersal` objects are one-directional, which means a separate `dispersal` object is required for each link in the `structure` matrix.
 
 Using the simplistic, two-class example, which had adults moving both directions between the two populations, the `dispersal` objects could be specified as:
 
@@ -227,7 +227,7 @@ A by-product of this setup is that processes (with the exception of dispersal) a
 
 The `metapopulation` function is designed to make metapopulation dynamics as similar as possible to single-population dynamics, which takes full advantage of the methods in `simulate` for (relatively) fast and flexible models. One complication is that `simulate` does not explicitly allow separate covariate sequences for each population. This is a relatively common scenario given that metapopulations typically span multiple spatial locations, and this section illustrates a possible workaround. An additional example of this approach is included in the `metapopulation` documentation (accessible by typing `?metapopulation` into the R console). A more elegant solution is a focus for future development of `aae.pop`.
 
-Using the simplified, two-population example above, this workaround involves combining two sequences of covariates into a single `matrix` (or `data.frame`), then subsetting this combined `matrix` within the `covariates` functions for each individual poplation.
+Using the simplified, two-population example above, this workaround involves combining two sequences of covariates into a single `matrix` (or `data.frame`), then subsetting this combined `matrix` within the `covariates` functions for each individual population.
 
 ```{r, dev = "png"}
 # define two covariate sequences and combine them into a data.frame

@@ -250,7 +250,7 @@ plot(sims, col = scales::alpha("#2171B5", 0.1))
 
 Specifying a `covariates` term does not automatically include covariates in the model. Note that the `nesting` variable also had to be passed to `simulate` via the `args` argument. The reason for this is that it allows a single population dynamics object (`popdyn`, above) to be used with multiple different sets of covariates, without re-compiling the `dynamics` object each time. The `format_covariates` function is included to format covariate values and any auxiliary (static) variables.
 
-`aae.pop` assumess that `covariates` change through time, so a consequence of specifying covariates is that the vector/matrix of covariates determines the number of simulated time steps (`n_time`). In the above example, there were 20 values of `nesting`, which translates to 21 time steps (initial condition plus 20 updates).
+`aae.pop` assumes that `covariates` change through time, so a consequence of specifying covariates is that the vector/matrix of covariates determines the number of simulated time steps (`n_time`). In the above example, there were 20 values of `nesting`, which translates to 21 time steps (initial condition plus 20 updates).
 
 It is assumed that covariates can be passed as a vector, matrix, or data.frame, with one element or row for each time step. More complex `covariate` terms are possible through the `args.dyn` and `args.fn` arguments to `simulate`. These terms are demonstrated in the [Passing arguments](passing_arguments.html) vignette.
 

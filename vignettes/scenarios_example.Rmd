@@ -12,7 +12,7 @@ library(aae.pop)
 
 ## Background
 
-A common application of population models is the comparison of scenarios based on population outcomes. Examples include predicting population trajectories under different scenarios of climate change, comparing or ranking competing management scenarios, and predicting the consequences of different ecological hypotheses. This example uses a simplified model of population dyanamics to demonstrate the comparison of multiple scenarios, as well as several methods to speed computation when simulating many scenarios.
+A common application of population models is the comparison of scenarios based on population outcomes. Examples include predicting population trajectories under different scenarios of climate change, comparing or ranking competing management scenarios, and predicting the consequences of different ecological hypotheses. This example uses a simplified model of population dynamics to demonstrate the comparison of multiple scenarios, as well as several methods to speed computation when simulating many scenarios.
 
 ## A simple population model
 
@@ -532,7 +532,7 @@ This example demonstrates one way in which scenarios can be run in parallel. An 
 
 ### Not-so-meta populations
 
-There is one less-obvious option for simulations of multiple, independent populations: running all populations as a single `metapopulation` with no dispersal. This method has computational benefits because the calculations within `simulate` are vectorised, which can make operations on one big matrix faster than repeating those operations on multiple, smaller matrices. Howevever, this is a complex method to set up primarily because the `mask`/`function` approach used in `aae.pop` does not yet work neatly with metapopulations.
+There is one less-obvious option for simulations of multiple, independent populations: running all populations as a single `metapopulation` with no dispersal. This method has computational benefits because the calculations within `simulate` are vectorised, which can make operations on one big matrix faster than repeating those operations on multiple, smaller matrices. However, this is a complex method to set up primarily because the `mask`/`function` approach used in `aae.pop` does not yet work neatly with metapopulations.
 
 Setting up a `metapopulation` for this purpose requires redefinition of the `density_dependence_n` and `covariates` processes because neither of these was set up to handle arguments for multiple populations simultaneously. The first step is to define the base `metapopulation` dynamics object:
 

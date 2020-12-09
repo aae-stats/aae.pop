@@ -15,9 +15,9 @@ Cover the importance of checking model outputs and how this can be done.
 
 Common-sense checks.
 
-Link to forecasting exmaple for more rigorous checks.
+Link to forecasting example for more rigorous checks.
 
-Could highligth statitsical tests and checks but these are an extension.
+Could highlight statistical tests and checks but these are an extension.
 
 ```{r}
 a <- rnorm(10)
