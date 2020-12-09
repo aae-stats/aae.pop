@@ -56,7 +56,6 @@ reference:
   - title: Helpers
     contents:
     - rng
-    - templates
 
 navbar:
   structure:

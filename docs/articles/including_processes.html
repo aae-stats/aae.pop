@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
       </span>
     </div>
 
@@ -318,7 +318,7 @@
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 <p>Specifying a <code>covariates</code> term does not automatically include covariates in the model. Note that the <code>nesting</code> variable also had to be passed to <code>simulate</code> via the <code>args</code> argument. The reason for this is that it allows a single population dynamics object (<code>popdyn</code>, above) to be used with multiple different sets of covariates, without re-compiling the <code>dynamics</code> object each time. The <code>format_covariates</code> function is included to format covariate values and any auxiliary (static) variables.</p>
-<p><code>aae.pop</code> assumess that <code>covariates</code> change through time, so a consequence of specifying covariates is that the vector/matrix of covariates determines the number of simulated time steps (<code>n_time</code>). In the above example, there were 20 values of <code>nesting</code>, which translates to 21 time steps (initial condition plus 20 updates).</p>
+<p><code>aae.pop</code> assumes that <code>covariates</code> change through time, so a consequence of specifying covariates is that the vector/matrix of covariates determines the number of simulated time steps (<code>n_time</code>). In the above example, there were 20 values of <code>nesting</code>, which translates to 21 time steps (initial condition plus 20 updates).</p>
 <p>It is assumed that covariates can be passed as a vector, matrix, or data.frame, with one element or row for each time step. More complex <code>covariate</code> terms are possible through the <code>args.dyn</code> and <code>args.fn</code> arguments to <code>simulate</code>. These terms are demonstrated in the <a href="passing_arguments.html">Passing arguments</a> vignette.</p>
 </div>
 </div>

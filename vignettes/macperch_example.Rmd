@@ -23,7 +23,6 @@ references:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(aae.pop)
 library(aae.pop.templates)
 ```
 

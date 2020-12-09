@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
       </span>
     </div>
 
@@ -163,7 +163,11 @@
   args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
   args.dyn <span class='op'>=</span> <span class='cn'>NULL</span>,
   args.fn <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span>
+
+<span class='fu'>is.simulation</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+
+<span class='fu'>is.simulation_list</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -223,19 +227,37 @@ according to <code>options()$aae.pop_initialisation</code></p></td>
       <th>args</th>
       <td><p>named list of lists passing arguments to processes defined
 in <code>object</code>, including <code>interaction</code> for
-<code><a href='multispecies.html'>multispecies</a></code> objects.</p></td>
+<code><a href='multispecies.html'>multispecies</a></code> objects. Lists (up to one per process)
+can contain a mix of static, dynamic, and function arguments.
+Dynamic arguments must be lists with one element per time step.
+Function arguments must be functions that calculate arguments
+dynamically in each generation based on from the population dynamics
+object, population abundances, and time step in each generation.
+All other classes (e.g., single values, matrices, data frames)
+are treated as static arguments. Covariates contained in numeric
+vectors, matrices, or data frames can be formatted as dynamic
+arguments with the <code>format_covariates</code> function</p></td>
     </tr>
     <tr>
       <th>args.dyn</th>
-      <td><p>list of time-varying values of <code>args</code>. Defaults to
-<code>NULL</code> and requires one element for each generation (specified
-by covariates or with <code>options$ntime</code>).</p></td>
+      <td><p>this argument is deprecated. List of time-varying
+values of <code>args</code>. Defaults to <code>NULL</code> and requires one
+element for each generation (specified by covariates or with
+<code>options$ntime</code>). Dynamic arguments can now be passed directly
+to <code>args</code></p></td>
     </tr>
     <tr>
       <th>args.fn</th>
-      <td><p>named list of functions evaluating additional values of
+      <td><p>this argument is deprecated.
+Named list of functions evaluating additional values of
 <code>args</code> based on the matrix and abundances in each generation.
-Defaults to <code>NULL</code>.</p></td>
+Defaults to <code>NULL</code>. Function arguments can now be passed
+directly to <code>args</code></p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>an object to pass to <code>is.simulation</code> or
+<code>is.simulation.list</code></p></td>
     </tr>
     </table>
 
@@ -289,6 +311,7 @@ Defaults to <code>NULL</code>.</p></td>
 <span class='co'># and plot again</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>sims</span><span class='op'>)</span>
 </div><div class='img'><img src='simulate-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># note that there is only one trajectory now because</span>
 <span class='co'>#   this simulation is deterministic.</span>
 <span class='co'>#</span>
@@ -349,7 +372,7 @@ Defaults to <code>NULL</code>.</p></td>
   <span class='va'>dyn</span>,
   init <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>20</span>, <span class='fl'>10</span>, <span class='fl'>10</span>, <span class='fl'>5</span><span class='op'>)</span>,
   nsim <span class='op'>=</span> <span class='fl'>100</span>,
-  args.fn <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>environmental_stochasticity <span class='op'>=</span> <span class='va'>envstoch_function</span><span class='op'>)</span>,
+  args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>environmental_stochasticity <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>envstoch_function</span><span class='op'>)</span><span class='op'>)</span>,
   options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>ntime <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>,
 <span class='op'>)</span>
 
@@ -372,13 +395,15 @@ Defaults to <code>NULL</code>.</p></td>
   <span class='va'>dyn</span>,
   init <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>20</span>, <span class='fl'>10</span>, <span class='fl'>10</span>, <span class='fl'>5</span><span class='op'>)</span>,
   nsim <span class='op'>=</span> <span class='fl'>100</span>,
-  args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>covariates <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xvals</span><span class='op'>)</span><span class='op'>)</span>,
-  args.fn <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>environmental_stochasticity <span class='op'>=</span> <span class='va'>envstoch_function</span><span class='op'>)</span>
+  args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    covariates <span class='op'>=</span> <span class='fu'><a href='covariates.html'>format_covariates</a></span><span class='op'>(</span><span class='va'>xvals</span><span class='op'>)</span>,
+    environmental_stochasticity <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>envstoch_function</span><span class='op'>)</span>
+  <span class='op'>)</span>
 <span class='op'>)</span>
 
 <span class='co'># and can plot these again</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>sims</span><span class='op'>)</span>
-</div><div class='img'><img src='simulate-4.png' alt='' width='700' height='433' /></div><div class='input'>
+
 <span class='co'># a simple way to add demographic stochasticity is to change</span>
 <span class='co'>#   the "updater" that converts the population at time t</span>
 <span class='co'>#   to its value at time t + 1. The default in aae.pop</span>
@@ -393,13 +418,16 @@ Defaults to <code>NULL</code>.</p></td>
   nsim <span class='op'>=</span> <span class='fl'>100</span>,
   options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>update <span class='op'>=</span> <span class='va'>update_binomial_leslie</span>,
                  tidy_abundances <span class='op'>=</span> <span class='va'>floor</span><span class='op'>)</span>,
-  args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>covariates <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xvals</span><span class='op'>)</span><span class='op'>)</span>,
-  args.fn <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>environmental_stochasticity <span class='op'>=</span> <span class='va'>envstoch_function</span><span class='op'>)</span>
+  args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    covariates <span class='op'>=</span> <span class='fu'><a href='covariates.html'>format_covariates</a></span><span class='op'>(</span><span class='va'>xvals</span><span class='op'>)</span>,
+    environmental_stochasticity <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>envstoch_function</span><span class='op'>)</span>
+  <span class='op'>)</span>
 <span class='op'>)</span>
 
 <span class='co'># and can plot these again</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>sims</span><span class='op'>)</span>
-</div><div class='img'><img src='simulate-5.png' alt='' width='700' height='433' /></div></pre>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
