@@ -34,8 +34,7 @@ Suggests:
     DiagrammeR,
     testthat,
     covr,
-    rmarkdown,
-    aae.pop.templates
+    rmarkdown
 VignetteBuilder:
     knitr,
     rmarkdown
