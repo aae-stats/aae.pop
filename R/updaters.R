@@ -26,9 +26,6 @@ NULL
 #' popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
 #' popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
 #'
-#' # can extract standard population matrix summary stats
-#' lambda <- Re(eigen(popmat)$values[1])
-#'
 #' # define a dynamics object
 #' dyn <- dynamics(popmat)
 #'
