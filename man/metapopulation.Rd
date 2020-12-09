@@ -2,9 +2,12 @@
 % Please edit documentation in R/metapopulation.R
 \name{metapopulation}
 \alias{metapopulation}
+\alias{is.metapopulation}
 \title{Create a metapopulation dynamics object}
 \usage{
 metapopulation(structure, dynamics, dispersal)
+
+is.metapopulation(x)
 }
 \arguments{
 \item{structure}{binary or logical matrix denoting dispersal
@@ -48,71 +51,89 @@ The \code{metapopulation} function connects multiple
   but currently untested.
 }
 \examples{
-# define some populations
-dyn1 <- murray_cod()
-dyn2 <- murray_cod(k = 15000)
-dyn3 <- murray_cod(k = 30000)
+# define some populations, all with identical vital rataes
+nstage <- 5
+popmat <- matrix(0, nrow = nstage, ncol = nstage)
+popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
+popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
+
+# define a dynamics object
+dyn <- lapply(
+  1:3,
+  function(i) dynamics(popmat)
+)
 
 # define metapopulation structure with populations
 #   1 and 3 dispersing into population 2
-mc_structure <- matrix(0, nrow = 3, ncol = 3)
-mc_structure[1, 2] <- 1
-mc_structure[3, 2] <- 1
+pop_structure <- matrix(0, nrow = 3, ncol = 3)
+pop_structure[1, 2] <- 1
+pop_structure[3, 2] <- 1
 
 # define dispersal between populations
 nclass <- nrow(dyn1$matrix)
 dispersal_matrix <- matrix(0, nrow = nclass, ncol = nclass)
 dispersal_matrix[survival(dispersal_matrix, dims = 20:25)] <- 0.2
-mc_dispersal1 <- dispersal(dispersal_matrix, proportion = TRUE)
-mc_dispersal2 <- dispersal(dispersal_matrix, proportion = FALSE)
-mc_dispersal <- list(mc_dispersal1, mc_dispersal2)
+pop_dispersal1 <- dispersal(dispersal_matrix, proportion = TRUE)
+pop_dispersal2 <- dispersal(dispersal_matrix, proportion = FALSE)
+pop_dispersal <- list(pop_dispersal1, pop_dispersal2)
 
 # create metapopulation object
-mc_meta <- metapopulation(mc_structure, list(dyn1, dyn2, dyn3), mc_dispersal)
+metapop <- metapopulation(pop_structure, dyn, pop_dispersal)
 
 # simulate without covariates
-sims <- simulate(mc_meta, nsim = 2)
+sims <- simulate(metapop, nsim = 2)
 
 # simulate with shared covariates
-#  (uses pre-defined Murray cod covariate function)
+# define a covariates function
+covar_fn <- function(mat, x) {
+  mat * (1 / (1 + exp(-0.5 * (x + 10))))
+}
+
+# and some covariates
 xsim <- matrix(rnorm(20), ncol = 1)
+
+# update the population dynamics objects with covariates
+dyn <- lapply(
+  dyn,
+  update,
+  covariates(masks = transition(dyn[[1]]$matrix), funs = covar_fn)
+)
+
+# (re)create metapopulation object
+metapop <- metapopulation(pop_structure, dyn, pop_dispersal)
 sims <- simulate(
-  mc_meta,
+  metapop,
   nsim = 2,
   args = list(covariates = format_covariates(xsim))
 )
 
 # simulate with separate covariates
-#  (requires re-definition of Murray cod covariate function)
-new_fn1 <- function(mat, x) {
-  mat * (1 / (1 + exp(-0.5 * (x[1] + 10))))
+#  (requires re-definition of covariate functions)
+new_fn <- function(i) {
+  force(i)
+  function(mat, x) {
+    mat * (1 / (1 + exp(-0.5 * (x[i] + 10))))
+  }
 }
-new_fn2 <- function(mat, x) {
-  mat * (1 / (1 + exp(-0.5 * (x[2] + 10))))
-}
-new_fn3 <- function(mat, x) {
-  mat * (1 / (1 + exp(-0.5 * (x[3] + 10))))
-}
-dyn1 <- update(
-  dyn1,
-  covariates(masks = transition(dyn1$matrix), funs = new_fn1)
+new_fn <- lapply(
+  1:3,
+  new_fn
 )
-dyn2 <- update(
-  dyn2,
-  covariates(masks = transition(dyn2$matrix), funs = new_fn2)
-)
-dyn3 <- update(
-  dyn3,
-  covariates(masks = transition(dyn3$matrix), funs = new_fn3)
+
+# update the population dynamics objects with covariates
+dyn <- lapply(
+  dyn,
+  update,
+  covariates(masks = transition(dyn[[1]]$matrix), funs = covar_fn)
 )
 
 # (re)create metapopulation object
-mc_meta <- metapopulation(mc_structure, list(dyn1, dyn2, dyn3), mc_dispersal)
+metapop <- metapopulation(pop_structure, dyn, pop_dispersal)
 
 # and simulate with one column of predictors for each population
 xsim <- matrix(rnorm(60), ncol = 3)
 sims <- simulate(
-  mc_meta,
+  metapop,
   nsim = 2,
   args = list(covariates = format_covariates(xsim))
 )

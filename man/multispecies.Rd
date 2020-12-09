@@ -2,9 +2,15 @@
 % Please edit documentation in R/multispecies.R
 \name{multispecies}
 \alias{multispecies}
+\alias{is.multispecies}
+\alias{is.interaction}
 \title{Create a population dynamics object with multiple species}
 \usage{
 multispecies(...)
+
+is.multispecies(x)
+
+is.interaction(x)
 }
 \arguments{
 \item{\dots}{\code{pairwise_interaction} objects defining

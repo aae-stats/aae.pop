@@ -3,6 +3,8 @@
 \name{simulate}
 \alias{simulate}
 \alias{simulate.dynamics}
+\alias{is.simulation}
+\alias{is.simulation_list}
 \title{Simulate single or multispecies population dynamics in R}
 \usage{
 \method{simulate}{dynamics}(
@@ -16,6 +18,10 @@
   args.dyn = NULL,
   args.fn = NULL
 )
+
+is.simulation(x)
+
+is.simulation_list(x)
 }
 \arguments{
 \item{object}{a \code{dynamics} object created with

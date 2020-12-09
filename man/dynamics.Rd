@@ -3,11 +3,14 @@
 \name{dynamics}
 \alias{dynamics}
 \alias{update.dynamics}
+\alias{is.dynamics}
 \title{Create and update population dynamics objects}
 \usage{
 dynamics(matrix, ...)
 
 \method{update}{dynamics}(object, ...)
+
+is.dynamics(x)
 }
 \arguments{
 \item{matrix}{a matrix of vital rates specifying transitions between

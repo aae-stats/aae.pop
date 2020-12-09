@@ -269,6 +269,7 @@ plot.dynamics <- function(x, y, ...) {
 }
 
 # S3 is method
+#' @rdname dynamics
 #' @export
 # nolint start
 is.dynamics <- function(x) {

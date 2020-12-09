@@ -159,6 +159,7 @@ define_interaction <- function(dyn, dots, hex_list, interaction_list) {
 }
 
 # S3 method
+#' @rdname multispecies
 #' @export
 # nolint start
 is.multispecies <- function(x) {
@@ -175,6 +176,7 @@ print.multispecies <- function(x, ...) {
 }
 
 # S3 method
+#' @rdname multispecies
 #' @export
 # nolint start
 is.interaction <- function(x) {

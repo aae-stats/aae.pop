@@ -907,6 +907,7 @@ subset.simulation_list <- function(x, subset, ...) {
 }
 
 # S3 is method
+#' @rdname simulate
 #' @export
 # nolint start
 is.simulation <- function(x) {
@@ -915,6 +916,7 @@ is.simulation <- function(x) {
 }
 
 # S3 is method
+#' @rdname simulate
 #' @export
 # nolint start
 is.simulation_list <- function(x) {
