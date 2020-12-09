@@ -867,7 +867,9 @@ update_args <- function(args, dyn, fn, obj, pop, iter) {
     for (i in seq_along(fn_exist)) {
       for (j in seq_along(fn[[i]])) {
         fn_eval <- fn[[i]][[j]](obj, pop, iter)
-        args[[fn_exist[i]]] <- c(args[[fn_exist[i]]], list(fn_eval))
+        if (!is.list(fn_eval))
+          fn_eval <- list(fn_eval)
+        args[[fn_exist[i]]] <- c(args[[fn_exist[i]]], fn_eval)
       }
     }
 
