@@ -88,7 +88,11 @@ test_that("simulate returns correct abundances with covariates", {
     nsim = nsim,
     init = init_set,
     options = list(ntime = ntime, tidy_abundances = floor),
-    args = list(covariates = list(lapply(seq_len(length(xsim)), function(i) xsim[i])))
+    args = list(
+      covariates = list(
+        lapply(seq_len(length(xsim)), function(i) xsim[i])
+      )
+    )
   )
   target <- array(dim = dim(value))
   target[, , 1] <- init_set
