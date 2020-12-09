@@ -10,5 +10,4 @@
 ^docs$
 ^pkgdown$
 ^index\.md$
-
-^vignettes/*\.Rmd$
+^todo\.md$
