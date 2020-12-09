@@ -21,13 +21,22 @@ NULL
 #'
 #' @examples
 #' # define a basic population
-#' mc <- murray_cod(k = 15000)
+#' nstage <- 5
+#' popmat <- matrix(0, nrow = nstage, ncol = nstage)
+#' popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
+#' popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
+#'
+#' # can extract standard population matrix summary stats
+#' lambda <- Re(eigen(popmat)$values[1])
+#'
+#' # define a dynamics object
+#' dyn <- dynamics(popmat)
 #'
 #' # simulate with the default updater
-#' sims <- simulate(mc)
+#' sims <- simulate(dyn)
 #'
 #' # simulate with a multinomial updater
-#' sims <- simulate(mc, options = list(update = update_multinomial))
+#' sims <- simulate(dyn, options = list(update = update_multinomial))
 update_crossprod <- function(pop, mat) {
   tcrossprod(pop, mat)
 }
