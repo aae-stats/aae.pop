@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@
 <h2 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h2>
 <p><code>aae.pop</code> has a built-in method to define a metapopulation from multiple populations. This is based on the most-general definition of a metapopulation: populations of the same species connected by dispersal. Defining a metapopulation requires <code>dynamics</code> objects for multiple populations, a <code>structure</code> that defines movements between populations, and a <code>dispersal</code> object, which is a new class of object used to specify in detail the movements between populations.</p>
-<p>This vignette introduces <code>structure</code> and <code>dispersal</code> objects and explains how population processes (e.g., demograhic stochasticity) are handled in metapopulations.</p>
+<p>This vignette introduces <code>structure</code> and <code>dispersal</code> objects and explains how population processes (e.g., demographic stochasticity) are handled in metapopulations.</p>
 </div>
 <div id="defining-a-metapopulation" class="section level2">
 <h2 class="hasAnchor">
@@ -208,7 +208,7 @@
 <div id="dispersal" class="section level3">
 <h3 class="hasAnchor">
 <a href="#dispersal" class="anchor"></a>Dispersal</h3>
-<p>Defining the structure of a metapopulation is the first step towards simulating metapopulation dynamics. However, this definition of structure is biologically vague. It specifies which populations are connected and the direction of those connectons, but doesn’t specify which classes <em>within</em> populations are moving and how frequently. <code>dispersal</code> objects specify the probability of a transition between specific source and receiver classes, whether these transitions are density dependent, and any stochasticity in the transitions. <code>dispersal</code> objects are one-directional, which means a separate <code>dispersal</code> object is required for each link in the <code>structure</code> matrix.</p>
+<p>Defining the structure of a metapopulation is the first step towards simulating metapopulation dynamics. However, this definition of structure is biologically vague. It specifies which populations are connected and the direction of those connections, but doesn’t specify which classes <em>within</em> populations are moving and how frequently. <code>dispersal</code> objects specify the probability of a transition between specific source and receiver classes, whether these transitions are density dependent, and any stochasticity in the transitions. <code>dispersal</code> objects are one-directional, which means a separate <code>dispersal</code> object is required for each link in the <code>structure</code> matrix.</p>
 <p>Using the simplistic, two-class example, which had adults moving both directions between the two populations, the <code>dispersal</code> objects could be specified as:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit">
 <span class="va">kern</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.3</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
@@ -298,7 +298,7 @@
 <h3 class="hasAnchor">
 <a href="#covarissues" class="anchor"></a>A complication: covariates</h3>
 <p>The <code>metapopulation</code> function is designed to make metapopulation dynamics as similar as possible to single-population dynamics, which takes full advantage of the methods in <code>simulate</code> for (relatively) fast and flexible models. One complication is that <code>simulate</code> does not explicitly allow separate covariate sequences for each population. This is a relatively common scenario given that metapopulations typically span multiple spatial locations, and this section illustrates a possible workaround. An additional example of this approach is included in the <code>metapopulation</code> documentation (accessible by typing <code><a href="../reference/metapopulation.html">?metapopulation</a></code> into the R console). A more elegant solution is a focus for future development of <code>aae.pop</code>.</p>
-<p>Using the simplified, two-population example above, this workaround involves combining two sequences of covariates into a single <code>matrix</code> (or <code>data.frame</code>), then subsetting this combined <code>matrix</code> within the <code>covariates</code> functions for each individual poplation.</p>
+<p>Using the simplified, two-population example above, this workaround involves combining two sequences of covariates into a single <code>matrix</code> (or <code>data.frame</code>), then subsetting this combined <code>matrix</code> within the <code>covariates</code> functions for each individual population.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit">
 <span class="co"># define two covariate sequences and combine them into a data.frame</span>
 <span class="va">covar_seq1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">20</span>, min <span class="op">=</span> <span class="fl">0.5</span>, max <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span>
