@@ -15,6 +15,8 @@ is.interaction(x)
 \arguments{
 \item{\dots}{\code{pairwise_interaction} objects defining
 a set of pairwise interactions between species}
+
+\item{x}{an object to pass to \code{is.multispecies}}
 }
 \description{
 Define population dynamics for multiple species from

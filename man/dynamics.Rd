@@ -26,6 +26,8 @@ Must be one or more of \code{\link{covariates}},
 \code{\link{density_dependence_n}}}
 
 \item{object}{a \code{dynamics} object}
+
+\item{x}{an object to pass to \code{is.dynamics}}
 }
 \description{
 Define population dynamics from a matrix and additional

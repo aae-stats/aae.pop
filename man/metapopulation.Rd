@@ -28,6 +28,8 @@ class-specific movements and density-dependent movements.
 link in \code{structure}. These links are interpreted in
 column-major order, so that \code{dispersal} objects
 must be ordered by links in column 1, then column 2, and so on}
+
+\item{x}{an object to pass to \code{is.metapopulation}}
 }
 \description{
 Define population dynamics for multiple populations of
@@ -52,8 +54,8 @@ The \code{metapopulation} function connects multiple
 }
 \examples{
 # define some populations, all with identical vital rataes
-nstage <- 5
-popmat <- matrix(0, nrow = nstage, ncol = nstage)
+nclass <- 5
+popmat <- matrix(0, nrow = nclass, ncol = nclass)
 popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
 popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
 
@@ -70,7 +72,6 @@ pop_structure[1, 2] <- 1
 pop_structure[3, 2] <- 1
 
 # define dispersal between populations
-nclass <- nrow(dyn1$matrix)
 dispersal_matrix <- matrix(0, nrow = nclass, ncol = nclass)
 dispersal_matrix[survival(dispersal_matrix, dims = 20:25)] <- 0.2
 pop_dispersal1 <- dispersal(dispersal_matrix, proportion = TRUE)

@@ -160,7 +160,10 @@ define_interaction <- function(dyn, dots, hex_list, interaction_list) {
 
 # S3 method
 #' @rdname multispecies
+#'
 #' @export
+#'
+#' @param x an object to pass to \code{is.multispecies}
 # nolint start
 is.multispecies <- function(x) {
   # nolint end

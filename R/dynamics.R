@@ -270,7 +270,10 @@ plot.dynamics <- function(x, y, ...) {
 
 # S3 is method
 #' @rdname dynamics
+#'
 #' @export
+#'
+#' @param x an object to pass to \code{is.dynamics}
 # nolint start
 is.dynamics <- function(x) {
   # nolint end

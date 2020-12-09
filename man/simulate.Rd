@@ -92,6 +92,9 @@ Named list of functions evaluating additional values of
 \code{args} based on the matrix and abundances in each generation.
 Defaults to \code{NULL}. Function arguments can now be passed
 directly to \code{args}}
+
+\item{x}{an object to pass to \code{is.simulation} or
+\code{is.simulation.list}}
 }
 \description{
 Simulate population dynamics for one or more

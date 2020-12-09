@@ -43,8 +43,8 @@ NULL
 #'
 #' @examples
 #' # define some populations, all with identical vital rataes
-#' nstage <- 5
-#' popmat <- matrix(0, nrow = nstage, ncol = nstage)
+#' nclass <- 5
+#' popmat <- matrix(0, nrow = nclass, ncol = nclass)
 #' popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
 #' popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
 #'
@@ -61,7 +61,6 @@ NULL
 #' pop_structure[3, 2] <- 1
 #'
 #' # define dispersal between populations
-#' nclass <- nrow(dyn1$matrix)
 #' dispersal_matrix <- matrix(0, nrow = nclass, ncol = nclass)
 #' dispersal_matrix[survival(dispersal_matrix, dims = 20:25)] <- 0.2
 #' pop_dispersal1 <- dispersal(dispersal_matrix, proportion = TRUE)
@@ -641,7 +640,10 @@ check_survival <- function(mat, nclass, col, idx, timestep = NULL) {
 
 # S3 method
 #' @rdname metapopulation
+#'
 #' @export
+#'
+#' @param x an object to pass to \code{is.metapopulation}
 # nolint start
 is.metapopulation <- function(x) {
   # nolint end

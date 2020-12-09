@@ -908,7 +908,11 @@ subset.simulation_list <- function(x, subset, ...) {
 
 # S3 is method
 #' @rdname simulate
+#'
 #' @export
+#'
+#' @param x an object to pass to \code{is.simulation} or
+#'   \code{is.simulation.list}
 # nolint start
 is.simulation <- function(x) {
   # nolint end
