@@ -24,11 +24,14 @@ references:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(aae.pop)
+library(aae.pop.templates)
 ```
 
 ## Background
 
-This example uses a model of Macquarie perch (*Macquaria australasica*) population dynamics to illustrate several advanced features of `aae.pop`. Specifically, this example demonstrates the use of multiple `args` terms in `simulate`, complex forms of density dependence, and the use of the `args.fn` option in `simulate`, which supports dynamic arguments that depend on the state of the population at each time step.
+This example uses a model of Macquarie perch (*Macquaria australasica*) population dynamics to illustrate several advanced features of `aae.pop`. Specifically, this example demonstrates complex forms of density dependence and the use of multiple types of `args` in `simulate`, which supports dynamic arguments that depend on the state of the population at each time step.
+
+The Macquarie perch template is included in the `aae.pop.templates` package, which can be installed from Github with `remotes::install_github("aae-stats/aae.pop.templates")`.
 
 Macquarie perch is a freshwater fish species native to the Murray-Darling Basin in south-eastern Australia. Macquarie perch is a large (up to 46 cm and 3.5 kg), long-lived (up to 30 years) species, and was historically abundant throughout the southern Murray-Darling Basin, supporting an important recreational fishery until the 1980s. Macquarie perch has since undergone a dramatic decline in range and abundance, to the point where it is now considered locally extinct across much of its former range, and is listed as a nationally endangered species.
 
@@ -501,8 +504,10 @@ Simulating from this object requires a call to `simulate`, also recalling that a
 sims <- simulate(
   popdyn,
   nsim = 100,
-  args = list(density_dependence_n = list(n = c(100, 10), add = FALSE)),
-  args.fn = list(environmental_stochasticity = transform_survival)
+  args = list(
+    density_dependence_n = list(n = c(100, 10), add = FALSE),
+    environmental_stochasticity = list(transform_survival)
+  )
 )
 
 # plot the simulated trajectories
@@ -527,10 +532,10 @@ sims <- simulate(
   popdyn, 
   nsim = 100, 
   args = list(
-    density_dependence_n = list(n = c(0, 0)),        # remove no individuals this time
-    covariates = format_covariates(x = covar_values) # pass formatted covariate values
-  ),
-  args.fn = list(environmental_stochasticity = transform_survival)
+    density_dependence_n = list(n = c(0, 0)),         # remove no individuals this time
+    covariates = format_covariates(x = covar_values), # pass formatted covariate values
+    environmental_stochasticity = list(transform_survival)
+  )
 )
 
 # plot the simulated trajectories

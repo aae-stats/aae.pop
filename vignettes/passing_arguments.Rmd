@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## R Markdown
 
-Cover args, args.dyn, and args.fn. Explain when/why this is useful.
+Cover args, including dynamic and function arguments. Explain when/why this is useful.
 
 ```{r}
 a <- rnorm(10)

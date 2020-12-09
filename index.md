@@ -10,6 +10,11 @@ You can install the current version of the package from Github:
 remotes::install_github("aae-stats/aae.pop")
 ```
 
+aae.pop is designed as a general package for population models. Several existing models are included in the aae.pop.templates package, which can be installed from Github:
+
+``` r
+remotes::install_github("aae-stats/aae.pop.templates")
+```
 
 
 <!-- badges: start -->
