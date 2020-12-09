@@ -120,6 +120,7 @@ NULL
 #' # and plot again
 #' plot(sims)
 #'
+#' \dontrun{
 #' # note that there is only one trajectory now because
 #' #   this simulation is deterministic.
 #' #
@@ -234,6 +235,7 @@ NULL
 #'
 #' # and can plot these again
 #' plot(sims)
+#' }
 # nolint start
 simulate.dynamics <- function(object,
                               nsim = 1,
@@ -513,12 +515,12 @@ simulate_once <- function(
 
   # tweak matrix to account for density effects on vital rates,
   #   accounting for previously expanded matrix
-  if (!is.null(obj$density_dependence)) {
+  if (!is.null(obj[["density_dependence"]])) {
     if (is_expanded) {
       mat <- mapply(
         function(x, y) do.call(
-          obj$density_dependence,
-          c(list(x, y), args$density_dependence)
+          obj[["density_dependence"]],
+          c(list(x, y), args[["density_dependence"]])
         ),
         mat,
         lapply(seq_len(opt$replicates), function(i) pop_t[i, ]),
@@ -528,8 +530,8 @@ simulate_once <- function(
       mat <- lapply(
         seq_len(opt$replicates),
         function(i) do.call(
-          obj$density_dependence,
-          c(list(mat, pop_t[i, ]), args$density_dependence)
+          obj[["density_dependence"]],
+          c(list(mat, pop_t[i, ]), args[["density_dependence"]])
         )
       )
       is_expanded <- TRUE
@@ -947,7 +949,7 @@ print.simulation_list <- function(x, ...) {
 # S3 plot method
 #' @export
 #'
-#' @importFrom graphics lines
+#' @importFrom graphics lines plot
 # nolint start
 plot.simulation <- function(x, y, ..., class = NULL) {
   # nolint end
