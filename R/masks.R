@@ -45,13 +45,11 @@ NULL
 #' combine(reproduction(popmat, dims = 4:5), transition(popmat))
 #'
 #' # can also mask the population vector in this way
-#' popvec <- rpois(5, lambda = 10)
-#'
 #' # pull out all classes
-#' all_classes(popvec)
+#' all_classes(popmat)
 #'
 #' # and just 3-5 year olds
-#' all_classes(popvec, dims = 3:5)
+#' all_classes(popmat, dims = 3:5)
 reproduction <- function(matrix, dims = NULL) {
 
   if (is.null(dims))
