@@ -104,10 +104,9 @@ Simulate population dynamics for one or more
 Includes plot and subset methods
 }
 \examples{
-
 # define a population matrix (columns move to rows)
-nstage <- 5
-popmat <- matrix(0, nrow = nstage, ncol = nstage)
+nclass <- 5
+popmat <- matrix(0, nrow = nclass, ncol = nclass)
 popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
 popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
 

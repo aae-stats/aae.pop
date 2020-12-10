@@ -12,10 +12,15 @@ NULL
 #' @param pop current state of the population
 #' @param mat matrix of vital rates used to update population state
 #'
-#' @details Update abundances with a direct matrix multiplication
-#'   that does not include any form of demographic stochasticity.
-#'   This is the fastest update option and will vectorise across
-#'   replicates if the population matrix is not expanded by
+#' @details Updaters can be changed through the \code{options}
+#'   argument to \code{simulate} and can also be changed
+#'   globally for an R session by changing the global option with,
+#'   e.g., \code{options(aae.pop_update = update_binomial_leslie)}
+#'
+#'   \code{update_crossprod} updates abundances with a direct
+#'   matrix multiplication that does not include any form of demographic
+#'   stochasticity. This is the fastest update option and will vectorise
+#'   across replicates if the population matrix is not expanded by
 #'   \code{\link{environmental_stochasticity}} or
 #'   \code{\link{density_dependence}}.
 #'
@@ -42,9 +47,9 @@ update_crossprod <- function(pop, mat) {
 #'
 #' @export
 #'
-#' @details Update abundances with a direct RNG draw
-#   that combines update with demographic stochasticity,
-#   assuming a Leslie matrix.
+#' @details \code{update_binomial_leslie} updates abundances
+#'   with a direct RNG draw that combines update with demographic
+#'   stochasticity, assuming a Leslie matrix.
 update_binomial_leslie <- function(pop, mat) {
 
   if (!all((pop %% 1) == 0)) {
@@ -79,8 +84,8 @@ update_binomial_leslie <- function(pop, mat) {
 #'
 #' @export
 #'
-#' @details Update abundances with a direct RNG draw
-#'   that combines update with demographic stochasticity,
+#' @details \code{update_multinomial} updates abundances with a
+#'   direct RNG draw that combines update with demographic stochasticity,
 #'   allowing for general matrix forms (slower than
 #'   \code{update_binomial_leslie}).
 update_multinomial <- function(pop, mat) {

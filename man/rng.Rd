@@ -95,10 +95,35 @@ The r*unit family of functions support simulation of values
   are exported because \code{unit_to_real}, called within
   \code{runit} and \code{rmultiunit}, is slow. Separating
   this into a separate step allows less frequent calculations
-  of this transformation using the \code{args.fn} or
-  \code{args.dyn} options in \code{\link{simulate}}.
+  of this transformation using function or dynamic versions
+  of \code{args} in \code{\link{simulate}}.
 
   \code{unit_to_real} converts means and standard deviations
   from their values on the unit line to their equivalent
   values on the real line.
+
+  The use of the different versions of these functions is
+  illustrated in the Macquarie perch example on the package
+  [website](https://aae-stats.github.io/aae.pop/).
+}
+\examples{
+# rmultiunit generates multivariate draws constrained to
+#   the unit interval, with known mean, standard deviation,
+#   and (optionally) covariance/correlation structure
+rmultiunit(n = 10, mean = c(0.25, 0.5, 0.75), sd = c(0.1, 0.4, 0.25))
+
+\dontrun{
+# add in a correlation structure
+omega_set <- cbind(
+  c(1,    0.25, 0.01),
+  c(0.25, 1,    0.5),
+  c(0.01, 0.5,  1)
+)
+rmultiunit(
+  n = 10,
+  mean = c(0.25, 0.5, 0.75),
+  sd = c(0.1, 0.4, 0.25),
+  Omega = omega_set
+)
+}
 }

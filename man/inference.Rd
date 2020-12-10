@@ -56,7 +56,7 @@ PROBABLY BETTER TO DEFINE UPDATEABLE DEFAULTS
   FROM A DYNAMICS OBJECT?
 }
 \examples{
-# add
+# to add
 # add
 # add
 }

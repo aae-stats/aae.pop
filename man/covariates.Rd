@@ -53,5 +53,39 @@ Masks must be of the same dimension as the population
   as \code{args} to \code{simulate}.
 }
 \examples{
-# add
+# define a population matrix (columns move to rows)
+nclass <- 5
+popmat <- matrix(0, nrow = nclass, ncol = nclass)
+popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
+popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
+
+# define a dynamics object
+dyn <- dynamics(popmat)
+
+# can add covariates that influence vital rates
+#   e.g., a logistic function
+covars <- covariates(
+  masks = transition(popmat),
+  funs = function(mat, x) mat * (1 / (1 + exp(- 10 * x)))
+)
+
+# simulate 50 random covariate values
+xvals <- matrix(runif(50), ncol = 1)
+
+# update the dynamics object and simulate from it.
+#   Note that ntime is now captured in the 50 values
+#   of xvals, assuming we pass xvals as an argument
+#   to the covariates functions
+dyn <- update(dyn, covars)
+sims <- simulate(
+  dyn,
+  init = c(50, 20, 10, 10, 5),
+  nsim = 100,
+  args = list(
+    covariates = format_covariates(xvals)
+  )
+)
+
+# and can plot these simulated trajectories
+plot(sims)
 }

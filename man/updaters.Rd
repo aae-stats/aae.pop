@@ -24,17 +24,24 @@ Define how population abundances are updated from
   only be vectorised across replicates in limited situations.
 }
 \details{
-Update abundances with a direct matrix multiplication
-  that does not include any form of demographic stochasticity.
-  This is the fastest update option and will vectorise across
-  replicates if the population matrix is not expanded by
+Updaters can be changed through the \code{options}
+  argument to \code{simulate} and can also be changed
+  globally for an R session by changing the global option with,
+  e.g., \code{options(aae.pop_update = update_binomial_leslie)}
+
+  \code{update_crossprod} updates abundances with a direct
+  matrix multiplication that does not include any form of demographic
+  stochasticity. This is the fastest update option and will vectorise
+  across replicates if the population matrix is not expanded by
   \code{\link{environmental_stochasticity}} or
   \code{\link{density_dependence}}.
 
-Update abundances with a direct RNG draw
+\code{update_binomial_leslie} updates abundances
+  with a direct RNG draw that combines update with demographic
+  stochasticity, assuming a Leslie matrix.
 
-Update abundances with a direct RNG draw
-  that combines update with demographic stochasticity,
+\code{update_multinomial} updates abundances with a
+  direct RNG draw that combines update with demographic stochasticity,
   allowing for general matrix forms (slower than
   \code{update_binomial_leslie}).
 }

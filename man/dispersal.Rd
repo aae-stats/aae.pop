@@ -53,5 +53,37 @@ Specify dispersal between populations, including stochasticity
 To be completed.
 }
 \examples{
-# add
+# define some populations, all with identical vital rates
+nclass <- 5
+popmat <- matrix(0, nrow = nclass, ncol = nclass)
+popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
+popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
+
+# define a dynamics object
+dyn <- lapply(
+  1:3,
+  function(i) dynamics(popmat)
+)
+
+# define metapopulation structure with populations
+#   1 and 3 dispersing into population 2
+pop_structure <- matrix(0, nrow = 3, ncol = 3)
+pop_structure[1, 2] <- 1
+pop_structure[3, 2] <- 1
+
+# define dispersal between populations
+dispersal_matrix <- matrix(0, nrow = nclass, ncol = nclass)
+dispersal_matrix[survival(dispersal_matrix, dims = 20:25)] <- 0.2
+pop_dispersal1 <- dispersal(dispersal_matrix, proportion = TRUE)
+pop_dispersal2 <- dispersal(dispersal_matrix, proportion = FALSE)
+pop_dispersal <- list(pop_dispersal1, pop_dispersal2)
+
+# create metapopulation object
+metapop <- metapopulation(pop_structure, dyn, pop_dispersal)
+
+# simulate without covariates
+sims <- simulate(metapop, nsim = 10)
+
+# and plot the simulated trajectories
+plot(sims)
 }

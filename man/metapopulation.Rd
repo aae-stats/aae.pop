@@ -53,7 +53,7 @@ The \code{metapopulation} function connects multiple
   but currently untested.
 }
 \examples{
-# define some populations, all with identical vital rataes
+# define some populations, all with identical vital rates
 nclass <- 5
 popmat <- matrix(0, nrow = nclass, ncol = nclass)
 popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)

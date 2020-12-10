@@ -45,5 +45,36 @@ Helper functions to isolate particular components
 To be completed.
 }
 \examples{
-# add
+# define a population
+nclass <- 5
+popmat <- matrix(0, nrow = nclass, ncol = nclass)
+popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
+popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
+
+# pull out reproductive elements
+reproduction(popmat)
+
+# what if only 4 and 5 year olds reproduce?
+reproduction(popmat, dims = 4:5)
+
+# define survival elements
+survival(popmat)
+
+# what if 1 and 2 year olds always transition?
+survival(popmat, dims = 3:5)
+
+# and transitions
+transition(popmat)
+
+# combine transitions and reproduction of 4 and 5 year olds
+combine(reproduction(popmat, dims = 4:5), transition(popmat))
+
+# can also mask the population vector in this way
+popvec <- rpois(5, lambda = 10)
+
+# pull out all classes
+all_classes(popvec)
+
+# and just 3-5 year olds
+all_classes(popvec, dims = 3:5)
 }

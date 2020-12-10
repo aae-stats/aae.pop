@@ -25,8 +25,12 @@ NULL
 #' @details To be completed.
 #'
 #' @examples
-#' # add
+#' # to add
 inference <- function(dynamics, priors, comparison, target, method, ...) {
+
+  # not yet implemented
+  stop("inference is not suported in current versions of aae.pop",
+       call. = FALSE)
 
   # collate args into a list
   args <- list(...)
