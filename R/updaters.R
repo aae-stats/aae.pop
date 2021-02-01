@@ -54,7 +54,7 @@ update_binomial_leslie <- function(pop, mat) {
 
   if (!all((pop %% 1) == 0)) {
     stop("some abundances are not integers, so cannot be used ",
-         "with update_binomial_leslie. Check options()$tidy_abundances ",
+         "with update_binomial_leslie. Check options()$aae.pop_tidy_abundances ",
          "and update with an appropriate method (e.g. floor)",
          call. = FALSE)
   }
