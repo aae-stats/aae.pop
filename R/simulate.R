@@ -1,7 +1,8 @@
 #' @name simulate
 #' @title Simulate single or multispecies population dynamics in R
 #' @description Simulate population dynamics for one or more
-#'   species defined by \code{\link{dynamics}} objects.
+#'   species defined by \code{\link{dynamics}} or
+#'   \code{template} objects.
 NULL
 
 #' @rdname simulate
@@ -12,7 +13,9 @@ NULL
 #'
 #' @param object a \code{dynamics} object created with
 #'   \code{\link{dynamics}} or from a subsequent call to
-#'   \code{\link{multispecies}} or \code{\link{metapopulation}}
+#'   \code{\link{multispecies}} or \code{\link{metapopulation}}.
+#'   Alternatively, \code{ojbect} can be a \code{template}
+#'   object from \pkg{aae.pop.templates}
 #' @param nsim the number of replicate simulations (default = 1)
 #' @param seed optional seed used prior to initialisation and simulation to
 #'   give reproducible results
@@ -460,6 +463,66 @@ simulate.dynamics <- function(object,
 
   # return
   out
+
+}
+
+#' @rdname simulate
+#'
+#' @export
+#'
+# nolint start
+simulate.template <- function(object,
+                              nsim = 1,
+                              seed = NULL,
+                              ...,
+                              init = NULL,
+                              options = list(),
+                              args = list(),
+                              args.dyn = NULL,
+                              args.fn = NULL) {
+
+  # nolint end
+
+  # pull out dynamics object
+  dyn <- object$dynamics
+
+  # combine arguments
+  combined_args <- object$arguments
+  conflict <- names(args) %in% names(combined)
+  if (any(conflict)) {
+
+    # add non-conflicting arguments
+    combined_args <- c(combined_args, args[!conflict])
+
+    # print warning about conflicting arguments
+    warning(
+      "the following arguments are provided in both args ",
+      "and in the template object: ",
+      args[conflict],
+      ". This is currently not supported, update template$args ",
+      "directly prior to calling simulate",
+      call. = FALSE
+    )
+
+  } else {
+
+    # can just concatenate the two lists
+    combined_args <- c(combined_args, args)
+
+  }
+
+  # simulate
+  simulate(
+    dyn,
+    nsim = nsim,
+    seed = seed,
+    ...,
+    init = init,
+    options = options,
+    args = combined_args,
+    args.dyn = args.dyn,
+    args.fn = args.fn
+  )
 
 }
 
