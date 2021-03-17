@@ -487,12 +487,12 @@ simulate.template <- function(object,
   dyn <- object$dynamics
 
   # combine arguments
-  combined_args <- object$arguments
+  combined <- object$arguments
   conflict <- names(args) %in% names(combined)
   if (any(conflict)) {
 
     # add non-conflicting arguments
-    combined_args <- c(combined_args, args[!conflict])
+    combined <- c(combined, args[!conflict])
 
     # print warning about conflicting arguments
     warning(
@@ -507,7 +507,7 @@ simulate.template <- function(object,
   } else {
 
     # can just concatenate the two lists
-    combined_args <- c(combined_args, args)
+    combined <- c(combined, args)
 
   }
 
@@ -519,7 +519,7 @@ simulate.template <- function(object,
     ...,
     init = init,
     options = options,
-    args = combined_args,
+    args = combined,
     args.dyn = args.dyn,
     args.fn = args.fn
   )
