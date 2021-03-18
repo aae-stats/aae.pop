@@ -46,10 +46,10 @@ NULL
 #' plot(sims)
 beverton_holt <- function(k, exclude = NULL) {
 
-  function(x, n) {
+  function(x, n, theta = 1, ...) {
     if (!is.null(exclude))
       n <- n[-exclude]
-    x / (1 + x * sum(n) / k)
+    x / (1 + theta * x * sum(n) / k)
   }
 
 }
@@ -59,10 +59,10 @@ beverton_holt <- function(k, exclude = NULL) {
 #' @export
 ricker <- function(k, exclude = NULL) {
 
-  function(x, n) {
+  function(x, n, theta = 1, ...) {
     if (!is.null(exclude))
       n <- n[-exclude]
-    x * exp(1 - sum(n) / k) / exp(1)
+    x * exp(1 - theta * sum(n) / k) / exp(1)
   }
 
 }
