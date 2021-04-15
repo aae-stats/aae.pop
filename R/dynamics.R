@@ -156,6 +156,14 @@ update.dynamics <- function(object, ...) {
 
 # S3 plot method
 #' @export
+plot.template <- function(x, y, ...) {
+
+  plot(x$dynamics)
+
+}
+
+# S3 plot method
+#' @export
 plot.dynamics <- function(x, y, ...) {
 
   if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
