@@ -50,6 +50,10 @@
 #' pr_extinct(sims, threshold = 100, times = 11:51)
 pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
 
+  # check input object
+  if (!"simulation" %in% class(sims))
+    stop("pr_extinct is defined for simulation objects", call. = FALSE)
+
   # check subset
   if (!is.null(subset))
     sims <- subset(sims, subset = subset)
@@ -130,6 +134,10 @@ risk_curve <- function(
   sims, threshold = NULL, subset = NULL, times = NULL, n = 100
 ) {
 
+  # check input object
+  if (!"simulation" %in% class(sims))
+    stop("risk_curve is defined for simulation objects", call. = FALSE)
+
   # check subset
   if (!is.null(subset))
     sims <- subset(sims, subset = subset)
@@ -162,7 +170,7 @@ risk_curve <- function(
   )
 
   # add names to output so thresholds are known
-  names(out) <- threshold
+  names(out) <- round(threshold, digits = 0)
 
   # return
   out
@@ -221,6 +229,10 @@ risk_curve <- function(
 #' # calculate expected minimum population size based on median
 #' emps(sims, fun = median)
 emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
+
+  # check input object
+  if (!"simulation" %in% class(sims))
+    stop("emps is defined for simulation objects", call. = FALSE)
 
   # check subset
   if (!is.null(subset))
@@ -312,6 +324,10 @@ emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
 exps <- function(
   sims, subset = NULL, times = NULL, fun_within = mean, fun_among = mean, ...
 ) {
+
+  # check input object
+  if (!"simulation" %in% class(sims))
+    stop("exps is defined for simulation objects", call. = FALSE)
 
   # check subset
   if (!is.null(subset))

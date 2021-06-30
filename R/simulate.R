@@ -1003,7 +1003,7 @@ print.simulation <- function(x, ...) {
 # S3 summary method
 #' @export
 # nolint start
-summary.simulation <- function(x, ...) {
+summary_simulation <- function(x, ...) {
   # nolint end
 
   # calculate some basic summary stats
@@ -1011,19 +1011,21 @@ summary.simulation <- function(x, ...) {
   risk <- risk_curve(x, n = 10)
   emps_est <- emps(x)
 
+  # update names of risk to make it easier to read
+  names(risk) <- paste("n = ", names(risk), sep = "")
+
   # print a summary of these
   cat(paste0(
-    "Simulated population has a ", pr_ext, " probability
-     of extinction and expected minimum population size of ",
-    emps_est, "individuals.\n"
+    "Simulated population has a ", round(pr_ext, 2),
+    " probability of extinction and",
+    " expected minimum population size of ",
+    round(emps_est, 0), " individuals.\n",
+    "\nThe probability of population declines below non-zero thresholds is:\n"
   ))
-  print(paste0(
-    "Risk of population declines below non-zero thresholds is:\n",
-    risk
-  ))
+  print(risk)
 
-  # and return
-  list(
+  # and return silently
+  outputs <- list(
     pr_extinct = pr_ext,
     risk_curve = risk,
     emps = emps_est
