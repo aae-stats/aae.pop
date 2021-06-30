@@ -956,7 +956,7 @@ initialise_poisson <- function(n, args) {
 # nolint start
 subset.simulation <- function(x, subset, ...) {
   # nolint end
-  x <- x[, subset, ]
+  x <- x[, subset, , drop = FALSE]
   as_simulation(x)
 }
 
@@ -966,7 +966,7 @@ subset.simulation <- function(x, subset, ...) {
 subset.simulation_list <- function(x, subset, ...) {
   # nolint end
   for (i in seq_along(x))
-    x[[i]] <- x[[i]][, subset, ]
+    x[[i]] <- x[[i]][, subset, , drop = FALSE]
   as_simulation_list(x)
 }
 
@@ -999,6 +999,39 @@ print.simulation <- function(x, ...) {
   # nolint end
   cat(paste0("Simulated population dynamics for a single species\n"))
 }
+
+# S3 summary method
+#' @export
+# nolint start
+summary.simulation <- function(x, ...) {
+  # nolint end
+
+  # calculate some basic summary stats
+  pr_ext <- pr_extinct(x)
+  risk <- risk_curve(x, n = 10)
+  emps_est <- emps(x)
+
+  # print a summary of these
+  cat(paste0(
+    "Simulated population has a ", pr_ext, " probability
+     of extinction and expected minimum population size of ",
+    emps_est, "individuals.\n"
+  ))
+  print(paste0(
+    "Risk of population declines below non-zero thresholds is:\n",
+    risk
+  ))
+
+  # and return
+  list(
+    pr_extinct = pr_ext,
+    risk_curve = risk,
+    emps = emps_est
+  )
+
+}
+## SIM LIST EXAMPLE MIGHT INCLUDE multi-pop averages as well? It's only for multispecies models,
+##   so doesn't really make sense to do that
 
 # S3 print method
 #' @export
