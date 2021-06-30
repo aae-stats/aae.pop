@@ -47,10 +47,7 @@ popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
 dyn <- dynamics(popmat)
 
 # simulate with the default updater
-sims <- simulate(dyn)
-
-# simulate with a multinomial updater
-sims <- simulate(dyn, options = list(update = update_multinomial))
+sims <- simulate(dyn, nsim = 1000)
 
 # calculate expected minimum population size
 emps(sims)

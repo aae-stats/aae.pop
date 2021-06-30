@@ -52,10 +52,7 @@ popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
 dyn <- dynamics(popmat)
 
 # simulate with the default updater
-sims <- simulate(dyn)
-
-# simulate with a multinomial updater
-sims <- simulate(dyn, options = list(update = update_multinomial))
+sims <- simulate(dyn, nsim = 1000)
 
 # calculate risk curve
 risk_curve(sims)
@@ -64,8 +61,8 @@ risk_curve(sims)
 risk_curve(sims, threshold = seq(0, 100, by = 1))
 
 # calculate risk curve for 4 and 5 year olds only
-pr_extinct(sims, subset = 4:5)
+risk_curve(sims, subset = 4:5)
 
 # calculate risk curve but ignore first 10 years
-pr_extinct(sims, times = 11:51)
+risk_curve(sims, times = 11:51)
 }

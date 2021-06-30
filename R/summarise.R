@@ -37,10 +37,7 @@
 #' dyn <- dynamics(popmat)
 #'
 #' # simulate with the default updater
-#' sims <- simulate(dyn)
-#'
-#' # simulate with a multinomial updater
-#' sims <- simulate(dyn, options = list(update = update_multinomial))
+#' sims <- simulate(dyn, nsim = 1000)
 #'
 #' # calculate quasi-extinction risk at a threshold population size
 #' #   of 100 individuals
@@ -116,10 +113,7 @@ pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
 #' dyn <- dynamics(popmat)
 #'
 #' # simulate with the default updater
-#' sims <- simulate(dyn)
-#'
-#' # simulate with a multinomial updater
-#' sims <- simulate(dyn, options = list(update = update_multinomial))
+#' sims <- simulate(dyn, nsim = 1000)
 #'
 #' # calculate risk curve
 #' risk_curve(sims)
@@ -128,10 +122,10 @@ pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
 #' risk_curve(sims, threshold = seq(0, 100, by = 1))
 #'
 #' # calculate risk curve for 4 and 5 year olds only
-#' pr_extinct(sims, subset = 4:5)
+#' risk_curve(sims, subset = 4:5)
 #'
 #' # calculate risk curve but ignore first 10 years
-#' pr_extinct(sims, times = 11:51)
+#' risk_curve(sims, times = 11:51)
 risk_curve <- function(
   sims, threshold = NULL, subset = NULL, times = NULL, n = 100
 ) {
@@ -166,6 +160,9 @@ risk_curve <- function(
     function(x, y) pr_extinct(sims = y, threshold = x),
     y = sims
   )
+
+  # add names to output so thresholds are known
+  names(out) <- threshold
 
   # return
   out
@@ -209,10 +206,7 @@ risk_curve <- function(
 #' dyn <- dynamics(popmat)
 #'
 #' # simulate with the default updater
-#' sims <- simulate(dyn)
-#'
-#' # simulate with a multinomial updater
-#' sims <- simulate(dyn, options = list(update = update_multinomial))
+#' sims <- simulate(dyn, nsim = 1000)
 #'
 #' # calculate expected minimum population size
 #' emps(sims)
@@ -290,10 +284,7 @@ emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
 #' dyn <- dynamics(popmat)
 #'
 #' # simulate with the default updater
-#' sims <- simulate(dyn)
-#'
-#' # simulate with a multinomial updater
-#' sims <- simulate(dyn, options = list(update = update_multinomial))
+#' sims <- simulate(dyn, nsim = 1000)
 #'
 #' # calculate expected population size
 #' exps(sims)
