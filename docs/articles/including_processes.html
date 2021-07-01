@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -58,6 +58,9 @@
     </li>
     <li>
       <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+    <li>
+      <a href="../articles/templates.html">Species templates</a>
     </li>
   </ul>
 </li>
@@ -175,7 +178,7 @@
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># plot the population trajectories</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div id="environmental-stochasticity" class="section level3">
@@ -221,7 +224,7 @@
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># plot the population trajectories</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>It is easy to include both environmental and demographic stochasticity in the same model. The <code>dynamics</code> call simply needs both <code>envstoch</code> and <code>demostoch</code> objects. This is a case where the <code>update</code> function comes in handy. Rather than re-defining the population dynamics object, the existing version of <code>popdyn</code> (which included <code>popmat</code> and <code>envstoch</code>) can simply be updated to include <code>demostoch</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
@@ -232,7 +235,7 @@
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># plot the population trajectories</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div id="density-dependence" class="section level3">
@@ -256,7 +259,7 @@
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># plot the population trajectories</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>Density dependence can take many other forms. These forms may include positive density dependence (e.g., Allee effects) or may affect adult abundances as well as reproduction. An example of the former is included in the <a href="macperch_example.html">Macquarie perch worked example</a>. The next section introduces an example of the latter.</p>
 </div>
@@ -281,7 +284,7 @@
 <span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># plot the population trajectories</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 </div>
 <div id="covariates" class="section level3">
@@ -315,11 +318,11 @@
 <span class="op">)</span>
 
 <span class="co"># plot the population trajectories</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 <p>Specifying a <code>covariates</code> term does not automatically include covariates in the model. Note that the <code>nesting</code> variable also had to be passed to <code>simulate</code> via the <code>args</code> argument. The reason for this is that it allows a single population dynamics object (<code>popdyn</code>, above) to be used with multiple different sets of covariates, without re-compiling the <code>dynamics</code> object each time. The <code>format_covariates</code> function is included to format covariate values and any auxiliary (static) variables.</p>
 <p><code>aae.pop</code> assumes that <code>covariates</code> change through time, so a consequence of specifying covariates is that the vector/matrix of covariates determines the number of simulated time steps (<code>n_time</code>). In the above example, there were 20 values of <code>nesting</code>, which translates to 21 time steps (initial condition plus 20 updates).</p>
-<p>It is assumed that covariates can be passed as a vector, matrix, or data.frame, with one element or row for each time step. More complex <code>covariate</code> terms are possible through the <code>args.dyn</code> and <code>args.fn</code> arguments to <code>simulate</code>. These terms are demonstrated in the <a href="passing_arguments.html">Passing arguments</a> vignette.</p>
+<p>It is assumed that covariates can be passed as a vector, matrix, or data.frame, with one element or row for each time step. More complex <code>covariate</code> terms are possible, such as dynamic arguments that change through time or functions that specify arguments based on the current state of the population. These terms can be passed to <code>simulate</code> via the <code>args</code> argument but must follow specific rules described in the <a href="passing_arguments.html">Passing arguments</a> vignette.</p>
 </div>
 </div>
 <div id="nomask" class="section level2">
@@ -376,7 +379,7 @@
 <span class="op">)</span>
 
 <span class="co"># plot the population trajectories</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 </div>
   </div>

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -58,6 +58,9 @@
     </li>
     <li>
       <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+    <li>
+      <a href="../articles/templates.html">Species templates</a>
     </li>
   </ul>
 </li>
@@ -104,7 +107,7 @@
       <h1 data-toc-skip>Get started with aae.pop</h1>
                         <h4 class="author">Jian Yen</h4>
             
-            <h4 class="date">04/11/2020</h4>
+            <h4 class="date">01/07/2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/master/vignettes/get_started.Rmd"><code>vignettes/get_started.Rmd</code></a></small>
       <div class="hidden name"><code>get_started.Rmd</code></div>
@@ -185,8 +188,8 @@
 <p>It is possible to plot the population dynamics object to visualise the transitions and structure this implies. This requires the <code>DiagrammeR</code> package. Visualising population structures can be a useful way to check the model has been specified correctly, and these plots are easier to communicate than a giant matrix.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">popdyn</span><span class="op">)</span></pre></div>
-<div id="htmlwidget-aabbef871d4b90bfd430" style="width:700px;height:432.632880098888px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-aabbef871d4b90bfd430">{"x":{"diagram":"digraph {\n\ngraph [layout = \"dot\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       rankdir = \"LR\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Age 1\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"2\" [label = \"Age 2\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"3\" [label = \"Age 3\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"4\" [label = \"Age 4\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"5\" [label = \"Age 5\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n\"1\"->\"2\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"2\"->\"3\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"3\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"3\"->\"4\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"4\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"4\"->\"5\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"5\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6472af3f533255d0e507" style="width:700px;height:432.632880098888px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6472af3f533255d0e507">{"x":{"diagram":"digraph {\n\ngraph [layout = \"dot\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       rankdir = \"LR\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Age 1\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"2\" [label = \"Age 2\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"3\" [label = \"Age 3\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"4\" [label = \"Age 4\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"5\" [label = \"Age 5\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n\"1\"->\"2\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"2\"->\"3\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"3\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"3\"->\"4\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"4\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"4\"->\"5\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"5\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="simulating-population-trajectories" class="section level3">
 <h3 class="hasAnchor">
@@ -210,6 +213,78 @@
                  init <span class="op">=</span> <span class="va">initials</span>,
                  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ntime <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p>Default settings also specify that population updates are calculated as a cross product and that abundances are not rounded in any way in each step, which allows fractional individuals in the population. These are not ideal settings. Changing them is covered in the <a href="beyond_defaults.html">Beyond defaults</a> vignette.</p>
+</div>
+<div id="summarise-simulated-trajectories" class="section level3">
+<h3 class="hasAnchor">
+<a href="#summarise-simulated-trajectories" class="anchor"></a>Summarise simulated trajectories</h3>
+<p>Simulated trajectories are arrays with dimensions of replicates (rows) by classes (columns) by time steps (slices). These arrays are relatively easy to summarise using <code>apply</code> functions but the <code>aae.pop</code> package includes several basic summary functions for convencience.</p>
+<p>A simple summary of the probability a population will hit zero individuals at any time step, plus expected minimum population size (EMPS), is generated with the <code>summary</code> function. This summary makes most sense when considering replicate population trajectories because extinction probabilities are defined as the proportion of trajectories hitting zero individuals:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   0.000   5.784   8.741  23.078  21.437 219.000</code></pre>
+<p>The vector printed at the bottom of this summary is a basic risk curve calculated from ten different extinction thresholds (described below).</p>
+<p>The components of this summary are directly accessible:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="fu"><a href="../reference/pr_extinct.html">pr_extinct</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 0</code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="fu"><a href="../reference/emps.html">emps</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 49.95396</code></pre>
+<div class="sourceCode" id="cb16"><pre class="downlit">
+<span class="fu"><a href="../reference/risk_curve.html">risk_curve</a></span><span class="op">(</span><span class="va">sims</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></pre></div>
+<pre><code>##     0    27    55    82   110   137   165   192   219   247 
+## 0.000 0.000 0.747 1.000 1.000 1.000 1.000 1.000 1.000 1.000</code></pre>
+<p>The default settings for <code>pr_extinct</code>, <code>emps</code>, and <code>risk_curve</code> consider all population classes, all time steps, and define extinction as zero individuals in the population. Many applications require more-nuanced definitions. All three functions can be calculated for a subset of the population (e.g., adults) and for a reduced time period (e.g., generations 40-50).</p>
+<div class="sourceCode" id="cb18"><pre class="downlit">
+<span class="fu"><a href="../reference/pr_extinct.html">pr_extinct</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, times <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">50</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 0</code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit">
+<span class="fu"><a href="../reference/emps.html">emps</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, times <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">50</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 20.25532</code></pre>
+<div class="sourceCode" id="cb22"><pre class="downlit">
+<span class="fu"><a href="../reference/risk_curve.html">risk_curve</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, times <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">50</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></pre></div>
+<pre><code>##     0     3     7    10    14    17    21    24    27    31 
+## 0.000 0.000 0.000 0.000 0.012 0.164 0.546 0.858 0.987 1.000</code></pre>
+<p>Extinction can be defined at levels other than zero individuals. For example, a population might be considered functionally extinct or destined to become extinct when only 100 adults remain. This <em>quasi-extinction</em> threshold is controlled with the <code>threshold</code> parameter to <code>pr_extinct</code>:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit">
+<span class="fu"><a href="../reference/pr_extinct.html">pr_extinct</a></span><span class="op">(</span><span class="va">sims</span>, threshold <span class="op">=</span> <span class="fl">100</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, times <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">50</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 1</code></pre>
+<p>Risk curves are an extension of the previous idea and consider probabilities of population declines below multiple thresholds simultaneously. The <code>summary</code> function calculates a basic risk curve with ten thresholds spaced evenly between zero and the maximum observed abundance. More commonly, risk curves focus on multiple levels and might represent categories such as extreme, high, moderate, mild, and no risk. These values could be based on many criteria but often consider genetic factors such as the risk of inbreeding.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit">
+<span class="fu"><a href="../reference/risk_curve.html">risk_curve</a></span><span class="op">(</span><span class="va">sims</span>, threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></pre></div>
+<pre><code>##     0    10    50   100  1000 
+## 0.000 0.000 0.489 1.000 1.000</code></pre>
+<p>The <code>emps</code> function extracts the minimum population size within each replicate trajectory and then averages these values over all trajectories. This averaging defaults to an arithmetic mean but this can be changed to any function using the <code>fun</code> argument (see <code><a href="../reference/emps.html">?emps</a></code> for details). A generalisation of this calculation is provided with the <code>exps</code> function, where <em>x</em> represents an unknown function in place of the minimum. With few exceptions, <code>emps</code> and <code>exps</code> require summary functions that return single values (scalars). Even with this restriction, <code>exps</code> allows flexible calculations to calculate many different summary statistics. For example, it might be informative to calculate the 95th percentile of each trajectory and then take the median of this over all trajectories:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit">
+<span class="fu"><a href="../reference/exps.html">exps</a></span><span class="op">(</span><span class="va">sims</span>, fun_within <span class="op">=</span> <span class="va">quantile</span>, fun_among <span class="op">=</span> <span class="va">median</span>, probs <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 128.2427</code></pre>
+<p>The above summary functions are provided for convenient handling of details such as subsetting the population or time steps. More complicated functions could be implemented directly with the <code>apply</code> function and the output <code>simulation</code> object. An example is the median population size at each time step:</p>
+<div class="sourceCode" id="cb30"><pre class="downlit">
+<span class="co"># subset the population to adults </span>
+<span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>
+
+<span class="co"># drop the first 10 generations (the drop = FALSE</span>
+<span class="co">#   argument is a safeguard that keeps the third array</span>
+<span class="co">#   dimension when filtering to a single time step)</span>
+<span class="va">sims</span> <span class="op">&lt;-</span> <span class="va">sims</span><span class="op">[</span>, , <span class="fl">11</span><span class="op">:</span><span class="fl">51</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>
+
+<span class="co"># sum abundances over all classes, which</span>
+<span class="co">#   gives a matrix (2D array) with replicates</span>
+<span class="co">#   in rows and time steps in columns</span>
+<span class="va">abundance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">sims</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, <span class="va">sum</span><span class="op">)</span>
+
+<span class="co"># and calculate median over all trajectories, which</span>
+<span class="co">#   requires keeping the second dimension (time steps)</span>
+<span class="co">#   while iterating over the first</span>
+<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">abundance</span>, <span class="fl">2</span>, <span class="va">median</span><span class="op">)</span></pre></div>
+<pre><code>##  [1] 19.22748 17.17366 18.33678 20.46965 19.72835 18.56678 18.39267 19.46140
+##  [9] 19.96411 19.22133 18.85610 19.25421 19.72517 19.64967 19.27890 19.32012
+## [17] 19.64911 19.75846 19.62223 19.53479 19.69130 19.84027 19.83002 19.77347
+## [25] 19.81280 19.93794 19.98855 19.97720 19.98975 20.06086 20.13157 20.15580
+## [33] 20.17051 20.21401 20.27553 20.31935 20.34588 20.37975 20.43017 20.47861
+## [41] 20.51506</code></pre>
 </div>
 </div>
   </div>

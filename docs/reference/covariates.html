@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -100,6 +100,9 @@
     </li>
     <li>
       <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+    <li>
+      <a href="../articles/templates.html">Species templates</a>
     </li>
   </ul>
 </li>
@@ -208,8 +211,42 @@ included in <code>x</code></p></td>
   as <code>args</code> to <code>simulate</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># add</span>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># define a population matrix (columns move to rows)</span>
+<span class='va'>nclass</span> <span class='op'>&lt;-</span> <span class='fl'>5</span>
+<span class='va'>popmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, nrow <span class='op'>=</span> <span class='va'>nclass</span>, ncol <span class='op'>=</span> <span class='va'>nclass</span><span class='op'>)</span>
+<span class='va'>popmat</span><span class='op'>[</span><span class='fu'><a href='masks.html'>reproduction</a></span><span class='op'>(</span><span class='va'>popmat</span>, dims <span class='op'>=</span> <span class='fl'>4</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>20</span><span class='op'>)</span>
+<span class='va'>popmat</span><span class='op'>[</span><span class='fu'><a href='masks.html'>transition</a></span><span class='op'>(</span><span class='va'>popmat</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>0.3</span>, <span class='fl'>0.5</span>, <span class='fl'>0.65</span><span class='op'>)</span>
+
+<span class='co'># define a dynamics object</span>
+<span class='va'>dyn</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dynamics.html'>dynamics</a></span><span class='op'>(</span><span class='va'>popmat</span><span class='op'>)</span>
+
+<span class='co'># can add covariates that influence vital rates</span>
+<span class='co'>#   e.g., a logistic function</span>
+<span class='va'>covars</span> <span class='op'>&lt;-</span> <span class='fu'>covariates</span><span class='op'>(</span>
+  masks <span class='op'>=</span> <span class='fu'><a href='masks.html'>transition</a></span><span class='op'>(</span><span class='va'>popmat</span><span class='op'>)</span>,
+  funs <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>mat</span>, <span class='va'>x</span><span class='op'>)</span> <span class='va'>mat</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>/</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='op'>-</span> <span class='fl'>10</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='co'># simulate 50 random covariate values</span>
+<span class='va'>xvals</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>50</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='co'># update the dynamics object and simulate from it.</span>
+<span class='co'>#   Note that ntime is now captured in the 50 values</span>
+<span class='co'>#   of xvals, assuming we pass xvals as an argument</span>
+<span class='co'>#   to the covariates functions</span>
+<span class='va'>dyn</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/update.html'>update</a></span><span class='op'>(</span><span class='va'>dyn</span>, <span class='va'>covars</span><span class='op'>)</span>
+<span class='va'>sims</span> <span class='op'>&lt;-</span> <span class='fu'><a href='simulate.html'>simulate</a></span><span class='op'>(</span>
+  <span class='va'>dyn</span>,
+  init <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>20</span>, <span class='fl'>10</span>, <span class='fl'>10</span>, <span class='fl'>5</span><span class='op'>)</span>,
+  nsim <span class='op'>=</span> <span class='fl'>100</span>,
+  args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    covariates <span class='op'>=</span> <span class='fu'>format_covariates</span><span class='op'>(</span><span class='va'>xvals</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='co'># and can plot these simulated trajectories</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>sims</span><span class='op'>)</span>
+</div><div class='img'><img src='covariates-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

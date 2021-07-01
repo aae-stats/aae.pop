@@ -22,6 +22,13 @@ reference:
     contents:
     - simulate
 
+  - title: Summarising population dynamics
+    contents:
+    - pr_extinct
+    - emps
+    - risk_curve
+    - exps
+
   - title: Adding density dependence
     contents:
     - density_dependence
@@ -80,6 +87,8 @@ navbar:
         href: articles/metapopulations.html
       - text: "Multiple species"
         href: articles/multiple_species.html
+      - text: "Species templates"
+        href: articles/templates.html
     examples:
       text: examples
       menu:

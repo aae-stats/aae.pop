@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -58,6 +58,9 @@
     </li>
     <li>
       <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+    <li>
+      <a href="../articles/templates.html">Species templates</a>
     </li>
   </ul>
 </li>
@@ -209,7 +212,7 @@
 
 <span class="co"># plot this</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>,
-     col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span>,
+     col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span>,
      main <span class="op">=</span> <span class="st">"Three different initial conditions"</span><span class="op">)</span></pre></div>
 <p><img src="beyond_defaults_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <p>The previous example might be a bit unwieldy with many replicates, in which case a single vector can be passed to simulate:</p>
@@ -228,7 +231,7 @@
 
 <span class="co"># plot this</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>,
-     col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span>,
+     col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span>,
      main <span class="op">=</span> <span class="st">"Many replicates with the same initial condition"</span><span class="op">)</span></pre></div>
 <p><img src="beyond_defaults_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>Alternatively, this approach could be modified to add stochasticity to initial conditions while retaining some of the structure from the previous examples:</p>
@@ -254,7 +257,7 @@
 
 <span class="co"># plot this</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">sims</span>,
-     col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span>,
+     col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span>,
      main <span class="op">=</span> <span class="st">"Many replicates with stochastic, structured initial conditions"</span><span class="op">)</span></pre></div>
 <p><img src="beyond_defaults_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
@@ -286,14 +289,14 @@
 ## {
 ##     tcrossprod(pop, mat)
 ## }
-## &lt;bytecode: 0x7f8e39ab00d8&gt;
+## &lt;bytecode: 0x7fbea02d5558&gt;
 ## &lt;environment: namespace:aae.pop&gt;</code></pre>
 <p>The <code>update_binomial_leslie</code> function is slightly more complicated and includes a check for integer abundances and then uses a mix of Poisson (for reproduction) and Binomial draws (for survival):</p>
 <pre><code>## function (pop, mat) 
 ## {
 ##     if (!all((pop%%1) == 0)) {
 ##         stop("some abundances are not integers, so cannot be used ", 
-##             "with update_binomial_leslie. Check options()$tidy_abundances ", 
+##             "with update_binomial_leslie. ", "Check options()$aae.pop_tidy_abundances ", 
 ##             "and update with an appropriate method (e.g. floor)", 
 ##             call. = FALSE)
 ##     }
@@ -306,7 +309,7 @@
 ##     cbind(rpois(nrow(vals), lambda = vals[, 1]), matrix(rbinom(length(probs), 
 ##         size = pop_nm1, prob = probs), nrow = nrow(pop_nm1)))
 ## }
-## &lt;bytecode: 0x7f8e3f3c3588&gt;
+## &lt;bytecode: 0x7fbea39a6c18&gt;
 ## &lt;environment: namespace:aae.pop&gt;</code></pre>
 <p>The primary reason to change the updater is speed. Although <code>update_crossprod</code> is relatively fast compared to other R methods, it is highly likely that other methods can be sped up through, for example, the use of C++ matrix libraries (e.g., with <code>RcppEigen</code> and <code>RcppArmadillo</code>). The final updater to use is best determined through benchmarking of alternative updaters. Keep in mind that <code>aae.pop</code> is built for flexibility and R compatibility rather then speed <em>per se</em>. If speed is the primary limitation or concern, a better approach might involve coding the entire simulation process in C++ or similar (e.g., Julia).</p>
 </div>

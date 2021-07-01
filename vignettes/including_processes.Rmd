@@ -252,7 +252,7 @@ Specifying a `covariates` term does not automatically include covariates in the 
 
 `aae.pop` assumes that `covariates` change through time, so a consequence of specifying covariates is that the vector/matrix of covariates determines the number of simulated time steps (`n_time`). In the above example, there were 20 values of `nesting`, which translates to 21 time steps (initial condition plus 20 updates).
 
-It is assumed that covariates can be passed as a vector, matrix, or data.frame, with one element or row for each time step. More complex `covariate` terms are possible through the `args.dyn` and `args.fn` arguments to `simulate`. These terms are demonstrated in the [Passing arguments](passing_arguments.html) vignette.
+It is assumed that covariates can be passed as a vector, matrix, or data.frame, with one element or row for each time step. More complex `covariate` terms are possible, such as dynamic arguments that change through time or functions that specify arguments based on the current state of the population. These terms can be passed to `simulate` via the `args` argument but must follow specific rules described in the [Passing arguments](passing_arguments.html) vignette.
 
 ## What if I don't want to use masks? {#nomask}
 

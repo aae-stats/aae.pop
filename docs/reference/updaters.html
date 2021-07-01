@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@
     </li>
     <li>
       <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+    <li>
+      <a href="../articles/templates.html">Species templates</a>
     </li>
   </ul>
 </li>
@@ -175,15 +178,21 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Update abundances with a direct matrix multiplication
-  that does not include any form of demographic stochasticity.
-  This is the fastest update option and will vectorise across
-  replicates if the population matrix is not expanded by
+    <p>Updaters can be changed through the <code>options</code>
+  argument to <code>simulate</code> and can also be changed
+  globally for an R session by changing the global option with,
+  e.g., <code><a href='https://rdrr.io/r/base/options.html'>options(aae.pop_update = update_binomial_leslie)</a></code></p>
+<p><code>update_crossprod</code> updates abundances with a direct
+  matrix multiplication that does not include any form of demographic
+  stochasticity. This is the fastest update option and will vectorise
+  across replicates if the population matrix is not expanded by
   <code><a href='stochasticity.html'>environmental_stochasticity</a></code> or
   <code><a href='density_dependence.html'>density_dependence</a></code>.</p>
-<p>Update abundances with a direct RNG draw</p>
-<p>Update abundances with a direct RNG draw
-  that combines update with demographic stochasticity,
+<p><code>update_binomial_leslie</code> updates abundances
+  with a direct RNG draw that combines update with demographic
+  stochasticity, assuming a Leslie matrix.</p>
+<p><code>update_multinomial</code> updates abundances with a
+  direct RNG draw that combines update with demographic stochasticity,
   allowing for general matrix forms (slower than
   <code>update_binomial_leslie</code>).</p>
 

@@ -41,7 +41,8 @@
 
 <meta property="og:title" content="Simulate single or multispecies population dynamics in R — simulate" />
 <meta property="og:description" content="Simulate population dynamics for one or more
-  species defined by dynamics objects." />
+  species defined by dynamics or
+  template objects." />
 
 
 
@@ -73,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -100,6 +101,9 @@
     </li>
     <li>
       <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+    <li>
+      <a href="../articles/templates.html">Species templates</a>
     </li>
   </ul>
 </li>
@@ -149,10 +153,24 @@
 
     <div class="ref-description">
     <p>Simulate population dynamics for one or more
-  species defined by <code><a href='dynamics.html'>dynamics</a></code> objects.</p>
+  species defined by <code><a href='dynamics.html'>dynamics</a></code> or
+  <code>template</code> objects.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for dynamics</span>
+<span class='fu'>simulate</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  nsim <span class='op'>=</span> <span class='fl'>1</span>,
+  seed <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>,
+  init <span class='op'>=</span> <span class='cn'>NULL</span>,
+  options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  args.dyn <span class='op'>=</span> <span class='cn'>NULL</span>,
+  args.fn <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
+
+<span class='co'># S3 method for template</span>
 <span class='fu'>simulate</span><span class='op'>(</span>
   <span class='va'>object</span>,
   nsim <span class='op'>=</span> <span class='fl'>1</span>,
@@ -176,7 +194,9 @@
       <th>object</th>
       <td><p>a <code>dynamics</code> object created with
 <code><a href='dynamics.html'>dynamics</a></code> or from a subsequent call to
-<code><a href='multispecies.html'>multispecies</a></code> or <code><a href='metapopulation.html'>metapopulation</a></code></p></td>
+<code><a href='multispecies.html'>multispecies</a></code> or <code><a href='metapopulation.html'>metapopulation</a></code>.
+Alternatively, <code>ojbect</code> can be a <code>template</code>
+object from <span class="pkg">aae.pop.templates</span></p></td>
     </tr>
     <tr>
       <th>nsim</th>
@@ -266,10 +286,9 @@ directly to <code>args</code></p></td>
     <p>Includes plot and subset methods</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># define a population matrix (columns move to rows)</span>
-<span class='va'>nstage</span> <span class='op'>&lt;-</span> <span class='fl'>5</span>
-<span class='va'>popmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, nrow <span class='op'>=</span> <span class='va'>nstage</span>, ncol <span class='op'>=</span> <span class='va'>nstage</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='co'># define a population matrix (columns move to rows)</span>
+<span class='va'>nclass</span> <span class='op'>&lt;-</span> <span class='fl'>5</span>
+<span class='va'>popmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, nrow <span class='op'>=</span> <span class='va'>nclass</span>, ncol <span class='op'>=</span> <span class='va'>nclass</span><span class='op'>)</span>
 <span class='va'>popmat</span><span class='op'>[</span><span class='fu'><a href='masks.html'>reproduction</a></span><span class='op'>(</span><span class='va'>popmat</span>, dims <span class='op'>=</span> <span class='fl'>4</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>20</span><span class='op'>)</span>
 <span class='va'>popmat</span><span class='op'>[</span><span class='fu'><a href='masks.html'>transition</a></span><span class='op'>(</span><span class='va'>popmat</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>0.3</span>, <span class='fl'>0.5</span>, <span class='fl'>0.65</span><span class='op'>)</span>
 

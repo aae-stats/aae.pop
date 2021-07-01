@@ -1,7 +1,7 @@
 ---
 title: "Population dynamics of Macquarie perch"
 author: "Jian Yen"
-date: "12/11/2020"
+date: "01/07/2021"
 output: html_document
 references:
 - id: todd_lintermans2015
@@ -30,7 +30,7 @@ library(aae.pop.templates)
 
 This example uses a model of Macquarie perch (*Macquaria australasica*) population dynamics to illustrate several advanced features of `aae.pop`. Specifically, this example demonstrates complex forms of density dependence and the use of multiple types of `args` in `simulate`, which supports dynamic arguments that depend on the state of the population at each time step.
 
-The Macquarie perch template is included in the `aae.pop.templates` package, which can be installed from Github with `remotes::install_github("aae-stats/aae.pop.templates")`.
+The Macquarie perch model presented here is an early implementation that has since been updated with new information. The updated template is included in the `aae.pop.templates` package, which can be installed from Github with `remotes::install_github("aae-stats/aae.pop.templates")`. See [Templates](templates.html) for available templates or additional details on using or defining population model templates.
 
 Macquarie perch is a freshwater fish species native to the Murray-Darling Basin in south-eastern Australia. Macquarie perch is a large (up to 46 cm and 3.5 kg), long-lived (up to 30 years) species, and was historically abundant throughout the southern Murray-Darling Basin, supporting an important recreational fishery until the 1980s. Macquarie perch has since undergone a dramatic decline in range and abundance, to the point where it is now considered locally extinct across much of its former range, and is listed as a nationally endangered species.
 
@@ -577,7 +577,7 @@ calculate_quasi_extinction <- function(popsim, threshold, subset = NULL, include
     threshold <- threshold + 1e-5
   
   # is a trajectory below a threshold?
-  threshold_check <- apply(popsim, 1, function(x) x < threshold)
+  threshold_check <- apply(popsim, 1, function(x) any(x < threshold))
   
   # return proportion below threshold
   #   (mean of binary values is the proportion equal to 1)

@@ -2,7 +2,7 @@
 
 aae.pop is a plug-and-play tool to simulate matrix population models. It's designed to be fast, flexible, and easily adapted to different model structures, including [complex demographic processes](articles/including_processes.html), [metapopulations](articles/metapopulations.html), and [multispecies models](articles/multiple_species.html).
 
-This website includes a [quick start guide](articles/get_started.html), examples, vignettes, and [package documentation](reference/index.html). 
+This website includes a [quick start guide](articles/get_started.html), examples, vignettes, and [package documentation](reference/index.html). Template models have been developed for several species. These are included in the `aae.pop.templates` package and are described [here](articles/templates.html).
 
 You can install the current version of the package from Github:
 

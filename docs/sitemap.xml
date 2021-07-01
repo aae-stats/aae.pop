@@ -22,6 +22,12 @@
     <loc>https://aae-stats.github.io/aae.pop/reference/dynamics.html</loc>
   </url>
   <url>
+    <loc>https://aae-stats.github.io/aae.pop/reference/emps.html</loc>
+  </url>
+  <url>
+    <loc>https://aae-stats.github.io/aae.pop/reference/exps.html</loc>
+  </url>
+  <url>
     <loc>https://aae-stats.github.io/aae.pop/reference/inference.html</loc>
   </url>
   <url>
@@ -37,6 +43,12 @@
     <loc>https://aae-stats.github.io/aae.pop/reference/pairwise_interaction.html</loc>
   </url>
   <url>
+    <loc>https://aae-stats.github.io/aae.pop/reference/pr_extinct.html</loc>
+  </url>
+  <url>
+    <loc>https://aae-stats.github.io/aae.pop/reference/risk_curve.html</loc>
+  </url>
+  <url>
     <loc>https://aae-stats.github.io/aae.pop/reference/rng.html</loc>
   </url>
   <url>
@@ -50,9 +62,6 @@
   </url>
   <url>
     <loc>https://aae-stats.github.io/aae.pop/articles/beyond_defaults.html</loc>
-  </url>
-  <url>
-    <loc>https://aae-stats.github.io/aae.pop/articles/dynamic_environments.html</loc>
   </url>
   <url>
     <loc>https://aae-stats.github.io/aae.pop/articles/forecasting_example.html</loc>
@@ -82,6 +91,6 @@
     <loc>https://aae-stats.github.io/aae.pop/articles/scenarios_example.html</loc>
   </url>
   <url>
-    <loc>https://aae-stats.github.io/aae.pop/articles/summarising_trajectories.html</loc>
+    <loc>https://aae-stats.github.io/aae.pop/articles/templates.html</loc>
   </url>
 </urlset>

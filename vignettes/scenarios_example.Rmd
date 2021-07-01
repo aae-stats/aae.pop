@@ -1,8 +1,30 @@
 ---
 title: "Comparing scenarios with population models"
 author: "Jian Yen"
-date: "18/11/2020"
+date: "01/07/2021"
 output: html_document
+references:
+- id: yen2021
+  title: 'Using population models to estimate expected benefit of management actions: case studies on six aquatic species'
+  author:
+  - family: Yen
+    given: Jian D.L.
+  - family: Tonkin
+    given: Zeb
+  - family: Todd
+    given: Charles
+  - family: Stoessel
+    given: Daniel
+  - family: Raadik
+    given: Tarmo A.
+  - family: Lyon
+    given: Jarod
+  container-title: 'Arthur Rylah Institute for Environmental Research: Technical Report Series'
+  volume: XYZ
+  URL: 'xyz'
+  type: article-journal
+  issued:
+    year: 2021
 ---
 
 ```{r setup, include=FALSE}
@@ -12,7 +34,7 @@ library(aae.pop)
 
 ## Background
 
-A common application of population models is the comparison of scenarios based on population outcomes. Examples include predicting population trajectories under different scenarios of climate change, comparing or ranking competing management scenarios, and predicting the consequences of different ecological hypotheses. This example uses a simplified model of population dynamics to demonstrate the comparison of multiple scenarios, as well as several methods to speed computation when simulating many scenarios.
+A common application of population models is the comparison of scenarios based on population outcomes. Examples include predicting population trajectories under different scenarios of climate change, comparing or ranking competing management scenarios, and predicting the consequences of different ecological hypotheses. This example uses a simplified model of population dynamics to demonstrate the comparison of multiple scenarios, as well as several methods to speed computation when simulating many scenarios. A detailed exploration of this approach is outlined in [@yen2021].
 
 ## A simple population model
 
@@ -753,3 +775,5 @@ out_metapop <- cbind(scenarios, round(quasi_ext_metapop, 2))
 colnames(out_metapop) <- c("habitat", "fishing", paste("population", 1:4, sep = " "))
 print(out_metapop)
 ```
+
+## References

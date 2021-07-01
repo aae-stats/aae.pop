@@ -75,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@
     </li>
     <li>
       <a href="../articles/multiple_species.html">Multiple species</a>
+    </li>
+    <li>
+      <a href="../articles/templates.html">Species templates</a>
     </li>
   </ul>
 </li>
@@ -196,8 +199,93 @@ to be combined into a single mask by one of the
     <p>To be completed.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># add</span>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># define a population</span>
+<span class='va'>nclass</span> <span class='op'>&lt;-</span> <span class='fl'>5</span>
+<span class='va'>popmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, nrow <span class='op'>=</span> <span class='va'>nclass</span>, ncol <span class='op'>=</span> <span class='va'>nclass</span><span class='op'>)</span>
+<span class='va'>popmat</span><span class='op'>[</span><span class='fu'>reproduction</span><span class='op'>(</span><span class='va'>popmat</span>, dims <span class='op'>=</span> <span class='fl'>4</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>20</span><span class='op'>)</span>
+<span class='va'>popmat</span><span class='op'>[</span><span class='fu'>transition</span><span class='op'>(</span><span class='va'>popmat</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>0.3</span>, <span class='fl'>0.5</span>, <span class='fl'>0.65</span><span class='op'>)</span>
+
+<span class='co'># pull out reproductive elements</span>
+<span class='fu'>reproduction</span><span class='op'>(</span><span class='va'>popmat</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       [,1]  [,2]  [,3]  [,4]  [,5]
+#&gt; [1,] FALSE  TRUE  TRUE  TRUE  TRUE
+#&gt; [2,] FALSE FALSE FALSE FALSE FALSE
+#&gt; [3,] FALSE FALSE FALSE FALSE FALSE
+#&gt; [4,] FALSE FALSE FALSE FALSE FALSE
+#&gt; [5,] FALSE FALSE FALSE FALSE FALSE
+#&gt; attr(,"class")
+#&gt; [1] "mask"   "matrix"</div><div class='input'>
+<span class='co'># what if only 4 and 5 year olds reproduce?</span>
+<span class='fu'>reproduction</span><span class='op'>(</span><span class='va'>popmat</span>, dims <span class='op'>=</span> <span class='fl'>4</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       [,1]  [,2]  [,3]  [,4]  [,5]
+#&gt; [1,] FALSE FALSE FALSE  TRUE  TRUE
+#&gt; [2,] FALSE FALSE FALSE FALSE FALSE
+#&gt; [3,] FALSE FALSE FALSE FALSE FALSE
+#&gt; [4,] FALSE FALSE FALSE FALSE FALSE
+#&gt; [5,] FALSE FALSE FALSE FALSE FALSE
+#&gt; attr(,"class")
+#&gt; [1] "mask"   "matrix"</div><div class='input'>
+<span class='co'># define survival elements</span>
+<span class='fu'>survival</span><span class='op'>(</span><span class='va'>popmat</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       [,1]  [,2]  [,3]  [,4]  [,5]
+#&gt; [1,]  TRUE FALSE FALSE FALSE FALSE
+#&gt; [2,] FALSE  TRUE FALSE FALSE FALSE
+#&gt; [3,] FALSE FALSE  TRUE FALSE FALSE
+#&gt; [4,] FALSE FALSE FALSE  TRUE FALSE
+#&gt; [5,] FALSE FALSE FALSE FALSE  TRUE
+#&gt; attr(,"class")
+#&gt; [1] "mask"   "matrix"</div><div class='input'>
+<span class='co'># what if 1 and 2 year olds always transition?</span>
+<span class='fu'>survival</span><span class='op'>(</span><span class='va'>popmat</span>, dims <span class='op'>=</span> <span class='fl'>3</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       [,1]  [,2]  [,3]  [,4]  [,5]
+#&gt; [1,] FALSE FALSE FALSE FALSE FALSE
+#&gt; [2,] FALSE FALSE FALSE FALSE FALSE
+#&gt; [3,] FALSE FALSE  TRUE FALSE FALSE
+#&gt; [4,] FALSE FALSE FALSE  TRUE FALSE
+#&gt; [5,] FALSE FALSE FALSE FALSE  TRUE
+#&gt; attr(,"class")
+#&gt; [1] "mask"   "matrix"</div><div class='input'>
+<span class='co'># and transitions</span>
+<span class='fu'>transition</span><span class='op'>(</span><span class='va'>popmat</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       [,1]  [,2]  [,3]  [,4]  [,5]
+#&gt; [1,] FALSE FALSE FALSE FALSE FALSE
+#&gt; [2,]  TRUE FALSE FALSE FALSE FALSE
+#&gt; [3,] FALSE  TRUE FALSE FALSE FALSE
+#&gt; [4,] FALSE FALSE  TRUE FALSE FALSE
+#&gt; [5,] FALSE FALSE FALSE  TRUE FALSE
+#&gt; attr(,"class")
+#&gt; [1] "mask"   "matrix"</div><div class='input'>
+<span class='co'># combine transitions and reproduction of 4 and 5 year olds</span>
+<span class='fu'>combine</span><span class='op'>(</span><span class='fu'>reproduction</span><span class='op'>(</span><span class='va'>popmat</span>, dims <span class='op'>=</span> <span class='fl'>4</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>, <span class='fu'>transition</span><span class='op'>(</span><span class='va'>popmat</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       [,1]  [,2]  [,3]  [,4]  [,5]
+#&gt; [1,] FALSE FALSE FALSE  TRUE  TRUE
+#&gt; [2,]  TRUE FALSE FALSE FALSE FALSE
+#&gt; [3,] FALSE  TRUE FALSE FALSE FALSE
+#&gt; [4,] FALSE FALSE  TRUE FALSE FALSE
+#&gt; [5,] FALSE FALSE FALSE  TRUE FALSE
+#&gt; attr(,"class")
+#&gt; [1] "mask"   "matrix"</div><div class='input'>
+<span class='co'># can also mask the population vector in this way</span>
+<span class='co'># pull out all classes</span>
+<span class='fu'>all_classes</span><span class='op'>(</span><span class='va'>popmat</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      [,1]
+#&gt; [1,] TRUE
+#&gt; [2,] TRUE
+#&gt; [3,] TRUE
+#&gt; [4,] TRUE
+#&gt; [5,] TRUE
+#&gt; attr(,"class")
+#&gt; [1] "mask"   "matrix"</div><div class='input'>
+<span class='co'># and just 3-5 year olds</span>
+<span class='fu'>all_classes</span><span class='op'>(</span><span class='va'>popmat</span>, dims <span class='op'>=</span> <span class='fl'>3</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       [,1]
+#&gt; [1,] FALSE
+#&gt; [2,] FALSE
+#&gt; [3,]  TRUE
+#&gt; [4,]  TRUE
+#&gt; [5,]  TRUE
+#&gt; attr(,"class")
+#&gt; [1] "mask"   "matrix"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
