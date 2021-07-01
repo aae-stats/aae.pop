@@ -143,8 +143,16 @@ risk_curve <- function(
     sims <- subset(sims, subset = subset)
 
   # check times
-  if (!is.null(times))
+  if (!is.null(times)) {
+
+    # filter to selected time steps
     sims <- sims[, , times, drop = FALSE]
+
+    # but need to add back the simulation class so pr_extinct
+    #   does not error
+    sims <- as_simulation(sims)
+
+  }
 
   # set default threshold if required
   if (is.null(threshold)) {
