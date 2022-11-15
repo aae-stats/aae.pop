@@ -262,10 +262,12 @@ simulate.dynamics <- function(object,
 
   # check matrix if Leslie updater is used
   if (isTRUE(all.equal(update_binomial_leslie, opt$update))) {
-    mat_test <- object$matrix
-    mat_test[transition(mat_test)] <- 0
-    mat_test[reproduction(mat_test)] <- 0
-    if (any(mat_test != 0)) {
+    if (!is.multispecies(object)) {
+      leslie_ok <- check_leslie(object)
+    } else {
+      leslie_ok <- sapply(object$dynamics, check_leslie)
+    }
+    if (any(!leslie_ok)) {
       stop("matrix must be a Leslie matrix to use update_binomial_leslie",
            call. = FALSE)
     }
@@ -657,11 +659,12 @@ simulate_once_multispecies <- function(iter,
   pop_tp1 <- future_lapply(
     seq_len(obj$nspecies),
     simulate_multispecies_internal,
-    iter, obj, pop_t, opt, args
+    iter, obj, pop_t, opt, args,
+    future.seed = TRUE
   )
 
   # return tidied abundances (e.g. rounded or floored values)
-  opt$tidy_abundances(pop_tp1)
+  lapply(pop_tp1, opt$tidy_abundances)
 
 }
 

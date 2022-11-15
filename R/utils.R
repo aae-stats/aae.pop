@@ -48,3 +48,14 @@ as_class <- function(
   object
 
 }
+
+# check that a matrix is compatible with Leslie matrix updates
+check_leslie <- function(x) {
+  x <- x$matrix
+  x[transition(x)] <- 0
+  x[reproduction(x)] <- 0
+  out <- TRUE
+  if (any(x != 0))
+    out <- FALSE
+  out
+}
