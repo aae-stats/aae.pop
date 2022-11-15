@@ -185,6 +185,212 @@ risk_curve <- function(
 
 }
 
+#' @name get_cdf
+#'
+#' @title Calculate the cumulative distribution function
+#'   of a summary statistic across all iterations of a
+#'   \code{\link{simulate}} object
+#'
+#' @export
+#'
+#' @param sims an object returned from \code{\link{simulate}}
+#' @param subset \code{integer} vector denoting the population classes
+#'   to include in calculation of population abundance. Defaults to
+#'   all classes
+#' @param times \code{integer} vector specifying generations to
+#'   include in calculation of extinction risk. Defaults to all
+#'   simulated generations
+#' @param n \code{integer} specifying number of threshold values
+#'   to use in default case when \code{threshold} is not specified.
+#'   Defaults to 100
+#' @param fn function to apply to each iteration. Defaults to min
+#' @param \dots additional arguments passed to \code{fn}
+#'
+#' @details \code{get_cdf} is a faster and more
+#'   general alternative to the \code{risk_curve} function.
+#'   \code{get_cdf} can be used to calculate the cumulative
+#'   distribution of any summary statistic. For example, the
+#'   cumulative distribution of the minimum population size
+#'   is equivalent to a risk curve. Summary statistics for
+#'   \code{get_cdf} are extracted from a \code{\link{simulate}}
+#'   object and represent the cumulative distribution of that
+#'   statistic over all replicate trajectories at any time step
+#'   within a set period. Abundances can be specified for all
+#'   population classes or for a subset of classes.
+#'
+#' @examples
+#' # define a basic population
+#' nstage <- 5
+#' popmat <- matrix(0, nrow = nstage, ncol = nstage)
+#' popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
+#' popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
+#'
+#' # define a dynamics object
+#' dyn <- dynamics(popmat)
+#'
+#' # simulate with the default updater
+#' sims <- simulate(dyn, nsim = 1000)
+#'
+#' # calculate distribution of minimum population sizes (default)
+#' get_cdf(sims)
+#'
+#' # calculate distribution of maximum population sizes
+#' get_cdf(sims, fn = max)
+#'
+#' # calculate distribution of the 90th percentile of
+#' #   population sizes
+#' get_cdf(sims, fn = quantile, prob = 0.9)
+#'
+#' # calculate distribution of minimum population sizes
+#' #   but ignore first 10 years
+#' get_cdf(sims, fn = max, times = 11:51)
+get_cdf <- function(
+    sims, subset = NULL, times = NULL, n = 100, fn = min, ...
+){
+
+  # check input object
+  if (!"simulation" %in% class(sims))
+    stop("risk_curve is defined for simulation objects", call. = FALSE)
+
+  # check subset
+  if (!is.null(subset))
+    sims <- subset(sims, subset = subset)
+
+  # check times
+  if (!is.null(times)) {
+
+    # filter to selected time steps
+    sims <- sims[, , times, drop = FALSE]
+
+    # but need to add back the simulation class so pr_extinct
+    #   does not error
+    sims <- as_simulation(sims)
+
+  }
+
+  # calculate  total abundance
+  abund <- apply(sims, c(1, 3), sum)
+
+  # calculate fn over each replicate
+  r_fn <- apply(abund, 1, fn, ...)
+
+  # define sequence of probabilties from 0 to 1
+  prob <- seq(0, 1, length = (n + 1))
+
+  # calculate the CDF of minimum values, ranging
+  #   from never observed to always observed
+  value <- quantile(r_fn, probs = prob)
+  names(value) <- NULL
+
+  # collate and return
+  data.frame(
+    prob = prob,
+    value = value
+  )
+
+}
+
+#' @name get_pdf
+#'
+#' @title Calculate the probability density of a summary
+#'   statistic across all iterations of a
+#'   \code{\link{simulate}} object
+#'
+#' @export
+#'
+#' @param sims an object returned from \code{\link{simulate}}
+#' @param subset \code{integer} vector denoting the population classes
+#'   to include in calculation of population abundance. Defaults to
+#'   all classes
+#' @param times \code{integer} vector specifying generations to
+#'   include in calculation of extinction risk. Defaults to all
+#'   simulated generations
+#' @param n \code{integer} specifying number of threshold values
+#'   to use in default case when \code{threshold} is not specified.
+#'   Defaults to 100
+#' @param fn function to apply to each iteration. Defaults to min
+#' @param \dots additional arguments passed to \code{fn}
+#'
+#' @details \code{get_pdf} and \code{get_cdf} are faster and more
+#'   general alternatives to the \code{risk_curve} function.
+#'   \code{get_pdf} can be used to calculate the probability
+#'   distribution of any summary statistic. For example, the
+#'   probability distribution of the minimum population size
+#'   is the density-based equivalent of a risk curve (the function
+#'   \code{get_cdf} can be used to get the true equivalent).
+#'   Summary statistics for \code{get_pdf} are extracted from
+#'   a \code{\link{simulate}} object and represent the distribution
+#'   of that statistic over all replicate trajectories at any time step
+#'   within a set period. Abundances can be specified for all
+#'   population classes or for a subset of classes.
+#'
+#' @examples
+#' # define a basic population
+#' nstage <- 5
+#' popmat <- matrix(0, nrow = nstage, ncol = nstage)
+#' popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
+#' popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
+#'
+#' # define a dynamics object
+#' dyn <- dynamics(popmat)
+#'
+#' # simulate with the default updater
+#' sims <- simulate(dyn, nsim = 1000)
+#'
+#' # calculate distribution of minimum population sizes (default)
+#' get_pdf(sims)
+#'
+#' # calculate distribution of maximum population sizes
+#' get_pdf(sims, fn = max)
+#'
+#' # calculate distribution of the 90th percentile of
+#' #   population sizes
+#' get_pdf(sims, fn = quantile, prob = 0.9)
+#'
+#' # calculate distribution of minimum population sizes
+#' #   but ignore first 10 years
+#' get_pdf(sims, fn = max, times = 11:51)
+get_pdf <- function(
+    sims, subset = NULL, times = NULL, n = 100, fn = min, ...
+){
+
+  # check input object
+  if (!"simulation" %in% class(sims))
+    stop("risk_curve is defined for simulation objects", call. = FALSE)
+
+  # check subset
+  if (!is.null(subset))
+    sims <- subset(sims, subset = subset)
+
+  # check times
+  if (!is.null(times)) {
+
+    # filter to selected time steps
+    sims <- sims[, , times, drop = FALSE]
+
+    # but need to add back the simulation class so pr_extinct
+    #   does not error
+    sims <- as_simulation(sims)
+
+  }
+
+  # calculate  total abundance
+  abund <- apply(sims, c(1, 3), sum)
+
+  # calculate fn over each replicate
+  r_fn <- apply(abund, 1, fn, ...)
+
+  # define sequence of probabilities from 0 to 1
+  dens <- density(r_fn, n = n)
+
+  # collate and return
+  data.frame(
+    prob = dens$y,
+    value = dens$x
+  )
+
+}
+
 #' @name emps
 #'
 #' @title Calculate expected minimum population size (EMPS)
