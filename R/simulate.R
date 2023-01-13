@@ -1006,7 +1006,7 @@ print.simulation <- function(x, ...) {
 # S3 summary method
 #' @export
 # nolint start
-summary_simulation <- function(x, ...) {
+summary.simulation <- function(x, ...) {
   # nolint end
 
   # calculate some basic summary stats

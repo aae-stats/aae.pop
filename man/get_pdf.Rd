@@ -6,7 +6,7 @@
   statistic across all iterations of a
   \code{\link{simulate}} object}
 \usage{
-get_pdf(sims, subset, times, n, fn = min, ...)
+get_pdf(sims, subset = NULL, times = NULL, n = 100, fn = min, ...)
 }
 \arguments{
 \item{sims}{an object returned from \code{\link{simulate}}}
@@ -23,9 +23,9 @@ simulated generations}
 to use in default case when \code{threshold} is not specified.
 Defaults to 100}
 
-\item{fn}{function to apply to each iteration}
+\item{fn}{function to apply to each iteration. Defaults to min}
 
-\item{\dots}{additional arguments passed to `fn`}
+\item{\dots}{additional arguments passed to \code{fn}}
 }
 \description{
 Calculate the probability density of a summary

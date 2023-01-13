@@ -136,6 +136,15 @@ get_unique_dynamics <- function(interactions) {
 #   species
 define_interaction <- function(dyn, dots, hex_list, interaction_list) {
 
+  # TODO: consider generalising to mean field interactions
+  # aggregate_species <- user_defined_function(n, source) {n[source[1]][1:5] + n[source[2]][6:10]}
+  # source_sp <- match(sapply(dots[idx], function(x) x$source$hex), hex_list)
+  # out <- function(x, n, ...) {
+  #   for (j in seq_along(idx))
+  #     x <- interaction_list[[idx[j]]](x, aggregate_species(n, source_sp), ...)
+  #   x
+  # }
+
   # pull out relevant elements of fn_list
   idx <- which(sapply(dots, function(x) x$target$hex) == dyn$hex)
 
