@@ -9,7 +9,6 @@
 #' @param \dots \code{pairwise_interaction} objects defining
 #'   a set of pairwise interactions between species
 multispecies <- function(...) {
-
   # collate dots into list
   dots <- list(...)
 
@@ -17,8 +16,9 @@ multispecies <- function(...) {
   classes <- sapply(dots, function(x) class(x)[1])
   if (!all(classes == "interaction")) {
     stop("all inputs to multispecies should be interaction ",
-         "objects created with pairwise_interaction",
-         call. = FALSE)
+      "objects created with pairwise_interaction",
+      call. = FALSE
+    )
   }
 
   # pull out dynamics$hex for all and use to find unique objects
@@ -41,19 +41,21 @@ multispecies <- function(...) {
   # and collate these into a list with one element for each species
   interaction <- vector("list", length = length(dynamics))
   interaction <- lapply(dynamics,
-                        define_interaction,
-                        dots = dots,
-                        hex_list = hex_list,
-                        interaction_list = interaction_list)
+    define_interaction,
+    dots = dots,
+    hex_list = hex_list,
+    interaction_list = interaction_list
+  )
 
   # return
   as_multispecies(
-    list(nspecies = length(dynamics),
-         structure = structure,
-         dynamics = dynamics,
-         interaction = interaction)
+    list(
+      nspecies = length(dynamics),
+      structure = structure,
+      dynamics = dynamics,
+      interaction = interaction
+    )
   )
-
 }
 
 #' @name pairwise_interaction
@@ -75,7 +77,6 @@ multispecies <- function(...) {
 #'
 #' @details To be completed.
 pairwise_interaction <- function(target, source, masks, funs) {
-
   # force evaluation to avoid NULL functions down the line
   force(masks)
   force(funs)
@@ -83,8 +84,9 @@ pairwise_interaction <- function(target, source, masks, funs) {
   # define function that specifies effects of source on target
   if (is.list(masks)) {
     interaction <- function(x, n, ...) {
-      for (i in seq_along(masks))
+      for (i in seq_along(masks)) {
         x <- do_mask(x, masks[[i]], funs[[i]], n, ...)
+      }
       x
     }
   } else {
@@ -95,17 +97,17 @@ pairwise_interaction <- function(target, source, masks, funs) {
 
   # return
   as_interaction(
-    list(target = target,
-         source = source,
-         interaction = interaction)
+    list(
+      target = target,
+      source = source,
+      interaction = interaction
+    )
   )
-
 }
 
 # internal function: extract unique dynamics objects from
 #   list of interaction objects
 get_unique_dynamics <- function(interactions) {
-
   # which hex values do we have?
   hex_target <- sapply(interactions, function(x) x$target$hex)
   hex_source <- sapply(interactions, function(x) x$source$hex)
@@ -129,13 +131,11 @@ get_unique_dynamics <- function(interactions) {
 
   # return all required dynamics objects
   out
-
 }
 
 # internal function: define interaction of each species with any other
 #   species
 define_interaction <- function(dyn, dots, hex_list, interaction_list) {
-
   # TODO: consider generalising to mean field interactions
   # aggregate_species <- user_defined_function(n, source) {n[source[1]][1:5] + n[source[2]][6:10]}
   # source_sp <- match(sapply(dots[idx], function(x) x$source$hex), hex_list)
@@ -152,8 +152,9 @@ define_interaction <- function(dyn, dots, hex_list, interaction_list) {
   if (length(idx) > 0) {
     source_sp <- match(sapply(dots[idx], function(x) x$source$hex), hex_list)
     out <- function(x, n, ...) {
-      for (j in seq_along(idx))
+      for (j in seq_along(idx)) {
         x <- interaction_list[[idx[j]]](x, n[[source_sp[j]]], ...)
+      }
       x
     }
   } else {
@@ -164,7 +165,6 @@ define_interaction <- function(dyn, dots, hex_list, interaction_list) {
 
   # return
   out
-
 }
 
 # S3 method
@@ -198,13 +198,11 @@ is.interaction <- function(x) {
 
 # internal function: set multispecies class
 as_multispecies <- function(x) {
-
   # inherit from dynamics
   x <- as_dynamics(x)
 
   # and then add multispecies class on top of that
   as_class(x, name = "multispecies", type = "dynamics")
-
 }
 
 # internal function: set interaction class

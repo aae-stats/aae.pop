@@ -170,8 +170,9 @@ NULL
 #' #   pass to environmental_stochasticty
 #' envstoch_function <- function(obj, pop, iter) {
 #'   mat <- obj$matrix
-#'   if (is.list(mat))
+#'   if (is.list(mat)) {
 #'     mat <- mat[[iter]]
+#'   }
 #'   out <- aae.pop:::unit_to_real(
 #'     mat[transition(mat)], 0.1 * mat[transition(mat)]
 #'   )
@@ -192,7 +193,7 @@ NULL
 #' #   e.g., a logistic function
 #' covars <- covariates(
 #'   masks = transition(popmat),
-#'   funs = function(mat, x) mat * (1 / (1 + exp(- 10 * x)))
+#'   funs = function(mat, x) mat * (1 / (1 + exp(-10 * x)))
 #' )
 #'
 #' # simulate 50 random covariate values
@@ -228,8 +229,10 @@ NULL
 #'   dyn,
 #'   init = c(50, 20, 10, 10, 5),
 #'   nsim = 100,
-#'   options = list(update = update_binomial_leslie,
-#'                  tidy_abundances = floor),
+#'   options = list(
+#'     update = update_binomial_leslie,
+#'     tidy_abundances = floor
+#'   ),
 #'   args = list(
 #'     covariates = format_covariates(xvals),
 #'     environmental_stochasticity = list(envstoch_function)
@@ -270,7 +273,8 @@ simulate.dynamics <- function(object,
     }
     if (any(!leslie_ok)) {
       stop("matrix must be a Leslie matrix to use update_binomial_leslie",
-           call. = FALSE)
+        call. = FALSE
+      )
     }
   }
 
@@ -286,13 +290,13 @@ simulate.dynamics <- function(object,
 
   # set an identity covariates function if no covariate arguments
   #   provided
-  if (is.null(args$covariates))
+  if (is.null(args$covariates)) {
     object <- use_identity_covariates(object)
+  }
 
   # set identity covariates if args provided and covariates process
   #   is missing
   if (is.multispecies(object)) {
-
     # do any species have missing covariates?
     no_covariates <- sapply(
       object$dynamics, function(x) is.null(x$covariates)
@@ -305,12 +309,10 @@ simulate.dynamics <- function(object,
         use_identity_covariates
       )
     }
-
   } else {
-
-    if (is.null(object$covariates))
+    if (is.null(object$covariates)) {
       object$covariates <- use_identity_covariates(object)
-
+    }
   }
 
   # classify user args by type
@@ -319,9 +321,10 @@ simulate.dynamics <- function(object,
   # check args
   if (!is.null(args.dyn) | !is.null(args.fn)) {
     warning("args.dyn and args.fn are deprecated; ",
-            "dynamic and function arguments can be ",
-            "included directly in args",
-            call. = FALSE)
+      "dynamic and function arguments can be ",
+      "included directly in args",
+      call. = FALSE
+    )
   }
 
   # set static args here
@@ -339,7 +342,8 @@ simulate.dynamics <- function(object,
     n_dyn_args <- n_dyn_args[n_dyn_args > 0]
     if (length(unique(n_dyn_args)) > 1) {
       stop("all dynamic (list) arguments must have the same length",
-           call. = FALSE)
+        call. = FALSE
+      )
     }
     opt$ntime <- unique(n_dyn_args)
   }
@@ -349,7 +353,6 @@ simulate.dynamics <- function(object,
 
   # if seed is provided, use it but reset random seed afterwards
   if (!is.null(seed)) {
-
     if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
       runif(1)
     }
@@ -357,25 +360,21 @@ simulate.dynamics <- function(object,
     r_seed <- get(".Random.seed", envir = .GlobalEnv)
     on.exit(assign(".Random.seed", r_seed, envir = .GlobalEnv))
     set.seed(seed)
-
   }
 
   # initalise the population with init if provided, following
   #   options()$aae.pop_initialisation otherwise
   if (is.multispecies(object)) {
-
     # check if initials are provided as a list with one element
     #   per species
     if (!is.list(init)) {
-
       # if not, is it an array?
       if (length(dim(init)) == 3) {
         init <- lapply(seq_len(dim(init)[3]), function(i) init[, , i])
       } else { # assume all species shared initial conditions
-               #   (possibly NULL)
+        #   (possibly NULL)
         init <- lapply(seq_len(object$nspecies), function(i) init)
       }
-
     }
 
     # multispecies model, check dims for each
@@ -397,21 +396,18 @@ simulate.dynamics <- function(object,
         SIMPLIFY = FALSE
       )
     }
-
   } else {
-
     # single-species model, check dims
     pop_tmp <- initialise(object, opt, init, keep_slices = FALSE)
 
     # do we need to create an object to store everything?
-    if (opt$keep_slices)
+    if (opt$keep_slices) {
       pop <- initialise(object, opt, init, keep_slices = opt$keep_slices)
-
+    }
   }
 
   # loop through timesteps, updating population at each timestep
   for (i in seq_len(opt$ntime)) {
-
     # update args if required
     default_args <- update_args(
       args = args$static,
@@ -446,15 +442,16 @@ simulate.dynamics <- function(object,
         opt = opt,
         args = default_args
       )
-      if (opt$keep_slices)
+      if (opt$keep_slices) {
         pop[, , i + 1] <- pop_tmp
+      }
     }
-
   }
 
   # do we want to keep intermediate abundances or just the final step?
-  if (!opt$keep_slices)
+  if (!opt$keep_slices) {
     pop <- pop_tmp
+  }
 
   # set appropriate class for outputs
   if (is.multispecies(object)) {
@@ -466,7 +463,6 @@ simulate.dynamics <- function(object,
 
   # return
   out
-
 }
 
 #' @rdname simulate
@@ -483,7 +479,6 @@ simulate.template <- function(object,
                               args = list(),
                               args.dyn = NULL,
                               args.fn = NULL) {
-
   # nolint end
 
   # pull out dynamics object
@@ -493,7 +488,6 @@ simulate.template <- function(object,
   combined <- object$arguments
   conflict <- names(args) %in% names(combined)
   if (any(conflict)) {
-
     # add non-conflicting arguments
     combined <- c(combined, args[!conflict])
 
@@ -506,12 +500,9 @@ simulate.template <- function(object,
       "directly prior to calling simulate",
       call. = FALSE
     )
-
   } else {
-
     # can just concatenate the two lists
     combined <- c(combined, args)
-
   }
 
   # simulate
@@ -526,23 +517,21 @@ simulate.template <- function(object,
     args.dyn = args.dyn,
     args.fn = args.fn
   )
-
 }
 
 #' @importFrom future.apply future_lapply
 # internal function: update a single time step for one species
-simulate_once <- function(
-  iter, obj, pop_t, opt, args, is_expanded = FALSE
-) {
-
+simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
   # calculate covariate-altered matrix
   if (is_expanded) {
     mat <- lapply(
       obj$matrix,
-      function(x) do.call(
-        obj$covariates,
-        c(list(x), args$covariates)
-      )
+      function(x) {
+        do.call(
+          obj$covariates,
+          c(list(x), args$covariates)
+        )
+      }
     )
   } else {
     mat <- do.call(
@@ -552,8 +541,9 @@ simulate_once <- function(
   }
 
   # keep pop_t as a matrix if replicates == 1
-  if (opt$replicates == 1)
+  if (opt$replicates == 1) {
     pop_t <- matrix(pop_t, nrow = 1)
+  }
 
   # draw stochastic matrix values if env stoch included,
   #   accounting for previously expanded matrix if multispecies
@@ -561,18 +551,22 @@ simulate_once <- function(
     if (is_expanded) {
       mat <- lapply(
         mat,
-        function(x) do.call(
-          obj$environmental_stochasticity,
-          c(list(x), args$environmental_stochasticity)
-        )
+        function(x) {
+          do.call(
+            obj$environmental_stochasticity,
+            c(list(x), args$environmental_stochasticity)
+          )
+        }
       )
     } else {
       mat <- lapply(
         seq_len(opt$replicates),
-        function(j) do.call(
-          obj$environmental_stochasticity,
-          c(list(mat), args$environmental_stochasticity)
-        )
+        function(j) {
+          do.call(
+            obj$environmental_stochasticity,
+            c(list(mat), args$environmental_stochasticity)
+          )
+        }
       )
       is_expanded <- TRUE
     }
@@ -583,10 +577,12 @@ simulate_once <- function(
   if (!is.null(obj[["density_dependence"]])) {
     if (is_expanded) {
       mat <- mapply(
-        function(x, y) do.call(
-          obj[["density_dependence"]],
-          c(list(x, y), args[["density_dependence"]])
-        ),
+        function(x, y) {
+          do.call(
+            obj[["density_dependence"]],
+            c(list(x, y), args[["density_dependence"]])
+          )
+        },
         mat,
         lapply(seq_len(opt$replicates), function(i) pop_t[i, ]),
         SIMPLIFY = FALSE
@@ -594,10 +590,12 @@ simulate_once <- function(
     } else {
       mat <- lapply(
         seq_len(opt$replicates),
-        function(i) do.call(
-          obj[["density_dependence"]],
-          c(list(mat, pop_t[i, ]), args[["density_dependence"]])
-        )
+        function(i) {
+          do.call(
+            obj[["density_dependence"]],
+            c(list(mat, pop_t[i, ]), args[["density_dependence"]])
+          )
+        }
       )
       is_expanded <- TRUE
     }
@@ -621,10 +619,12 @@ simulate_once <- function(
       apply(
         pop_tp1,
         1,
-        function(x) do.call(
-          obj$demographic_stochasticity,
-          c(list(x), args$demographic_stochasticity)
-        )
+        function(x) {
+          do.call(
+            obj$demographic_stochasticity,
+            c(list(x), args$demographic_stochasticity)
+          )
+        }
       )
     )
   }
@@ -636,17 +636,18 @@ simulate_once <- function(
       apply(
         pop_tp1,
         1,
-        function(x) do.call(
-          obj$density_dependence_n,
-          c(list(x), args$density_dependence_n)
-        )
+        function(x) {
+          do.call(
+            obj$density_dependence_n,
+            c(list(x), args$density_dependence_n)
+          )
+        }
       )
     )
   }
 
   # return tidied abundances (e.g. rounded or floored values)
   opt$tidy_abundances(pop_tp1)
-
 }
 
 # internal function: update a single time step with interacting species
@@ -655,7 +656,6 @@ simulate_once_multispecies <- function(iter,
                                        pop_t,
                                        opt,
                                        args) {
-
   # vectorised update for all species
   pop_tp1 <- future_lapply(
     seq_len(obj$nspecies),
@@ -666,15 +666,11 @@ simulate_once_multispecies <- function(iter,
 
   # return tidied abundances (e.g. rounded or floored values)
   lapply(pop_tp1, opt$tidy_abundances)
-
 }
 
 # internal function: update one species in a multispecies simulation
 #   (to vectorise simulate_once_multispecies)
-simulate_multispecies_internal <- function(
-  i, iter, obj, pop_t, opt, args
-) {
-
+simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args) {
   # pull out relevant object
   dynamics <- obj$dynamics[[i]]
 
@@ -687,11 +683,12 @@ simulate_multispecies_internal <- function(
   if (!is.null(obj$interaction[[i]])) {
     mat <- lapply(
       seq_len(opt$replicates),
-      function(j)
+      function(j) {
         do.call(
           obj$interaction[[i]],
           c(list(mat, lapply(pop_t, function(x) x[j, ])), args$interaction)
         )
+      }
     )
     is_expanded <- TRUE
   }
@@ -708,7 +705,6 @@ simulate_multispecies_internal <- function(
     args,
     is_expanded = is_expanded
   )
-
 }
 
 # internal function: update single step of simulation with multiple species
@@ -719,21 +715,18 @@ add_multispecies_sims <- function(x, y, iter) {
 
 # internal function: initialise a simulation when inits not provided
 initialise <- function(obj, opt, init, keep_slices) {
-
   dims <- c(opt$replicates, obj$nclass, opt$ntime + 1)
   ndim <- length(dims)
 
   # generate initial conditions if not provided
   if (is.null(init)) {
-
     init <- array(
       options()$aae.pop_initialisation(
         prod(dims[-ndim]), opt$initialise_args
       ),
       dim = dims[-ndim]
     )
-
-  } else {  # check initial values if provided
+  } else { # check initial values if provided
 
     # create an error message for re-use
     expected_dims <- dims[1:(ndim - 1)]
@@ -748,36 +741,37 @@ initialise <- function(obj, opt, init, keep_slices) {
     )
 
     # must be a numeric vector or array
-    if (!is.numeric(init))
+    if (!is.numeric(init)) {
       stop(dims_error_msg, call. = FALSE)
+    }
 
     # if numeric, are the dimensions ok?
     dims_ok <- check_dims(init, expected_dims)
 
     # error if dims not OK
-    if (dims_ok$error)
+    if (dims_ok$error) {
       stop(dims_error_msg, call. = FALSE)
+    }
 
     # do we need to expand init over replicates?
-    if (dims_ok$expand)
+    if (dims_ok$expand) {
       init <- expand_dims(init, expected_dims[1])
-
+    }
   }
 
   pop <- array(NA, dim = dims)
   pop[seq_len(prod(dims[-ndim]))] <- init
 
   # only return single slice (initials) if !keep_slices
-  if (!keep_slices)
+  if (!keep_slices) {
     pop <- array(pop[seq_len(prod(dims[-ndim]))], dim = dims[-ndim])
+  }
 
   pop
-
 }
 
 # internal function: check dimensions of initial conditions
 check_dims <- function(init, expected_dims) {
-
   # assume not OK unless inits meet criteria below
   is_ok <- FALSE
 
@@ -786,56 +780,45 @@ check_dims <- function(init, expected_dims) {
 
   # if it's a numeric vector, must have nclass elements
   if (is.null(dim(init))) {
-
     # are we good?
     if (length(init) == prod(expected_dims[-1])) {
       expand <- TRUE
       is_ok <- TRUE
     }
-
   } else {
-
     # are replicates included in init?
     if (length(dim(init)) == length(expected_dims)) {
-
-      if (all.equal(dim(init), expected_dims))
+      if (all.equal(dim(init), expected_dims)) {
         is_ok <- TRUE
-
+      }
     } else {
-
       if (length(dim(init)) == (length(expected_dims) - 1)) {
         if (all.equal(dim(init), expected_dims[-1])) {
           expand <- TRUE
           is_ok <- TRUE
         }
       }
-
     }
-
   }
 
   list(error = !is_ok, expand = expand)
-
 }
 
 # internal function: expand initial values
 #
 #' @importFrom abind abind
 expand_dims <- function(init, replicates) {
-
   # expand over replicates if only one value for each class
   abind::abind(
     lapply(seq_len(replicates), function(x) init),
     along = 0
   )
-
 }
 
 # internal function: set identity covariates function if covariates
 #   are not used
 #' @importFrom stats update
 use_identity_covariates <- function(obj) {
-
   # define identity covariates function
   identity_mask <- ifelse(
     is.multispecies(obj),
@@ -863,13 +846,11 @@ use_identity_covariates <- function(obj) {
 
   # return
   obj
-
 }
 
 
 # internal function: split arguments based on type
 classify_args <- function(args) {
-
   # which arguments are static?
   static <- lapply(args, extract_args, type = "static")
 
@@ -881,13 +862,11 @@ classify_args <- function(args) {
 
   # and return list of arguments by type
   list(static = static, dyn = dyn, fn = fn)
-
 }
 
 # internal function: extract arguments by type for each
 #   process
 extract_args <- function(x, type) {
-
   # work out classes
   arg_class <- sapply(x, class)
 
@@ -895,23 +874,23 @@ extract_args <- function(x, type) {
   #    dynamic if list
   #    function if function,
   #    static otherwise
-  if (type == "static")
+  if (type == "static") {
     x <- x[!arg_class %in% c("list", "function")]
-  if (type == "dynamic")
+  }
+  if (type == "dynamic") {
     x <- x[arg_class == "list"]
-  if (type == "function")
+  }
+  if (type == "function") {
     x <- x[arg_class == "function"]
+  }
 
   # return
   x
-
 }
 
 # internal function: update arguments based on the current generation
 update_args <- function(args, dyn, fn, obj, pop, iter) {
-
   if (any(sapply(dyn, length) > 0)) {
-
     # check which exist
     dyn_exist <- names(dyn)
 
@@ -923,11 +902,9 @@ update_args <- function(args, dyn, fn, obj, pop, iter) {
         )
       }
     }
-
   }
 
   if (any(sapply(fn, length) > 0)) {
-
     # check which exist
     fn_exist <- names(fn)
 
@@ -935,17 +912,16 @@ update_args <- function(args, dyn, fn, obj, pop, iter) {
     for (i in seq_along(fn_exist)) {
       for (j in seq_along(fn[[i]])) {
         fn_eval <- fn[[i]][[j]](obj, pop, iter)
-        if (!is.list(fn_eval))
+        if (!is.list(fn_eval)) {
           fn_eval <- list(fn_eval)
+        }
         args[[fn_exist[i]]] <- c(args[[fn_exist[i]]], fn_eval)
       }
     }
-
   }
 
   # and return
   args
-
 }
 
 # internal function: initialise simulations with Poisson random draws
@@ -969,8 +945,9 @@ subset.simulation <- function(x, subset, ...) {
 # nolint start
 subset.simulation_list <- function(x, subset, ...) {
   # nolint end
-  for (i in seq_along(x))
+  for (i in seq_along(x)) {
     x[[i]] <- x[[i]][, subset, , drop = FALSE]
+  }
   as_simulation_list(x)
 }
 
@@ -1034,7 +1011,6 @@ summary.simulation <- function(object, ...) {
     risk_curve = risk,
     emps = emps_est
   )
-
 }
 ## SIM LIST EXAMPLE MIGHT INCLUDE multi-pop averages as well? It's only for multispecies models,
 ##   so doesn't really make sense to do that
@@ -1086,7 +1062,6 @@ plot.simulation <- function(x, y, ..., class = NULL) {
     lines_tmp <- c(lines_defaults, list(x = xplot, y = yplot[i, ]))
     do.call(lines, lines_tmp)
   }
-
 }
 
 # S3 plot method
@@ -1097,26 +1072,25 @@ plot.simulation_list <- function(x, y, ..., which = seq_along(x)) {
 
   nspecies <- length(x)
 
-  for (i in which)
+  for (i in which) {
     plot(x[[i]], ...)
-
+  }
 }
 
 # internal function: set simulation class
 as_simulation <- function(x) {
   type <- "array"
-  if (is.matrix(x))
+  if (is.matrix(x)) {
     type <- "matrix"
+  }
   as_class(x, name = "simulation", type = type)
 }
 
 # internal function: set simulation class
 as_simulation_list <- function(x) {
-
   # each species is a simulation object
   x <- lapply(x, as_simulation)
 
   # but combination of species is a list
   as_class(x, name = "simulation_list", type = "list")
-
 }

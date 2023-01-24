@@ -76,10 +76,10 @@ dispersal <- function(kernel,
                       density_masks = NULL,
                       density_funs = NULL,
                       proportion = FALSE) {
-
   # check kernel
-  if (nrow(kernel) != ncol(kernel))
+  if (nrow(kernel) != ncol(kernel)) {
     stop("kernel must be a square matrix", call. = FALSE)
+  }
 
   # force evaluation to avoid NULL functions down the line
   force(stochasticity_masks)
@@ -92,10 +92,11 @@ dispersal <- function(kernel,
   if (!is.null(stochasticity_masks)) {
     if (is.list(stochasticity_masks)) {
       stoch_fn <- function(x, ...) {
-        for (i in seq_along(stochasticity_masks))
+        for (i in seq_along(stochasticity_masks)) {
           x <- do_mask(
             x, stochasticity_masks[[i]], stochasticity_funs[[i]], ...
           )
+        }
         x
       }
     } else {
@@ -141,7 +142,6 @@ dispersal <- function(kernel,
 
   # and return as dispersal object
   as_dispersal(dispersal)
-
 }
 
 # internal function: set demographic_stochasticity class

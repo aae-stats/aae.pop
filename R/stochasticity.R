@@ -102,8 +102,9 @@ NULL
 #' #   pass to environmental_stochasticty
 #' envstoch_function <- function(obj, pop, iter) {
 #'   mat <- obj$matrix
-#'   if (is.list(mat))
+#'   if (is.list(mat)) {
 #'     mat <- mat[[iter]]
+#'   }
 #'   out <- aae.pop:::unit_to_real(
 #'     mat[transition(mat)], 0.1 * mat[transition(mat)]
 #'   )
@@ -132,8 +133,10 @@ NULL
 #'   dyn,
 #'   init = c(50, 20, 10, 10, 5),
 #'   nsim = 100,
-#'   options = list(update = update_binomial_leslie,
-#'                  tidy_abundances = floor),
+#'   options = list(
+#'     update = update_binomial_leslie,
+#'     tidy_abundances = floor
+#'   ),
 #'   args = list(
 #'     environmental_stochasticity = list(envstoch_function)
 #'   )
@@ -143,15 +146,15 @@ NULL
 #' plot(sims)
 #' }
 environmental_stochasticity <- function(masks, funs) {
-
   # force evaluation to avoid NULL functions down the line
   force(masks)
   force(funs)
 
   if (is.list(masks)) {
     fn <- function(x, ...) {
-      for (i in seq_along(masks))
+      for (i in seq_along(masks)) {
         x <- do_mask(x, masks[[i]], funs[[i]], ...)
+      }
       x
     }
   } else {
@@ -161,22 +164,21 @@ environmental_stochasticity <- function(masks, funs) {
   }
 
   as_environmental_stochasticity(fn)
-
 }
 
 #' @rdname stochasticity
 #'
 #' @export
 demographic_stochasticity <- function(masks, funs) {
-
   # force evaluation to avoid NULL functions down the line
   force(masks)
   force(funs)
 
   if (is.list(masks)) {
     fn <- function(x, ...) {
-      for (i in seq_along(masks))
+      for (i in seq_along(masks)) {
         x <- do_mask(x, masks[[i]], funs[[i]], ...)
+      }
       x
     }
   } else {
@@ -186,19 +188,20 @@ demographic_stochasticity <- function(masks, funs) {
   }
 
   as_demographic_stochasticity(fn)
-
 }
 
 # internal function: set environmental_stochasticity class
 as_environmental_stochasticity <- function(x) {
   as_class(
-    x, name = "environmental_stochasticity", type = "function"
+    x,
+    name = "environmental_stochasticity", type = "function"
   )
 }
 
 # internal function: set demographic_stochasticity class
 as_demographic_stochasticity <- function(x) {
   as_class(
-    x, name = "demographic_stochasticity", type = "function"
+    x,
+    name = "demographic_stochasticity", type = "function"
   )
 }

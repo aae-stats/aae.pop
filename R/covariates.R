@@ -49,7 +49,7 @@ NULL
 #' #   e.g., a logistic function
 #' covars <- covariates(
 #'   masks = transition(popmat),
-#'   funs = function(mat, x) mat * (1 / (1 + exp(- 10 * x)))
+#'   funs = function(mat, x) mat * (1 / (1 + exp(-10 * x)))
 #' )
 #'
 #' # simulate 50 random covariate values
@@ -72,7 +72,6 @@ NULL
 #' # and can plot these simulated trajectories
 #' plot(sims)
 covariates <- function(masks, funs) {
-
   # force evaluation to avoid NULL functions down the line
   force(masks)
   force(funs)
@@ -80,8 +79,9 @@ covariates <- function(masks, funs) {
   # define function to combine masks and funs
   if (is.list(masks)) {
     fn <- function(mat, ...) {
-      for (i in seq_along(masks))
+      for (i in seq_along(masks)) {
         mat <- do_mask(mat, masks[[i]], funs[[i]], ...)
+      }
       mat
     }
   } else {
@@ -92,7 +92,6 @@ covariates <- function(masks, funs) {
 
   # return
   as_covariates(fn)
-
 }
 
 #' @rdname covariates
@@ -107,16 +106,17 @@ covariates <- function(masks, funs) {
 #'   included in \code{x}
 #'
 format_covariates <- function(x, aux = NULL, names = NULL) {
-
   # is x a vector or matrix/data.frame?
-  if (is.null(dim(x)))
+  if (is.null(dim(x))) {
     x <- matrix(x, ncol = 1)
+  }
 
   # add names if required
   if (!is.null(names)) {
     if (length(names) != ncol(x)) {
       stop("names must contain one value for each column of x",
-           call. = FALSE)
+        call. = FALSE
+      )
     }
     colnames(x) <- names
   }
@@ -126,14 +126,14 @@ format_covariates <- function(x, aux = NULL, names = NULL) {
 
   # do we need to add auxiliary variables?
   if (!is.null(aux)) {
-    if (!is.list(aux))
+    if (!is.list(aux)) {
       aux <- list(aux)
+    }
     x <- c(x, aux)
   }
 
   # return
   x
-
 }
 
 # internal function: set covariates class
