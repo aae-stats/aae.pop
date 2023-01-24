@@ -1,8 +1,12 @@
 ---
-title: "Working with metapopulations"
+title: "Modelling metapopulations"
 author: "Jian Yen"
 date: "10/11/2020"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Modelling metapopulations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}

@@ -2,7 +2,11 @@
 title: "Models of interacting species"
 author: "Jian Yen"
 date: "10/11/2020"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Models of interacting species}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}

@@ -2,7 +2,11 @@
 title: "Population dynamics of Macquarie perch"
 author: "Jian Yen"
 date: "01/07/2021"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Population dynamics of Macquarie perch}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 references:
 - id: todd_lintermans2015
   title: Who do you move? A stochastic population model to guide translocation strategies for an endangered freshwater fish in south-eastern Australia

@@ -2,7 +2,11 @@
 title: "Comparing scenarios with population models"
 author: "Jian Yen"
 date: "01/07/2021"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Comparing scenarios with population models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 references:
 - id: yen2021
   title: 'Using population models to estimate expected benefit of management actions: case studies on six aquatic species'
@@ -25,6 +29,37 @@ references:
   type: article-journal
   issued:
     year: 2021
+- id: yen2022
+  title: 'Establishing new populations in water-secure locations may benefit species persistence more than interventions in water-stressed locations'
+  author:
+  - family: Yen
+    given: Jian D.L.
+  - family: Todd
+    given: Charles R.
+  - family: Sharley
+    given: Joanne
+  - family: Harris
+    given: Annique
+  - family: Geary
+    given: William L.
+  - family: Kelly
+    given: Ella
+  - family: Pavlova
+    given: Alexandra
+  - family: Hunt
+    given: Taylor L.
+  - family: Ingram
+    given: Brett
+  - family: Lyon
+    given: Jarod
+  - family: Tonkin
+    given: Zeb
+  container-title: Biological Conservation
+  volume: 276
+  URL: 'https://www.sciencedirect.com/science/article/pii/S0006320722003652'
+  type: article-journal
+  issued:
+    year: 2022
 ---
 
 ```{r setup, include=FALSE}
@@ -34,7 +69,7 @@ library(aae.pop)
 
 ## Background
 
-A common application of population models is the comparison of scenarios based on population outcomes. Examples include predicting population trajectories under different scenarios of climate change, comparing or ranking competing management scenarios, and predicting the consequences of different ecological hypotheses. This example uses a simplified model of population dynamics to demonstrate the comparison of multiple scenarios, as well as several methods to speed computation when simulating many scenarios. A detailed exploration of this approach is outlined in [@yen2021].
+A common application of population models is the comparison of scenarios based on population outcomes. Examples include predicting population trajectories under different scenarios of climate change, comparing or ranking competing management scenarios, and predicting the consequences of different ecological hypotheses. This example uses a simplified model of population dynamics to demonstrate the comparison of multiple scenarios, as well as several methods to speed computation when simulating many scenarios. A detailed exploration of this approach is outlined in [@yen2021] and [@yen2022].
 
 ## A simple population model
 

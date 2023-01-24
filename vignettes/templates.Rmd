@@ -2,7 +2,11 @@
 title: "Population model templates with aae.pop.templates"
 author: "Jian Yen"
 date: "01/07/2021"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Population model templates wtih aae.pop.templates}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}

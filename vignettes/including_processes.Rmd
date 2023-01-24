@@ -2,7 +2,11 @@
 title: "Including demographic processes in a population model"
 author: "Jian Yen"
 date: "5/11/2020"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Including demographic processes in a population model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}

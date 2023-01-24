@@ -2,7 +2,11 @@
 title: "Passing arguments to demographic processes"
 author: "Jian Yen"
 date: "12/11/2020"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Passing arguments to demographic processes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
