@@ -41,7 +41,8 @@ is.simulation_list(x)
 \code{\link{dynamics}} or from a subsequent call to
 \code{\link{multispecies}} or \code{\link{metapopulation}}.
 Alternatively, \code{ojbect} can be a \code{template}
-object from \pkg{aae.pop.templates}}
+object from \pkg{aae.pop.templates}, or the output of a
+call to \code{simulate} in the case of \code{summary}}
 
 \item{nsim}{the number of replicate simulations (default = 1)}
 

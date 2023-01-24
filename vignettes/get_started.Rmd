@@ -128,7 +128,7 @@ Default settings also specify that population updates are calculated as a cross 
 
 ### Summarise simulated trajectories
 
-Simulated trajectories are arrays with dimensions of replicates (rows) by classes (columns) by time steps (slices). These arrays are relatively easy to summarise using `apply` functions but the `aae.pop` package includes several basic summary functions for convencience.
+Simulated trajectories are arrays with dimensions of replicates (rows) by classes (columns) by time steps (slices). These arrays are relatively easy to summarise using `apply` functions but the `aae.pop` package includes several basic summary functions for convenience.
 
 A simple summary of the probability a population will hit zero individuals at any time step, plus expected minimum population size (EMPS), is generated with the `summary` function. This summary makes most sense when considering replicate population trajectories because extinction probabilities are defined as the proportion of trajectories hitting zero individuals:
 

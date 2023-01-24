@@ -46,7 +46,7 @@ Calculate expected population size for a
 Expected population size (ExPS) is a highly
   flexible generalisation of \code{\link{emps}} and
   represents a two-level summary that first summarises
-  individual population trajectories and then summarisies
+  individual population trajectories and then summarises
   these values over all replicates. Abundances
   can be specified for all population classes or for a subset
   of classes.

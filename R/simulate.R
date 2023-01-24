@@ -15,7 +15,8 @@ NULL
 #'   \code{\link{dynamics}} or from a subsequent call to
 #'   \code{\link{multispecies}} or \code{\link{metapopulation}}.
 #'   Alternatively, \code{ojbect} can be a \code{template}
-#'   object from \pkg{aae.pop.templates}
+#'   object from \pkg{aae.pop.templates}, or the output of a
+#'   call to \code{simulate} in the case of \code{summary}
 #' @param nsim the number of replicate simulations (default = 1)
 #' @param seed optional seed used prior to initialisation and simulation to
 #'   give reproducible results
@@ -1006,13 +1007,13 @@ print.simulation <- function(x, ...) {
 # S3 summary method
 #' @export
 # nolint start
-summary.simulation <- function(x, ...) {
+summary.simulation <- function(object, ...) {
   # nolint end
 
   # calculate some basic summary stats
-  pr_ext <- pr_extinct(x)
-  risk <- risk_curve(x, n = 10)
-  emps_est <- emps(x)
+  pr_ext <- pr_extinct(object)
+  risk <- risk_curve(object, n = 10)
+  emps_est <- emps(object)
 
   # update names of risk to make it easier to read
   names(risk) <- paste("n = ", names(risk), sep = "")

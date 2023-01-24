@@ -5,6 +5,8 @@
 #' @title Calculate (quasi-)extinction risk for a \code{\link{simulate}}
 #'   object
 #'
+#' @importFrom stats quantile density
+#'
 #' @export
 #'
 #' @param sims an object returned from \code{\link{simulate}}
@@ -494,7 +496,7 @@ emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
 #' @details Expected population size (ExPS) is a highly
 #'   flexible generalisation of \code{\link{emps}} and
 #'   represents a two-level summary that first summarises
-#'   individual population trajectories and then summarisies
+#'   individual population trajectories and then summarises
 #'   these values over all replicates. Abundances
 #'   can be specified for all population classes or for a subset
 #'   of classes.
