@@ -1,7 +1,7 @@
 Package: aae.pop
 Type: Package
 Title: Flexible Simulation of Multispecies Population Dynamics 
-Version: 0.0.1.9000
+Version: 0.0.2.9000
 Date: 2022-11-15
 Author: c(
   person(given = "Jian",
