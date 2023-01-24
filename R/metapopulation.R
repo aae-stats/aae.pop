@@ -128,7 +128,6 @@ NULL
 #'   args = list(covariates = format_covariates(xsim))
 #' )
 metapopulation <- function(structure, dynamics, dispersal) {
-
   # check the structure is ok
   structure <- check_structure(structure)
 
@@ -143,8 +142,9 @@ metapopulation <- function(structure, dynamics, dispersal) {
   } else {
     if (length(dynamics) != structure$npop) {
       stop("dynamics must be a single dynamics object or a list of dynamics ",
-           "objects with one element for each row/col of structure",
-           call. = FALSE)
+        "objects with one element for each row/col of structure",
+        call. = FALSE
+      )
     }
   }
 
@@ -163,8 +163,9 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
   # define masks for each population
   mat_skeleton <- metapop_matrix
-  if (is.list(mat_skeleton))
+  if (is.list(mat_skeleton)) {
     mat_skeleton <- mat_skeleton[[1]]
+  }
   mat_masks <- lapply(
     seq_len(structure$npop),
     function(i) metapop_idx(mat_skeleton, dyn_check$nclass, from = i, to = i)
@@ -177,18 +178,19 @@ metapopulation <- function(structure, dynamics, dispersal) {
   # define masks for each dispersal element
   dispersal_masks <- lapply(
     seq_len(structure$ndispersal),
-    function(i) metapop_idx(
-      mat_skeleton,
-      dyn_check$nclass,
-      from = str_cols[i],
-      to = str_rows[i]
-    )
+    function(i) {
+      metapop_idx(
+        mat_skeleton,
+        dyn_check$nclass,
+        from = str_cols[i],
+        to = str_rows[i]
+      )
+    }
   )
 
   # add in covariates if included in any populations
   covars <- NULL
   if (any(dyn_check$covars)) {
-
     # pull out functions for all populations
     covar_funs <- lapply(dynamics, function(x) x$covariates)
 
@@ -198,13 +200,11 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
     # create full environmental stochasticity component
     covars <- covariates(covar_masks, covar_funs)
-
   }
 
   # add in environmental stochasticity if included in any populations
   envstoch <- NULL
   if (any(dyn_check$envstoch) | any(dispersal$stochasticity)) {
-
     # pull out functions for all populations
     env_funs <- lapply(dynamics, function(x) x$environmental_stochasticity)
 
@@ -222,13 +222,11 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
     # create full environmental stochasticity component
     envstoch <- environmental_stochasticity(env_masks, env_funs)
-
   }
 
   # expand demographic stochasticity if included
   demostoch <- NULL
   if (any(dyn_check$demostoch)) {
-
     # pull out masks and functions for all populations
     demo_funs <- lapply(dynamics, function(x) x$demographic_stochasticity)
 
@@ -238,13 +236,11 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
     # create full demographic stochasticity component
     demostoch <- demographic_stochasticity(demo_masks, demo_funs)
-
   }
 
   # expand density dependence if included
   dens_depend <- NULL
   if (any(dyn_check$dens_depend) | any(dispersal$density)) {
-
     # pull out functions for all populations
     dens_funs <- lapply(dynamics, function(x) x$density_dependence)
 
@@ -274,13 +270,11 @@ metapopulation <- function(structure, dynamics, dispersal) {
       dens_funs,
       nmasks
     )
-
   }
 
   # expand rescale density dependence if included
   dens_depend_n <- NULL
   if (any(dyn_check$dens_depend_n)) {
-
     # pull out masks and functions for all populations
     dens_n_funs <- lapply(dynamics, function(x) x$density_dependence_n)
 
@@ -290,7 +284,6 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
     # create full demographic stochasticity component
     dens_depend_n <- density_dependence_n(dens_n_masks, dens_n_funs)
-
   }
 
   # collate metapop object with expanded dynamics
@@ -309,23 +302,24 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
   # return metapopulation object
   as_metapopulation(metapop_dynamics)
-
 }
 
 # internal function: check the structure matrix is OK
 check_structure <- function(x) {
-
   # is structure actually a matrix?
-  if (!is.matrix(x))
+  if (!is.matrix(x)) {
     stop("structure must be a matrix", call. = FALSE)
+  }
 
   # structure must be a square matrix
-  if (nrow(x) != ncol(x))
+  if (nrow(x) != ncol(x)) {
     stop("structure must be a square matrix", call. = FALSE)
+  }
 
   # convert binary matrix to logical
-  if (all(x %in% c(0, 1)))
+  if (all(x %in% c(0, 1))) {
     x <- x > 0
+  }
 
   # is structure now logical?
   if (!all(x %in% c(TRUE, FALSE))) {
@@ -336,8 +330,9 @@ check_structure <- function(x) {
   }
 
   # remove diag if included
-  if (any(diag(x)))
+  if (any(diag(x))) {
     diag(x) <- FALSE
+  }
 
   # how many populations are included?
   npop <- nrow(x)
@@ -346,15 +341,15 @@ check_structure <- function(x) {
   ndispersal <- sum(x[upper.tri(x)]) + sum(x[lower.tri(x)])
 
   # return list of key information
-  list(npop = npop,
-       ndispersal = ndispersal,
-       structure = x)
-
+  list(
+    npop = npop,
+    ndispersal = ndispersal,
+    structure = x
+  )
 }
 
 # internal function: check dispersal object
 check_dispersal <- function(x, n) {
-
   if (missing(x)) {
     stop(
       "dispersal must be provided to define a metapopulation",
@@ -372,8 +367,9 @@ check_dispersal <- function(x, n) {
   }
 
   # and convert dispersal to list if needed
-  if (n == 1 & class(x)[1] == "dispersal")
+  if (n == 1 & class(x)[1] == "dispersal") {
     x <- list(x)
+  }
 
   stochasticity <- check_processes(x, type = "stochasticity")
   density <- check_processes(x, type = "density")
@@ -382,13 +378,11 @@ check_dispersal <- function(x, n) {
   list(
     dispersal = x, stochasticity = stochasticity, density = density
   )
-
 }
 
 # internal function: check list of dynamics object can be turned into
 #   metapopulation object
 check_dynamics <- function(dyn_list) {
-
   # do all elements have the same number of classes?
   classes <- sapply(dyn_list, function(x) x$nclass)
   if (length(unique(classes)) != 1) {
@@ -422,12 +416,10 @@ check_dynamics <- function(dyn_list) {
     dens_depend = dens_depend,
     dens_depend_n = dens_depend_n
   )
-
 }
 
 # internal function: create a block diagonal matrix from list of matrices
 block_diagonal <- function(mats) {
-
   # work out dims and initialise an empty matrix
   nrow_single <- nrow(mats[[1]])
   nrows <- nrow_single * length(mats)
@@ -442,18 +434,15 @@ block_diagonal <- function(mats) {
 
   # return
   mat
-
 }
 
 # internal function: check processes from multiple dynamics objects
 check_processes <- function(x, type) {
-
   # pull out relevant process
   procs <- lapply(x, function(x) x[[type]])
 
   # return flag checking which pops include process
   !sapply(procs, is.null)
-
 }
 
 # internal function: add dispersal elements to metapopulation matrix
@@ -462,13 +451,10 @@ add_dispersal <- function(mat,
                           str_cols,
                           dispersal,
                           nclass) {
-
   # and loop through all dispersals, updating metapop matrix one-by-one
   for (i in seq_along(dispersal)) {
-
     # loop if we have a list of matrices (i.e. if covariates are included)
     if (is.list(mat)) {
-
       # work out which cells we need to update
       #   (all matrices should have identical dims)
       idx <- metapop_idx(mat[[1]], nclass, from = str_cols[i], to = str_rows[i])
@@ -480,17 +466,13 @@ add_dispersal <- function(mat,
         mask = idx,
         fun = function(x) dispersal[[i]]$kernel
       )
-
     } else {
-
       # work out which cells we need to update
       idx <- metapop_idx(mat, nclass, from = str_cols[i], to = str_rows[i])
 
       # and add in dispersal bits
       mat <- do_mask(mat, mask = idx, function(x) dispersal[[i]]$kernel)
-
     }
-
   }
 
   # rescale if needed
@@ -507,51 +489,49 @@ add_dispersal <- function(mat,
 
   # and check survival doesn't exceed 1
   for (i in seq_along(dispersal)) {
-
     if (is.list(mat)) {
-
       survival_issue <- lapply(
         seq_along(mat),
-        function(j) check_survival(
-          mat[[j]], nclass, str_cols[i], idx, timestep = j
-        )
+        function(j) {
+          check_survival(
+            mat[[j]], nclass, str_cols[i], idx,
+            timestep = j
+          )
+        }
       )
       issue <- sapply(survival_issue, function(x) x$issue)
       classes <- unlist(lapply(survival_issue, function(x) x$classes))
       if (any(issue)) {
-        message("Survival (including dispersal) exceeds 1 for classes ",
-                clean_paste(unique(classes)),
-                " in timesteps ", clean_paste(which(issue)),
-                " for population ", i)
+        message(
+          "Survival (including dispersal) exceeds 1 for classes ",
+          clean_paste(unique(classes)),
+          " in timesteps ", clean_paste(which(issue)),
+          " for population ", i
+        )
       }
-
     } else {
-
       survival_issue <- check_survival(mat, nclass, str_cols[i], idx)
       if (survival_issue$issue) {
-        message("Survival (including dispersal) exceeds 1 for classes ",
-                clean_paste(survival_issue$classes))
+        message(
+          "Survival (including dispersal) exceeds 1 for classes ",
+          clean_paste(survival_issue$classes)
+        )
       }
-
     }
-
   }
 
   # return
   mat
-
 }
 
 # internal function: rescale dispersal kernel and source matrices
 rescale_dispersal <- function(mat, nclass, cols, rows) {
-
   # work out how many dispersing from each population
   n_disperse <- table(cols)
   dispersers <- as.numeric(names(n_disperse))
 
   # loop over each source population with active dispersers
   for (i in seq_along(dispersers)) {
-
     # pull out the source population
     idx <- metapop_idx(mat, nclass, dispersers[i], dispersers[i])
     source <- matrix(mat[idx], ncol = nclass)
@@ -598,16 +578,13 @@ rescale_dispersal <- function(mat, nclass, cols, rows) {
     mat[idy] <- kernels
     mat[idz] <- off_target
     mat[idx] <- source
-
   }
 
   mat
-
 }
 
 # internal function: define masks for metapopulations based on pop IDs
 metapop_idx <- function(mat, nclass, from, to) {
-
   # work out which rows correspond to "to"
   row_subset <-
     ((to - 1) * nclass + 1):(to * nclass)
@@ -618,12 +595,10 @@ metapop_idx <- function(mat, nclass, from, to) {
 
   # return cell subset
   row(mat) %in% row_subset & col(mat) %in% col_subset
-
 }
 
 # internal function: check implied survival with dispersal
 check_survival <- function(mat, nclass, col, idx, timestep = NULL) {
-
   # pull out the from population, add dispersal, and check proportion surviving
   idy <- metapop_idx(mat, nclass, from = col, to = col)
   total <- matrix(mat[idy] + mat[idx], ncol = nclass)
@@ -635,7 +610,6 @@ check_survival <- function(mat, nclass, col, idx, timestep = NULL) {
     issue = any(total_survival > 1),
     classes = which(total_survival > 1)
   )
-
 }
 
 # S3 method
@@ -664,7 +638,6 @@ print.metapopulation <- function(x, ...) {
 
 # internal function: set metapopulation class
 as_metapopulation <- function(x) {
-
   # it should just be a list coming in but we want it to be a
   #   dynamics object. This will check it's a list and add
   #   the dynamics class.
@@ -672,5 +645,4 @@ as_metapopulation <- function(x) {
 
   # return
   as_class(x, name = "metapopulation", type = "dynamics")
-
 }

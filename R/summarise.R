@@ -51,18 +51,20 @@
 #' # repeat previous but ignore first 10 years
 #' pr_extinct(sims, threshold = 100, times = 11:51)
 pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
-
   # check input object
-  if (!"simulation" %in% class(sims))
+  if (!"simulation" %in% class(sims)) {
     stop("pr_extinct is defined for simulation objects", call. = FALSE)
+  }
 
   # check subset
-  if (!is.null(subset))
+  if (!is.null(subset)) {
     sims <- subset(sims, subset = subset)
+  }
 
   # check times
-  if (!is.null(times))
+  if (!is.null(times)) {
     sims <- sims[, , times, drop = FALSE]
+  }
 
   # calculate  total abundance
   abund <- apply(sims, c(1, 3), sum)
@@ -74,7 +76,6 @@ pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
 
   # return
   out
-
 }
 
 #' @name risk_curve
@@ -132,33 +133,29 @@ pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
 #'
 #' # calculate risk curve but ignore first 10 years
 #' risk_curve(sims, times = 11:51)
-risk_curve <- function(
-  sims, threshold = NULL, subset = NULL, times = NULL, n = 100
-) {
-
+risk_curve <- function(sims, threshold = NULL, subset = NULL, times = NULL, n = 100) {
   # check input object
-  if (!"simulation" %in% class(sims))
+  if (!"simulation" %in% class(sims)) {
     stop("risk_curve is defined for simulation objects", call. = FALSE)
+  }
 
   # check subset
-  if (!is.null(subset))
+  if (!is.null(subset)) {
     sims <- subset(sims, subset = subset)
+  }
 
   # check times
   if (!is.null(times)) {
-
     # filter to selected time steps
     sims <- sims[, , times, drop = FALSE]
 
     # but need to add back the simulation class so pr_extinct
     #   does not error
     sims <- as_simulation(sims)
-
   }
 
   # set default threshold if required
   if (is.null(threshold)) {
-
     # calculate  total abundance
     abund <- apply(sims, c(1, 3), sum)
 
@@ -168,7 +165,6 @@ risk_curve <- function(
     # define a threshold as n evenly spaced values
     #   between 0 and the max abundance
     threshold <- seq(0, max_n, length = n)
-
   }
 
   # calculate risk at each threshold, noting that
@@ -184,7 +180,6 @@ risk_curve <- function(
 
   # return
   out
-
 }
 
 #' @name get_cdf
@@ -246,28 +241,25 @@ risk_curve <- function(
 #' # calculate distribution of minimum population sizes
 #' #   but ignore first 10 years
 #' get_cdf(sims, fn = max, times = 11:51)
-get_cdf <- function(
-    sims, subset = NULL, times = NULL, n = 100, fn = min, ...
-){
-
+get_cdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
   # check input object
-  if (!"simulation" %in% class(sims))
+  if (!"simulation" %in% class(sims)) {
     stop("risk_curve is defined for simulation objects", call. = FALSE)
+  }
 
   # check subset
-  if (!is.null(subset))
+  if (!is.null(subset)) {
     sims <- subset(sims, subset = subset)
+  }
 
   # check times
   if (!is.null(times)) {
-
     # filter to selected time steps
     sims <- sims[, , times, drop = FALSE]
 
     # but need to add back the simulation class so pr_extinct
     #   does not error
     sims <- as_simulation(sims)
-
   }
 
   # calculate  total abundance
@@ -289,7 +281,6 @@ get_cdf <- function(
     prob = prob,
     value = value
   )
-
 }
 
 #' @name get_pdf
@@ -352,28 +343,25 @@ get_cdf <- function(
 #' # calculate distribution of minimum population sizes
 #' #   but ignore first 10 years
 #' get_pdf(sims, fn = max, times = 11:51)
-get_pdf <- function(
-    sims, subset = NULL, times = NULL, n = 100, fn = min, ...
-){
-
+get_pdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
   # check input object
-  if (!"simulation" %in% class(sims))
+  if (!"simulation" %in% class(sims)) {
     stop("risk_curve is defined for simulation objects", call. = FALSE)
+  }
 
   # check subset
-  if (!is.null(subset))
+  if (!is.null(subset)) {
     sims <- subset(sims, subset = subset)
+  }
 
   # check times
   if (!is.null(times)) {
-
     # filter to selected time steps
     sims <- sims[, , times, drop = FALSE]
 
     # but need to add back the simulation class so pr_extinct
     #   does not error
     sims <- as_simulation(sims)
-
   }
 
   # calculate  total abundance
@@ -390,7 +378,6 @@ get_pdf <- function(
     prob = dens$y,
     value = dens$x
   )
-
 }
 
 #' @name emps
@@ -445,18 +432,20 @@ get_pdf <- function(
 #' # calculate expected minimum population size based on median
 #' emps(sims, fun = median)
 emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
-
   # check input object
-  if (!"simulation" %in% class(sims))
+  if (!"simulation" %in% class(sims)) {
     stop("emps is defined for simulation objects", call. = FALSE)
+  }
 
   # check subset
-  if (!is.null(subset))
+  if (!is.null(subset)) {
     sims <- subset(sims, subset = subset)
+  }
 
   # check times
-  if (!is.null(times))
+  if (!is.null(times)) {
     sims <- sims[, , times, drop = FALSE]
+  }
 
   # calculate  total abundance
   abund <- apply(sims, c(1, 3), sum)
@@ -466,7 +455,6 @@ emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
 
   # calculate and return average minimum over all trajectories
   fun(min_n, ...)
-
 }
 
 #' @name exps
@@ -532,26 +520,31 @@ emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
 #'
 #' # calculate exps with conflicting quantile functions, handling
 #' #   conflicting arguments with wrapper functions
-#' quant1 <- function(x, p1, ...) {quantile(x, prob = p1)}
-#' quant2 <- function(x, p2, ...) {quantile(x, prob = p2)}
+#' quant1 <- function(x, p1, ...) {
+#'   quantile(x, prob = p1)
+#' }
+#' quant2 <- function(x, p2, ...) {
+#'   quantile(x, prob = p2)
+#' }
 #' exps(
-#'   sims, fun_within = quant1, fun_among = quant2, p1 = 0.25, p2 = 0.75
+#'   sims,
+#'   fun_within = quant1, fun_among = quant2, p1 = 0.25, p2 = 0.75
 #' )
-exps <- function(
-  sims, subset = NULL, times = NULL, fun_within = mean, fun_among = mean, ...
-) {
-
+exps <- function(sims, subset = NULL, times = NULL, fun_within = mean, fun_among = mean, ...) {
   # check input object
-  if (!"simulation" %in% class(sims))
+  if (!"simulation" %in% class(sims)) {
     stop("exps is defined for simulation objects", call. = FALSE)
+  }
 
   # check subset
-  if (!is.null(subset))
+  if (!is.null(subset)) {
     sims <- subset(sims, subset = subset)
+  }
 
   # check times
-  if (!is.null(times))
+  if (!is.null(times)) {
     sims <- sims[, , times, drop = FALSE]
+  }
 
   # calculate  total abundance
   abund <- apply(sims, c(1, 3), sum)
@@ -561,5 +554,4 @@ exps <- function(
 
   # calculate and return average minimum over all trajectories
   fun_among(summary_n, ...)
-
 }

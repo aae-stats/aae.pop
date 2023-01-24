@@ -45,24 +45,22 @@ NULL
 #' # and plot
 #' plot(sims)
 beverton_holt <- function(k, exclude = NULL) {
-
   function(x, n, theta = 1, ...) {
-    if (!is.null(exclude))
+    if (!is.null(exclude)) {
       n <- n[-exclude]
+    }
     x / (1 + theta * x * sum(n) / k)
   }
-
 }
 
 #' @rdname density_functions
 #'
 #' @export
 ricker <- function(k, exclude = NULL) {
-
   function(x, n, theta = 1, ...) {
-    if (!is.null(exclude))
+    if (!is.null(exclude)) {
       n <- n[-exclude]
+    }
     x * exp(1 - theta * sum(n) / k) / exp(1)
   }
-
 }

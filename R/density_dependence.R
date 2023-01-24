@@ -82,7 +82,6 @@ NULL
 #' # and plot
 #' plot(sims)
 density_dependence <- function(masks, funs, nmask = NULL) {
-
   # force evaluation to avoid NULL functions down the line
   force(masks)
   force(funs)
@@ -91,59 +90,59 @@ density_dependence <- function(masks, funs, nmask = NULL) {
   # populate nmask if not specified
   if (is.null(nmask)) {
     if (is.list(masks)) {
-    nmask <- lapply(
-      masks, function(x) rep(TRUE, nrow(x))
-    )
+      nmask <- lapply(
+        masks, function(x) rep(TRUE, nrow(x))
+      )
     } else {
       nmask <- rep(TRUE, nrow(masks))
     }
   }
 
   if (is.list(masks)) {
-
     # check nmask and funs have enough elements
     if (!is.null(nmask)) {
       if (length(masks) != length(nmask)) {
         stop("must be one element of nmask ",
-             "for each element of masks",
-             call. = FALSE)
+          "for each element of masks",
+          call. = FALSE
+        )
       }
     }
     if (length(masks) != length(funs)) {
       stop("must be one element of funs ",
-           "for each element of masks",
-           call. = FALSE)
+        "for each element of masks",
+        call. = FALSE
+      )
     }
 
     fn <- function(x, n, ...) {
-      for (i in seq_along(masks))
+      for (i in seq_along(masks)) {
         x <- do_mask(x, masks[[i]], funs[[i]], n[nmask[[i]]], ...)
+      }
       x
     }
   } else {
     fn <- function(x, n, ...) {
       do_mask(x, masks, funs, n[nmask], ...)
     }
-
   }
 
   as_density_dependence(fn)
-
 }
 
 #' @rdname density_dependence
 #'
 #' @export
 density_dependence_n <- function(masks, funs) {
-
   # force evaluation to avoid NULL functions down the line
   force(masks)
   force(funs)
 
   if (is.list(masks)) {
     fn <- function(pop_t, ...) {
-      for (i in seq_along(masks))
+      for (i in seq_along(masks)) {
         pop_t <- do_mask(pop_t, masks[[i]], funs[[i]], ...)
+      }
       pop_t
     }
   } else {
@@ -153,7 +152,6 @@ density_dependence_n <- function(masks, funs) {
   }
 
   as_density_dependence_n(fn)
-
 }
 
 # internal function: set density_dependence class

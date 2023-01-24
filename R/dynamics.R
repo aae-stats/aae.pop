@@ -39,16 +39,17 @@ NULL
 #' # and plot this
 #' plot(dyn)
 dynamics <- function(matrix, ...) {
-
   # check matrix is provided
-  if (missing(matrix))
+  if (missing(matrix)) {
     stop("matrix must be provided when creating dynamics object")
+  }
 
   # is matrix actually a matrix?
   if (length(dim(matrix)) != 2) {
     stop("matrix must be a two-dimensional array or matrix ",
-         "defining a population dynamics model",
-         call. = FALSE)
+      "defining a population dynamics model",
+      call. = FALSE
+    )
   }
 
   # list possible processes
@@ -73,8 +74,9 @@ dynamics <- function(matrix, ...) {
   # error if processes not supported
   if (!all(processes_supplied %in% processes_supported)) {
     stop("Additional arguments to dynamics must be one of ",
-         clean_paste(processes_supported, final_sep = "or"),
-         call. = FALSE)
+      clean_paste(processes_supported, final_sep = "or"),
+      call. = FALSE
+    )
   }
 
   # error if multiple of the same process supplied
@@ -83,9 +85,10 @@ dynamics <- function(matrix, ...) {
     if (any(nproc > 1)) {
       duplicate_process <- names(nproc)[nproc > 1]
       stop("Multiple objects provided for the following processes: ",
-           clean_paste(duplicate_process, final_sep = "and"), ".\n",
-           " A dynamics object can include up to one of each process type",
-           call. = FALSE)
+        clean_paste(duplicate_process, final_sep = "and"), ".\n",
+        " A dynamics object can include up to one of each process type",
+        call. = FALSE
+      )
     }
   }
 
@@ -104,7 +107,6 @@ dynamics <- function(matrix, ...) {
       process_list
     )
   )
-
 }
 
 #' @rdname dynamics
@@ -117,7 +119,6 @@ dynamics <- function(matrix, ...) {
 #'   updated to change any of the included processes with
 #'   the \code{update} function.
 update.dynamics <- function(object, ...) {
-
   # collate dots into a list
   processes_updated <- list(...)
 
@@ -151,25 +152,22 @@ update.dynamics <- function(object, ...) {
 
   # recreate and return dynamics object with new processes
   do.call(dynamics, c(list(object$matrix), processes_existing))
-
 }
 
 # S3 plot method
 #' @export
 plot.template <- function(x, y, ...) {
-
   plot(x$dynamics)
-
 }
 
 # S3 plot method
 #' @export
 plot.dynamics <- function(x, y, ...) {
-
   if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
     stop("the DiagrammeR package must be installed to ",
-         "plot dynamics objects",
-         call. = FALSE)
+      "plot dynamics objects",
+      call. = FALSE
+    )
   }
 
   # pull out the population matrix
@@ -185,12 +183,14 @@ plot.dynamics <- function(x, y, ...) {
   type <- ifelse(any(diag(mat) > 0), "Stage", "Age")
 
   # add tweak for age-structured with final collecting stage
-  if (all(diag(mat)[-nrow(mat)] == 0))
+  if (all(diag(mat)[-nrow(mat)] == 0)) {
     type <- "Age"
+  }
 
-  gr <- DiagrammeR::from_adj_matrix(mat,    # nolint
-                                    mode = "directed",
-                                    use_diag = TRUE)
+  gr <- DiagrammeR::from_adj_matrix(mat, # nolint
+    mode = "directed",
+    use_diag = TRUE
+  )
 
   # how many nodes?
   n_nodes <- nrow(gr$nodes_df)
@@ -200,8 +200,9 @@ plot.dynamics <- function(x, y, ...) {
   from <- gr$edges_df$from
 
   # change type back to stage if there are multiple "age x+" terms
-  if (sum(to == from) > 1)
+  if (sum(to == from) > 1) {
     type <- "Stage"
+  }
 
   # identify different node types
   node_type <- rep("pre_reprod", n_nodes)
@@ -232,13 +233,14 @@ plot.dynamics <- function(x, y, ...) {
   node_labels <- paste(type, seq_len(n_nodes), sep = " ")
 
   # if it's a Leslie matrix and to == from, we have an "age+" situation
-  if (type == "Age")
+  if (type == "Age") {
     node_labels[from[to == from]] <- paste0(node_labels[from[to == from]], "+")
+  }
 
   edge_style <- rep("solid", length(to))
   edge_style[from %in% which(node_type == "reprod") &
-               !(to %in% which(node_type == "reprod")) &
-               !(to %in% which(node_type == "post_reprod"))] <- "dashed"
+    !(to %in% which(node_type == "reprod")) &
+    !(to %in% which(node_type == "post_reprod"))] <- "dashed"
 
   font_colour <- rep(col_pal[2], n_nodes)
   font_colour[node_type == "reprod"] <- col_pal[3]
@@ -275,15 +277,18 @@ plot.dynamics <- function(x, y, ...) {
   gr$global_attrs$value[gr$global_attrs$attr == "layout"] <- "dot"
 
   # make it horizontal
-  gr$global_attrs <- rbind(gr$global_attrs,
-                           data.frame(attr = "rankdir",
-                                      value = "LR",
-                                      attr_type = "graph"))
+  gr$global_attrs <- rbind(
+    gr$global_attrs,
+    data.frame(
+      attr = "rankdir",
+      value = "LR",
+      attr_type = "graph"
+    )
+  )
 
-  grViz <- DiagrammeR::render_graph(gr)  # nolint
+  grViz <- DiagrammeR::render_graph(gr) # nolint
   attr(grViz, "dgr_graph") <- gr
   grViz
-
 }
 
 # S3 is method
@@ -304,8 +309,9 @@ is.dynamics <- function(x) {
 print.dynamics <- function(x, ...) {
   # nolint end
   nsp <- x$nspecies
-  if (is.null(nsp))
+  if (is.null(nsp)) {
     nsp <- "a single"
+  }
 
   cat(paste0("Population dynamics object for ", nsp, " species\n"))
 }

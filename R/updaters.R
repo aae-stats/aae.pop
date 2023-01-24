@@ -51,18 +51,19 @@ update_crossprod <- function(pop, mat) {
 #'   with a direct RNG draw that combines update with demographic
 #'   stochasticity, assuming a Leslie matrix.
 update_binomial_leslie <- function(pop, mat) {
-
   if (!all((pop %% 1) == 0)) {
     stop("some abundances are not integers, so cannot be used ",
-         "with update_binomial_leslie. ",
-         "Check options()$aae.pop_tidy_abundances ",
-         "and update with an appropriate method (e.g. floor)",
-         call. = FALSE)
+      "with update_binomial_leslie. ",
+      "Check options()$aae.pop_tidy_abundances ",
+      "and update with an appropriate method (e.g. floor)",
+      call. = FALSE
+    )
   }
 
   # need a 1 row matrix if pop is a vector
-  if (is.null(dim(pop)))
+  if (is.null(dim(pop))) {
     pop <- matrix(pop, nrow = 1)
+  }
 
   # pull out all ages except the last
   pop_nm1 <- pop[, -ncol(pop), drop = FALSE]
@@ -74,9 +75,9 @@ update_binomial_leslie <- function(pop, mat) {
   cbind(
     rpois(nrow(vals), lambda = vals[, 1]),
     matrix(rbinom(length(probs), size = pop_nm1, prob = probs),
-           nrow = nrow(pop_nm1))
+      nrow = nrow(pop_nm1)
+    )
   )
-
 }
 
 #' @rdname updaters
@@ -90,17 +91,18 @@ update_binomial_leslie <- function(pop, mat) {
 #'   allowing for general matrix forms (slower than
 #'   \code{update_binomial_leslie}).
 update_multinomial <- function(pop, mat) {
-
   if (!all((pop %% 1) == 0)) {
     stop("some abundances are not integers, so cannot be used ",
-         "with update_multinomial. Check options()$tidy_abundances ",
-         "and update with an appropriate method (e.g. floor)",
-         call. = FALSE)
+      "with update_multinomial. Check options()$tidy_abundances ",
+      "and update with an appropriate method (e.g. floor)",
+      call. = FALSE
+    )
   }
 
   # need a 1 row matrix if pop is a vector
-  if (is.null(dim(pop)))
+  if (is.null(dim(pop))) {
     pop <- matrix(pop, nrow = 1)
+  }
 
   n <- ncol(pop)
 
@@ -129,13 +131,10 @@ update_multinomial <- function(pop, mat) {
   out[, 1] <- out[, 1] + recruits
 
   out
-
 }
 
 # internal function: single multinomial draw for one replicate
 multinomial_internal <- function(n, pop, mat) {
-
   out <- mc2d::rmultinomial(n = n, size = pop, prob = t(mat))
   apply(out[, 1:n], 2, sum)
-
 }
