@@ -11,3 +11,4 @@
 ^pkgdown$
 ^index\.md$
 ^todo\.md$
+^\.github$
