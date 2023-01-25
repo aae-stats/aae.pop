@@ -28,6 +28,8 @@ reference:
     - emps
     - risk_curve
     - exps
+    - get_pdf
+    - get_cdf
 
   - title: Adding density dependence
     contents:
