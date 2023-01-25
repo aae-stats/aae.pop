@@ -30,6 +30,8 @@ Imports:
     mc2d,
     nleqslv
 Suggests:
+    aae.pop.templates,
+    aae.pop.inference,
     knitr,
     DiagrammeR,
     testthat,
