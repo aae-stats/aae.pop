@@ -1,0 +1,20 @@
+pandoc: 2.19.2
+pkgdown: 2.0.7
+pkgdown_sha: ~
+articles:
+  beyond_defaults: beyond_defaults.html
+  forecasting_example: forecasting_example.html
+  get_started: get_started.html
+  including_processes: including_processes.html
+  macperch_example: macperch_example.html
+  metapopulations: metapopulations.html
+  model_checking: model_checking.html
+  multiple_species: multiple_species.html
+  passing_arguments: passing_arguments.html
+  scenarios_example: scenarios_example.html
+  templates: templates.html
+last_built: 2023-01-25T01:07Z
+urls:
+  reference: https://aae-stats.github.io/aae.pop/reference
+  article: https://aae-stats.github.io/aae.pop/articles
+
