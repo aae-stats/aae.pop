@@ -167,24 +167,24 @@ be used to define expected arguments for each function</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected population size</span></span></span>
 <span class="r-in"><span><span class="fu">exps</span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 95.42344</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 95.00564</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected population size for 4 and 5 year</span></span></span>
 <span class="r-in"><span><span class="co">#   olds only</span></span></span>
 <span class="r-in"><span><span class="fu">exps</span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.831533</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.815639</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected population size but ignore first 10 years</span></span></span>
 <span class="r-in"><span><span class="fu">exps</span><span class="op">(</span><span class="va">sims</span>, times <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">51</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 79.37101</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 79.00825</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected population size based on median</span></span></span>
 <span class="r-in"><span><span class="fu">exps</span><span class="op">(</span><span class="va">sims</span>, fun_among <span class="op">=</span> <span class="va">median</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 94.97641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 94.14786</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected maximum population size based on median</span></span></span>
 <span class="r-in"><span><span class="fu">exps</span><span class="op">(</span><span class="va">sims</span>, fun_within <span class="op">=</span> <span class="va">max</span>, fun_among <span class="op">=</span> <span class="va">median</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 316.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 316.85</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate exps with conflicting quantile functions, handling</span></span></span>
 <span class="r-in"><span><span class="co">#   conflicting arguments with wrapper functions</span></span></span>
@@ -194,7 +194,7 @@ be used to define expected arguments for each function</p></dd>
 <span class="r-in"><span>  <span class="va">sims</span>, fun_within <span class="op">=</span> <span class="va">quant1</span>, fun_among <span class="op">=</span> <span class="va">quant2</span>, p1 <span class="op">=</span> <span class="fl">0.25</span>, p2 <span class="op">=</span> <span class="fl">0.75</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      75% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60.82855 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59.97068 </span>
 </code></pre></div>
     </div>
   </div>
