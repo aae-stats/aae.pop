@@ -36,6 +36,9 @@ Suggests:
     covr,
     rmarkdown,
     spelling
+Remotes:
+    aae-stats/aae.pop.templates
+    aae-stats/aae.pop.inference
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 Language: en-GB
