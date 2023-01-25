@@ -82,9 +82,14 @@ exps(sims, fun_within = max, fun_among = median)
 
 # calculate exps with conflicting quantile functions, handling
 #   conflicting arguments with wrapper functions
-quant1 <- function(x, p1, ...) {quantile(x, prob = p1)}
-quant2 <- function(x, p2, ...) {quantile(x, prob = p2)}
+quant1 <- function(x, p1, ...) {
+  quantile(x, prob = p1)
+}
+quant2 <- function(x, p2, ...) {
+  quantile(x, prob = p2)
+}
 exps(
-  sims, fun_within = quant1, fun_among = quant2, p1 = 0.25, p2 = 0.75
+  sims,
+  fun_within = quant1, fun_among = quant2, p1 = 0.25, p2 = 0.75
 )
 }

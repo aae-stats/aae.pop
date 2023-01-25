@@ -212,8 +212,9 @@ envstoch <- environmental_stochasticity(
 #   pass to environmental_stochasticty
 envstoch_function <- function(obj, pop, iter) {
   mat <- obj$matrix
-  if (is.list(mat))
+  if (is.list(mat)) {
     mat <- mat[[iter]]
+  }
   out <- aae.pop:::unit_to_real(
     mat[transition(mat)], 0.1 * mat[transition(mat)]
   )
@@ -234,7 +235,7 @@ sims <- simulate(
 #   e.g., a logistic function
 covars <- covariates(
   masks = transition(popmat),
-  funs = function(mat, x) mat * (1 / (1 + exp(- 10 * x)))
+  funs = function(mat, x) mat * (1 / (1 + exp(-10 * x)))
 )
 
 # simulate 50 random covariate values
@@ -270,8 +271,10 @@ sims <- simulate(
   dyn,
   init = c(50, 20, 10, 10, 5),
   nsim = 100,
-  options = list(update = update_binomial_leslie,
-                 tidy_abundances = floor),
+  options = list(
+    update = update_binomial_leslie,
+    tidy_abundances = floor
+  ),
   args = list(
     covariates = format_covariates(xvals),
     environmental_stochasticity = list(envstoch_function)

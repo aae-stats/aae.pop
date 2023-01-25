@@ -115,9 +115,9 @@ rmultiunit(n = 10, mean = c(0.25, 0.5, 0.75), sd = c(0.1, 0.4, 0.25))
 \dontrun{
 # add in a correlation structure
 omega_set <- cbind(
-  c(1,    0.25, 0.01),
-  c(0.25, 1,    0.5),
-  c(0.01, 0.5,  1)
+  c(1, 0.25, 0.01),
+  c(0.25, 1, 0.5),
+  c(0.01, 0.5, 1)
 )
 rmultiunit(
   n = 10,

@@ -66,7 +66,7 @@ dyn <- dynamics(popmat)
 #   e.g., a logistic function
 covars <- covariates(
   masks = transition(popmat),
-  funs = function(mat, x) mat * (1 / (1 + exp(- 10 * x)))
+  funs = function(mat, x) mat * (1 / (1 + exp(-10 * x)))
 )
 
 # simulate 50 random covariate values
