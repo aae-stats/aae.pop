@@ -138,9 +138,9 @@ test_that("simulate returns correct abundances
   for (i in seq_along(xsim)) {
     mat_tmp <- lapply(
       seq_len(nsim),
-      function(x) t(
-        dd_manual(dyn$covariates(dyn$matrix, xsim[i]), target[x, , i])
-      )
+      function(x) {
+        t(dd_manual(dyn$covariates(dyn$matrix, xsim[i]), target[x, , i]))
+      }
     )
     target[, , i + 1] <- floor(t(
       mapply(

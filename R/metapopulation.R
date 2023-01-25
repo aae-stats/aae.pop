@@ -204,7 +204,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
   # add in environmental stochasticity if included in any populations
   envstoch <- NULL
-  if (any(dyn_check$envstoch) | any(dispersal$stochasticity)) {
+  if (any(dyn_check$envstoch) || any(dispersal$stochasticity)) {
     # pull out functions for all populations
     env_funs <- lapply(dynamics, function(x) x$environmental_stochasticity)
 
@@ -240,7 +240,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
   # expand density dependence if included
   dens_depend <- NULL
-  if (any(dyn_check$dens_depend) | any(dispersal$density)) {
+  if (any(dyn_check$dens_depend) || any(dispersal$density)) {
     # pull out functions for all populations
     dens_funs <- lapply(dynamics, function(x) x$density_dependence)
 
@@ -367,7 +367,7 @@ check_dispersal <- function(x, n) {
   }
 
   # and convert dispersal to list if needed
-  if (n == 1 & class(x)[1] == "dispersal") {
+  if (n == 1 && class(x)[1] == "dispersal") {
     x <- list(x)
   }
 

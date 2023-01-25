@@ -319,7 +319,7 @@ simulate.dynamics <- function(object,
   args <- classify_args(args)
 
   # check args
-  if (!is.null(args.dyn) | !is.null(args.fn)) {
+  if (!is.null(args.dyn) || !is.null(args.fn)) {
     warning("args.dyn and args.fn are deprecated; ",
       "dynamic and function arguments can be ",
       "included directly in args",
@@ -1006,14 +1006,17 @@ summary.simulation <- function(object, ...) {
   print(risk)
 
   # and return silently
+  # nolint start
   outputs <- list(
     pr_extinct = pr_ext,
     risk_curve = risk,
     emps = emps_est
   )
+  # nolint end
+
 }
-## SIM LIST EXAMPLE MIGHT INCLUDE multi-pop averages as well? It's only for multispecies models,
-##   so doesn't really make sense to do that
+## SIM LIST EXAMPLE MIGHT INCLUDE multi-pop averages as well?
+##   It's only for multispecies models, so doesn't really make sense to do that
 
 # S3 print method
 #' @export
@@ -1070,11 +1073,10 @@ plot.simulation <- function(x, y, ..., class = NULL) {
 plot.simulation_list <- function(x, y, ..., which = seq_along(x)) {
   # nolint end
 
-  nspecies <- length(x)
-
   for (i in which) {
     plot(x[[i]], ...)
   }
+
 }
 
 # internal function: set simulation class

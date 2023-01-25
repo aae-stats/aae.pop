@@ -39,7 +39,7 @@ test_that("multispecies object has correct dynamics elements", {
 
 })
 
-
+# nolint start
 test_that("multispecies objects simulate correctly", {
 
   # not a full test because test_simulate.R covers identical use of simulate
@@ -113,6 +113,7 @@ test_that("multispecies objects simulate correctly", {
   expect_equal(value, target)
 
 })
+# nolint end
 
 test_that("multispecies errors informatively when inputs are inappropriate", {
 

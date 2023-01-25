@@ -166,7 +166,7 @@ rmultiunit_from_real <- function(
   # nolint end
 
   # need one of sd_real or Sigma_chol
-  if (is.null(sd_real) & is.null(Sigma_chol)) {
+  if (is.null(sd_real) && is.null(Sigma_chol)) {
     stop("one of sd_real or Sigma_chol must be provided ",
       "to rmultiunit_from_real",
       call. = FALSE
