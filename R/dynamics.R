@@ -289,7 +289,6 @@ plot.dynamics <- function(x, y, ...) {
   gr_viz <- DiagrammeR::render_graph(gr) # nolint
   attr(gr_viz, "dgr_graph") <- gr
   gr_viz
-
 }
 
 # S3 is method

@@ -1013,7 +1013,6 @@ summary.simulation <- function(object, ...) {
     emps = emps_est
   )
   # nolint end
-
 }
 ## SIM LIST EXAMPLE MIGHT INCLUDE multi-pop averages as well?
 ##   It's only for multispecies models, so doesn't really make sense to do that
@@ -1076,7 +1075,6 @@ plot.simulation_list <- function(x, y, ..., which = seq_along(x)) {
   for (i in which) {
     plot(x[[i]], ...)
   }
-
 }
 
 # internal function: set simulation class

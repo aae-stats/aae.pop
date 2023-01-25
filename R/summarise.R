@@ -51,7 +51,6 @@
 #' # repeat previous but ignore first 10 years
 #' pr_extinct(sims, threshold = 100, times = 11:51)
 pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
-
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("pr_extinct is defined for simulation objects", call. = FALSE)
@@ -134,9 +133,7 @@ pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
 #'
 #' # calculate risk curve but ignore first 10 years
 #' risk_curve(sims, times = 11:51)
-risk_curve <- function(
-    sims, threshold = NULL, subset = NULL, times = NULL, n = 100
-) {
+risk_curve <- function(sims, threshold = NULL, subset = NULL, times = NULL, n = 100) {
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("risk_curve is defined for simulation objects", call. = FALSE)
@@ -245,7 +242,6 @@ risk_curve <- function(
 #' #   but ignore first 10 years
 #' get_cdf(sims, fn = max, times = 11:51)
 get_cdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
-
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("risk_curve is defined for simulation objects", call. = FALSE)
@@ -348,7 +344,6 @@ get_cdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
 #' #   but ignore first 10 years
 #' get_pdf(sims, fn = max, times = 11:51)
 get_pdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
-
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("risk_curve is defined for simulation objects", call. = FALSE)
@@ -437,7 +432,6 @@ get_pdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
 #' # calculate expected minimum population size based on median
 #' emps(sims, fun = median)
 emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
-
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("emps is defined for simulation objects", call. = FALSE)
@@ -536,9 +530,7 @@ emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
 #'   sims,
 #'   fun_within = quant1, fun_among = quant2, p1 = 0.25, p2 = 0.75
 #' )
-exps <- function(
-    sims, subset = NULL, times = NULL, fun_within = mean, fun_among = mean, ...
-) {
+exps <- function(sims, subset = NULL, times = NULL, fun_within = mean, fun_among = mean, ...) {
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("exps is defined for simulation objects", call. = FALSE)
