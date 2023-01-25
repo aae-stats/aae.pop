@@ -4,7 +4,7 @@ author: "Jian Yen"
 date: "01/07/2021"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Get started wtih aae.pop}
+  %\VignetteIndexEntry{Get started with aae.pop}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
