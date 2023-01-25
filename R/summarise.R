@@ -51,6 +51,7 @@
 #' # repeat previous but ignore first 10 years
 #' pr_extinct(sims, threshold = 100, times = 11:51)
 pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
+
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("pr_extinct is defined for simulation objects", call. = FALSE)
@@ -244,6 +245,7 @@ risk_curve <- function(
 #' #   but ignore first 10 years
 #' get_cdf(sims, fn = max, times = 11:51)
 get_cdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
+
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("risk_curve is defined for simulation objects", call. = FALSE)
@@ -346,6 +348,7 @@ get_cdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
 #' #   but ignore first 10 years
 #' get_pdf(sims, fn = max, times = 11:51)
 get_pdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
+
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("risk_curve is defined for simulation objects", call. = FALSE)
@@ -434,6 +437,7 @@ get_pdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
 #' # calculate expected minimum population size based on median
 #' emps(sims, fun = median)
 emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
+
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("emps is defined for simulation objects", call. = FALSE)
