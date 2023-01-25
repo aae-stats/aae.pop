@@ -237,8 +237,8 @@ be a useful way to check the model has been specified correctly, and
 these plots are easier to communicate than a giant matrix.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">popdyn</span><span class="op">)</span></span></code></pre></div>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-a82419600d08fd0bbca2" style="width:700px;height:432.632880098888px;"></div>
-<script type="application/json" data-for="htmlwidget-a82419600d08fd0bbca2">{"x":{"diagram":"digraph {\n\ngraph [layout = \"dot\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       rankdir = \"LR\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Age 1\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"2\" [label = \"Age 2\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"3\" [label = \"Age 3\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"4\" [label = \"Age 4\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"5\" [label = \"Age 5\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n\"1\"->\"2\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"2\"->\"3\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"3\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"3\"->\"4\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"4\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"4\"->\"5\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"5\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-5f0238a60ac889730b7a" style="width:700px;height:432.632880098888px;"></div>
+<script type="application/json" data-for="htmlwidget-5f0238a60ac889730b7a">{"x":{"diagram":"digraph {\n\ngraph [layout = \"dot\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       rankdir = \"LR\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Age 1\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"2\" [label = \"Age 2\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", width = \"0.9\", height = \"0.72\", fillcolor = \"#4F794250\"] \n  \"3\" [label = \"Age 3\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"4\" [label = \"Age 4\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n  \"5\" [label = \"Age 5\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", width = \"0.9\", height = \"0.72\", fillcolor = \"#0E4D9250\"] \n\"1\"->\"2\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"2\"->\"3\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"3\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"3\"->\"4\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"4\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n\"4\"->\"5\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"5\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"fecundity\", style = \"dashed\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level3">
 <h3 id="simulating-population-trajectories">Simulating population trajectories<a class="anchor" aria-label="anchor" href="#simulating-population-trajectories"></a>
@@ -292,8 +292,8 @@ proportion of trajectories hitting zero individuals:</p>
 <pre><code><span><span class="co">## Simulated population has a 0 probability of extinction and expected minimum population size of 50 individuals.</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## The probability of population declines below non-zero thresholds is:</span></span>
-<span><span class="co">##   n = 0  n = 26  n = 53  n = 80 n = 106 n = 132 n = 159 n = 186 n = 212 n = 238 </span></span>
-<span><span class="co">##   0.000   0.000   0.643   1.000   1.000   1.000   1.000   1.000   1.000   1.000</span></span></code></pre>
+<span><span class="co">##   n = 0  n = 27  n = 53  n = 80 n = 107 n = 133 n = 160 n = 187 n = 213 n = 240 </span></span>
+<span><span class="co">##   0.000   0.000   0.692   1.000   1.000   1.000   1.000   1.000   1.000   1.000</span></span></code></pre>
 <p>The vector printed at the bottom of this summary is a basic risk
 curve calculated from ten different extinction thresholds (described
 below).</p>
@@ -303,11 +303,11 @@ below).</p>
 <pre><code><span><span class="co">## [1] 0</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/emps.html">emps</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 49.96603</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 50.01076</span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/risk_curve.html">risk_curve</a></span><span class="op">(</span><span class="va">sims</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##     0    26    53    80   106   132   159   186   212   238 </span></span>
-<span><span class="co">## 0.000 0.000 0.643 1.000 1.000 1.000 1.000 1.000 1.000 1.000</span></span></code></pre>
+<pre><code><span><span class="co">##     0    27    53    80   107   133   160   187   213   240 </span></span>
+<span><span class="co">## 0.000 0.000 0.692 1.000 1.000 1.000 1.000 1.000 1.000 1.000</span></span></code></pre>
 <p>The default settings for <code>pr_extinct</code>, <code>emps</code>,
 and <code>risk_curve</code> consider all population classes, all time
 steps, and define extinction as zero individuals in the population. Many
@@ -319,11 +319,11 @@ reduced time period (e.g., generations 40-50).</p>
 <pre><code><span><span class="co">## [1] 0</span></span></code></pre>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/emps.html">emps</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, times <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">50</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 20.25718</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 20.26391</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/risk_curve.html">risk_curve</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, times <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">50</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##     0     4     7    11    15    18    22    25    29    33 </span></span>
-<span><span class="co">## 0.000 0.000 0.000 0.002 0.028 0.275 0.688 0.928 0.998 1.000</span></span></code></pre>
+<pre><code><span><span class="co">##     0     4     7    11    14    18    22    25    29    33 </span></span>
+<span><span class="co">## 0.000 0.000 0.000 0.001 0.026 0.258 0.677 0.944 0.995 1.000</span></span></code></pre>
 <p>Extinction can be defined at levels other than zero individuals. For
 example, a population might be considered functionally extinct or
 destined to become extinct when only 100 adults remain. This
@@ -342,8 +342,8 @@ mild, and no risk. These values could be based on many criteria but
 often consider genetic factors such as the risk of inbreeding.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/risk_curve.html">risk_curve</a></span><span class="op">(</span><span class="va">sims</span>, threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##     0    10    50   100  1000 </span></span>
-<span><span class="co">## 0.000 0.000 0.492 1.000 1.000</span></span></code></pre>
+<pre><code><span><span class="co">##    0   10   50  100 1000 </span></span>
+<span><span class="co">## 0.00 0.00 0.48 1.00 1.00</span></span></code></pre>
 <p>The <code>emps</code> function extracts the minimum population size
 within each replicate trajectory and then averages these values over all
 trajectories. This averaging defaults to an arithmetic mean but this can
@@ -359,7 +359,7 @@ to calculate the 95th percentile of each trajectory and then take the
 median of this over all trajectories:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/exps.html">exps</a></span><span class="op">(</span><span class="va">sims</span>, fun_within <span class="op">=</span> <span class="va">quantile</span>, fun_among <span class="op">=</span> <span class="va">median</span>, probs <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 128.1501</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 128.4761</span></span></code></pre>
 <p>The above summary functions are provided for convenient handling of
 details such as subsetting the population or time steps. More
 complicated functions could be implemented directly with the
@@ -383,12 +383,12 @@ object. An example is the median population size at each time step:</p>
 <span><span class="co">#   requires keeping the second dimension (time steps)</span></span>
 <span><span class="co">#   while iterating over the first</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">abundance</span>, <span class="fl">2</span>, <span class="va">median</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##  [1] 19.38892 17.25852 18.32934 20.42187 19.80184 18.59062 18.46066 19.47068</span></span>
-<span><span class="co">##  [9] 20.00339 19.26358 18.90940 19.28486 19.77231 19.66479 19.29864 19.37898</span></span>
-<span><span class="co">## [17] 19.68823 19.81316 19.64985 19.58132 19.73283 19.88607 19.88465 19.82757</span></span>
-<span><span class="co">## [25] 19.87280 19.98628 20.04818 20.03693 20.05101 20.11817 20.18948 20.21754</span></span>
-<span><span class="co">## [33] 20.23082 20.27577 20.33557 20.38169 20.40965 20.44334 20.49205 20.54089</span></span>
-<span><span class="co">## [41] 20.57889</span></span></code></pre>
+<pre><code><span><span class="co">##  [1] 19.42769 17.26715 18.35360 20.49902 19.84046 18.66289 18.48022 19.51840</span></span>
+<span><span class="co">##  [9] 20.07752 19.32286 18.92962 19.33250 19.81920 19.75590 19.36000 19.42008</span></span>
+<span><span class="co">## [17] 19.75206 19.88225 19.72116 19.64010 19.78975 19.95222 19.95073 19.88976</span></span>
+<span><span class="co">## [25] 19.92651 20.04794 20.11283 20.09966 20.10601 20.17731 20.25121 20.27854</span></span>
+<span><span class="co">## [33] 20.29016 20.33382 20.39629 20.44229 20.46796 20.50157 20.55216 20.60177</span></span>
+<span><span class="co">## [41] 20.63875</span></span></code></pre>
 </div>
 </div>
   </div>

@@ -212,24 +212,24 @@ interval</p></dd>
 <span class="r-in"><span><span class="co">#   the unit interval, with known mean, standard deviation,</span></span></span>
 <span class="r-in"><span><span class="co">#   and (optionally) covariance/correlation structure</span></span></span>
 <span class="r-in"><span><span class="fu">rmultiunit</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]         [,2]      [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.12860403 1.464737e-01 0.4817193</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.20883652 9.628728e-01 0.7932790</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.16407625 2.541710e-01 0.4069199</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.11066012 7.661811e-01 0.8163552</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 0.35800725 9.735599e-01 0.8771383</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.38443733 6.295483e-01 0.8714212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.11629096 1.275216e-01 0.9984877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 0.19492429 4.663831e-05 0.8486810</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.39834398 7.970468e-02 0.4112776</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.06340701 7.976144e-01 0.9841446</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]       [,2]      [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.29383494 0.96124541 0.5083240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.12517718 0.91235240 0.9285086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.32943116 0.91871895 0.6195235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.15525460 0.50235443 0.4775083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 0.34809150 0.99606024 0.6553134</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.23537836 0.81909011 0.9430827</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.09306351 0.95224562 0.9613883</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 0.24785442 0.18489082 0.7638855</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.14520546 0.98484084 0.3148338</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.32492980 0.02813353 0.8403384</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># add in a correlation structure</span></span></span>
 <span class="r-in"><span><span class="va">omega_set</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,    <span class="fl">0.25</span>, <span class="fl">0.01</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">1</span>,    <span class="fl">0.5</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.5</span>,  <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.25</span>, <span class="fl">0.01</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">rmultiunit</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  n <span class="op">=</span> <span class="fl">10</span>,</span></span>
