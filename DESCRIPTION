@@ -1,0 +1,48 @@
+Package: aae.pop
+Type: Package
+Title: Flexible Simulation of Multispecies Population Dynamics 
+Version: 0.0.2.9000
+Date: 2022-11-15
+Author: c(
+  person(given = "Jian",
+         family = "Yen",
+         role = c("aut", "cre"),
+         email = "jdl.yen@gmail.com"),
+  person(given = "Arthur Rylah Institute for Environmental Research",
+         role = c("cph", "fnd"))
+  )
+Maintainer: Jian Yen <jdl.yen@gmail.com>
+Description: Simulate multispecies population dynamics when vital rates
+    are influenced by time-varying covariates, such as environmental
+    conditions or the abundances of other species.
+License: Apache License 2.0
+URL: https://aae-stats/github.io/aae.pop,
+    https://github.com/aae-stats/aae.pop,
+    https://aae-stats.github.io/aae.pop/
+BugReports: https://github.com/aae-stats/aae.pop/issues
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 3.0)
+Imports:
+    stats,
+    abind,
+    cubature,
+    future.apply,
+    mc2d,
+    nleqslv
+Suggests:
+    aae.pop.templates,
+    aae.pop.inference,
+    knitr,
+    DiagrammeR,
+    testthat,
+    covr,
+    rmarkdown,
+    spelling
+Remotes:
+    aae-stats/aae.pop.templates,
+    aae-stats/aae.pop.inference
+VignetteBuilder: knitr
+RoxygenNote: 7.1.1
+Language: en-GB

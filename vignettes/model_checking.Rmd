@@ -1,0 +1,28 @@
+---
+title: "Verifying and validating simulated population dynamics"
+author: "Jian Yen"
+date: "12/11/2020"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Verifying and validating simulated population dynamics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Cover the importance of checking model outputs and how this can be done.
+
+Common-sense checks.
+
+Link to forecasting example for more rigorous checks.
+
+Could highlight statistical tests and checks but these are an extension.
+
+```{r}
+a <- rnorm(10)
+```

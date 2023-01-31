@@ -1,0 +1,22 @@
+---
+title: "Passing arguments to demographic processes"
+author: "Jian Yen"
+date: "12/11/2020"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Passing arguments to demographic processes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Cover args, including dynamic and function arguments. Explain when/why this is useful.
+
+```{r}
+a <- rnorm(10)
+```
