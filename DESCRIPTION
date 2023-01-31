@@ -1,8 +1,8 @@
 Package: aae.pop
 Type: Package
 Title: Flexible Simulation of Multispecies Population Dynamics 
-Version: 0.0.2.9000
-Date: 2022-11-15
+Version: 0.1.0
+Date: 2023-01-31
 Author: c(
   person(given = "Jian",
          family = "Yen",
@@ -17,8 +17,7 @@ Description: Simulate multispecies population dynamics when vital rates
     conditions or the abundances of other species.
 License: Apache License 2.0
 URL: https://aae-stats/github.io/aae.pop,
-    https://github.com/aae-stats/aae.pop,
-    https://aae-stats.github.io/aae.pop/
+    https://github.com/aae-stats/aae.pop
 BugReports: https://github.com/aae-stats/aae.pop/issues
 Encoding: UTF-8
 LazyData: true
