@@ -147,20 +147,20 @@ might include <code>median</code> or <code>min</code></p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected minimum population size</span></span></span>
 <span class="r-in"><span><span class="fu">emps</span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 35.52413</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 36.18211</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected minimum population size for 4 and 5 year</span></span></span>
 <span class="r-in"><span><span class="co">#   olds only</span></span></span>
 <span class="r-in"><span><span class="fu">emps</span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.307974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.322085</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected minimum population size but ignore first 10 years</span></span></span>
 <span class="r-in"><span><span class="fu">emps</span><span class="op">(</span><span class="va">sims</span>, times <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">51</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 35.80296</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 36.51044</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected minimum population size based on median</span></span></span>
 <span class="r-in"><span><span class="fu">emps</span><span class="op">(</span><span class="va">sims</span>, fun <span class="op">=</span> <span class="va">median</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 35.54745</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 35.94977</span>
 </code></pre></div>
     </div>
   </div>
