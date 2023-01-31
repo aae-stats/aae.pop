@@ -5,81 +5,81 @@ development:
 
 template:
   params:
-    bootswatch: flatly
+  bootswatch: flatly
 
 authors:
   Jian Yen:
-    href: https://scholar.google.com.au/citations?user=oEmm1CMAAAAJ&hl=en
-  Applied Aquatic Ecology, Arthur Rylah Institute for Environmental Research:
-    href: https://github.com/aae-stats
+  href: https://scholar.google.com.au/citations?user=oEmm1CMAAAAJ&hl=en
+Applied Aquatic Ecology, Arthur Rylah Institute for Environmental Research:
+  href: https://github.com/aae-stats
 
 reference:
   - title: Defining population dynamics models
     contents:
-    - dynamics
+      - dynamics
 
   - title: Simulating population dynamics
     contents:
-    - simulate
+      - simulate
 
   - title: Summarising population dynamics
     contents:
-    - pr_extinct
-    - emps
-    - risk_curve
-    - exps
-    - get_pdf
-    - get_cdf
+      - pr_extinct
+      - emps
+      - risk_curve
+      - exps
+      - get_pdf
+      - get_cdf
 
   - title: Adding density dependence
     contents:
-    - density_dependence
-    - density_functions
+      - density_dependence
+      - density_functions
 
   - title: Adding stochasticity
     contents:
-    - stochasticity
+      - stochasticity
 
   - title: Adding covariates
     contents:
-    - covariates
+      - covariates
 
   - title: Subsetting population matrices
     contents:
-    - masks
+      - masks
 
   - title: Updating population abundances
     contents:
-    - updaters
+      - updaters
 
   - title: Adding metapopulation structure
     contents:
-    - metapopulation
-    - dispersal
+      - metapopulation
+      - dispersal
 
   - title: Modelling multiple species
     contents:
-    - multispecies
-    - pairwise_interaction
+      - multispecies
+      - pairwise_interaction
 
   - title: Helpers
     contents:
-    - rng
+      - rng
 
-navbar:
-  structure:
-    left: [get_started, functions, vignettes, examples]
-    right: [github]
+  navbar:
+    structure:
+      left: [get_started, functions, vignettes, examples]
+      right: [github]
   components:
     home: ~
     reference: ~
     articles: ~
     news: ~
     get_started:
-      text: get started
+    text: get started
       href: articles/get_started.html
-    vignettes:
-      text: vignettes
+  vignettes:
+    text: vignettes
       menu:
       - text: "Including processes"
         href: articles/including_processes.html
@@ -91,16 +91,16 @@ navbar:
         href: articles/multiple_species.html
       - text: "Species templates"
         href: articles/templates.html
-    examples:
-      text: examples
+  examples:
+    text: examples
       menu:
       - text: "Macquarie perch"
         href: articles/macperch_example.html
       - text: "Comparing scenarios"
         href: articles/scenarios_example.html
-    documentation:
-      text: documentation
-      href: reference/index.html
-    github:
-      icon: fab fa-github
-      href: https://github.com/aae-stats/aae.pop
+  documentation:
+    text: documentation
+    href: reference/index.html
+  github:
+    icon: fab fa-github
+    href: https://github.com/aae-stats/aae.pop

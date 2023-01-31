@@ -16,7 +16,9 @@ Description: Simulate multispecies population dynamics when vital rates
     are influenced by time-varying covariates, such as environmental
     conditions or the abundances of other species.
 License: Apache License 2.0
-URL: https://aae-stats/github.io/aae.pop, https://github.com/aae-stats/aae.pop
+URL: https://aae-stats/github.io/aae.pop,
+    https://github.com/aae-stats/aae.pop,
+    https://aae-stats.github.io/aae.pop/
 BugReports: https://github.com/aae-stats/aae.pop/issues
 Encoding: UTF-8
 LazyData: true
