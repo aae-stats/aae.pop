@@ -38,7 +38,8 @@ Suggests:
     testthat,
     covr,
     rmarkdown,
-    spelling
+    spelling,
+    scales
 Remotes:
     aae-stats/aae.pop.templates,
     aae-stats/aae.pop.inference
