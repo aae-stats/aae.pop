@@ -19,7 +19,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -97,9 +97,7 @@
 <span>  <span class="va">...</span>,</span>
 <span>  init <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  args.dyn <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  args.fn <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for template</span></span>
@@ -110,9 +108,7 @@
 <span>  <span class="va">...</span>,</span>
 <span>  init <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  args.dyn <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  args.fn <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">is.simulation</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
@@ -189,22 +185,6 @@ All other classes (e.g., single values, matrices, data frames)
 are treated as static arguments. Covariates contained in numeric
 vectors, matrices, or data frames can be formatted as dynamic
 arguments with the <code>format_covariates</code> function</p></dd>
-
-
-<dt>args.dyn</dt>
-<dd><p>this argument is deprecated. List of time-varying
-values of <code>args</code>. Defaults to <code>NULL</code> and requires one
-element for each generation (specified by covariates or with
-<code>options$ntime</code>). Dynamic arguments can now be passed directly
-to <code>args</code></p></dd>
-
-
-<dt>args.fn</dt>
-<dd><p>this argument is deprecated.
-Named list of functions evaluating additional values of
-<code>args</code> based on the matrix and abundances in each generation.
-Defaults to <code>NULL</code>. Function arguments can now be passed
-directly to <code>args</code></p></dd>
 
 
 <dt>x</dt>
