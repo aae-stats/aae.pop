@@ -65,16 +65,6 @@ NULL
 #'   are treated as static arguments. Covariates contained in numeric
 #'   vectors, matrices, or data frames can be formatted as dynamic
 #'   arguments with the \code{format_covariates} function
-#' @param args.dyn this argument is deprecated. List of time-varying
-#'   values of \code{args}. Defaults to \code{NULL} and requires one
-#'   element for each generation (specified by covariates or with
-#'   \code{options$ntime}). Dynamic arguments can now be passed directly
-#'   to \code{args}
-#' @param args.fn this argument is deprecated.
-#'   Named list of functions evaluating additional values of
-#'   \code{args} based on the matrix and abundances in each generation.
-#'   Defaults to \code{NULL}. Function arguments can now be passed
-#'   directly to \code{args}
 #'
 #' @details Includes plot and subset methods
 #'
@@ -249,9 +239,7 @@ simulate.dynamics <- function(object,
                               ...,
                               init = NULL,
                               options = list(),
-                              args = list(),
-                              args.dyn = NULL,
-                              args.fn = NULL) {
+                              args = list()) {
   # nolint end
 
   # set default options for simulation
@@ -317,15 +305,6 @@ simulate.dynamics <- function(object,
 
   # classify user args by type
   args <- classify_args(args)
-
-  # check args
-  if (!is.null(args.dyn) || !is.null(args.fn)) {
-    warning("args.dyn and args.fn are deprecated; ",
-      "dynamic and function arguments can be ",
-      "included directly in args",
-      call. = FALSE
-    )
-  }
 
   # set static args here
   default_args[names(args$static)] <- args$static
@@ -476,9 +455,7 @@ simulate.template <- function(object,
                               ...,
                               init = NULL,
                               options = list(),
-                              args = list(),
-                              args.dyn = NULL,
-                              args.fn = NULL) {
+                              args = list()) {
   # nolint end
 
   # pull out dynamics object
@@ -513,9 +490,7 @@ simulate.template <- function(object,
     ...,
     init = init,
     options = options,
-    args = combined,
-    args.dyn = args.dyn,
-    args.fn = args.fn
+    args = combined
   )
 }
 
