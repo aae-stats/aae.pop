@@ -1,7 +1,7 @@
 url: https://aae-stats.github.io/aae.pop
 
 development:
-  mode: auto
+  mode: release
 
 template:
   params:
