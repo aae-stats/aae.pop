@@ -15,9 +15,7 @@
   ...,
   init = NULL,
   options = list(),
-  args = list(),
-  args.dyn = NULL,
-  args.fn = NULL
+  args = list()
 )
 
 \method{simulate}{template}(
@@ -27,9 +25,7 @@
   ...,
   init = NULL,
   options = list(),
-  args = list(),
-  args.dyn = NULL,
-  args.fn = NULL
+  args = list()
 )
 
 is.simulation(x)
@@ -96,18 +92,6 @@ All other classes (e.g., single values, matrices, data frames)
 are treated as static arguments. Covariates contained in numeric
 vectors, matrices, or data frames can be formatted as dynamic
 arguments with the \code{format_covariates} function}
-
-\item{args.dyn}{this argument is deprecated. List of time-varying
-values of \code{args}. Defaults to \code{NULL} and requires one
-element for each generation (specified by covariates or with
-\code{options$ntime}). Dynamic arguments can now be passed directly
-to \code{args}}
-
-\item{args.fn}{this argument is deprecated.
-Named list of functions evaluating additional values of
-\code{args} based on the matrix and abundances in each generation.
-Defaults to \code{NULL}. Function arguments can now be passed
-directly to \code{args}}
 
 \item{x}{an object to pass to \code{is.simulation} or
 \code{is.simulation.list}}
