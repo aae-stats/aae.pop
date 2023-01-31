@@ -18,7 +18,7 @@ remotes::install_github("aae-stats/aae.pop.templates")
 
 
 <!-- badges: start -->
-
-[![build status](https://travis-ci.org/aae-stats/aae.pop.svg?branch=master)](https://travis-ci.org/aae-stats/aae.pop) [![codecov.io](https://codecov.io/github/aae-stats/aae.pop/coverage.svg?branch=master)](https://codecov.io/github/aae-stats/aae.pop?branch=master) [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
+![R-CMD-check](https://github.com/aae-stats/aae.pop/actions/workflows/check-standard.yaml/badge.svg)
+[![Codecov test coverage](https://codecov.io/github/aae-stats/aae.pop/main/graph/badge.svg)](https://app.codecov.io/github/aae-stats/aae.pop/)
+[![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 <!-- badges: end -->
