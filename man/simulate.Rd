@@ -15,7 +15,8 @@
   ...,
   init = NULL,
   options = list(),
-  args = list()
+  args = list(),
+  .future = FALSE
 )
 
 \method{simulate}{template}(
@@ -92,6 +93,10 @@ All other classes (e.g., single values, matrices, data frames)
 are treated as static arguments. Covariates contained in numeric
 vectors, matrices, or data frames can be formatted as dynamic
 arguments with the \code{format_covariates} function}
+
+\item{.future}{flag to determine whether the future package should be
+used to manage updates for multispecies models (an embarrassingly
+parallel problem)}
 
 \item{x}{an object to pass to \code{is.simulation} or
 \code{is.simulation.list}}

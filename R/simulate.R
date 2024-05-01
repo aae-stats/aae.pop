@@ -65,6 +65,9 @@ NULL
 #'   are treated as static arguments. Covariates contained in numeric
 #'   vectors, matrices, or data frames can be formatted as dynamic
 #'   arguments with the \code{format_covariates} function
+#' @param .future flag to determine whether the future package should be
+#'   used to manage updates for multispecies models (an embarrassingly
+#'   parallel problem)
 #'
 #' @details Includes plot and subset methods
 #'
@@ -233,13 +236,16 @@ NULL
 #' plot(sims)
 #' }
 # nolint start
-simulate.dynamics <- function(object,
-                              nsim = 1,
-                              seed = NULL,
-                              ...,
-                              init = NULL,
-                              options = list(),
-                              args = list()) {
+simulate.dynamics <- function(
+    object,
+    nsim = 1,
+    seed = NULL,
+    ...,
+    init = NULL,
+    options = list(),
+    args = list(),
+    .future = FALSE
+) {
   # nolint end
 
   # set default options for simulation
@@ -261,7 +267,7 @@ simulate.dynamics <- function(object,
     }
     if (any(!leslie_ok)) {
       stop("matrix must be a Leslie matrix to use update_binomial_leslie",
-        call. = FALSE
+           call. = FALSE
       )
     }
   }
@@ -321,7 +327,7 @@ simulate.dynamics <- function(object,
     n_dyn_args <- n_dyn_args[n_dyn_args > 0]
     if (length(unique(n_dyn_args)) > 1) {
       stop("all dynamic (list) arguments must have the same length",
-        call. = FALSE
+           call. = FALSE
       )
     }
     opt$ntime <- unique(n_dyn_args)
@@ -404,7 +410,8 @@ simulate.dynamics <- function(object,
         object,
         pop_tmp,
         opt = opt,
-        args = default_args
+        args = default_args,
+        .future = .future
       )
       if (opt$keep_slices) {
         pop <- mapply(
@@ -626,18 +633,31 @@ simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
 }
 
 # internal function: update a single time step with interacting species
-simulate_once_multispecies <- function(iter,
-                                       obj,
-                                       pop_t,
-                                       opt,
-                                       args) {
+simulate_once_multispecies <- function(
+    iter,
+    obj,
+    pop_t,
+    opt,
+    args,
+    .future
+) {
+
   # vectorised update for all species
-  pop_tp1 <- future_lapply(
-    seq_len(obj$nspecies),
-    simulate_multispecies_internal,
-    iter, obj, pop_t, opt, args,
-    future.seed = TRUE
-  )
+  if (!.future) {
+    pop_tp1 <- lapply(
+      seq_len(obj$nspecies),
+      simulate_multispecies_internal,
+      iter, obj, pop_t, opt, args,
+      future.seed = TRUE
+    )
+  } else {
+    pop_tp1 <- future_lapply(
+      seq_len(obj$nspecies),
+      simulate_multispecies_internal,
+      iter, obj, pop_t, opt, args,
+      future.seed = TRUE
+    )
+  }
 
   # return tidied abundances (e.g. rounded or floored values)
   lapply(pop_tp1, opt$tidy_abundances)

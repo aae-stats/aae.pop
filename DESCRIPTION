@@ -1,8 +1,8 @@
 Package: aae.pop
 Type: Package
 Title: Flexible Simulation of Multispecies Population Dynamics 
-Version: 0.1.0.9000
-Date: 2023-01-31
+Version: 0.1.0.9001
+Date: 2024-05-02
 Author: c(
   person(given = "Jian",
          family = "Yen",
@@ -44,5 +44,5 @@ Remotes:
     aae-stats/aae.pop.templates,
     aae-stats/aae.pop.inference
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 Language: en-GB
