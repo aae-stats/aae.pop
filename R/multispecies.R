@@ -9,6 +9,7 @@
 #' @param \dots \code{pairwise_interaction} objects defining
 #'   a set of pairwise interactions between species
 multispecies <- function(...) {
+
   # collate dots into list
   dots <- list(...)
 
@@ -47,15 +48,32 @@ multispecies <- function(...) {
     interaction_list = interaction_list
   )
 
-  # return
-  as_multispecies(
-    list(
-      nspecies = length(dynamics),
-      structure = structure,
-      dynamics = dynamics,
-      interaction = interaction
+  # specify output class based on whether a template is included
+  #   in the inputs or not
+  any_templates <- any(sapply(dynamics, is.template))
+  if (!any_templates) {
+    out <- as_multispecies(
+      list(
+        nspecies = length(dynamics),
+        structure = structure,
+        dynamics = dynamics,
+        interaction = interaction
+      )
     )
-  )
+  } else {
+    out <- as_multispecies_template(
+      list(
+        nspecies = length(dynamics),
+        structure = structure,
+        dynamics = dynamics,
+        interaction = interaction
+      )
+    )
+  }
+
+  # return
+  out
+
 }
 
 #' @name pairwise_interaction
@@ -119,18 +137,19 @@ get_unique_dynamics <- function(interactions) {
   target_ids <- match(hex_list, hex_target)
   out <- lapply(
     interactions[target_ids[!is.na(target_ids)]],
-    function(x) x$target
+    \(x) x$target
   )
   if (any(is.na(target_ids))) {
     source_ids <- match(hex_list[is.na(target_ids)], hex_source)
     out <- c(
       out,
-      lapply(interactions[source_ids], function(x) x$source)
+      lapply(interactions[source_ids], \(x) x$source)
     )
   }
 
   # return all required dynamics objects
   out
+
 }
 
 # internal function: define interaction of each species with any other
@@ -208,6 +227,15 @@ as_multispecies <- function(x) {
 
   # and then add multispecies class on top of that
   as_class(x, name = "multispecies", type = "dynamics")
+}
+
+# internal function: set multispecies class
+as_multispecies_template <- function(x) {
+  # inherit from dynamics
+  x <- as_dynamics(x)
+
+  # and then add multispecies class on top of that
+  as_class(x, name = "multispecies_template", type = "dynamics")
 }
 
 # internal function: set interaction class

@@ -4,6 +4,7 @@
 \alias{simulate}
 \alias{simulate.dynamics}
 \alias{simulate.template}
+\alias{simulate.multispecies_template}
 \alias{is.simulation}
 \alias{is.simulation_list}
 \title{Simulate single or multispecies population dynamics in R}
@@ -20,6 +21,16 @@
 )
 
 \method{simulate}{template}(
+  object,
+  nsim = 1,
+  seed = NULL,
+  ...,
+  init = NULL,
+  options = list(),
+  args = list()
+)
+
+\method{simulate}{multispecies_template}(
   object,
   nsim = 1,
   seed = NULL,
@@ -82,17 +93,20 @@ according to \code{options()$aae.pop_initialisation}}
       step to the next. Defaults to \code{options()$aae.pop_update}.}
 
 \item{args}{named list of lists passing arguments to processes defined
-in \code{object}, including \code{interaction} for
-\code{\link{multispecies}} objects. Lists (up to one per process)
-can contain a mix of static, dynamic, and function arguments.
-Dynamic arguments must be lists with one element per time step.
-Function arguments must be functions that calculate arguments
-dynamically in each generation based on from the population dynamics
-object, population abundances, and time step in each generation.
-All other classes (e.g., single values, matrices, data frames)
-are treated as static arguments. Covariates contained in numeric
-vectors, matrices, or data frames can be formatted as dynamic
-arguments with the \code{format_covariates} function}
+  in \code{object}, including \code{interaction} for
+  \code{\link{multispecies}} objects. Lists (up to one per process)
+  can contain a mix of static, dynamic, and function arguments.
+  Dynamic arguments must be lists with one element per time step.
+  Function arguments must be functions that calculate arguments
+  dynamically in each generation based on from the population dynamics
+  object, population abundances, and time step in each generation.
+  All other classes (e.g., single values, matrices, data frames)
+  are treated as static arguments. Covariates contained in numeric
+  vectors, matrices, or data frames can be formatted as dynamic
+  arguments with the \code{format_covariates} function.
+
+  \code{args} for \code{\link{multispecies}} objects must have one
+  element per species (defaults will expand automatically if not provided)}
 
 \item{.future}{flag to determine whether the future package should be
 used to manage updates for multispecies models (an embarrassingly

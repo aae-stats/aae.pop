@@ -64,7 +64,10 @@ NULL
 #'   All other classes (e.g., single values, matrices, data frames)
 #'   are treated as static arguments. Covariates contained in numeric
 #'   vectors, matrices, or data frames can be formatted as dynamic
-#'   arguments with the \code{format_covariates} function
+#'   arguments with the \code{format_covariates} function.
+#'
+#'   \code{args} for \code{\link{multispecies}} objects must have one
+#'   element per species (defaults will expand automatically if not provided)
 #' @param .future flag to determine whether the future package should be
 #'   used to manage updates for multispecies models (an embarrassingly
 #'   parallel problem)
@@ -288,9 +291,10 @@ simulate.dynamics <- function(
     object <- use_identity_covariates(object)
   }
 
-  # set identity covariates if args provided and covariates process
-  #   is missing
+  # handle arguments differently for single and multispecies objects
+  #   (arguments is a list of lists [one element per species] for multspecies)
   if (is.multispecies(object)) {
+
     # do any species have missing covariates?
     no_covariates <- sapply(
       object$dynamics, function(x) is.null(x$covariates)
@@ -303,34 +307,64 @@ simulate.dynamics <- function(
         use_identity_covariates
       )
     }
+
+    # classify user args by type
+    args <- lapply(args, classify_args)
+
+    # split default_args into a list with one element per species
+    default_args <- lapply(
+      seq_len(object$nspecies),
+      \(.x, .y) .y, .y = default_args
+    )
+
+    # set static args here
+    default_args <- mapply(
+      set_static_args,
+      x = default_args,
+      y = args,
+      SIMPLIFY = FALSE
+    )
+
+    # count the number of values of each dynamic argument, making
+    #   sure they match internally and across species
+    ndyn <- unlist(lapply(args, check_dynamic_args))
+    if (any(ndyn > 0)) {
+      ndyn <- unique(ndyn[ndyn > 0])
+      if (length(ndyn) > 1) {
+        stop(
+          "dynamic arguments must have the same length for all ",
+          "species (when specified)",
+          call. = FALSE
+        )
+      }
+
+      # and overwrite opt$ntime if there is a single ndyn value and it
+      #    differs from opt$ntime
+      if (ndyn != opt$ntime)
+        opt$ntime <- ndyn
+    }
+
   } else {
+
     if (is.null(object$covariates)) {
       object$covariates <- use_identity_covariates(object)
     }
-  }
 
-  # classify user args by type
-  args <- classify_args(args)
+    # classify user args by type
+    args <- classify_args(args)
 
-  # set static args here
-  default_args[names(args$static)] <- args$static
+    # set static args here
+    default_args <- set_static_args(default_args, args)
 
-  # calculate ntime from dynamic args if provided and
-  #   check for consistency among dynamic args
-  n_dyn_args <- unlist(
-    lapply(
-      args$dyn,
-      function(x) sapply(x, length)
-    )
-  )
-  if (any(n_dyn_args > 0)) {
-    n_dyn_args <- n_dyn_args[n_dyn_args > 0]
-    if (length(unique(n_dyn_args)) > 1) {
-      stop("all dynamic (list) arguments must have the same length",
-           call. = FALSE
-      )
-    }
-    opt$ntime <- unique(n_dyn_args)
+    # calculate ntime from dynamic args if provided and
+    #   check for consistency among dynamic args
+    ndyn <- check_dynamic_args(args)
+
+    # for a single species model, overwrite opt$ntime with ndyn if they
+    #    do not agree
+    if (ndyn > 0)
+      opt$ntime <- ndyn
+
   }
 
   # add nsim into options
@@ -393,24 +427,28 @@ simulate.dynamics <- function(
 
   # loop through timesteps, updating population at each timestep
   for (i in seq_len(opt$ntime)) {
-    # update args if required
-    default_args <- update_args(
-      args = args$static,
-      dyn = args$dyn,
-      fn = args$fn,
-      obj = object,
-      pop = pop_tmp,
-      iter = i
-    )
 
     # split based on multispecies or single species
     if (is.multispecies(object)) {
+
+      # update args if required
+      args_passed <- mapply(
+        update_args,
+        args = default_args,
+        dyn = lapply(args, \(.x) .x$dyn),
+        fn = lapply(args, \(.x) .x$fn),
+        obj = object$dynamics,
+        MoreArgs = list(iter = i),
+        SIMPLIFY = FALSE
+      )
+
+      # simulate a single step update
       pop_tmp <- simulate_once_multispecies(
         iter = i,
         object,
         pop_tmp,
         opt = opt,
-        args = default_args,
+        args = args_passed,
         .future = .future
       )
       if (opt$keep_slices) {
@@ -420,17 +458,31 @@ simulate.dynamics <- function(
           SIMPLIFY = FALSE
         )
       }
+
     } else {
+
+      # update args if required
+      args_passed <- update_args(
+        args = default_args,
+        dyn = args$dyn,
+        fn = args$fn,
+        obj = object,
+        pop = pop_tmp,
+        iter = i
+      )
+
+      # simulate a single step update
       pop_tmp <- simulate_once(
         iter = i,
         object,
         pop_tmp,
         opt = opt,
-        args = default_args
+        args = args_passed
       )
       if (opt$keep_slices) {
         pop[, , i + 1] <- pop_tmp
       }
+
     }
   }
 
@@ -456,38 +508,22 @@ simulate.dynamics <- function(
 #' @export
 #'
 # nolint start
-simulate.template <- function(object,
-                              nsim = 1,
-                              seed = NULL,
-                              ...,
-                              init = NULL,
-                              options = list(),
-                              args = list()) {
+simulate.template <- function(
+    object,
+    nsim = 1,
+    seed = NULL,
+    ...,
+    init = NULL,
+    options = list(),
+    args = list()
+) {
   # nolint end
 
   # pull out dynamics object
   dyn <- object$dynamics
 
   # combine arguments
-  combined <- object$arguments
-  conflict <- names(args) %in% names(combined)
-  if (any(conflict)) {
-    # add non-conflicting arguments
-    combined <- c(combined, args[!conflict])
-
-    # print warning about conflicting arguments
-    warning(
-      "the following arguments are provided in both args ",
-      "and in the template object: ",
-      args[conflict],
-      ". This is currently not supported, update template$args ",
-      "directly prior to calling simulate",
-      call. = FALSE
-    )
-  } else {
-    # can just concatenate the two lists
-    combined <- c(combined, args)
-  }
+  combined <- combine_args(object$arguments, args)
 
   # simulate
   simulate(
@@ -499,6 +535,46 @@ simulate.template <- function(object,
     options = options,
     args = combined
   )
+
+}
+
+#' @rdname simulate
+#'
+#' @export
+#'
+# nolint start
+simulate.multispecies_template <- function(
+    object,
+    nsim = 1,
+    seed = NULL,
+    ...,
+    init = NULL,
+    options = list(),
+    args = list()
+) {
+  # nolint end
+
+  # pull out dynamics object
+  dyn <- lapply(object, \(.x) .x$dynamics)
+
+  # combine arguments
+  combined <- mapply(
+    combine_args,
+    x = lapply(object, \(.x) .x$arguments),
+    y = args
+  )
+
+  # simulate
+  simulate(
+    dyn,
+    nsim = nsim,
+    seed = seed,
+    ...,
+    init = init,
+    options = options,
+    args = combined
+  )
+
 }
 
 #' @importFrom future.apply future_lapply
@@ -665,8 +741,10 @@ simulate_once_multispecies <- function(
 # internal function: update one species in a multispecies simulation
 #   (to vectorise simulate_once_multispecies)
 simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args) {
-  # pull out relevant object
+
+  # pull out relevant object and arguments
   dynamics <- obj$dynamics[[i]]
+  args <- args[[i]]
 
   # and matrix
   mat <- dynamics$matrix
@@ -699,6 +777,7 @@ simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args) {
     args,
     is_expanded = is_expanded
   )
+
 }
 
 # internal function: update single step of simulation with multiple species
@@ -842,7 +921,6 @@ use_identity_covariates <- function(obj) {
   obj
 }
 
-
 # internal function: split arguments based on type
 classify_args <- function(args) {
   # which arguments are static?
@@ -882,6 +960,32 @@ extract_args <- function(x, type) {
   x
 }
 
+# internal function: overwrite default static arguments with specified
+#   values if provided
+set_static_args <- function(x, y) {
+  x[names(y$static)] <- y$static
+  x
+}
+
+# internal function: calculate number of time steps implied by any
+#   provided dynamic args and check internal consistency for a single
+#   species (multispecies consistency checked in `simulate.dynamics`)
+check_dynamic_args <- function(x) {
+  ndyn <- unlist(lapply(x$dyn, \(.x) sapply(.x, length)))
+  if (any(ndyn > 0)) {
+    ndyn <- unique(ndyn[ndyn > 0])
+    if (length(ndyn) > 1) {
+      stop(
+        "all dynamic (list) arguments must have the same length",
+        call. = FALSE
+      )
+    }
+  } else {
+    ndyn <- 0
+  }
+  ndyn
+}
+
 # internal function: update arguments based on the current generation
 update_args <- function(args, dyn, fn, obj, pop, iter) {
   if (any(sapply(dyn, length) > 0)) {
@@ -916,6 +1020,36 @@ update_args <- function(args, dyn, fn, obj, pop, iter) {
 
   # and return
   args
+}
+
+# internal function: combine arguments from template (pre-specified)
+#   with any additional arguments provided to `simulate`
+combine_args <- function(x, y) {
+
+  conflict <- names(y) %in% names(x)
+  if (any(conflict)) {
+
+    # add non-conflicting arguments
+    combined <- c(x, y[!conflict])
+
+    # print warning about conflicting arguments
+    warning(
+      "the following arguments are provided in both args ",
+      "and in the template object: ",
+      args[conflict],
+      ". This is currently not supported, update template$args ",
+      "directly prior to calling simulate",
+      call. = FALSE
+    )
+
+  } else {
+    # can just concatenate the two lists
+    combined <- c(x, y)
+  }
+
+  # return
+  combined
+
 }
 
 # internal function: initialise simulations with Poisson random draws
