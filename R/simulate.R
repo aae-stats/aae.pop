@@ -325,6 +325,8 @@ simulate.dynamics <- function(
       SIMPLIFY = FALSE
     )
 
+    # TODO: work out args handling for multispecies templates, still wrong
+
     # count the number of values of each dynamic argument, making
     #   sure they match internally and across species
     ndyn <- unlist(lapply(args, check_dynamic_args))
@@ -524,45 +526,6 @@ simulate.template <- function(
 
   # combine arguments
   combined <- combine_args(object$arguments, args)
-
-  # simulate
-  simulate(
-    dyn,
-    nsim = nsim,
-    seed = seed,
-    ...,
-    init = init,
-    options = options,
-    args = combined
-  )
-
-}
-
-#' @rdname simulate
-#'
-#' @export
-#'
-# nolint start
-simulate.multispecies_template <- function(
-    object,
-    nsim = 1,
-    seed = NULL,
-    ...,
-    init = NULL,
-    options = list(),
-    args = list()
-) {
-  # nolint end
-
-  # pull out dynamics object
-  dyn <- lapply(object, \(.x) .x$dynamics)
-
-  # combine arguments
-  combined <- mapply(
-    combine_args,
-    x = lapply(object, \(.x) .x$arguments),
-    y = args
-  )
 
   # simulate
   simulate(

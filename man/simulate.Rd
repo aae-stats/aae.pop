@@ -4,7 +4,6 @@
 \alias{simulate}
 \alias{simulate.dynamics}
 \alias{simulate.template}
-\alias{simulate.multispecies_template}
 \alias{is.simulation}
 \alias{is.simulation_list}
 \title{Simulate single or multispecies population dynamics in R}
@@ -21,16 +20,6 @@
 )
 
 \method{simulate}{template}(
-  object,
-  nsim = 1,
-  seed = NULL,
-  ...,
-  init = NULL,
-  options = list(),
-  args = list()
-)
-
-\method{simulate}{multispecies_template}(
   object,
   nsim = 1,
   seed = NULL,

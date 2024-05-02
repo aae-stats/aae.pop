@@ -17,8 +17,8 @@ multispecies <- function(...) {
   classes <- sapply(dots, function(x) class(x)[1])
   if (!all(classes == "interaction")) {
     stop("all inputs to multispecies should be interaction ",
-      "objects created with pairwise_interaction",
-      call. = FALSE
+         "objects created with pairwise_interaction",
+         call. = FALSE
     )
   }
 
@@ -42,37 +42,21 @@ multispecies <- function(...) {
   # and collate these into a list with one element for each species
   interaction <- vector("list", length = length(dynamics))
   interaction <- lapply(dynamics,
-    define_interaction,
-    dots = dots,
-    hex_list = hex_list,
-    interaction_list = interaction_list
+                        define_interaction,
+                        dots = dots,
+                        hex_list = hex_list,
+                        interaction_list = interaction_list
   )
 
-  # specify output class based on whether a template is included
-  #   in the inputs or not
-  any_templates <- any(sapply(dynamics, is.template))
-  if (!any_templates) {
-    out <- as_multispecies(
-      list(
-        nspecies = length(dynamics),
-        structure = structure,
-        dynamics = dynamics,
-        interaction = interaction
-      )
-    )
-  } else {
-    out <- as_multispecies_template(
-      list(
-        nspecies = length(dynamics),
-        structure = structure,
-        dynamics = dynamics,
-        interaction = interaction
-      )
-    )
-  }
-
   # return
-  out
+  as_multispecies(
+    list(
+      nspecies = length(dynamics),
+      structure = structure,
+      dynamics = dynamics,
+      interaction = interaction
+    )
+  )
 
 }
 
@@ -95,6 +79,7 @@ multispecies <- function(...) {
 #'
 #' @details To be completed.
 pairwise_interaction <- function(target, source, masks, funs) {
+
   # force evaluation to avoid NULL functions down the line
   force(masks)
   force(funs)
@@ -121,6 +106,7 @@ pairwise_interaction <- function(target, source, masks, funs) {
       interaction = interaction
     )
   )
+
 }
 
 # internal function: extract unique dynamics objects from
@@ -227,15 +213,6 @@ as_multispecies <- function(x) {
 
   # and then add multispecies class on top of that
   as_class(x, name = "multispecies", type = "dynamics")
-}
-
-# internal function: set multispecies class
-as_multispecies_template <- function(x) {
-  # inherit from dynamics
-  x <- as_dynamics(x)
-
-  # and then add multispecies class on top of that
-  as_class(x, name = "multispecies_template", type = "dynamics")
 }
 
 # internal function: set interaction class
