@@ -647,8 +647,7 @@ simulate_once_multispecies <- function(
     pop_tp1 <- lapply(
       seq_len(obj$nspecies),
       simulate_multispecies_internal,
-      iter, obj, pop_t, opt, args,
-      future.seed = TRUE
+      iter, obj, pop_t, opt, args
     )
   } else {
     pop_tp1 <- future_lapply(
