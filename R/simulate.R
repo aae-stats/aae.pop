@@ -285,20 +285,22 @@ simulate.dynamics <- function(
     interaction = list()
   )
 
-  # set an identity covariates function if no covariate arguments
-  #   provided
-  if (is.null(args$covariates)) {
-    object <- use_identity_covariates(object)
-  }
-
   # handle arguments differently for single and multispecies objects
   #   (arguments is a list of lists [one element per species] for multspecies)
   if (is.multispecies(object)) {
 
+    # do any species' arguments have missing covariates?
+    no_covariate_args <- sapply(
+      args, function(x) is.null(x$covariates)
+    )
+
     # do any species have missing covariates?
-    no_covariates <- sapply(
+    no_covariate_obj <- sapply(
       object$dynamics, function(x) is.null(x$covariates)
     )
+
+    # combine these two
+    no_covariates <- no_covariate_args | no_covariate_obj
 
     # if so, fill with identity covariates
     if (any(no_covariates)) {
@@ -325,8 +327,6 @@ simulate.dynamics <- function(
       SIMPLIFY = FALSE
     )
 
-    # TODO: work out args handling for multispecies templates, still wrong
-
     # count the number of values of each dynamic argument, making
     #   sure they match internally and across species
     ndyn <- unlist(lapply(args, check_dynamic_args))
@@ -348,6 +348,13 @@ simulate.dynamics <- function(
 
   } else {
 
+    # set an identity covariates function if no covariate arguments
+    #   provided
+    if (is.null(args$covariates)) {
+      object <- use_identity_covariates(object)
+    }
+
+    # or if not covariate object exists
     if (is.null(object$covariates)) {
       object$covariates <- use_identity_covariates(object)
     }
@@ -855,6 +862,7 @@ expand_dims <- function(init, replicates) {
 #   are not used
 #' @importFrom stats update
 use_identity_covariates <- function(obj) {
+
   # define identity covariates function
   identity_mask <- ifelse(
     is.multispecies(obj),
@@ -869,23 +877,23 @@ use_identity_covariates <- function(obj) {
   # loop over species if multispecies, single
   #   update otherwise
   if (is.multispecies(obj)) {
-    for (i in seq_len(obj$nspecies)) {
-      obj$dynamics <- lapply(
-        obj$dynamics,
-        update,
-        identity_covariates
-      )
-    }
+    obj$dynamics <- lapply(
+      obj$dynamics,
+      update,
+      identity_covariates
+    )
   } else {
     obj <- update(obj, identity_covariates)
   }
 
   # return
   obj
+
 }
 
 # internal function: split arguments based on type
 classify_args <- function(args) {
+
   # which arguments are static?
   static <- lapply(args, extract_args, type = "static")
 
@@ -897,11 +905,13 @@ classify_args <- function(args) {
 
   # and return list of arguments by type
   list(static = static, dyn = dyn, fn = fn)
+
 }
 
 # internal function: extract arguments by type for each
 #   process
 extract_args <- function(x, type) {
+
   # work out classes
   arg_class <- sapply(x, class)
 
@@ -921,6 +931,7 @@ extract_args <- function(x, type) {
 
   # return
   x
+
 }
 
 # internal function: overwrite default static arguments with specified
