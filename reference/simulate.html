@@ -19,7 +19,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9002</span>
       </span>
     </div>
 
@@ -175,17 +175,19 @@ according to <code>options()$aae.pop_initialisation</code></p></dd>
 
 <dt>args</dt>
 <dd><p>named list of lists passing arguments to processes defined
-in <code>object</code>, including <code>interaction</code> for
-<code><a href="multispecies.html">multispecies</a></code> objects. Lists (up to one per process)
-can contain a mix of static, dynamic, and function arguments.
-Dynamic arguments must be lists with one element per time step.
-Function arguments must be functions that calculate arguments
-dynamically in each generation based on from the population dynamics
-object, population abundances, and time step in each generation.
-All other classes (e.g., single values, matrices, data frames)
-are treated as static arguments. Covariates contained in numeric
-vectors, matrices, or data frames can be formatted as dynamic
-arguments with the <code>format_covariates</code> function</p></dd>
+  in <code>object</code>, including <code>interaction</code> for
+  <code><a href="multispecies.html">multispecies</a></code> objects. Lists (up to one per process)
+  can contain a mix of static, dynamic, and function arguments.
+  Dynamic arguments must be lists with one element per time step.
+  Function arguments must be functions that calculate arguments
+  dynamically in each generation based on from the population dynamics
+  object, population abundances, and time step in each generation.
+  All other classes (e.g., single values, matrices, data frames)
+  are treated as static arguments. Covariates contained in numeric
+  vectors, matrices, or data frames can be formatted as dynamic
+  arguments with the <code>format_covariates</code> function.</p>
+<p><code>args</code> for <code><a href="multispecies.html">multispecies</a></code> objects must have one
+  element per species (defaults will expand automatically if not provided)</p></dd>
 
 
 <dt>.future</dt>
