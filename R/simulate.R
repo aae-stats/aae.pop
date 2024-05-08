@@ -289,14 +289,23 @@ simulate.dynamics <- function(
   #   (arguments is a list of lists [one element per species] for multspecies)
   if (is.multispecies(object)) {
 
+    # expand args if a single list is provided
+    if (length(args) != object$nspecies) {
+      if (length(args) == 0) {
+        args <- lapply(seq_len(object$nspecies), \(x) args)
+      } else {
+        stop("one element of args must be provided for each species")
+      }
+    }
+
     # do any species' arguments have missing covariates?
     no_covariate_args <- sapply(
-      args, function(x) is.null(x$covariates)
+      args, \(x) is.null(x$covariates)
     )
 
     # do any species have missing covariates?
     no_covariate_obj <- sapply(
-      object$dynamics, function(x) is.null(x$covariates)
+      object$dynamics, \(x) is.null(x$covariates)
     )
 
     # combine these two
@@ -304,8 +313,8 @@ simulate.dynamics <- function(
 
     # if so, fill with identity covariates
     if (any(no_covariates)) {
-      object[no_covariates] <- lapply(
-        object[no_covariates],
+      object$dynamics[no_covariates] <- lapply(
+        object$dynamics[no_covariates],
         use_identity_covariates
       )
     }
