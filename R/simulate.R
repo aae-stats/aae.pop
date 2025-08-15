@@ -645,19 +645,19 @@ simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
 
   # tweak matrix to account for replicate-specific effects on vital rates,
   #   accounting for previously expanded matrix
-  if (!is.null(obj[["replicated_covariates"]])) {
+  if (!is.null(obj$replicated_covariates)) {
     if (is_expanded) {
       mat <- mapply(
         function(x, y) {
           do.call(
-            obj[["replicated_covariates"]],
+            obj$replicated_covariates,
             c(list(x), y)
           )
         },
         mat,
         lapply(
           seq_len(opt$replicates),
-          function(i) lapply(args[["replicated_covariates"]], \(.x) .x[i])
+          function(i) lapply(args$replicated_covariates, \(.x) .x[i])
         ),
         SIMPLIFY = FALSE
       )
@@ -666,8 +666,8 @@ simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
         seq_len(opt$replicates),
         function(i) {
           do.call(
-            obj[["replicated_covariates"]],
-            c(list(mat), lapply(args[["replicated_covariates"]], \(.x) .x[i]))
+            obj$replicated_covariates,
+            c(list(mat), lapply(args$replicated_covariates, \(.x) .x[i]))
           )
         }
       )

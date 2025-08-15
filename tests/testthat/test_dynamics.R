@@ -1,6 +1,7 @@
 context("dynamics")
 
 # setup: simulate some data to test with
+nsim <- 10
 nstage <- 5
 mat <- matrix(0, nrow = nstage, ncol = nstage)
 mat[reproduction(mat, dims = 4:5)] <- rpois(2, 20)
@@ -15,6 +16,13 @@ cov_fn <- function(mat, x) {
 }
 cov_eff <- covariates(masks = survival(mat),
                       funs = cov_fn)
+
+# add replicated_covariates effects
+xsim_rep <- matrix(rnorm(ntime * nsim), ncol = nsim)
+rep_cov_eff <- replicated_covariates(
+  masks = survival(mat),
+  funs = cov_fn
+)
 
 # add density dependence
 dd_masks <- list(reproduction(mat, dims = 4:5))
@@ -44,67 +52,84 @@ resc <- density_dependence_n(rescale_mask, rescale_fn)
 test_that("dynamics object returns correct processes
            for different combinations of processes", {
 
-  # test basic dynamics object with no additional processes
-  dyn_obj <- dynamics(mat)
-  expect_equal(dyn_obj$matrix, mat)
-  expect_equal(dyn_obj$nclass, ncol(mat))
-  expect_null(dyn_obj$covariates)
-  expect_null(dyn_obj$environmental_stochasticity)
-  expect_null(dyn_obj$demographic_stochasticity)
-  expect_null(dyn_obj$density_dependence)
-  expect_null(dyn_obj$density_dependence_n)
+             # test basic dynamics object with no additional processes
+             dyn_obj <- dynamics(mat)
+             expect_equal(dyn_obj$matrix, mat)
+             expect_equal(dyn_obj$nclass, ncol(mat))
+             expect_null(dyn_obj$covariates)
+             expect_null(dyn_obj$replicated_covariates)
+             expect_null(dyn_obj$environmental_stochasticity)
+             expect_null(dyn_obj$demographic_stochasticity)
+             expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$density_dependence_n)
 
-  # test basic dynamics object with covariates
-  dyn_obj <- dynamics(mat, cov_eff)
-  expect_equal(dyn_obj$matrix, mat)
-  expect_equal(dyn_obj$nclass, ncol(mat))
-  expect_equal(dyn_obj$covariates, cov_eff)
-  expect_null(dyn_obj$environmental_stochasticity)
-  expect_null(dyn_obj$demographic_stochasticity)
-  expect_null(dyn_obj$density_dependence)
-  expect_null(dyn_obj$density_dependence_n)
+             # test basic dynamics object with covariates
+             dyn_obj <- dynamics(mat, cov_eff)
+             expect_equal(dyn_obj$matrix, mat)
+             expect_equal(dyn_obj$nclass, ncol(mat))
+             expect_equal(dyn_obj$covariates, cov_eff)
+             expect_null(dyn_obj$replicated_covariates)
+             expect_null(dyn_obj$environmental_stochasticity)
+             expect_null(dyn_obj$demographic_stochasticity)
+             expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$density_dependence_n)
 
-  # test basic dynamics object with environmental stochasticity
-  dyn_obj <- dynamics(mat, envstoch)
-  expect_equal(dyn_obj$matrix, mat)
-  expect_equal(dyn_obj$nclass, ncol(mat))
-  expect_null(dyn_obj$covariates)
-  expect_equal(dyn_obj$environmental_stochasticity, envstoch)
-  expect_null(dyn_obj$demographic_stochasticity)
-  expect_null(dyn_obj$density_dependence)
-  expect_null(dyn_obj$density_dependence_n)
+             # test basic dynamics object with replicated_covariates
+             dyn_obj <- dynamics(mat, rep_cov_eff)
+             expect_equal(dyn_obj$matrix, mat)
+             expect_equal(dyn_obj$nclass, ncol(mat))
+             expect_null(dyn_obj$covariates)
+             expect_equal(dyn_obj$replicated_covariates, rep_cov_eff)
+             expect_null(dyn_obj$environmental_stochasticity)
+             expect_null(dyn_obj$demographic_stochasticity)
+             expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$density_dependence_n)
 
-  # test basic dynamics object with demographic stochasticity
-  dyn_obj <- dynamics(mat, demostoch)
-  expect_equal(dyn_obj$matrix, mat)
-  expect_equal(dyn_obj$nclass, ncol(mat))
-  expect_null(dyn_obj$covariates)
-  expect_null(dyn_obj$environmental_stochasticity)
-  expect_equal(dyn_obj$demographic_stochasticity, demostoch)
-  expect_null(dyn_obj$density_dependence)
-  expect_null(dyn_obj$density_dependence_n)
+             # test basic dynamics object with environmental stochasticity
+             dyn_obj <- dynamics(mat, envstoch)
+             expect_equal(dyn_obj$matrix, mat)
+             expect_equal(dyn_obj$nclass, ncol(mat))
+             expect_null(dyn_obj$covariates)
+             expect_null(dyn_obj$replicated_covariates)
+             expect_equal(dyn_obj$environmental_stochasticity, envstoch)
+             expect_null(dyn_obj$demographic_stochasticity)
+             expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$density_dependence_n)
 
-  # test basic dynamics object with density_dependence
-  dyn_obj <- dynamics(mat, dd)
-  expect_equal(dyn_obj$matrix, mat)
-  expect_equal(dyn_obj$nclass, ncol(mat))
-  expect_null(dyn_obj$covariates)
-  expect_null(dyn_obj$environmental_stochasticity)
-  expect_null(dyn_obj$demographic_stochasticity)
-  expect_equal(dyn_obj$density_dependence, dd)
-  expect_null(dyn_obj$density_dependence_n)
+             # test basic dynamics object with demographic stochasticity
+             dyn_obj <- dynamics(mat, demostoch)
+             expect_equal(dyn_obj$matrix, mat)
+             expect_equal(dyn_obj$nclass, ncol(mat))
+             expect_null(dyn_obj$covariates)
+             expect_null(dyn_obj$replicated_covariates)
+             expect_null(dyn_obj$environmental_stochasticity)
+             expect_equal(dyn_obj$demographic_stochasticity, demostoch)
+             expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$density_dependence_n)
 
-  # test basic dynamics object with rescale density dependence
-  dyn_obj <- dynamics(mat, resc)
-  expect_equal(dyn_obj$matrix, mat)
-  expect_equal(dyn_obj$nclass, ncol(mat))
-  expect_null(dyn_obj$covariates)
-  expect_null(dyn_obj$environmental_stochasticity)
-  expect_null(dyn_obj$demographic_stochasticity)
-  expect_null(dyn_obj$density_dependence)
-  expect_equal(dyn_obj$density_dependence_n, resc)
+             # test basic dynamics object with density_dependence
+             dyn_obj <- dynamics(mat, dd)
+             expect_equal(dyn_obj$matrix, mat)
+             expect_equal(dyn_obj$nclass, ncol(mat))
+             expect_null(dyn_obj$covariates)
+             expect_null(dyn_obj$replicated_covariates)
+             expect_null(dyn_obj$environmental_stochasticity)
+             expect_null(dyn_obj$demographic_stochasticity)
+             expect_equal(dyn_obj$density_dependence, dd)
+             expect_null(dyn_obj$density_dependence_n)
 
-})
+             # test basic dynamics object with rescale density dependence
+             dyn_obj <- dynamics(mat, resc)
+             expect_equal(dyn_obj$matrix, mat)
+             expect_equal(dyn_obj$nclass, ncol(mat))
+             expect_null(dyn_obj$covariates)
+             expect_null(dyn_obj$replicated_covariates)
+             expect_null(dyn_obj$environmental_stochasticity)
+             expect_null(dyn_obj$demographic_stochasticity)
+             expect_null(dyn_obj$density_dependence)
+             expect_equal(dyn_obj$density_dependence_n, resc)
+
+           })
 
 
 test_that("dynamics objects can be updated", {
@@ -116,6 +141,14 @@ test_that("dynamics objects can be updated", {
   dyn_new <- update(dyn_obj, cov_eff)
   expect_equal(class(dyn_new$covariates), c("covariates", "function"))
   expect_equal(dyn_new$covariates, cov_eff)
+
+  # update by adding replicated_covariates
+  dyn_new <- update(dyn_obj, rep_cov_eff)
+  expect_equal(
+    class(dyn_new$replicated_covariates),
+    c("replicated_covariates", "function")
+  )
+  expect_equal(dyn_new$replicated_covariates, rep_cov_eff)
 
   # update by adding density dependence
   dyn_new <- update(dyn_obj, dd)
@@ -166,7 +199,7 @@ test_that("dynamics object errors informatively with unsuitable processes", {
   # non-process passed to dynamics
   expect_error(
     dynamics(mat, rnorm(10)),
-    "must be one of covariates, environmental_stochasticity"
+    "must be one of covariates, replicated_covariates"
   )
 
   # multiples of the same process

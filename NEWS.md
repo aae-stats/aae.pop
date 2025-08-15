@@ -1,5 +1,12 @@
 # aae.pop (development version)
 
+# aae.pop 0.1.1
+
+## Features
+
+- New process class to handle covariates applied separately to each replicate
+    trajectory: `replicated_covariates`
+
 # aae.pop 0.1.0
 
 ## Features
