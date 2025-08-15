@@ -11,9 +11,7 @@
 #'   examples of model definition and simulation.
 #'
 #' @keywords internal
-#'
-#' @docType _PACKAGE
-NULL
+"_PACKAGE"
 
 # set some options when package is loaded
 .onLoad <- function(libname, pkgname) { # nolint
