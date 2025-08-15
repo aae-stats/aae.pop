@@ -38,6 +38,7 @@ reference:
 - title: Adding covariates
   contents:
   - covariates
+  - replicated_covariates
 - title: Subsetting population matrices
   contents:
   - masks
