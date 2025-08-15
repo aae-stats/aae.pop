@@ -320,27 +320,6 @@ simulate.dynamics <- function(
       )
     }
 
-    # # do any species' arguments have missing replicated_covariates?
-    # no_rep_covariate_args <- sapply(
-    #   args, \(x) is.null(x$replicated_covariates)
-    # )
-    #
-    # # do any species have missing replicated_covariates?
-    # no_rep_covariate_obj <- sapply(
-    #   object$dynamics, \(x) is.null(x$replicated_covariates)
-    # )
-    #
-    # # combine these two
-    # no_rep_covariates <- no_rep_covariate_args | no_rep_covariate_obj
-    #
-    # # if so, fill with identity covariates
-    # if (any(no_rep_covariates)) {
-    #   object$dynamics[no_rep_covariates] <- lapply(
-    #     object$dynamics[no_rep_covariates],
-    #     use_identity_rep_covariates
-    #   )
-    # }
-
     # classify user args by type
     args <- lapply(args, classify_args)
 
@@ -377,6 +356,9 @@ simulate.dynamics <- function(
         opt$ntime <- ndyn
     }
 
+    # check replicated arguments
+    rep_args_ok <- unlist(lapply(args, check_replicated_args, y = nsim))
+
   } else {
 
     # set an identity covariates function if no covariate arguments
@@ -389,17 +371,6 @@ simulate.dynamics <- function(
     if (is.null(object$covariates)) {
       object$covariates <- use_identity_covariates(object)
     }
-
-    # # set an identity replicated_covariates function if no
-    # #  replicated_covariates arguments provided
-    # if (is.null(args$replicated_covariates)) {
-    #   object <- use_identity_rep_covariates(object)
-    # }
-    #
-    # # or if not replicated_covariates object exists
-    # if (is.null(object$replicated_covariates)) {
-    #   object$replicated_covariates <- use_identity_rep_covariates(object)
-    # }
 
     # classify user args by type
     args <- classify_args(args)
@@ -415,6 +386,9 @@ simulate.dynamics <- function(
     #    do not agree
     if (ndyn > 0)
       opt$ntime <- ndyn
+
+    # check replicated arguments
+    rep_args_ok <- check_replicated_args(args, nsim)
 
   }
 
@@ -1066,6 +1040,31 @@ check_dynamic_args <- function(x) {
     ndyn <- 0
   }
   ndyn
+}
+
+# internal function: calculate number of replicates implied by any
+#   provided replicated_ args and check internal consistency for a single
+#   species (multispecies consistency checked in `simulate.dynamics`)
+check_replicated_args <- function(x, y) {
+
+  if (!is.null(x$dyn$replicated_covariates)) {
+    rep_dim <- unlist(
+      lapply(x$dyn$replicated_covariates, \(.x) sapply(.x, length))
+    )
+    rep_dim <- unique(rep_dim)
+    if (length(rep_dim) > 1)
+      stop(
+        "replicated arguments should all have the same dimensions",
+        call. = FALSE
+      )
+    if (rep_dim != y) {
+      stop("replicated arguments should have nsim columns", call. = FALSE)
+    }
+  }
+
+  # return
+  TRUE
+
 }
 
 # internal function: update arguments based on the current generation

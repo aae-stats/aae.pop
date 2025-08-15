@@ -431,21 +431,81 @@ test_that("simulate returns reproducible outputs when seed is set", {
 
 })
 
-test_that("simulate errors informatively when initial
-           values have unsuitable dims", {
+test_that("simulate errors informatively when inits have unsuitable dims", {
 
+  # simulate trajectories with no uncertainty but with covariates
+  dyn <- dynamics(mat, dd, envstoch)
+  init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+  expect_error(
+    simulate(
+      dyn,
+      nsim = nsim,
+      init = init_set[-1],
+      options = list(ntime = ntime, tidy_abundances = floor)
+    ),
+    "must have dimensions \\(10,5\\) or \\(5\\)"
+  )
 
-             # simulate trajectories with no uncertainty but with covariates
-             dyn <- dynamics(mat, dd, envstoch)
-             init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
-             expect_error(
-               simulate(
-                 dyn,
-                 nsim = nsim,
-                 init = init_set[-1],
-                 options = list(ntime = ntime, tidy_abundances = floor)
-               ),
-               "must have dimensions \\(10,5\\) or \\(5\\)"
-             )
+})
 
-           })
+test_that("simulate errors informatively when dyn args have unsuitable dims", {
+
+  # when multiple dynamic arguments are passed with conflicting dimensions
+  dyn <- dynamics(mat, cov_eff)
+  init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+  expect_error(
+    simulate(
+      dyn,
+      nsim = nsim,
+      init = init_set,
+      options = list(ntime = ntime, tidy_abundances = floor),
+      args = list(
+        covariates = list(
+          lapply(seq_len(length(xsim) - 1L), function(i) xsim[i]),
+          lapply(seq_len(length(xsim)), function(i) xsim[i])
+        )
+      )
+    ),
+    "must have the same length"
+  )
+
+  # when replicated arguments have the wrong dimensions
+  dyn <- dynamics(mat, rep_cov_eff)
+  init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+  expect_error(
+    simulate(
+      dyn,
+      nsim = nsim,
+      init = init_set,
+      options = list(ntime = ntime, tidy_abundances = floor),
+      args = list(
+        replicated_covariates = list(
+          lapply(seq_len(nrow(xsim_rep)), function(i) xsim_rep[i, 1:5])
+        )
+      )
+    ),
+    "should have nsim columns"
+  )
+
+  # when dynamic and replicated arguments have mismatched dimensions
+  dyn <- dynamics(mat, cov_eff, rep_cov_eff)
+  init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+  expect_error(
+    simulate(
+      dyn,
+      nsim = nsim,
+      init = init_set,
+      options = list(ntime = ntime, tidy_abundances = floor),
+      args = list(
+        covariates = list(
+          lapply(seq_len(length(xsim) - 1L), function(i) xsim[i])
+        ),
+        replicated_covariates = list(
+          lapply(seq_len(nrow(xsim_rep)), function(i) xsim_rep[i, ])
+        )
+      )
+    ),
+    "must have the same length"
+  )
+
+})

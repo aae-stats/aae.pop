@@ -68,7 +68,7 @@ covars <- replicated_covariates(
 
 # simulate 50 random covariate values for each replicate (each
 #   value of nsim, set to 100 below)
-xvals <- matrix(runif(50 * 100), ncol = nsim)
+xvals <- matrix(runif(50 * 100), ncol = 100)
 
 # update the dynamics object and simulate from it.
 #   Note that ntime is now captured in the 50 values
