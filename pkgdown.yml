@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   beyond_defaults: beyond_defaults.html
@@ -13,8 +13,7 @@ articles:
   passing_arguments: passing_arguments.html
   scenarios_example: scenarios_example.html
   templates: templates.html
-last_built: 2024-05-08T09:15Z
+last_built: 2025-08-15T04:02Z
 urls:
   reference: https://aae-stats.github.io/aae.pop/reference
   article: https://aae-stats.github.io/aae.pop/articles
-
