@@ -142,8 +142,8 @@ metapopulation <- function(structure, dynamics, dispersal) {
   } else {
     if (length(dynamics) != structure$npop) {
       stop("dynamics must be a single dynamics object or a list of dynamics ",
-        "objects with one element for each row/col of structure",
-        call. = FALSE
+           "objects with one element for each row/col of structure",
+           call. = FALSE
       )
     }
   }
@@ -200,6 +200,20 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
     # create full environmental stochasticity component
     covars <- covariates(covar_masks, covar_funs)
+  }
+
+  # add in covariates if included in any populations
+  rep_covars <- NULL
+  if (any(dyn_check$rep_covars)) {
+    # pull out functions for all populations
+    rep_covar_funs <- lapply(dynamics, function(x) x$replicated_covariates)
+
+    # pull out non-NULL elements only
+    rep_covar_masks <- mat_masks[dyn_check$rep_covars]
+    rep_covar_funs <- rep_covar_funs[dyn_check$rep_covars]
+
+    # create full environmental stochasticity component
+    rep_covars <- covariates(rep_covar_masks, rep_covar_funs)
   }
 
   # add in environmental stochasticity if included in any populations
@@ -395,6 +409,9 @@ check_dynamics <- function(dyn_list) {
   # check covariates
   covars <- check_processes(dyn_list, type = "covariates")
 
+  # check replicated covariates
+  rep_covars <- check_processes(dyn_list, type = "replicated_covariates")
+
   # check environmental_stochasticity
   envstoch <- check_processes(dyn_list, type = "environmental_stochasticity")
 
@@ -411,6 +428,7 @@ check_dynamics <- function(dyn_list) {
   list(
     nclass = unique(classes),
     covars = covars,
+    rep_covars = rep_covars,
     envstoch = envstoch,
     demostoch = demostoch,
     dens_depend = dens_depend,
@@ -446,11 +464,13 @@ check_processes <- function(x, type) {
 }
 
 # internal function: add dispersal elements to metapopulation matrix
-add_dispersal <- function(mat,
-                          str_rows,
-                          str_cols,
-                          dispersal,
-                          nclass) {
+add_dispersal <- function(
+    mat,
+    str_rows,
+    str_cols,
+    dispersal,
+    nclass
+) {
   # and loop through all dispersals, updating metapop matrix one-by-one
   for (i in seq_along(dispersal)) {
     # loop if we have a list of matrices (i.e. if covariates are included)

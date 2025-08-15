@@ -15,6 +15,7 @@ NULL
 #'   transition from that column to that row
 #' @param \dots additional objects used to define population dynamics.
 #'   Must be one or more of \code{\link{covariates}},
+#'   \code{\link{replicated_covariates}},
 #'   \code{\link{environmental_stochasticity}},
 #'   \code{\link{demographic_stochasticity}},
 #'   \code{\link{density_dependence}}, or
@@ -55,6 +56,7 @@ dynamics <- function(matrix, ...) {
   # list possible processes
   processes_supported <- c(
     "covariates",
+    "replicated_covariates",
     "environmental_stochasticity",
     "demographic_stochasticity",
     "density_dependence",
@@ -134,6 +136,7 @@ update.dynamics <- function(object, ...) {
   # pull out existing processes
   processes_supported <- c(
     "covariates",
+    "replicated_covariates",
     "environmental_stochasticity",
     "demographic_stochasticity",
     "density_dependence",

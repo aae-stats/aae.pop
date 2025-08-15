@@ -278,6 +278,7 @@ simulate.dynamics <- function(
   # set default arguments passed to dynamic processes
   default_args <- list(
     covariates = list(),
+    replicated_covariates = list(),
     environmental_stochasticity = list(),
     demographic_stochasticity = list(),
     density_dependence = list(),
@@ -318,6 +319,27 @@ simulate.dynamics <- function(
         use_identity_covariates
       )
     }
+
+    # # do any species' arguments have missing replicated_covariates?
+    # no_rep_covariate_args <- sapply(
+    #   args, \(x) is.null(x$replicated_covariates)
+    # )
+    #
+    # # do any species have missing replicated_covariates?
+    # no_rep_covariate_obj <- sapply(
+    #   object$dynamics, \(x) is.null(x$replicated_covariates)
+    # )
+    #
+    # # combine these two
+    # no_rep_covariates <- no_rep_covariate_args | no_rep_covariate_obj
+    #
+    # # if so, fill with identity covariates
+    # if (any(no_rep_covariates)) {
+    #   object$dynamics[no_rep_covariates] <- lapply(
+    #     object$dynamics[no_rep_covariates],
+    #     use_identity_rep_covariates
+    #   )
+    # }
 
     # classify user args by type
     args <- lapply(args, classify_args)
@@ -367,6 +389,17 @@ simulate.dynamics <- function(
     if (is.null(object$covariates)) {
       object$covariates <- use_identity_covariates(object)
     }
+
+    # # set an identity replicated_covariates function if no
+    # #  replicated_covariates arguments provided
+    # if (is.null(args$replicated_covariates)) {
+    #   object <- use_identity_rep_covariates(object)
+    # }
+    #
+    # # or if not replicated_covariates object exists
+    # if (is.null(object$replicated_covariates)) {
+    #   object$replicated_covariates <- use_identity_rep_covariates(object)
+    # }
 
     # classify user args by type
     args <- classify_args(args)
@@ -559,6 +592,7 @@ simulate.template <- function(
 #' @importFrom future.apply future_lapply
 # internal function: update a single time step for one species
 simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
+
   # calculate covariate-altered matrix
   if (is_expanded) {
     mat <- lapply(
@@ -602,6 +636,38 @@ simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
           do.call(
             obj$environmental_stochasticity,
             c(list(mat), args$environmental_stochasticity)
+          )
+        }
+      )
+      is_expanded <- TRUE
+    }
+  }
+
+  # tweak matrix to account for replicate-specific effects on vital rates,
+  #   accounting for previously expanded matrix
+  if (!is.null(obj[["replicated_covariates"]])) {
+    if (is_expanded) {
+      mat <- mapply(
+        function(x, y) {
+          do.call(
+            obj[["replicated_covariates"]],
+            c(list(x), y)
+          )
+        },
+        mat,
+        lapply(
+          seq_len(opt$replicates),
+          function(i) lapply(args[["replicated_covariates"]], \(.x) .x[i])
+        ),
+        SIMPLIFY = FALSE
+      )
+    } else {
+      mat <- lapply(
+        seq_len(opt$replicates),
+        function(i) {
+          do.call(
+            obj[["replicated_covariates"]],
+            c(list(mat), lapply(args[["replicated_covariates"]], \(.x) .x[i]))
           )
         }
       )
@@ -893,6 +959,39 @@ use_identity_covariates <- function(obj) {
     )
   } else {
     obj <- update(obj, identity_covariates)
+  }
+
+  # return
+  obj
+
+}
+
+# internal function: set identity replicated_covariates function if
+#   replicated_covariates are not used
+#' @importFrom stats update
+use_identity_rep_covariates <- function(obj) {
+
+  # define identity covariates function
+  identity_mask <- ifelse(
+    is.multispecies(obj),
+    obj$dynamics[[1]]$matrix,
+    obj$matrix
+  )
+  identity_rep_covariates <- replicated_covariates(
+    masks = identity_mask,
+    funs = \(x, ...) identity(x)
+  )
+
+  # loop over species if multispecies, single
+  #   update otherwise
+  if (is.multispecies(obj)) {
+    obj$dynamics <- lapply(
+      obj$dynamics,
+      update,
+      identity_rep_covariates
+    )
+  } else {
+    obj <- update(obj, identity_rep_covariates)
   }
 
   # return

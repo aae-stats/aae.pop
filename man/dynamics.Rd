@@ -20,6 +20,7 @@ transition from that column to that row}
 
 \item{\dots}{additional objects used to define population dynamics.
 Must be one or more of \code{\link{covariates}},
+\code{\link{replicated_covariates}},
 \code{\link{environmental_stochasticity}},
 \code{\link{demographic_stochasticity}},
 \code{\link{density_dependence}}, or

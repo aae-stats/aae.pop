@@ -12,7 +12,7 @@
 #'
 #' @keywords internal
 #'
-#' @docType package
+#' @docType _PACKAGE
 NULL
 
 # set some options when package is loaded
