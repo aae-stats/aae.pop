@@ -651,6 +651,23 @@ simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
     }
   }
 
+  # additions to or removals from the population vector that occur
+  #   prior to the update step
+  if (!is.null(obj$add_remove_pre)) {
+    pop_t <- t(
+      apply(
+        pop_t,
+        1,
+        function(x) {
+          do.call(
+            obj$add_remove_pre,
+            c(list(x), args$add_remove_pre)
+          )
+        }
+      )
+    )
+  }
+
   # tweak matrix to account for density effects on vital rates,
   #   accounting for previously expanded matrix
   if (!is.null(obj[["density_dependence"]])) {
@@ -678,23 +695,6 @@ simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
       )
       is_expanded <- TRUE
     }
-  }
-
-  # additions to or removals from the population vector that occur
-  #   prior to the update step
-  if (!is.null(obj$add_remove_pre)) {
-    pop_tp1 <- t(
-      apply(
-        pop_tp1,
-        1,
-        function(x) {
-          do.call(
-            obj$add_remove_pre,
-            c(list(x), args$add_remove_pre)
-          )
-        }
-      )
-    )
   }
 
   # single-step update of abundances
