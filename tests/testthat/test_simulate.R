@@ -301,11 +301,12 @@ test_that("simulate returns correct abundances with
              target <- array(dim = dim(value))
              target[, , 1] <- init_set
              for (i in seq_along(xsim)) {
-               target[, , i + 1] <- floor(t(
-                 apply(target[, , i + 1], 1, function(x) 200 * (x / sum(x)))
-               ))
+               tmp_target <- t(
+                 apply(target[, , i], 1, function(x) 200 * (x / sum(x)))
+               )
                target[, , i + 1] <-
-                 target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i]))
+                 tmp_target %*% t(dyn$covariates(dyn$matrix, xsim[i]))
+               target[, , i + 1] <- floor(target[, , i + 1])
              }
              class(target) <- c("simulation", "array")
              expect_equal(target, value)
