@@ -48,6 +48,8 @@ envstoch <- environmental_stochasticity(masks = mask_list, funs = fn_list)
 rescale_mask <- all_classes(mat)
 rescale_fn <- function(x) 200 * (x / sum(x))
 resc <- density_dependence_n(rescale_mask, rescale_fn)
+resc_pre <- add_remove_pre(rescale_mask, rescale_fn)
+resc_post <- add_remove_post(rescale_mask, rescale_fn)
 
 test_that("dynamics object returns correct processes
            for different combinations of processes", {
@@ -61,6 +63,8 @@ test_that("dynamics object returns correct processes
              expect_null(dyn_obj$environmental_stochasticity)
              expect_null(dyn_obj$demographic_stochasticity)
              expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$add_remove_pre)
+             expect_null(dyn_obj$add_remove_post)
              expect_null(dyn_obj$density_dependence_n)
 
              # test basic dynamics object with covariates
@@ -72,6 +76,8 @@ test_that("dynamics object returns correct processes
              expect_null(dyn_obj$environmental_stochasticity)
              expect_null(dyn_obj$demographic_stochasticity)
              expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$add_remove_pre)
+             expect_null(dyn_obj$add_remove_post)
              expect_null(dyn_obj$density_dependence_n)
 
              # test basic dynamics object with replicated_covariates
@@ -83,6 +89,8 @@ test_that("dynamics object returns correct processes
              expect_null(dyn_obj$environmental_stochasticity)
              expect_null(dyn_obj$demographic_stochasticity)
              expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$add_remove_pre)
+             expect_null(dyn_obj$add_remove_post)
              expect_null(dyn_obj$density_dependence_n)
 
              # test basic dynamics object with environmental stochasticity
@@ -94,6 +102,8 @@ test_that("dynamics object returns correct processes
              expect_equal(dyn_obj$environmental_stochasticity, envstoch)
              expect_null(dyn_obj$demographic_stochasticity)
              expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$add_remove_pre)
+             expect_null(dyn_obj$add_remove_post)
              expect_null(dyn_obj$density_dependence_n)
 
              # test basic dynamics object with demographic stochasticity
@@ -105,6 +115,8 @@ test_that("dynamics object returns correct processes
              expect_null(dyn_obj$environmental_stochasticity)
              expect_equal(dyn_obj$demographic_stochasticity, demostoch)
              expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$add_remove_pre)
+             expect_null(dyn_obj$add_remove_post)
              expect_null(dyn_obj$density_dependence_n)
 
              # test basic dynamics object with density_dependence
@@ -116,6 +128,8 @@ test_that("dynamics object returns correct processes
              expect_null(dyn_obj$environmental_stochasticity)
              expect_null(dyn_obj$demographic_stochasticity)
              expect_equal(dyn_obj$density_dependence, dd)
+             expect_null(dyn_obj$add_remove_pre)
+             expect_null(dyn_obj$add_remove_post)
              expect_null(dyn_obj$density_dependence_n)
 
              # test basic dynamics object with rescale density dependence
@@ -127,7 +141,35 @@ test_that("dynamics object returns correct processes
              expect_null(dyn_obj$environmental_stochasticity)
              expect_null(dyn_obj$demographic_stochasticity)
              expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$add_remove_pre)
+             expect_null(dyn_obj$add_remove_post)
              expect_equal(dyn_obj$density_dependence_n, resc)
+
+             # test basic dynamics object with removals pre-update
+             dyn_obj <- dynamics(mat, resc_pre)
+             expect_equal(dyn_obj$matrix, mat)
+             expect_equal(dyn_obj$nclass, ncol(mat))
+             expect_null(dyn_obj$covariates)
+             expect_null(dyn_obj$replicated_covariates)
+             expect_null(dyn_obj$environmental_stochasticity)
+             expect_null(dyn_obj$demographic_stochasticity)
+             expect_null(dyn_obj$density_dependence)
+             expect_equal(dyn_obj$add_remove_pre, resc_pre)
+             expect_null(dyn_obj$add_remove_post)
+             expect_null(dyn_obj$density_dependence_n)
+
+             # test basic dynamics object with removals post-update
+             dyn_obj <- dynamics(mat, resc_post)
+             expect_equal(dyn_obj$matrix, mat)
+             expect_equal(dyn_obj$nclass, ncol(mat))
+             expect_null(dyn_obj$covariates)
+             expect_null(dyn_obj$replicated_covariates)
+             expect_null(dyn_obj$environmental_stochasticity)
+             expect_null(dyn_obj$demographic_stochasticity)
+             expect_null(dyn_obj$density_dependence)
+             expect_null(dyn_obj$add_remove_pre)
+             expect_equal(dyn_obj$add_remove_post, resc_post)
+             expect_null(dyn_obj$density_dependence_n)
 
            })
 
