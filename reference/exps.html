@@ -163,20 +163,20 @@ be used to define expected arguments for each function</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected population size</span></span></span>
 <span class="r-in"><span><span class="fu">exps</span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 96.06688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 96.07437</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected population size for 4 and 5 year</span></span></span>
 <span class="r-in"><span><span class="co">#   olds only</span></span></span>
 <span class="r-in"><span><span class="fu">exps</span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.860646</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.86103</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected population size but ignore first 10 years</span></span></span>
 <span class="r-in"><span><span class="fu">exps</span><span class="op">(</span><span class="va">sims</span>, times <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">51</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 79.90099</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 79.90749</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected population size based on median</span></span></span>
 <span class="r-in"><span><span class="fu">exps</span><span class="op">(</span><span class="va">sims</span>, fun_among <span class="op">=</span> <span class="va">median</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 95.40583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 95.4245</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate expected maximum population size based on median</span></span></span>
 <span class="r-in"><span><span class="fu">exps</span><span class="op">(</span><span class="va">sims</span>, fun_within <span class="op">=</span> <span class="va">max</span>, fun_among <span class="op">=</span> <span class="va">median</span><span class="op">)</span></span></span>

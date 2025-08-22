@@ -148,14 +148,12 @@ for each element of <code>masks</code>. See Details</p></dd>
 <span class="r-in"><span><span class="co"># remove up to 10 individuals from stages 4 and 5 prior to the</span></span></span>
 <span class="r-in"><span><span class="co">#   matrix update</span></span></span>
 <span class="r-in"><span><span class="va">removals</span> <span class="op">&lt;-</span> <span class="fu">add_remove_pre</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  masks <span class="op">=</span> <span class="fu">all_stages</span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  masks <span class="op">=</span> <span class="fu"><a href="masks.html">all_classes</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  funs <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&gt;</span> <span class="fl">10</span>, <span class="va">x</span> <span class="op">-</span> <span class="fl">10</span>, <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in all_stages(popmat, dims = 4:5):</span> could not find function "all_stages"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># update the dynamics object</span></span></span>
 <span class="r-in"><span><span class="va">dyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">dyn</span>, <span class="va">removals</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'removals' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># simulate trajectories</span></span></span>
 <span class="r-in"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate.html">simulate</a></span><span class="op">(</span><span class="va">dyn</span>, nsim <span class="op">=</span> <span class="fl">100</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ntime <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -167,15 +165,13 @@ for each element of <code>masks</code>. See Details</p></dd>
 <span class="r-in"><span><span class="co"># remove up to 10 individuals from stages 4 and 5 after to the</span></span></span>
 <span class="r-in"><span><span class="co">#   matrix update</span></span></span>
 <span class="r-in"><span><span class="va">removals</span> <span class="op">&lt;-</span> <span class="fu">add_remove_post</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  masks <span class="op">=</span> <span class="fu">all_stages</span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  funs <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">-</span> <span class="fl">10</span></span></span>
+<span class="r-in"><span>  masks <span class="op">=</span> <span class="fu"><a href="masks.html">all_classes</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  funs <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&gt;</span> <span class="fl">10</span>, <span class="va">x</span> <span class="op">-</span> <span class="fl">10</span>, <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in all_stages(popmat, dims = 4:5):</span> could not find function "all_stages"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># update the dynamics object (can't update because that will</span></span></span>
 <span class="r-in"><span><span class="co">#   include the add_remove_pre as well)</span></span></span>
-<span class="r-in"><span><span class="va">dyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">dyn</span>, <span class="va">removals</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> matrix must be a two-dimensional array or matrix defining a population dynamics model</span>
+<span class="r-in"><span><span class="va">dyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span>, <span class="va">removals</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># simulate trajectories</span></span></span>
 <span class="r-in"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate.html">simulate</a></span><span class="op">(</span><span class="va">dyn</span>, nsim <span class="op">=</span> <span class="fl">100</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ntime <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></span>
