@@ -32,6 +32,10 @@ reference:
   contents:
   - density_dependence
   - density_functions
+- title: Altering the population vector
+  contents:
+  - add_remove_pre
+  - add_remove_post
 - title: Adding stochasticity
   contents:
   - stochasticity
