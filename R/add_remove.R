@@ -54,7 +54,7 @@ NULL
 #' # remove up to 10 individuals from stages 4 and 5 prior to the
 #' #   matrix update
 #' removals <- add_remove_pre(
-#'   masks = all_stages(popmat, dims = 4:5),
+#'   masks = all_classes(popmat, dims = 4:5),
 #'   funs = \(x) ifelse(x > 10, x - 10, 0)
 #' )
 #'
@@ -70,13 +70,13 @@ NULL
 #' # remove up to 10 individuals from stages 4 and 5 after to the
 #' #   matrix update
 #' removals <- add_remove_post(
-#'   masks = all_stages(popmat, dims = 4:5),
-#'   funs = \(x) x - 10
+#'   masks = all_classes(popmat, dims = 4:5),
+#'   funs = \(x) ifelse(x > 10, x - 10, 0)
 #' )
 #'
 #' # update the dynamics object (can't update because that will
 #' #   include the add_remove_pre as well)
-#' dyn <- dynamics(dyn, removals)
+#' dyn <- dynamics(popmat, removals)
 #'
 #' # simulate trajectories
 #' sims <- simulate(dyn, nsim = 100, options = list(ntime = 50))
