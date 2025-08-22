@@ -23,8 +23,11 @@ Must be one or more of \code{\link{covariates}},
 \code{\link{replicated_covariates}},
 \code{\link{environmental_stochasticity}},
 \code{\link{demographic_stochasticity}},
-\code{\link{density_dependence}}, or
-\code{\link{density_dependence_n}}}
+\code{\link{density_dependence}},
+\code{\link{add_remove_pre}}, or
+\code{\link{add_remove_post}}.
+Note that \code{\link{density_dependence_n}} is equivalent to
+\code{\link{add_remove_post}}.}
 
 \item{object}{a \code{dynamics} object}
 

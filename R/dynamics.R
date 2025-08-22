@@ -18,8 +18,11 @@ NULL
 #'   \code{\link{replicated_covariates}},
 #'   \code{\link{environmental_stochasticity}},
 #'   \code{\link{demographic_stochasticity}},
-#'   \code{\link{density_dependence}}, or
-#'   \code{\link{density_dependence_n}}
+#'   \code{\link{density_dependence}},
+#'   \code{\link{add_remove_pre}}, or
+#'   \code{\link{add_remove_post}}.
+#'   Note that \code{\link{density_dependence_n}} is equivalent to
+#'   \code{\link{add_remove_post}}.
 #'
 #' @details A call to \code{dynamics} defines an object of class
 #'   \code{dynamics}, which can be used to simulate population
@@ -60,6 +63,8 @@ dynamics <- function(matrix, ...) {
     "environmental_stochasticity",
     "demographic_stochasticity",
     "density_dependence",
+    "add_remove_pre",
+    "add_remove_post",
     "density_dependence_n"
   )
 
@@ -140,6 +145,8 @@ update.dynamics <- function(object, ...) {
     "environmental_stochasticity",
     "demographic_stochasticity",
     "density_dependence",
+    "add_remove_pre",
+    "add_remove_post",
     "density_dependence_n"
   )
   processes_existing <- lapply(processes_supported, function(x) object[[x]])

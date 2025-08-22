@@ -35,7 +35,8 @@ Specify density dependence in vital rates
 
   \code{density_dependence_n} is an alternative
   parameterisation of density dependence that acts directly
-  on population abundances.
+  on population abundances. Note that \code{density_dependence_n}
+  has been superseded by \code{\link{add_remove_post}}.
 
   Masks must be of the same dimension as the population
   dynamics matrix and specify cells influenced by density

@@ -282,6 +282,8 @@ simulate.dynamics <- function(
     environmental_stochasticity = list(),
     demographic_stochasticity = list(),
     density_dependence = list(),
+    add_remove_pre = list(),
+    add_remove_post = list(),
     density_dependence_n = list(),
     interaction = list()
   )
@@ -678,6 +680,23 @@ simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
     }
   }
 
+  # additions to or removals from the population vector that occur
+  #   prior to the update step
+  if (!is.null(obj$add_remove_pre)) {
+    pop_tp1 <- t(
+      apply(
+        pop_tp1,
+        1,
+        function(x) {
+          do.call(
+            obj$add_remove_pre,
+            c(list(x), args$add_remove_pre)
+          )
+        }
+      )
+    )
+  }
+
   # single-step update of abundances
   if (is_expanded) {
     pop_tp1 <- t(mapply(
@@ -717,6 +736,22 @@ simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
           do.call(
             obj$density_dependence_n,
             c(list(x), args$density_dependence_n)
+          )
+        }
+      )
+    )
+  }
+
+  # add_remove_post; equivalent to density_dependence_n
+  if (!is.null(obj$add_remove_post)) {
+    pop_tp1 <- t(
+      apply(
+        pop_tp1,
+        1,
+        function(x) {
+          do.call(
+            obj$add_remove_post,
+            c(list(x), args$add_remove_post)
           )
         }
       )
