@@ -5,6 +5,10 @@
 - New process class to handle removals or additions to the population vector
     prior to or following the update step: `add_remove_pre`, `add_remove_post`
 
+## Fixes
+
+- Change `fecundity` to `reproduction` in `DiagrammeR` plots of dynamics objects
+
 # aae.pop 0.1.1
 
 ## Features

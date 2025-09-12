@@ -278,7 +278,7 @@ plot.dynamics <- function(x, y, ...) {
 
   edge_labels <- rep("transition", length(from))
   edge_labels <- ifelse(from == to, "survival", edge_labels)
-  edge_labels <- ifelse(from > to, "fecundity", edge_labels)
+  edge_labels <- ifelse(from > to, "reproduction", edge_labels)
 
   gr$edges_df$label <- edge_labels
   gr$edges_df$style <- edge_style
