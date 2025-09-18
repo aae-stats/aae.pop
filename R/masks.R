@@ -52,10 +52,10 @@ NULL
 #' all_classes(popmat, dims = 3:5)
 reproduction <- function(matrix, dims = NULL) {
   if (is.null(dims)) {
-    dims <- seq_len(ncol(matrix))
+    dims <- seq_len(ncol(matrix))[-1]
   }
 
-  as_mask(row(matrix) == 1 & col(matrix) != 1 & col(matrix) %in% dims)
+  as_mask(row(matrix) == 1 & col(matrix) %in% dims)
 }
 
 #' @rdname masks
