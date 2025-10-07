@@ -4,6 +4,7 @@
 
 - New process class to handle removals or additions to the population vector
     prior to or following the update step: `add_remove_pre`, `add_remove_post`
+- Allow custom labels on plotted dynamics objects with `labels` argument
 
 ## Fixes
 

@@ -23,6 +23,11 @@ NULL
 #'   \code{\link{add_remove_post}}.
 #'   Note that \code{\link{density_dependence_n}} is equivalent to
 #'   \code{\link{add_remove_post}}.
+#' @param labels a vector of labels passed to \code{plot} for a
+#'    \code{dynamics} object.
+#'    One label must be provided for each stage in the model. Defaults to
+#'    \code{NULL}, in which case \code{age} or \code{stage} is used
+#'    (guessed from matrix structure)
 #'
 #' @details A call to \code{dynamics} defines an object of class
 #'   \code{dynamics}, which can be used to simulate population
@@ -51,8 +56,8 @@ dynamics <- function(matrix, ...) {
   # is matrix actually a matrix?
   if (length(dim(matrix)) != 2) {
     stop("matrix must be a two-dimensional array or matrix ",
-      "defining a population dynamics model",
-      call. = FALSE
+         "defining a population dynamics model",
+         call. = FALSE
     )
   }
 
@@ -81,8 +86,8 @@ dynamics <- function(matrix, ...) {
   # error if processes not supported
   if (!all(processes_supplied %in% processes_supported)) {
     stop("Additional arguments to dynamics must be one of ",
-      clean_paste(processes_supported, final_sep = "or"),
-      call. = FALSE
+         clean_paste(processes_supported, final_sep = "or"),
+         call. = FALSE
     )
   }
 
@@ -92,9 +97,9 @@ dynamics <- function(matrix, ...) {
     if (any(nproc > 1)) {
       duplicate_process <- names(nproc)[nproc > 1]
       stop("Multiple objects provided for the following processes: ",
-        clean_paste(duplicate_process, final_sep = "and"), ".\n",
-        " A dynamics object can include up to one of each process type",
-        call. = FALSE
+           clean_paste(duplicate_process, final_sep = "and"), ".\n",
+           " A dynamics object can include up to one of each process type",
+           call. = FALSE
       )
     }
   }
@@ -172,11 +177,11 @@ plot.template <- function(x, y, ...) {
 
 # S3 plot method
 #' @export
-plot.dynamics <- function(x, y, ...) {
+plot.dynamics <- function(x, y, ..., labels = NULL) {
   if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
     stop("the DiagrammeR package must be installed to ",
-      "plot dynamics objects",
-      call. = FALSE
+         "plot dynamics objects",
+         call. = FALSE
     )
   }
 
@@ -198,8 +203,8 @@ plot.dynamics <- function(x, y, ...) {
   }
 
   gr <- DiagrammeR::from_adj_matrix(mat, # nolint
-    mode = "directed",
-    use_diag = TRUE
+                                    mode = "directed",
+                                    use_diag = TRUE
   )
 
   # how many nodes?
@@ -239,8 +244,24 @@ plot.dynamics <- function(x, y, ...) {
   node_size[node_type == "reprod"] <- 0.9
   node_size[node_type == "post_reprod"] <- 0.9
 
-  # add some labels for the nodes (age or stage depending on type of model)
-  node_labels <- paste(type, seq_len(n_nodes), sep = " ")
+  # add some labels for the nodes (age or stage depending on type of model),
+  #    or user labels if provided
+  if (is.null(labels)) {
+    node_labels <- paste(type, seq_len(n_nodes), sep = " ")
+  } else {
+
+    # check that there are enough labels
+    if (n_nodes != length(labels)) {
+      stop(
+        "There must be one label for each row/column in the population matrix",
+        call = FALSE
+      )
+    }
+
+    # use these if all OK
+    node_labels <- labels
+
+  }
 
   # if it's a Leslie matrix and to == from, we have an "age+" situation
   if (type == "Age") {
@@ -249,8 +270,8 @@ plot.dynamics <- function(x, y, ...) {
 
   edge_style <- rep("solid", length(to))
   edge_style[from %in% which(node_type == "reprod") &
-    !(to %in% which(node_type == "reprod")) &
-    !(to %in% which(node_type == "post_reprod"))] <- "dashed"
+               !(to %in% which(node_type == "reprod")) &
+               !(to %in% which(node_type == "post_reprod"))] <- "dashed"
 
   font_colour <- rep(col_pal[2], n_nodes)
   font_colour[node_type == "reprod"] <- col_pal[3]

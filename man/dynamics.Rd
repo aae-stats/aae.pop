@@ -32,6 +32,12 @@ Note that \code{\link{density_dependence_n}} is equivalent to
 \item{object}{a \code{dynamics} object}
 
 \item{x}{an object to pass to \code{is.dynamics}}
+
+\item{labels}{a vector of labels passed to \code{plot} for a
+\code{dynamics} object.
+One label must be provided for each stage in the model. Defaults to
+\code{NULL}, in which case \code{age} or \code{stage} is used
+(guessed from matrix structure)}
 }
 \description{
 Define population dynamics from a matrix and additional
