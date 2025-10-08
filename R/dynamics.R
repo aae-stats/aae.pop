@@ -23,11 +23,6 @@ NULL
 #'   \code{\link{add_remove_post}}.
 #'   Note that \code{\link{density_dependence_n}} is equivalent to
 #'   \code{\link{add_remove_post}}.
-#' @param labels a vector of labels passed to \code{plot} for a
-#'    \code{dynamics} object.
-#'    One label must be provided for each stage in the model. Defaults to
-#'    \code{NULL}, in which case \code{age} or \code{stage} is used
-#'    (guessed from matrix structure)
 #'
 #' @details A call to \code{dynamics} defines an object of class
 #'   \code{dynamics}, which can be used to simulate population
