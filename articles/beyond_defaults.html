@@ -269,7 +269,7 @@ conditions with any amount of structure or detail:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>,</span>
 <span>     col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">"Three different initial conditions"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="beyond_defaults_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="beyond_defaults_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="700"></p>
 <p>The previous example might be a bit unwieldy with many replicates, in
 which case a single vector can be passed to simulate:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -289,7 +289,7 @@ which case a single vector can be passed to simulate:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>,</span>
 <span>     col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">"Many replicates with the same initial condition"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="beyond_defaults_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="beyond_defaults_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="700"></p>
 <p>Alternatively, this approach could be modified to add stochasticity
 to initial conditions while retaining some of the structure from the
 previous examples:</p>
@@ -317,7 +317,7 @@ previous examples:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>,</span>
 <span>     col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">"Many replicates with stochastic, structured initial conditions"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="beyond_defaults_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="beyond_defaults_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="updaters">Updaters<a class="anchor" aria-label="anchor" href="#updaters"></a>
@@ -374,7 +374,7 @@ function to handle the matrix of replicate population vectors:</p>
 <span><span class="co">## {</span></span>
 <span><span class="co">##     tcrossprod(pop, mat)</span></span>
 <span><span class="co">## }</span></span>
-<span><span class="co">## &lt;bytecode: 0x5585502b9d90&gt;</span></span>
+<span><span class="co">## &lt;bytecode: 0x55b169fd3810&gt;</span></span>
 <span><span class="co">## &lt;environment: namespace:aae.pop&gt;</span></span></code></pre>
 <p>The <code>update_binomial_leslie</code> function is slightly more
 complicated and includes a check for integer abundances and then uses a
@@ -397,7 +397,7 @@ mix of Poisson (for reproduction) and Binomial draws (for survival):</p>
 <span><span class="co">##     cbind(rpois(nrow(vals), lambda = vals[, 1]), matrix(rbinom(length(probs), </span></span>
 <span><span class="co">##         size = pop_nm1, prob = probs), nrow = nrow(pop_nm1)))</span></span>
 <span><span class="co">## }</span></span>
-<span><span class="co">## &lt;bytecode: 0x558550c6ebe0&gt;</span></span>
+<span><span class="co">## &lt;bytecode: 0x55b16a9970f0&gt;</span></span>
 <span><span class="co">## &lt;environment: namespace:aae.pop&gt;</span></span></code></pre>
 <p>The primary reason to change the updater is speed. Although
 <code>update_crossprod</code> is relatively fast compared to other R
@@ -429,7 +429,7 @@ Julia).</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
