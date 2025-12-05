@@ -172,7 +172,9 @@ plot.template <- function(x, y, ...) {
 
 # S3 plot method
 #' @export
-plot.dynamics <- function(x, y, ..., labels = NULL) {
+plot.dynamics <- function(
+    x, y, ..., labels = NULL, cycle_first = "reproductive"
+) {
   if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
     stop("the DiagrammeR package must be installed to ",
          "plot dynamics objects",
@@ -216,7 +218,11 @@ plot.dynamics <- function(x, y, ..., labels = NULL) {
 
   # identify different node types
   node_type <- rep("pre_reprod", n_nodes)
-  node_type[from[to == 1 & from > 1]] <- "reprod"
+  if (cycle_first == "reproductive") {
+    node_type[from[to == 1]] <- "reprod"
+  } else {
+    node_type[from[to == 1 & from > 1]] <- "reprod"
+  }
   max_reprod <- max(which(node_type == "reprod"))
   node_type[seq_len(n_nodes) > max_reprod] <- "post_reprod"
 
@@ -294,6 +300,9 @@ plot.dynamics <- function(x, y, ..., labels = NULL) {
 
   edge_labels <- rep("transition", length(from))
   edge_labels <- ifelse(from == to, "survival", edge_labels)
+  if (cycle_first == "reproductive") {
+    edge_labels <- ifelse(from == to & from == 1, "reproduction", edge_labels)
+  }
   edge_labels <- ifelse(from > to, "reproduction", edge_labels)
 
   gr$edges_df$label <- edge_labels
