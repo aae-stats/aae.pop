@@ -11,6 +11,9 @@
 - Change `fecundity` to `reproduction` in `DiagrammeR` plots of dynamics objects
 - Change `reproduction` mask to allow first stage to reproduce, with a default
     that excludes this first stage (`2:ncol(mat)`)
+- Change `plot.dynamics` so that cycles in the first stage are labelled
+    as reproduction by default. The argument `cycles_first` can be set
+    to `"survival"` to revert to the original behaviour
 
 # aae.pop 0.1.1
 
