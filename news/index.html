@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9005</span>
       </span>
     </div>
 
@@ -91,6 +91,7 @@
 <h3 id="fixes-development-version">Fixes<a class="anchor" aria-label="anchor" href="#fixes-development-version"></a></h3>
 <ul><li>Change <code>fecundity</code> to <code>reproduction</code> in <code>DiagrammeR</code> plots of dynamics objects</li>
 <li>Change <code>reproduction</code> mask to allow first stage to reproduce, with a default that excludes this first stage (<code>2:ncol(mat)</code>)</li>
+<li>Change <code>plot.dynamics</code> so that cycles in the first stage are labelled as reproduction by default. The argument <code>cycles_first</code> can be set to <code>"survival"</code> to revert to the original behaviour</li>
 </ul></div>
 </div>
     <div class="section level2">
