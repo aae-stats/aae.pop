@@ -8,6 +8,10 @@
 
 ## Fixes
 
+- Update labelling for plots of dynamic objects to override all defaults
+    when custom labels are supplied
+- Update labelling for plots of dynamic objects to classify reproductive 
+    first stages as reproduction, not survival
 - Change `fecundity` to `reproduction` in `DiagrammeR` plots of dynamics objects
 - Change `reproduction` mask to allow first stage to reproduce, with a default
     that excludes this first stage (`2:ncol(mat)`)

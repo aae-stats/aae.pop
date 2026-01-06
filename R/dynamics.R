@@ -265,14 +265,18 @@ plot.dynamics <- function(
   }
 
   # if it's a Leslie matrix and to == from, we have an "age+" situation
-  if (type == "Age") {
+  if (type == "Age" & is.null(labels)) {
     node_labels[from[to == from]] <- paste0(node_labels[from[to == from]], "+")
   }
 
   edge_style <- rep("solid", length(to))
-  edge_style[from %in% which(node_type == "reprod") &
-               !(to %in% which(node_type == "reprod")) &
-               !(to %in% which(node_type == "post_reprod"))] <- "dashed"
+  if (cycle_first == "reproductive") {
+    edge_style[from %in% which(node_type == "reprod") & to == 1] <- "dashed"
+  } else {
+    edge_style[from %in% which(node_type == "reprod") &
+                 !(to %in% which(node_type == "reprod")) &
+                 !(to %in% which(node_type == "post_reprod"))] <- "dashed"
+  }
 
   font_colour <- rep(col_pal[2], n_nodes)
   font_colour[node_type == "reprod"] <- col_pal[3]
