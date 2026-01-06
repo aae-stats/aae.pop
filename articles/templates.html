@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9006</span>
       </span>
     </div>
 
@@ -223,7 +223,7 @@ example simulating Murray cod dynamics for 50 years:</p>
 <code class="sourceCode R"><span><span class="va">mc</span> <span class="op">&lt;-</span> <span class="fu">murray_cod</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">mc</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="st">"#2171B5"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="templates_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="700"></p>
+<p><img src="templates_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="700"></p>
 <p>Note that, with three lines of code, this template now simulates 100
 replicate trajectories for a species with 50 age classes and complex
 forms of density dependence and environmental and demographic
@@ -239,25 +239,25 @@ requires covariates provided as <code>args</code> to
 <span><span class="va">mc</span> <span class="op">&lt;-</span> <span class="fu">murray_cod</span><span class="op">(</span>k <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">mc</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="st">"#2171B5"</span>, main <span class="op">=</span> <span class="st">"K = 1000"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="templates_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+<p><img src="templates_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add angling effects</span></span>
 <span><span class="va">mc</span> <span class="op">&lt;-</span> <span class="fu">murray_cod</span><span class="op">(</span>k <span class="op">=</span> <span class="fl">10000</span>, p_capture <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">mc</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="st">"#2171B5"</span>, main <span class="op">=</span> <span class="st">"20 % angler catch rate"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="templates_files/figure-html/unnamed-chunk-4-2.png" class="r-plt" width="700"></p>
+<p><img src="templates_files/figure-html/unnamed-chunk-4-2.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add angling effects</span></span>
 <span><span class="va">mc</span> <span class="op">&lt;-</span> <span class="fu">murray_cod</span><span class="op">(</span>k <span class="op">=</span> <span class="fl">10000</span>, p_capture <span class="op">=</span> <span class="fl">0.1</span>, slot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">800</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">mc</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="st">"#2171B5"</span>, main <span class="op">=</span> <span class="st">"10 % angler catch rate but relaxed restrictions"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="templates_files/figure-html/unnamed-chunk-4-3.png" class="r-plt" width="700"></p>
+<p><img src="templates_files/figure-html/unnamed-chunk-4-3.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add angling effects</span></span>
 <span><span class="va">mc</span> <span class="op">&lt;-</span> <span class="fu">murray_cod</span><span class="op">(</span>k <span class="op">=</span> <span class="fl">10000</span>, p_capture <span class="op">=</span> <span class="fl">0.1</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">mc</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="st">"#2171B5"</span>, main <span class="op">=</span> <span class="st">"10 % angler catch rate and 1000 fingerlings stocked annually"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="templates_files/figure-html/unnamed-chunk-4-4.png" class="r-plt" width="700"></p>
+<p><img src="templates_files/figure-html/unnamed-chunk-4-4.png" class="r-plt" alt="" width="700"></p>
 <p>Arguments to <code>murray_cod</code> are described in the associated
 help file (<code>?murray_cod</code>), as are those for all other species
 templates. Covariates are not currently described in these documents but
