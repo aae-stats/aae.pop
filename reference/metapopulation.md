@@ -1,0 +1,211 @@
+# Create a metapopulation dynamics object
+
+Define population dynamics for multiple populations of a single species
+linked by dispersal (a metapopulation).
+
+## Usage
+
+``` r
+metapopulation(structure, dynamics, dispersal)
+
+is.metapopulation(x)
+```
+
+## Arguments
+
+- structure:
+
+  binary or logical matrix denoting dispersal links between populations.
+  Columns move to rows, so a `1` or `TRUE` in cell (a, b) denotes
+  movement from population b to population a
+
+- dynamics:
+
+  a
+  [`dynamics`](https://aae-stats.github.io/aae.pop/reference/dynamics.md)
+  object or list of dynamics objects with one element for each
+  population (each column/row of `structure`). If a single dynamics
+  object is provided, it is recycled over all required populations
+
+- dispersal:
+
+  object created with
+  [`dispersal`](https://aae-stats.github.io/aae.pop/reference/dispersal.md).
+  `dispersal` objects describe movements between populations and can
+  include class-specific movements and density-dependent movements.
+  `dispersal` objects must be a list with one element for each link in
+  `structure`. These links are interpreted in column-major order, so
+  that `dispersal` objects must be ordered by links in column 1, then
+  column 2, and so on
+
+- x:
+
+  an object to pass to `is.metapopulation`
+
+## Details
+
+The `metapopulation` function connects multiple populations through
+known dispersal probabilities, handling standardisations of dispersal
+probabilities (if required) and updating masks and functions for all
+processes defined within each population. Further details on the
+definition of dispersal terms are provided in
+[`dispersal`](https://aae-stats.github.io/aae.pop/reference/dispersal.md).
+
+Covariates can be included in metapopulation models. The default
+behaviour is for all populations to share a single set of covariates,
+with covariate associations and masks defined separately for each
+population. A workaround to the assumption of shared covariates is
+included in the examples, below. Including covariates on dispersal
+probabilities requires covariate associations and masks defined on the
+combined metapopulation model. This approach is possible but currently
+untested.
+
+## Examples
+
+``` r
+# define some populations, all with identical vital rates
+nclass <- 5
+popmat <- matrix(0, nrow = nclass, ncol = nclass)
+popmat[reproduction(popmat, dims = 4:5)] <- c(10, 20)
+popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
+
+# define a dynamics object
+dyn <- lapply(
+  1:3,
+  function(i) dynamics(popmat)
+)
+
+# define metapopulation structure with populations
+#   1 and 3 dispersing into population 2
+pop_structure <- matrix(0, nrow = 3, ncol = 3)
+pop_structure[1, 2] <- 1
+pop_structure[3, 2] <- 1
+
+# define dispersal between populations
+dispersal_matrix <- matrix(0, nrow = nclass, ncol = nclass)
+dispersal_matrix[survival(dispersal_matrix, dims = 20:25)] <- 0.2
+pop_dispersal1 <- dispersal(dispersal_matrix, proportion = TRUE)
+pop_dispersal2 <- dispersal(dispersal_matrix, proportion = FALSE)
+pop_dispersal <- list(pop_dispersal1, pop_dispersal2)
+
+# create metapopulation object
+metapop <- metapopulation(pop_structure, dyn, pop_dispersal)
+
+# simulate without covariates
+sims <- simulate(metapop, nsim = 2)
+
+# simulate with shared covariates
+# define a covariates function
+covar_fn <- function(mat, x) {
+  mat * (1 / (1 + exp(-0.5 * (x + 10))))
+}
+
+# and some covariates
+xsim <- matrix(rnorm(20), ncol = 1)
+
+# update the population dynamics objects with covariates
+dyn <- lapply(
+  dyn,
+  update,
+  covariates(masks = transition(dyn[[1]]$matrix), funs = covar_fn)
+)
+
+# (re)create metapopulation object
+metapop <- metapopulation(pop_structure, dyn, pop_dispersal)
+sims <- simulate(
+  metapop,
+  nsim = 2,
+  args = list(covariates = format_covariates(xsim))
+)
+
+# simulate with separate covariates
+#  (requires re-definition of covariate functions)
+new_fn <- function(i) {
+  force(i)
+  function(mat, x) {
+    mat * (1 / (1 + exp(-0.5 * (x[i] + 10))))
+  }
+}
+new_fn <- lapply(
+  1:3,
+  new_fn
+)
+
+# update the population dynamics objects with covariates
+dyn <- lapply(
+  dyn,
+  update,
+  covariates(masks = transition(dyn[[1]]$matrix), funs = covar_fn)
+)
+
+# (re)create metapopulation object
+metapop <- metapopulation(pop_structure, dyn, pop_dispersal)
+
+# and simulate with one column of predictors for each population
+xsim <- matrix(rnorm(60), ncol = 3)
+sims <- simulate(
+  metapop,
+  nsim = 2,
+  args = list(covariates = format_covariates(xsim))
+)
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+#> Warning: longer object length is not a multiple of shorter object length
+```

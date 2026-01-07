@@ -4,113 +4,73 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Population dynamics of Macquarie perch • aae.pop</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Population dynamics of Macquarie perch">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Population dynamics of Macquarie perch">
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9006</span>
-      </span>
-    </div>
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../articles/get_started.html">get started</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    vignettes
+    <a class="navbar-brand me-2" href="../index.html">aae.pop</a>
 
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/including_processes.html">Including processes</a>
-    </li>
-    <li>
-      <a href="../articles/beyond_defaults.html">Beyond defaults</a>
-    </li>
-    <li>
-      <a href="../articles/metapopulations.html">Metapopulations</a>
-    </li>
-    <li>
-      <a href="../articles/multiple_species.html">Multiple species</a>
-    </li>
-    <li>
-      <a href="../articles/templates.html">Species templates</a>
-    </li>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.1.9007</small>
+
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="../articles/get_started.html">get started</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">vignettes</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
+<li><a class="dropdown-item" href="../articles/including_processes.html">Including processes</a></li>
+    <li><a class="dropdown-item" href="../articles/beyond_defaults.html">Beyond defaults</a></li>
+    <li><a class="dropdown-item" href="../articles/metapopulations.html">Metapopulations</a></li>
+    <li><a class="dropdown-item" href="../articles/multiple_species.html">Multiple species</a></li>
+    <li><a class="dropdown-item" href="../articles/templates.html">Species templates</a></li>
   </ul>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    examples
-
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/macperch_example.html">Macquarie perch</a>
-    </li>
-    <li>
-      <a href="../articles/scenarios_example.html">Comparing scenarios</a>
-    </li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">examples</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
+<li><a class="dropdown-item" href="../articles/macperch_example.html">Macquarie perch</a></li>
+    <li><a class="dropdown-item" href="../articles/scenarios_example.html">Comparing scenarios</a></li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/aae-stats/aae.pop" class="external-link">
-    <span class="fab fa-github"></span>
-
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop"><span class="fa fab fa-github"></span></a></li>
       </ul>
 </div>
-<!--/.nav-collapse -->
+
+
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
 
 
-      </header><link href="macperch_example_files/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<link href="macperch_example_files/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
 <script src="macperch_example_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="macperch_example_files/viz-1.8.2/viz.js"></script><link href="macperch_example_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
 <script src="macperch_example_files/grViz-binding-1.0.11/grViz.js"></script><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Population dynamics of Macquarie perch</h1>
+  <main id="main" class="col-md-9"><div class="page-header">
+
+      <h1>Population dynamics of Macquarie perch</h1>
                         <h4 data-toc-skip class="author">Jian Yen</h4>
             
             <h4 data-toc-skip class="date">01/07/2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/main/vignettes/macperch_example.Rmd" class="external-link"><code>vignettes/macperch_example.Rmd</code></a></small>
-      <div class="hidden name"><code>macperch_example.Rmd</code></div>
-
+      <div class="d-none name"><code>macperch_example.Rmd</code></div>
     </div>
 
     
@@ -515,12 +475,11 @@ dynamics is the inclusion of stocking or fishing. These processes could
 be included directly in the population matrix through their effects on
 survival and reproduction. This section demonstrates an alternative way
 of accounting for the addition or removal of individuals, using the
-<code>density_dependence_n</code> construct, which allows
-density-dependent changes to the population vector (i.e., abundances)
-following all other updates. This approach requires a <code>mask</code>
-that selects the classes of the population affected, as well as a
-<code>function</code> that determines how population abundances are
-altered.</p>
+<code>add_remove_post</code> construct, which allows density-dependent
+changes to the population vector (i.e., abundances) following all other
+updates. This approach requires a <code>mask</code> that selects the
+classes of the population affected, as well as a <code>function</code>
+that determines how population abundances are altered.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># take a population vector and update it to add or remove n individuals</span></span>
 <span><span class="co">#   split into two stages (juveniles, adults)</span></span>
@@ -587,8 +546,8 @@ altered.</p>
 <span>  </span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># wrap this up in a density_dependence_n object</span></span>
-<span><span class="va">dens_depend_n</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/density_dependence.html">density_dependence_n</a></span><span class="op">(</span></span>
+<span><span class="co"># wrap this up in a add_remove_post object (formerly density_dependence_n)</span></span>
+<span><span class="va">add_remove</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_remove.html">add_remove_post</a></span><span class="op">(</span></span>
 <span>  masks <span class="op">=</span> <span class="fu"><a href="../reference/masks.html">all_classes</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span>,</span>
 <span>  funs <span class="op">=</span> <span class="va">dd_n</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -597,13 +556,13 @@ static, that is, a fixed number of individuals is added or removed each
 and every time step. An extension of this approach could set the number
 of individuals stochastically (e.g., as a Poisson random variable) and
 could make the number of individuals change through time. For example,
-the <code>args.fn</code> or <code>args.dyn</code> options could pass a
+the <code>args</code> argument to <code>simulate</code> could include a
 time-varying value of <code>n</code>, or the <code>dd_n</code> function
 could use <code>pop</code> (actual abundances) to define a
 density-dependent addition or removal scenario. These extensions are not
-shown here but an example of the <code>args.fn</code> approach is
-included in the <code>macquarie_perch</code> template to simulate
-changes in fishing regulations or stocking through time.</p>
+shown here but an example of a function argument is included in the
+<code>macquarie_perch</code> template to simulate changes in fishing
+regulations or stocking through time.</p>
 </div>
 <div class="section level3">
 <h3 id="covariate-effects">Covariate effects<a class="anchor" aria-label="anchor" href="#covariate-effects"></a>
@@ -724,11 +683,11 @@ section.</p>
 <span>  <span class="va">covars</span>,</span>
 <span>  <span class="va">envstoch</span>,</span>
 <span>  <span class="va">dens_depend</span>,</span>
-<span>  <span class="va">dens_depend_n</span></span>
+<span>  <span class="va">add_remove</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Simulating from this object requires a call to <code>simulate</code>,
-also recalling that at least one <code>args.fn</code> is required here
-to transform survival values from the unit interval to their real-line
+also recalling that at least one function argument is required here to
+transform survival values from the unit interval to their real-line
 equivalents:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># simulate, using the transform_survival function defined above</span></span>
@@ -739,13 +698,13 @@ equivalents:</p>
 <span>  <span class="va">popdyn</span>,</span>
 <span>  nsim <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    density_dependence_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">10</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>    add_remove_post <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">10</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>    environmental_stochasticity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">transform_survival</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the simulated trajectories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="macperch_example_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="700"></p>
 <p>The simulated abundances are extremely high given expected population
 sizes in this system. The primary reason for this is that the model
@@ -769,25 +728,25 @@ added to this model with the following code, noting that the same
 <span>  <span class="va">popdyn</span>, </span>
 <span>  nsim <span class="op">=</span> <span class="fl">100</span>, </span>
 <span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    density_dependence_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,         <span class="co"># remove no individuals this time</span></span>
+<span>    add_remove_post <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,         <span class="co"># remove no individuals this time</span></span>
 <span>    covariates <span class="op">=</span> <span class="fu"><a href="../reference/covariates.html">format_covariates</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">covar_values</span><span class="op">)</span>, <span class="co"># pass formatted covariate values</span></span>
 <span>    environmental_stochasticity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">transform_survival</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the simulated trajectories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="macperch_example_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="700"></p>
 <p>The simulated trajectories now look much more realistic. Here, large
 values reflect young individuals, many of which do not survive to
 adulthood. Plotting older classes alone highlights this effect:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># all adults</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="macperch_example_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ages 5 and above</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="macperch_example_files/figure-html/unnamed-chunk-17-2.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
@@ -945,29 +904,22 @@ Endangered Freshwater Fish in South-Eastern Australia.”</span>
 </div>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-      </div>
-
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p></p>
-<p>Developed by Jian Yen.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p>Developed by Jian Yen.</p>
 </div>
 
-<div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+<div class="pkgdown-footer-right">
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
-
 
 
 

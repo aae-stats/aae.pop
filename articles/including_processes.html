@@ -4,112 +4,72 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Including demographic processes in a population model • aae.pop</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Including demographic processes in a population model">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Including demographic processes in a population model">
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">aae.pop</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9006</span>
-      </span>
-    </div>
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../articles/get_started.html">get started</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    vignettes
+    <a class="navbar-brand me-2" href="../index.html">aae.pop</a>
 
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/including_processes.html">Including processes</a>
-    </li>
-    <li>
-      <a href="../articles/beyond_defaults.html">Beyond defaults</a>
-    </li>
-    <li>
-      <a href="../articles/metapopulations.html">Metapopulations</a>
-    </li>
-    <li>
-      <a href="../articles/multiple_species.html">Multiple species</a>
-    </li>
-    <li>
-      <a href="../articles/templates.html">Species templates</a>
-    </li>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.1.9007</small>
+
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="../articles/get_started.html">get started</a></li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">vignettes</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
+<li><a class="dropdown-item" href="../articles/including_processes.html">Including processes</a></li>
+    <li><a class="dropdown-item" href="../articles/beyond_defaults.html">Beyond defaults</a></li>
+    <li><a class="dropdown-item" href="../articles/metapopulations.html">Metapopulations</a></li>
+    <li><a class="dropdown-item" href="../articles/multiple_species.html">Multiple species</a></li>
+    <li><a class="dropdown-item" href="../articles/templates.html">Species templates</a></li>
   </ul>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    examples
-
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/macperch_example.html">Macquarie perch</a>
-    </li>
-    <li>
-      <a href="../articles/scenarios_example.html">Comparing scenarios</a>
-    </li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">examples</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
+<li><a class="dropdown-item" href="../articles/macperch_example.html">Macquarie perch</a></li>
+    <li><a class="dropdown-item" href="../articles/scenarios_example.html">Comparing scenarios</a></li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/aae-stats/aae.pop" class="external-link">
-    <span class="fab fa-github"></span>
-
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop"><span class="fa fab fa-github"></span></a></li>
       </ul>
 </div>
-<!--/.nav-collapse -->
+
+
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
 
 
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Including demographic processes in a population
-model</h1>
+
+<div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
+
+      <h1>Including demographic processes in a population model</h1>
                         <h4 data-toc-skip class="author">Jian Yen</h4>
             
-            <h4 data-toc-skip class="date">5/11/2020</h4>
+            <h4 data-toc-skip class="date">07/01/2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/main/vignettes/including_processes.Rmd" class="external-link"><code>vignettes/including_processes.Rmd</code></a></small>
-      <div class="hidden name"><code>including_processes.Rmd</code></div>
-
+      <div class="d-none name"><code>including_processes.Rmd</code></div>
     </div>
 
     
@@ -118,7 +78,7 @@ model</h1>
 <h2 id="demographic-processes">Demographic processes?<a class="anchor" aria-label="anchor" href="#demographic-processes"></a>
 </h2>
 <p>This is a broad term that could mean many things.
-<code>aae.pop</code> focuses on four main processes:</p>
+<code>aae.pop</code> focuses on five main processes:</p>
 <ul>
 <li><p>demographic stochasticity: random variation in the outcomes of
 individual processes (e.g. birth, death), resulting in variation in
@@ -133,8 +93,13 @@ dependence can be negative (e.g., due to limited resources) or positive
 <li><p>covariate effects: the influence of covariates on the population
 matrix. In <code>aae.pop</code>, covariate effects are included
 primarily to allow the population matrix to change through time in
-response to external factors (e.g., weather, habitat
-availability).</p></li>
+response to external factors (e.g., weather, habitat availability,
+management interventions).</p></li>
+<li><p>additions or removals: any processes that lead to individuals
+being added to or removed from a population. Additions and removals are
+defined broadly but can capture things like population augmentation
+(e.g., stocking or releases of captive-bred individuals) and targeted
+removals (e.g., angling or predation).</p></li>
 </ul>
 <p>Two additional processes, <em>dispersal</em> and <em>interspecific
 interactions</em>, are covered in the <a href="metapopulations.html">Metapopulations</a> and <a href="multiple_species.html">Multiple species</a> vignettes.</p>
@@ -232,8 +197,14 @@ creates a <code>dynamics</code> object that can be used in
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the population trajectories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
+<p>This simple example includes one mask/function pair, but the
+<code>demographic_stochasticity</code> function can chain together as
+many different mask/function pairs as required. In these cases, there
+should be one mask for each function, and the set of masks/functions
+should be passed to <code>demographic_stochasiticity</code> as a list
+(e.g., <code>masks = list(demostoch_mask1, demostoch_mask2)</code>).</p>
 </div>
 <div class="section level3">
 <h3 id="environmental-stochasticity">Environmental Stochasticity<a class="anchor" aria-label="anchor" href="#environmental-stochasticity"></a>
@@ -241,7 +212,7 @@ creates a <code>dynamics</code> object that can be used in
 <p>Environmental stochasticity will be defined here with two masks and
 their corresponding functions. The simplest form of variation in
 reproduction is Poisson variation around the expected number of new
-individuals. This can be coded up as:</p>
+individuals. This can be coded as:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">reproduction_mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/masks.html">reproduction</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="co"># only ages 3-5 reproduce</span></span>
 <span><span class="va">reproduction_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -297,7 +268,7 @@ creates a <code>dynamics</code> object that can be used in
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the population trajectories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700"></p>
 <p>It is easy to include both environmental and demographic
 stochasticity in the same model. The <code>dynamics</code> call simply
@@ -315,7 +286,7 @@ version of <code>popdyn</code> (which included <code>popmat</code> and
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the population trajectories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level3">
@@ -345,12 +316,17 @@ competition</em> (unequal division of resources). Importantly, the
 Ricker model is <em>overcompensatory</em>, which means it can increase
 mortality rates to the point of complete mortality. This does not occur
 under the Beverton-Holt model.</p>
-<p>In <code>aae.pop</code>, both models are specified with one
-parameter, <code>k</code>, that represents the <em>carrying
-capacity</em> of the population. Both functions include one extra
-argument, <code>exclude</code>, which allows estimates of carrying
-capacity to be defined for a subset of population classes (e.g., adult
-abundances only). A Ricker model can be specified as follows:</p>
+<p>In <code>aae.pop</code>, both models are specified with two
+parameters: <code>k</code>, that represents the <em>carrying
+capacity</em> of the population; and <code>theta</code>, which
+represents the strength of density dependence. <code>theta</code>
+re-scales population sizes, so is mathematically equivalent to adjusting
+<code>k</code> (e.g., <code>theta = 0.5; k = k</code> and
+<code>theta = 1; k = 2 * k</code> will give the same outcome). Both
+functions include one extra argument, <code>exclude</code>, which allows
+estimates of carrying capacity to be defined for a subset of population
+classes (e.g., adult abundances only). A Ricker model can be specified
+as follows:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># specify a Ricker model for density dependence</span></span>
 <span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/density_dependence.html">density_dependence</a></span><span class="op">(</span></span>
@@ -365,7 +341,7 @@ abundances only). A Ricker model can be specified as follows:</p>
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the population trajectories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="700"></p>
 <p>Density dependence can take many other forms. These forms may include
 positive density dependence (e.g., Allee effects) or may affect adult
@@ -388,17 +364,21 @@ direct effects on population abundances. Although not linked directly to
 vital rates (e.g., survival), this approach can be easier to implement
 and can capture processes that do not directly affect vital rates, such
 as fishing, hunting, or logging.</p>
-<p>The <code>density_dependence_n</code> function defines this form of
-density dependence. In this case, the <code>mask</code> needs to select
-the relevant classes in the population, and the <code>function</code>
-takes only one argument, the vector of population abundances. This
-approach can be implemented as follows:</p>
+<p>The <code>add_remove_pre</code> and <code>add_remove_post</code>
+functions can be used to define this form of density dependence
+(<code>_pre</code>: before reproduction; <code>_post</code>: after
+reproduction). These functions are described in more detail below and
+replace the now-deprecated <code>density_dependence_n</code> function.
+In this case, the <code>mask</code> needs to select the relevant classes
+in the population, and the <code>function</code> takes only one
+argument, the vector of population abundances. This approach can be
+implemented as follows:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># specify density dependence that removes 10 % of adults in each generation</span></span>
-<span><span class="va">dd_n</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/density_dependence.html">density_dependence_n</a></span><span class="op">(</span></span>
+<span><span class="va">dd_n</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_remove.html">add_remove_post</a></span><span class="op">(</span></span>
 <span>  masks <span class="op">=</span> <span class="fu"><a href="../reference/masks.html">all_classes</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, <span class="co"># want to focus on adults</span></span>
 <span>  funs <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="va">n</span>               <span class="co"># define in-line function to return</span></span>
-<span>                                           <span class="co">#   90 % of adult population</span></span>
+<span>  <span class="co">#   90 % of adult population</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create a new population dynamics object</span></span>
@@ -408,7 +388,7 @@ approach can be implemented as follows:</p>
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span><span class="va">popdyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the population trajectories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level3">
@@ -429,9 +409,10 @@ effects. An example illustrates this most clearly:</p>
 <span><span class="va">covar_mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/masks.html">reproduction</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>  <span class="co"># assume nesting sites only affect reproduction</span></span>
 <span></span>
 <span><span class="co"># define a function that links vital rates to the covariates</span></span>
-<span><span class="va">covar_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">nests</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="co">#   (dots to soak up any extra arguments passed to other functions)</span></span>
+<span><span class="va">covar_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">nests</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">x</span> <span class="op">*</span> <span class="va">nests</span>    <span class="co"># really simple function, assume the proportion of successful reproduction</span></span>
-<span>               <span class="co">#   attempts is equal to the proportion of nests</span></span>
+<span>  <span class="co">#   attempts is equal to the proportion of nests</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># combine this into a covariates term</span></span>
@@ -448,7 +429,7 @@ effects. An example illustrates this most clearly:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the population trajectories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="including_processes_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="700"></p>
 <p>Specifying a <code>covariates</code> term does not automatically
 include covariates in the model. Note that the <code>nesting</code>
@@ -456,15 +437,29 @@ variable also had to be passed to <code>simulate</code> via the
 <code>args</code> argument. The reason for this is that it allows a
 single population dynamics object (<code>popdyn</code>, above) to be
 used with multiple different sets of covariates, without re-compiling
-the <code>dynamics</code> object each time. The
-<code>format_covariates</code> function is included to format covariate
-values and any auxiliary (static) variables.</p>
-<p><code>aae.pop</code> assumes that <code>covariates</code> change
-through time, so a consequence of specifying covariates is that the
-vector/matrix of covariates determines the number of simulated time
-steps (<code>n_time</code>). In the above example, there were 20 values
-of <code>nesting</code>, which translates to 21 time steps (initial
-condition plus 20 updates).</p>
+the <code>dynamics</code> object each time.</p>
+<p>The <code>format_covariates</code> function is included to format
+covariate values into a list with one element per time step. These
+formatted covariates can be combined with static covariates by collating
+everything into a super-list:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span></span>
+<span>  <span class="va">popdyn</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="../reference/covariates.html">format_covariates</a></span><span class="op">(</span><span class="va">nesting</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>static_argument1 <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>static_argument2 <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><code>aae.pop</code> assumes that at least one argument to
+<code>covariates</code> changes through time, so a consequence of
+specifying covariates is that the vector/matrix of covariates determines
+the number of simulated time steps (<code>n_time</code>). In the above
+example, there were 20 values of <code>nesting</code>, which translates
+to 21 time steps (initial condition plus 20 updates).</p>
 <p>It is assumed that covariates can be passed as a vector, matrix, or
 data.frame, with one element or row for each time step. More complex
 <code>covariate</code> terms are possible, such as dynamic arguments
@@ -473,6 +468,106 @@ the current state of the population. These terms can be passed to
 <code>simulate</code> via the <code>args</code> argument but must follow
 specific rules described in the <a href="passing_arguments.html">Passing
 arguments</a> vignette.</p>
+</div>
+<div class="section level3">
+<h3 id="fine-grained-control-of-covariate-effects">Fine-grained control of covariate effects<a class="anchor" aria-label="anchor" href="#fine-grained-control-of-covariate-effects"></a>
+</h3>
+<p>Simulated populations can include The default <code>covariates</code>
+terms are applied consistently to all replicate trajectories. In some
+cases, it may be useful to specify covariate effects specific to each
+trajectory. The <code>replicated_covariates</code> process is included
+to address this situation, and allows covariate functions to act on the
+full vector of vital rates with replicate-specific arguments and
+effects.</p>
+<p>The simplest way to set up (and visualise) a
+<code>replicated_covariates</code> term is to define a matrix with
+<code>nsim</code> columns and <code>ntime</code> rows. Each column in
+this matrix specifies the covariate values/arguments applied to a single
+replicate trajectory, and each row specifies the effects (for all
+replicates) at a single time step.</p>
+<p>One application of <code>replicated_covariates</code> (and the reason
+this approach was developed) is to allow both variation and uncertainty
+in vital rates in a single simulation. With this structure, the input
+matrix can be defined with variation (e.g., representing environmental
+variability) around different mean values (representing uncertainty),
+without having to run multiple simulations.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># set up 20 years of covariates, such as proportion of available nesting sites,</span></span>
+<span><span class="co">#   but now with a different minimum (and, therefore, mean) value for each replicate</span></span>
+<span><span class="va">nesting</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span>, min <span class="op">=</span> <span class="fl">0.5</span>, max <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">20</span>, min <span class="op">=</span> <span class="va">x</span>, max <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># define the mask</span></span>
+<span><span class="va">covar_mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/masks.html">reproduction</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>  <span class="co"># assume nesting sites only affect reproduction</span></span>
+<span></span>
+<span><span class="co"># define a function that links vital rates to the covariates</span></span>
+<span><span class="co">#   (dots to soak up any extra arguments passed to other functions)</span></span>
+<span><span class="va">covar_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">nests</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">*</span> <span class="va">nests</span>    <span class="co"># really simple function, assume the proportion of successful reproduction</span></span>
+<span>  <span class="co">#   attempts is equal to the proportion of nests</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># combine this into a covariates term</span></span>
+<span><span class="va">covs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/replicated_covariates.html">replicated_covariates</a></span><span class="op">(</span><span class="va">covar_mask</span>, <span class="va">covar_fn</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create population dynamics object (without density dependence)</span></span>
+<span><span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span>, <span class="va">envstoch</span>, <span class="va">demostoch</span>, <span class="va">covs</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># simulate population dynamics</span></span>
+<span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span></span>
+<span>  <span class="va">popdyn</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>replicated_covariates <span class="op">=</span> <span class="fu"><a href="../reference/covariates.html">format_covariates</a></span><span class="op">(</span><span class="va">nesting</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># plot the population trajectories</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="including_processes_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="adding-or-removing-individuals-from-a-population">Adding or removing individuals from a population<a class="anchor" aria-label="anchor" href="#adding-or-removing-individuals-from-a-population"></a>
+</h3>
+<p>Many processes might lead to individuals being added to or removed
+from a population. The <code>add_remove_pre</code> and
+<code>add_remove_post</code> functions are defined generically to
+capture any such process, with the <code>pre</code> version being
+applied prior to reproduction and the <code>post</code> version applied
+following reproduction. Similar to demographic stochasticity, additions
+and removals act on the population state vector (the counts in each
+class) rather than the population matrix (the vital rates). Importantly,
+<code>add_remove_pre</code> is the only way in which the state vector
+can be modified before reproduction.</p>
+<p>Examples of additions include fish stocking and releases of
+captive-bred individuals. Examples of removals include angling or
+predation of individuals, noting that both could also be applied as
+covariates acting on survival rates. The <a href="macperch_example.html">Macquarie perch worked example</a> includes
+examples of both additions and removals.</p>
+<p>A simple example can illustrate the general approach.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># set up a release of 10 individuals each year into the first age class,</span></span>
+<span><span class="co">#   occurring after reproduction</span></span>
+<span><span class="va">captives</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_remove.html">add_remove_post</a></span><span class="op">(</span></span>
+<span>  masks <span class="op">=</span> <span class="fu"><a href="../reference/masks.html">all_classes</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  funs <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># repeat to remove 2 adults via predation each year, prior to reproduction</span></span>
+<span><span class="va">predators</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_remove.html">add_remove_pre</a></span><span class="op">(</span></span>
+<span>  masks <span class="op">=</span> <span class="fu"><a href="../reference/masks.html">all_classes</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  funs <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&gt;=</span> <span class="fl">2</span>, <span class="va">x</span> <span class="op">-</span> <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create population dynamics object (without density dependence)</span></span>
+<span><span class="va">popdyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span>, <span class="va">envstoch</span>, <span class="va">demostoch</span>, <span class="va">captives</span>, <span class="va">predators</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># simulate population dynamics</span></span>
+<span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span></span>
+<span>  <span class="va">popdyn</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># plot the population trajectories</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="including_processes_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 </div>
 <div class="section level2">
@@ -494,17 +589,17 @@ within a <code>function</code> using R’s standard <code>[i, j]</code>
 notation. This is because the functions within <code>aae.pop</code>
 receive a flattened (and masked) version of the population matrix, which
 actually looks like:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reproduction mask</span></span>
 <span><span class="va">popmat</span><span class="op">[</span><span class="fu"><a href="../reference/masks.html">reproduction</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 2 4 7</span></span></code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># transition mask</span></span>
 <span><span class="va">popmat</span><span class="op">[</span><span class="fu"><a href="../reference/masks.html">transition</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.25 0.45 0.70 0.85</span></span></code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># all elements</span></span>
 <span><span class="va">popmat</span><span class="op">[</span><span class="fu"><a href="../reference/masks.html">all_cells</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] 0.00 0.25 0.00 0.00 0.00 0.00 0.00 0.45 0.00 0.00 2.00 0.00 0.00 0.70 0.00</span></span>
@@ -513,7 +608,7 @@ actually looks like:</p>
 function, a workaround is to reconstruct the matrix within the function
 by passing the dimensions through the <code>args</code> argument in
 <code>simulate</code>. This might look a bit like:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># define a function</span></span>
 <span><span class="va">no_mask_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">dim</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
@@ -546,32 +641,25 @@ by passing the dimensions through the <code>args</code> argument in
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the population trajectories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="including_processes_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="700"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="including_processes_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" alt="" width="700"></p>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-      </div>
-
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p></p>
-<p>Developed by Jian Yen.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p>Developed by Jian Yen.</p>
 </div>
 
-<div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+<div class="pkgdown-footer-right">
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
-
 
 
 
