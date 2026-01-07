@@ -3,7 +3,6 @@
 \name{simulate}
 \alias{simulate}
 \alias{simulate.dynamics}
-\alias{simulate.template}
 \alias{is.simulation}
 \alias{is.simulation_list}
 \title{Simulate single or multispecies population dynamics in R}
@@ -19,16 +18,6 @@
   .future = FALSE
 )
 
-\method{simulate}{template}(
-  object,
-  nsim = 1,
-  seed = NULL,
-  ...,
-  init = NULL,
-  options = list(),
-  args = list()
-)
-
 is.simulation(x)
 
 is.simulation_list(x)
@@ -37,8 +26,7 @@ is.simulation_list(x)
 \item{object}{a \code{dynamics} object created with
 \code{\link{dynamics}} or from a subsequent call to
 \code{\link{multispecies}} or \code{\link{metapopulation}}.
-Alternatively, \code{ojbect} can be a \code{template}
-object from \pkg{aae.pop.templates}, or the output of a
+Alternatively, \code{object} can be the output of a
 call to \code{simulate} in the case of \code{summary}}
 
 \item{nsim}{the number of replicate simulations (default = 1)}
@@ -106,8 +94,7 @@ parallel problem)}
 }
 \description{
 Simulate population dynamics for one or more
-  species defined by \code{\link{dynamics}} or
-  \code{template} objects.
+  species defined by \code{\link{dynamics}} objects.
 }
 \details{
 Includes plot and subset methods
