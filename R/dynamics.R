@@ -166,12 +166,6 @@ update.dynamics <- function(object, ...) {
 
 # S3 plot method
 #' @export
-plot.template <- function(x, y, ...) {
-  plot(x$dynamics)
-}
-
-# S3 plot method
-#' @export
 plot.dynamics <- function(
     x, y, ..., labels = NULL, cycle_first = "reproductive"
 ) {

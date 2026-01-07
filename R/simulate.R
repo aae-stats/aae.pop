@@ -1,8 +1,7 @@
 #' @name simulate
 #' @title Simulate single or multispecies population dynamics in R
 #' @description Simulate population dynamics for one or more
-#'   species defined by \code{\link{dynamics}} or
-#'   \code{template} objects.
+#'   species defined by \code{\link{dynamics}} objects.
 NULL
 
 #' @rdname simulate
@@ -14,8 +13,7 @@ NULL
 #' @param object a \code{dynamics} object created with
 #'   \code{\link{dynamics}} or from a subsequent call to
 #'   \code{\link{multispecies}} or \code{\link{metapopulation}}.
-#'   Alternatively, \code{ojbect} can be a \code{template}
-#'   object from \pkg{aae.pop.templates}, or the output of a
+#'   Alternatively, \code{object} can be the output of a
 #'   call to \code{simulate} in the case of \code{summary}
 #' @param nsim the number of replicate simulations (default = 1)
 #' @param seed optional seed used prior to initialisation and simulation to
@@ -528,41 +526,6 @@ simulate.dynamics <- function(
 
   # return
   out
-}
-
-#' @rdname simulate
-#'
-#' @export
-#'
-# nolint start
-simulate.template <- function(
-    object,
-    nsim = 1,
-    seed = NULL,
-    ...,
-    init = NULL,
-    options = list(),
-    args = list()
-) {
-  # nolint end
-
-  # pull out dynamics object
-  dyn <- object$dynamics
-
-  # combine arguments
-  combined <- combine_args(object$arguments, args)
-
-  # simulate
-  simulate(
-    dyn,
-    nsim = nsim,
-    seed = seed,
-    ...,
-    init = init,
-    options = options,
-    args = combined
-  )
-
 }
 
 #' @importFrom future.apply future_lapply
@@ -1136,36 +1099,6 @@ update_args <- function(args, dyn, fn, obj, pop, iter) {
 
   # and return
   args
-}
-
-# internal function: combine arguments from template (pre-specified)
-#   with any additional arguments provided to `simulate`
-combine_args <- function(x, y) {
-
-  conflict <- names(y) %in% names(x)
-  if (any(conflict)) {
-
-    # add non-conflicting arguments
-    combined <- c(x, y[!conflict])
-
-    # print warning about conflicting arguments
-    warning(
-      "the following arguments are provided in both args ",
-      "and in the template object: ",
-      args[conflict],
-      ". This is currently not supported, update template$args ",
-      "directly prior to calling simulate",
-      call. = FALSE
-    )
-
-  } else {
-    # can just concatenate the two lists
-    combined <- c(x, y)
-  }
-
-  # return
-  combined
-
 }
 
 # internal function: initialise simulations with Poisson random draws
