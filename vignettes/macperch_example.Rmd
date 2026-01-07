@@ -318,7 +318,7 @@ transform_survival <- function(obj, pop, iter) {
 
 ### Adding and removing individuals
 
-An additional process in the model of Macquarie perch population dynamics is the inclusion of stocking or fishing. These processes could be included directly in the population matrix through their effects on survival and reproduction. This section demonstrates an alternative way of accounting for the addition or removal of individuals, using the `density_dependence_n` construct, which allows density-dependent changes to the population vector (i.e., abundances) following all other updates. This approach requires a `mask` that selects the classes of the population affected, as well as a `function` that determines how population abundances are altered.
+An additional process in the model of Macquarie perch population dynamics is the inclusion of stocking or fishing. These processes could be included directly in the population matrix through their effects on survival and reproduction. This section demonstrates an alternative way of accounting for the addition or removal of individuals, using the `add_remove_post` construct, which allows density-dependent changes to the population vector (i.e., abundances) following all other updates. This approach requires a `mask` that selects the classes of the population affected, as well as a `function` that determines how population abundances are altered.
 
 ```{r}
 # take a population vector and update it to add or remove n individuals
@@ -386,14 +386,14 @@ dd_n <- function(pop, n, add = TRUE) {
   
 }
 
-# wrap this up in a density_dependence_n object
-dens_depend_n <- density_dependence_n(
+# wrap this up in a add_remove_post object (formerly density_dependence_n)
+add_remove <- add_remove_post(
   masks = all_classes(popmat),
   funs = dd_n
 )
 ```
 
-The `dd_n` function above is entirely deterministic and static, that is, a fixed number of individuals is added or removed each and every time step. An extension of this approach could set the number of individuals stochastically (e.g., as a Poisson random variable) and could make the number of individuals change through time. For example, the `args.fn` or `args.dyn` options could pass a time-varying value of `n`, or the `dd_n` function could use `pop` (actual abundances) to define a density-dependent addition or removal scenario. These extensions are not shown here but an example of the `args.fn` approach is included in the `macquarie_perch` template to simulate changes in fishing regulations or stocking through time.
+The `dd_n` function above is entirely deterministic and static, that is, a fixed number of individuals is added or removed each and every time step. An extension of this approach could set the number of individuals stochastically (e.g., as a Poisson random variable) and could make the number of individuals change through time. For example, the `args` argument to `simulate` could include a time-varying value of `n`, or the `dd_n` function could use `pop` (actual abundances) to define a density-dependent addition or removal scenario. These extensions are not shown here but an example of a function argument is included in the `macquarie_perch` template to simulate changes in fishing regulations or stocking through time.
 
 ### Covariate effects
 
@@ -493,11 +493,11 @@ popdyn <- update(
   covars,
   envstoch,
   dens_depend,
-  dens_depend_n
+  add_remove
 )
 ```
 
-Simulating from this object requires a call to `simulate`, also recalling that at least one `args.fn` is required here to transform survival values from the unit interval to their real-line equivalents:
+Simulating from this object requires a call to `simulate`, also recalling that at least one function argument is required here to transform survival values from the unit interval to their real-line equivalents:
 
 ```{r, dev = "png"}
 # simulate, using the transform_survival function defined above
@@ -508,13 +508,13 @@ sims <- simulate(
   popdyn,
   nsim = 100,
   args = list(
-    density_dependence_n = list(n = c(100, 10), add = FALSE),
+    add_remove_post = list(n = c(100, 10), add = FALSE),
     environmental_stochasticity = list(transform_survival)
   )
 )
 
 # plot the simulated trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.4))
 ```
 
 The simulated abundances are extremely high given expected population sizes in this system. The primary reason for this is that the model assumes *ideal* conditions in each year, with covariate effects used to reduce vital rates to match actual conditions. Covariates can be added to this model with the following code, noting that the same `popdyn` object can be used with or without covariates:
@@ -535,24 +535,24 @@ sims <- simulate(
   popdyn, 
   nsim = 100, 
   args = list(
-    density_dependence_n = list(n = c(0, 0)),         # remove no individuals this time
+    add_remove_post = list(n = c(0, 0)),         # remove no individuals this time
     covariates = format_covariates(x = covar_values), # pass formatted covariate values
     environmental_stochasticity = list(transform_survival)
   )
 )
 
 # plot the simulated trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.4))
 ```
 
 The simulated trajectories now look much more realistic. Here, large values reflect young individuals, many of which do not survive to adulthood. Plotting older classes alone highlights this effect:
 
 ```{r, dev = "png"}
 # all adults
-plot(subset(sims, subset = 3:30), col = scales::alpha("#2171B5", 0.1))
+plot(subset(sims, subset = 3:30), col = scales::alpha("#2171B5", 0.4))
 
 # ages 5 and above
-plot(subset(sims, subset = 5:30), col = scales::alpha("#2171B5", 0.1))
+plot(subset(sims, subset = 5:30), col = scales::alpha("#2171B5", 0.4))
 ```
 
 ## Summarising model outputs

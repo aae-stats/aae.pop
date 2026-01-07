@@ -4,8 +4,8 @@ development:
   mode: release
 
 template:
-  params:
-    bootswatch: flatly
+  bootstrap: 5
+  bootswatch: flatly
 
 authors:
   Jian Yen:

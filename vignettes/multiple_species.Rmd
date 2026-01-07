@@ -1,7 +1,7 @@
 ---
 title: "Models of interacting species"
 author: "Jian Yen"
-date: "10/11/2020"
+date: "07/01/2026"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Models of interacting species}
@@ -102,11 +102,11 @@ In this case, the `simulate` function returns a list with one element for each s
 
 ```{r, dev = "png"}
 # plot
-plot(sims, which = 1, col = scales::alpha("#2171B5", 0.1), main = "Species 1")
+plot(sims, which = 1, col = scales::alpha("#2171B5", 0.4), main = "Species 1")
 
 # plot
-plot(sims, which = 2, col = scales::alpha("#2171B5", 0.1), main = "Species 2")
+plot(sims, which = 2, col = scales::alpha("#2171B5", 0.4), main = "Species 2")
 
 # plot
-plot(sims, which = 3, col = scales::alpha("#2171B5", 0.1), main = "Species 3")
+plot(sims, which = 3, col = scales::alpha("#2171B5", 0.4), main = "Species 3")
 ```

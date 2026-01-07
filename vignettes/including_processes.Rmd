@@ -1,14 +1,14 @@
 ---
 title: "Including demographic processes in a population model"
 author: "Jian Yen"
-date: "5/11/2020"
+date: "07/01/2026"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Including demographic processes in a population model}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+  
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(aae.pop)
@@ -16,7 +16,7 @@ library(aae.pop)
 
 ## Demographic processes?
 
-This is a broad term that could mean many things. `aae.pop` focuses on four main processes:
+This is a broad term that could mean many things. `aae.pop` focuses on five main processes:
 
 - demographic stochasticity: random variation in the outcomes of individual processes (e.g. birth, death), resulting in variation in population abundances.
 
@@ -24,7 +24,9 @@ This is a broad term that could mean many things. `aae.pop` focuses on four main
 
 - density dependence: variation in vital rates or population outcomes that depends on the abundance of the population. Density dependence can be negative (e.g., due to limited resources) or positive (e.g., Allee effects).
 
-- covariate effects: the influence of covariates on the population matrix. In `aae.pop`, covariate effects are included primarily to allow the population matrix to change through time in response to external factors (e.g., weather, habitat availability).
+- covariate effects: the influence of covariates on the population matrix. In `aae.pop`, covariate effects are included primarily to allow the population matrix to change through time in response to external factors (e.g., weather, habitat availability, management interventions).
+
+- additions or removals: any processes that lead to individuals being added to or removed from a population. Additions and removals are defined broadly but can capture things like population augmentation (e.g., stocking or releases of captive-bred individuals) and targeted removals (e.g., angling or predation). 
 
 Two additional processes, *dispersal* and *interspecific interactions*, are covered in the [Metapopulations](metapopulations.html) and [Multiple species](multiple_species.html) vignettes.
 
@@ -90,12 +92,14 @@ popdyn <- dynamics(popmat, demostoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.4))
 ```
+
+This simple example includes one mask/function pair, but the `demographic_stochasticity` function can chain together as many different mask/function pairs as required. In these cases, there should be one mask for each function, and the set of masks/functions should be passed to `demographic_stochasiticity` as a list (e.g., `masks = list(demostoch_mask1, demostoch_mask2)`).
 
 ### Environmental Stochasticity
 
-Environmental stochasticity will be defined here with two masks and their corresponding functions. The simplest form of variation in reproduction is Poisson variation around the expected number of new individuals. This can be coded up as:
+Environmental stochasticity will be defined here with two masks and their corresponding functions. The simplest form of variation in reproduction is Poisson variation around the expected number of new individuals. This can be coded as:
 
 ```{r}
 reproduction_mask <- reproduction(popmat, dims = 3:5) # only ages 3-5 reproduce
@@ -147,7 +151,7 @@ popdyn <- dynamics(popmat, envstoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.4))
 ```
 
 It is easy to include both environmental and demographic stochasticity in the same model. The `dynamics` call simply needs both `envstoch` and `demostoch` objects. This is a case where the `update` function comes in handy. Rather than re-defining the population dynamics object, the existing version of `popdyn` (which included `popmat` and `envstoch`) can simply be updated to include `demostoch`:
@@ -160,7 +164,7 @@ popdyn <- update(popdyn, demostoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.4))
 ```
 
 ### Density dependence
@@ -171,7 +175,7 @@ Density dependence can be included in exactly the same way as environmental stoc
 
 `aae.pop` has pre-defined functions for two common forms of density dependence: the *Ricker* model and the *Beverton-Holt* model. The Ricker model assumes that mortality rates of new individuals are proportional to adult population size due to *scramble competition* (equal division of resources). The Beverton-Holt model assumes that mortality rates of new individuals are linearly dependent on the number of individuals due to *contest competition* (unequal division of resources). Importantly, the Ricker model is *overcompensatory*, which means it can increase mortality rates to the point of complete mortality. This does not occur under the Beverton-Holt model.
 
-In `aae.pop`, both models are specified with one parameter, `k`, that represents the *carrying capacity* of the population. Both functions include one extra argument, `exclude`, which allows estimates of carrying capacity to be defined for a subset of population classes (e.g., adult abundances only). A Ricker model can be specified as follows:
+In `aae.pop`, both models are specified with two parameters: `k`, that represents the *carrying capacity* of the population; and `theta`, which represents the strength of density dependence. `theta` re-scales population sizes, so is mathematically equivalent to adjusting `k` (e.g., `theta = 0.5; k = k` and `theta = 1; k = 2 * k` will give the same outcome). Both functions include one extra argument, `exclude`, which allows estimates of carrying capacity to be defined for a subset of population classes (e.g., adult abundances only). A Ricker model can be specified as follows:
 
 ```{r, dev = "png"}
 # specify a Ricker model for density dependence
@@ -187,7 +191,7 @@ popdyn <- update(popdyn, dd)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.4))
 ```
 
 Density dependence can take many other forms. These forms may include positive density dependence (e.g., Allee effects) or may affect adult abundances as well as reproduction. An example of the former is included in the [Macquarie perch worked example](macperch_example.html). The next section introduces an example of the latter.
@@ -198,14 +202,14 @@ Density dependence is most commonly assumed to affect only the new individuals e
 
 An alternative approach is to model density dependence through its direct effects on population abundances. Although not linked directly to vital rates (e.g., survival), this approach can be easier to implement and can capture processes that do not directly affect vital rates, such as fishing, hunting, or logging.
 
-The `density_dependence_n` function defines this form of density dependence. In this case, the `mask` needs to select the relevant classes in the population, and the `function` takes only one argument, the vector of population abundances. This approach can be implemented as follows:
+The `add_remove_pre` and `add_remove_post` functions can be used to define this form of density dependence (`_pre`: before reproduction; `_post`: after reproduction). These functions are described in more detail below and replace the now-deprecated `density_dependence_n` function. In this case, the `mask` needs to select the relevant classes in the population, and the `function` takes only one argument, the vector of population abundances. This approach can be implemented as follows:
 
 ```{r, dev = "png"}
 # specify density dependence that removes 10 % of adults in each generation
-dd_n <- density_dependence_n(
+dd_n <- add_remove_post(
   masks = all_classes(popmat, dims = 3:5), # want to focus on adults
   funs = function(n) 0.9 * n               # define in-line function to return
-                                           #   90 % of adult population
+  #   90 % of adult population
 )
 
 # create a new population dynamics object
@@ -215,7 +219,7 @@ popdyn <- dynamics(popmat, envstoch, demostoch, dd_n)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.4))
 ```
 
 ### Covariates
@@ -230,9 +234,10 @@ nesting <- runif(20, min = 0.5, max = 1.0)    # 50 % to 100 % of total sites ava
 covar_mask <- reproduction(popmat, dims = 3:5)  # assume nesting sites only affect reproduction
 
 # define a function that links vital rates to the covariates
-covar_fn <- function(x, nests) {
+#   (dots to soak up any extra arguments passed to other functions)
+covar_fn <- function(x, nests, ...) {
   x * nests    # really simple function, assume the proportion of successful reproduction
-               #   attempts is equal to the proportion of nests
+  #   attempts is equal to the proportion of nests
 }
 
 # combine this into a covariates term
@@ -249,14 +254,106 @@ sims <- simulate(
 )
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.4))
 ```
 
-Specifying a `covariates` term does not automatically include covariates in the model. Note that the `nesting` variable also had to be passed to `simulate` via the `args` argument. The reason for this is that it allows a single population dynamics object (`popdyn`, above) to be used with multiple different sets of covariates, without re-compiling the `dynamics` object each time. The `format_covariates` function is included to format covariate values and any auxiliary (static) variables.
+Specifying a `covariates` term does not automatically include covariates in the model. Note that the `nesting` variable also had to be passed to `simulate` via the `args` argument. The reason for this is that it allows a single population dynamics object (`popdyn`, above) to be used with multiple different sets of covariates, without re-compiling the `dynamics` object each time.
 
-`aae.pop` assumes that `covariates` change through time, so a consequence of specifying covariates is that the vector/matrix of covariates determines the number of simulated time steps (`n_time`). In the above example, there were 20 values of `nesting`, which translates to 21 time steps (initial condition plus 20 updates).
+The `format_covariates` function is included to format covariate values into a list with one element per time step. These formatted covariates can be combined with static covariates by collating everything into a super-list:
+
+```{r, eval = FALSE}
+sims <- simulate(
+  popdyn,
+  nsim = 100,
+  args = list(
+    covariates = c(
+      format_covariates(nesting),
+      list(static_argument1 = 0.05),
+      list(static_argument2 = 100)
+    )
+  )
+)
+```
+
+`aae.pop` assumes that at least one argument to `covariates` changes through time, so a consequence of specifying covariates is that the vector/matrix of covariates determines the number of simulated time steps (`n_time`). In the above example, there were 20 values of `nesting`, which translates to 21 time steps (initial condition plus 20 updates).
 
 It is assumed that covariates can be passed as a vector, matrix, or data.frame, with one element or row for each time step. More complex `covariate` terms are possible, such as dynamic arguments that change through time or functions that specify arguments based on the current state of the population. These terms can be passed to `simulate` via the `args` argument but must follow specific rules described in the [Passing arguments](passing_arguments.html) vignette.
+
+### Fine-grained control of covariate effects
+
+Simulated populations can include The default `covariates` terms are applied consistently to all replicate trajectories. In some cases, it may be useful to specify covariate effects specific to each trajectory. The `replicated_covariates` process is included to address this situation, and allows covariate functions to act on the full vector of vital rates with replicate-specific arguments and effects.
+
+The simplest way to set up (and visualise) a `replicated_covariates` term is to define a matrix with `nsim` columns and `ntime` rows. Each column in this matrix specifies the covariate values/arguments applied to a single replicate trajectory, and each row specifies the effects (for all replicates) at a single time step.
+
+One application of `replicated_covariates` (and the reason this approach was developed) is to allow both variation and uncertainty in vital rates in a single simulation. With this structure, the input matrix can be defined with variation (e.g., representing environmental variability) around different mean values (representing uncertainty), without having to run multiple simulations.
+
+```{r, dev = "png"}
+# set up 20 years of covariates, such as proportion of available nesting sites,
+#   but now with a different minimum (and, therefore, mean) value for each replicate
+nesting <- do.call(cbind, lapply(runif(100, min = 0.5, max = 0.8), \(x) runif(20, min = x, max = 1.0)))
+
+# define the mask
+covar_mask <- reproduction(popmat, dims = 3:5)  # assume nesting sites only affect reproduction
+
+# define a function that links vital rates to the covariates
+#   (dots to soak up any extra arguments passed to other functions)
+covar_fn <- function(x, nests, ...) {
+  x * nests    # really simple function, assume the proportion of successful reproduction
+  #   attempts is equal to the proportion of nests
+}
+
+# combine this into a covariates term
+covs <- replicated_covariates(covar_mask, covar_fn)
+
+# create population dynamics object (without density dependence)
+popdyn <- dynamics(popmat, envstoch, demostoch, covs)
+
+# simulate population dynamics
+sims <- simulate(
+  popdyn,
+  nsim = 100,
+  args = list(replicated_covariates = format_covariates(nesting))
+)
+
+# plot the population trajectories
+plot(sims, col = scales::alpha("#2171B5", 0.4))
+```
+
+
+### Adding or removing individuals from a population
+
+Many processes might lead to individuals being added to or removed from a population. The `add_remove_pre` and `add_remove_post` functions are defined generically to capture any such process, with the `pre` version being applied prior to reproduction and the `post` version applied following reproduction. Similar to demographic stochasticity, additions and removals act on the population state vector (the counts in each class) rather than the population matrix (the vital rates). Importantly, `add_remove_pre` is the only way in which the state vector can be modified before reproduction.
+
+Examples of additions include fish stocking and releases of captive-bred individuals. Examples of removals include angling or predation of individuals, noting that both could also be applied as covariates acting on survival rates. The [Macquarie perch worked example](macperch_example.html) includes examples of both additions and removals.
+
+A simple example can illustrate the general approach.
+
+```{r, dev = "png"}
+# set up a release of 10 individuals each year into the first age class,
+#   occurring after reproduction
+captives <- add_remove_post(
+  masks = all_classes(popmat, dims = 1),
+  funs = \(x) x + 10
+)
+
+# repeat to remove 2 adults via predation each year, prior to reproduction
+predators <- add_remove_pre(
+  masks = all_classes(popmat, dims = ncol(popmat)),
+  funs = \(x) ifelse(x >= 2, x - 2, 0)
+)
+
+# create population dynamics object (without density dependence)
+popdyn <- dynamics(popmat, envstoch, demostoch, captives, predators)
+
+# simulate population dynamics
+sims <- simulate(
+  popdyn,
+  nsim = 100
+)
+
+# plot the population trajectories
+plot(sims, col = scales::alpha("#2171B5", 0.4))
+```
 
 ## What if I don't want to use masks? {#nomask}
 
@@ -318,5 +415,5 @@ sims <- simulate(
 )
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.1))
+plot(sims, col = scales::alpha("#2171B5", 0.4))
 ```

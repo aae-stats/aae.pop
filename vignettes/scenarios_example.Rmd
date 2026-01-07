@@ -1,7 +1,7 @@
 ---
 title: "Comparing scenarios with population models"
 author: "Jian Yen"
-date: "01/07/2021"
+date: "07/01/2026"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Comparing scenarios with population models}
@@ -162,9 +162,9 @@ removals_fn <- function(n, remove) {
   
 }
 
-# collate this into a single density_dependence_n object, 
+# collate this into a single add_remove_post object, 
 #   focusing on adults
-dd_n <- density_dependence_n(
+add_remove <- add_remove_post(
   masks = all_classes(popmat, dims = 3:5), # want to focus on adults
   funs = removals_fn
 )
@@ -286,7 +286,7 @@ restore <- function(n, amount, current, ntime) {
 }
 ```
 
-To incorporate scenarios of fishing regulation simply requires an `args` element for `density_dependence_n` that specifies the average number of fish removed per year. In this case, unregulated fishing is assumed to remove 50 fish per year at a site, with partial regulation reducing this to 25 fish removed per year.
+To incorporate scenarios of fishing regulation simply requires an `args` element for `add_remove_post` that specifies the average number of fish removed per year. In this case, unregulated fishing is assumed to remove 50 fish per year at a site, with partial regulation reducing this to 25 fish removed per year.
 
 ## Simulating many scenarios
 
@@ -340,7 +340,7 @@ popdyn <- lapply(
     envstoch,
     demostoch,
     dd,
-    dd_n,
+    add_remove,
     covars
   )
 )
@@ -396,7 +396,7 @@ for (i in seq_len(nrow(scenarios))) {
       init = initial_abundance[, j],
       args = list(
         covariates = format_covariates(extent_tmp[, j]),
-        density_dependence_n = list(remove = fish_tmp[j])
+        add_remove_post = list(remove = fish_tmp[j])
       )
     )    
   }
@@ -520,7 +520,7 @@ run_scenario <- function(
       init = initial_abundance[, j],
       args = list(
         covariates = format_covariates(extent_tmp[, j]),
-        density_dependence_n = list(remove = fish_tmp[j])
+        add_remove_post = list(remove = fish_tmp[j])
       )
     )    
   }
@@ -595,7 +595,7 @@ Setting up a `metapopulation` for this purpose requires redefinition of the `den
 
 ```{r}
 # define a population model for each of the four populations in popdyn
-#   but without the density_dependence_n or covariates components,
+#   but without the add_remove_post or covariates components,
 #   which will be redefined below
 popmat_list <- lapply(popdyn, function(x) x$matrix)
 popdyn <- lapply(
@@ -621,7 +621,7 @@ disp_tmp <- dispersal(dispersal_matrix)
 metapopdyn <- metapopulation(metapopstr, popdyn, list(disp_tmp))
 ```
 
-The second step involves redefining the `density_dependence_n` and `covariates` processes to use masks that identify the correct elements of the metapopulation vector (which now has 20 elements, 5 for each population) and to use functions that select the correct arguments for each population. The latter approach is also demonstrated in the [Metapopulation](metapopulations.html) vignette and in the help file for the `metapopulations` function.
+The second step involves redefining the `add_remove_post` and `covariates` processes to use masks that identify the correct elements of the metapopulation vector (which now has 20 elements, 5 for each population) and to use functions that select the correct arguments for each population. The latter approach is also demonstrated in the [Metapopulation](metapopulations.html) vignette and in the help file for the `metapopulations` function.
 
 ```{r}
 # wrapper function to define the removals function for each
@@ -661,7 +661,7 @@ define_removals <- function(idx) {
 
 # combine the masks for adults of each population with
 #   the removals function defined for populations 1-4
-dd_n <- density_dependence_n(
+add_remove <- add_remove_post(
   masks = list(
     all_classes(metapopdyn$matrix, dims = 3:5),
     all_classes(metapopdyn$matrix, dims = 8:10),
@@ -752,7 +752,7 @@ The final step is to update the `metapopulation` dynamics object with the new `d
 
 ```{r}
 # update the metapopulation dynamics object
-metapopdyn <- update(metapopdyn, dd_n, covars)
+metapopdyn <- update(metapopdyn, add_remove, covars)
 
 # create a new initial abundance vector that has the same
 #   values as above but is a vector rather than matrix
@@ -781,7 +781,7 @@ for (i in seq_len(nrow(scenarios))) {
     init = initial_abundance_meta,
     args = list(
       covariates = format_covariates(extent_tmp),
-      density_dependence_n = list(remove = fish_tmp)
+      add_remove_post = list(remove = fish_tmp)
     )
   )    
   

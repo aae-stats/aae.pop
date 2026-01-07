@@ -1,14 +1,14 @@
 ---
 title: "Get started with aae.pop"
 author: "Jian Yen"
-date: "01/07/2021"
+date: "07/01/2026"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Get started with aae.pop}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+  
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(aae.pop)
@@ -47,11 +47,11 @@ There are two population structures used frequently in population ecology: the *
 
 `aae.pop` uses three terms to help specify common model structures: *reproduction*, *survival*, and *transition*. These are defined as follows:
 
-- reproduction: any transition to the first class (first row), assumed to exclude the first column (i.e., new individuals can't reproduce).
+- reproduction: any transition to the first class (first row), often assumed to exclude the first column (i.e., new individuals can't reproduce). This assumption is not enforced in `aae.pop`, so that models can include reproduction from the first class.
 
-- survival: remaining in the same class.
+- survival: surviving one time step and remaining in the same class.
 
-- transition: moving to the next age class or life stage.
+- transition: surviving one time stpe and moving to the next age class or life stage.
 
 With these terms, a Leslie matrix has reproduction and transition elements, whereas a Lefkovitch matrix has reproduction, transition, and survival elements.
 
@@ -102,6 +102,8 @@ It is possible to plot the population dynamics object to visualise the transitio
 plot(popdyn)
 ```
 
+Plots of `dynamics` objects can use custom labels with the `labels` argument (a character vector with one value for each class). Additionally, the default assumption that the first stage is not reproductive can be overwritten by passing `cycle_first = "reproductive"` as an argument to `plot`.
+
 ### Simulating population trajectories
 
 With a compiled `dynamics` object, it's relatively straightforward to simulate some population trajectories (with default settings):
@@ -122,10 +124,12 @@ The default settings simulate a single trajectory with 50 time steps, from rando
 
 ```{r, dev = "png"}
 initials <- c(100, 50, 20, 10, 5)  # some initial conditions
-sims <- simulate(popdyn,
-                 nsim = 100,
-                 init = initials,
-                 options = list(ntime = 20))
+sims <- simulate(
+  popdyn,
+  nsim = 100,
+  init = initials,
+  options = list(ntime = 20)
+)
 ```
 
 Default settings also specify that population updates are calculated as a cross product and that abundances are not rounded in any way in each step, which allows fractional individuals in the population. These are not ideal settings. Changing them is covered in the [Beyond defaults](beyond_defaults.html) vignette.
