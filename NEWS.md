@@ -9,6 +9,7 @@
 
 ## Fixes
 
+- Increase test coverage
 - Update labelling for plots of dynamic objects to override all defaults
     when custom labels are supplied
 - Update labelling for plots of dynamic objects to classify reproductive 
