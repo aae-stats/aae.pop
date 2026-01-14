@@ -57,11 +57,11 @@ resc_post <- add_remove_post(rescale_mask, rescale_fn)
 #   catch the things not already tested above)
 cov_eff2 <- covariates(
   masks = list(survival(mat, dims = 3:5), survival(mat, dims = 1)),
-  funs = list(cov_fn)
+  funs = list(cov_fn, cov_fn)
 )
 rep_cov_eff2 <- replicated_covariates(
   masks = list(survival(mat, dims = 3:5), survival(mat, dims = 1)),
-  funs = list(cov_fn)
+  funs = list(cov_fn, cov_fn)
 )
 dd2 <- density_dependence(
   masks = list(reproduction(mat, dims = 4), reproduction(mat, dims = 5)),
@@ -404,7 +404,7 @@ test_that("simulate returns correct abundances with
              for (i in seq_along(xsim)) {
                target[, , i + 1] <- floor(
                  target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i]))
-               ) + 1
+               ) + 2
              }
              class(target) <- c("simulation", "array")
              expect_equal(target, value)
@@ -456,8 +456,6 @@ test_that("simulate returns correct abundances with demographic
              for (i in seq_along(xsim)) {
                mat_tmp <- dyn$covariates(dyn$matrix, xsim[i])
                mat_tmp[1, 4:5] <- mat_tmp[1, 4:5] + 2
-               idx <- row(mat_tmp) == col(mat_tmp)
-               mat_tmp[idx] <- mat_tmp[idx] + 0.01
                target[, , i + 1] <- floor(target[, , i] %*% t(mat_tmp)) + 1
              }
              class(target) <- c("simulation", "array")
