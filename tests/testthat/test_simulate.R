@@ -53,6 +53,44 @@ resc <- density_dependence_n(rescale_mask, rescale_fn)
 resc_pre <- add_remove_pre(rescale_mask, rescale_fn)
 resc_post <- add_remove_post(rescale_mask, rescale_fn)
 
+# add extra versions of the above with either lists or no lists (to
+#   catch the things not already tested above)
+cov_eff2 <- covariates(
+  masks = list(survival(mat, dims = 3:5), survival(mat, dims = 1)),
+  funs = list(cov_fn)
+)
+rep_cov_eff2 <- replicated_covariates(
+  masks = list(survival(mat, dims = 3:5), survival(mat, dims = 1)),
+  funs = list(cov_fn)
+)
+dd2 <- density_dependence(
+  masks = list(reproduction(mat, dims = 4), reproduction(mat, dims = 5)),
+  funs = list(
+    function(x, n) x * (1 / (1 + 1e-4 * sum(n))),
+    function(x, n) x * (1 / (1 + 1e-4 * sum(n)))
+  )
+)
+demostoch2 <- demographic_stochasticity(
+  masks = list(demo_mask, demo_mask),
+  funs = list(demo_fn, demo_fn)
+)
+envstoch2 <- environmental_stochasticity(
+  masks = reproduction(mat, dims = 4:5),
+  funs = \(x) x + 2
+  )
+resc2 <- density_dependence_n(
+  list(rescale_mask, rescale_mask),
+  list(rescale_fn, rescale_fn)
+)
+resc_pre2 <- add_remove_pre(
+  list(rescale_mask, rescale_mask),
+  list(rescale_fn, rescale_fn)
+)
+resc_post2 <- add_remove_post(
+  list(rescale_mask, rescale_mask),
+  list(rescale_fn, rescale_fn)
+)
+
 # define default imulation settings
 ntime <- 50
 
@@ -93,6 +131,44 @@ test_that("simulate returns correct abundances with covariates", {
 
   # simulate trajectories with no uncertainty but with covariates
   dyn <- dynamics(mat, cov_eff)
+  init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+  value <- simulate(
+    dyn,
+    nsim = nsim,
+    init = init_set,
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(
+      covariates = list(
+        lapply(seq_len(length(xsim)), function(i) xsim[i])
+      )
+    )
+  )
+  target <- array(dim = dim(value))
+  target[, , 1] <- init_set
+  for (i in seq_along(xsim)) {
+    target[, , i + 1] <- floor(
+      target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i]))
+    )
+  }
+  class(target) <- c("simulation", "array")
+  expect_equal(target, value)
+
+  # test again with format_covariates
+  value <- simulate(
+    dyn,
+    nsim = nsim,
+    init = init_set,
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(covariates = format_covariates(xsim))
+  )
+  expect_equal(target, value)
+
+})
+
+test_that("simulate returns correct abundances with list covariates", {
+
+  # simulate trajectories with no uncertainty but with covariates
+  dyn <- dynamics(mat, cov_eff2)
   init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
   value <- simulate(
     dyn,
@@ -168,11 +244,90 @@ test_that("simulate returns correct abundances with replicated_covariates", {
 
 })
 
+test_that("simulate returns correct abundances with list replicated_covariates", {
+
+  # simulate trajectories with no uncertainty but with covariates
+  dyn <- dynamics(mat, rep_cov_eff2)
+  init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+  value <- simulate(
+    dyn,
+    nsim = nsim,
+    init = init_set,
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(
+      replicated_covariates = list(
+        lapply(seq_len(nrow(xsim_rep)), function(i) xsim_rep[i, ])
+      )
+    )
+  )
+  target <- array(dim = dim(value))
+  target[, , 1] <- init_set
+  for (i in seq_len(nrow(xsim_rep))) {
+    for (j in seq_len(ncol(xsim_rep))) {
+      target[j, , i + 1] <- floor(
+        target[j, , i] %*%
+          t(dyn$replicated_covariates(dyn$matrix, xsim_rep[i, j]))
+      )
+    }
+  }
+  class(target) <- c("simulation", "array")
+  expect_equal(target, value)
+
+  # test again with format_covariates
+  value <- simulate(
+    dyn,
+    nsim = nsim,
+    init = init_set,
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(replicated_covariates = format_covariates(xsim_rep))
+  )
+  expect_equal(target, value)
+
+})
+
 test_that("simulate returns correct abundances
            with density dependence and covariates", {
 
              # simulate trajectories with no uncertainty but with covariates
              dyn <- dynamics(mat, cov_eff, dd)
+             init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+             value <- simulate(
+               dyn,
+               nsim = nsim,
+               init = init_set,
+               options = list(ntime = ntime, tidy_abundances = floor),
+               args = list(covariates = format_covariates(xsim))
+             )
+             target <- array(dim = dim(value))
+             target[, , 1] <- init_set
+             dd_manual <- function(x, n) {
+               x[1, 4:5] <- dd_fns[[1]](x[1, 4:5], n)
+               x
+             }
+             for (i in seq_along(xsim)) {
+               mat_tmp <- lapply(
+                 seq_len(nsim),
+                 function(x) {
+                   t(dd_manual(dyn$covariates(dyn$matrix, xsim[i]), target[x, , i]))
+                 }
+               )
+               target[, , i + 1] <- floor(t(
+                 mapply(
+                   `%*%`,
+                   lapply(seq_len(nsim), function(x) target[x, , i]), mat_tmp
+                 )
+               ))
+             }
+             class(target) <- c("simulation", "array")
+             expect_equal(target, value)
+
+           })
+
+test_that("simulate returns correct abundances
+           with list density dependence and covariates", {
+
+             # simulate trajectories with no uncertainty but with covariates
+             dyn <- dynamics(mat, cov_eff, dd2)
              init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
              value <- simulate(
                dyn,
@@ -231,6 +386,31 @@ test_that("simulate returns correct abundances with
 
            })
 
+test_that("simulate returns correct abundances with
+           list demographic stochasticity and covariates", {
+
+             # simulate trajectories with no uncertainty but with covariates
+             dyn <- dynamics(mat, cov_eff, demostoch2)
+             init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+             value <- simulate(
+               dyn,
+               nsim = nsim,
+               init = init_set,
+               options = list(ntime = ntime, tidy_abundances = floor),
+               args = list(covariates = format_covariates(xsim))
+             )
+             target <- array(dim = dim(value))
+             target[, , 1] <- init_set
+             for (i in seq_along(xsim)) {
+               target[, , i + 1] <- floor(
+                 target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i]))
+               ) + 1
+             }
+             class(target) <- c("simulation", "array")
+             expect_equal(target, value)
+
+           })
+
 test_that("simulate returns correct abundances with demographic
            and environmental stochasticity and covariates", {
 
@@ -258,11 +438,65 @@ test_that("simulate returns correct abundances with demographic
 
            })
 
+test_that("simulate returns correct abundances with demographic
+           and list environmental stochasticity and covariates", {
+
+             # simulate trajectories with no uncertainty but with covariates
+             dyn <- dynamics(mat, cov_eff, demostoch, envstoch2)
+             init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+             value <- simulate(
+               dyn,
+               nsim = nsim,
+               init = init_set,
+               options = list(ntime = ntime, tidy_abundances = floor),
+               args = list(covariates = format_covariates(xsim))
+             )
+             target <- array(dim = dim(value))
+             target[, , 1] <- init_set
+             for (i in seq_along(xsim)) {
+               mat_tmp <- dyn$covariates(dyn$matrix, xsim[i])
+               mat_tmp[1, 4:5] <- mat_tmp[1, 4:5] + 2
+               idx <- row(mat_tmp) == col(mat_tmp)
+               mat_tmp[idx] <- mat_tmp[idx] + 0.01
+               target[, , i + 1] <- floor(target[, , i] %*% t(mat_tmp)) + 1
+             }
+             class(target) <- c("simulation", "array")
+             expect_equal(target, value)
+
+           })
+
 test_that("simulate returns correct abundances with
            rescale density dependence and covariates", {
 
              # simulate trajectories with no uncertainty but with covariates
              dyn <- dynamics(mat, cov_eff, resc)
+             init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+             value <- simulate(
+               dyn,
+               nsim = nsim,
+               init = init_set,
+               options = list(ntime = ntime, tidy_abundances = floor),
+               args = list(covariates = format_covariates(xsim))
+             )
+             target <- array(dim = dim(value))
+             target[, , 1] <- init_set
+             for (i in seq_along(xsim)) {
+               target[, , i + 1] <-
+                 target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i]))
+               target[, , i + 1] <- floor(t(
+                 apply(target[, , i + 1], 1, function(x) 200 * (x / sum(x)))
+               ))
+             }
+             class(target) <- c("simulation", "array")
+             expect_equal(target, value)
+
+           })
+
+test_that("simulate returns correct abundances with
+           list rescale density dependence and covariates", {
+
+             # simulate trajectories with no uncertainty but with covariates
+             dyn <- dynamics(mat, cov_eff, resc2)
              init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
              value <- simulate(
                dyn,
@@ -314,10 +548,65 @@ test_that("simulate returns correct abundances with
            })
 
 test_that("simulate returns correct abundances with
+           list removals pre-update and covariates", {
+
+             # simulate trajectories with no uncertainty but with covariates
+             dyn <- dynamics(mat, cov_eff, resc_pre2)
+             init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+             value <- simulate(
+               dyn,
+               nsim = nsim,
+               init = init_set,
+               options = list(ntime = ntime, tidy_abundances = floor),
+               args = list(covariates = format_covariates(xsim))
+             )
+             target <- array(dim = dim(value))
+             target[, , 1] <- init_set
+             for (i in seq_along(xsim)) {
+               tmp_target <- t(
+                 apply(target[, , i], 1, function(x) 200 * (x / sum(x)))
+               )
+               target[, , i + 1] <-
+                 tmp_target %*% t(dyn$covariates(dyn$matrix, xsim[i]))
+               target[, , i + 1] <- floor(target[, , i + 1])
+             }
+             class(target) <- c("simulation", "array")
+             expect_equal(target, value)
+
+           })
+
+test_that("simulate returns correct abundances with
            removals post-update and covariates", {
 
              # simulate trajectories with no uncertainty but with covariates
              dyn <- dynamics(mat, cov_eff, resc_post)
+             init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+             value <- simulate(
+               dyn,
+               nsim = nsim,
+               init = init_set,
+               options = list(ntime = ntime, tidy_abundances = floor),
+               args = list(covariates = format_covariates(xsim))
+             )
+             target <- array(dim = dim(value))
+             target[, , 1] <- init_set
+             for (i in seq_along(xsim)) {
+               target[, , i + 1] <-
+                 target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i]))
+               target[, , i + 1] <- floor(t(
+                 apply(target[, , i + 1], 1, function(x) 200 * (x / sum(x)))
+               ))
+             }
+             class(target) <- c("simulation", "array")
+             expect_equal(target, value)
+
+           })
+
+test_that("simulate returns correct abundances with
+           list removals post-update and covariates", {
+
+             # simulate trajectories with no uncertainty but with covariates
+             dyn <- dynamics(mat, cov_eff, resc_post2)
              init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
              value <- simulate(
                dyn,
