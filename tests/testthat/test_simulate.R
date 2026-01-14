@@ -64,11 +64,8 @@ rep_cov_eff2 <- replicated_covariates(
   funs = list(cov_fn, cov_fn)
 )
 dd2 <- density_dependence(
-  masks = list(reproduction(mat, dims = 4), reproduction(mat, dims = 5)),
-  funs = list(
-    function(x, n) x * (1 / (1 + 1e-4 * sum(n))),
-    function(x, n) x * (1 / (1 + 1e-4 * sum(n)))
-  )
+  masks = reproduction(mat, dims = 4:5),
+  funs = \(x, n) x * (1 / (1 + 1e-4 * sum(n)))
 )
 demostoch2 <- demographic_stochasticity(
   masks = list(demo_mask, demo_mask),
@@ -89,6 +86,22 @@ resc_pre2 <- add_remove_pre(
 resc_post2 <- add_remove_post(
   list(rescale_mask, rescale_mask),
   list(rescale_fn, rescale_fn)
+)
+
+# extra covariates term to test aux and named vars in format_covariates
+cov_eff3 <- covariates(
+  masks = survival(mat),
+  funs = \(mat, x, y) mat * plogis(x + y)
+)
+
+# set pre-cooked dd functions for testing
+dd_bh <- density_dependence(
+  masks = reproduction(mat, dims = 4:5),
+  funs = beverton_holt(k = 100)
+)
+dd_ricker <- density_dependence(
+  masks = reproduction(mat, dims = 4:5),
+  funs = ricker(k = 100)
 )
 
 # define default imulation settings
@@ -161,6 +174,33 @@ test_that("simulate returns correct abundances with covariates", {
     options = list(ntime = ntime, tidy_abundances = floor),
     args = list(covariates = format_covariates(xsim))
   )
+  expect_equal(target, value)
+
+})
+
+test_that("simulate returns correct abundances with named covariates
+          and aux vars", {
+
+  # simulate trajectories with no uncertainty but with covariates
+  dyn <- dynamics(mat, cov_eff3)
+  init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+  value <- simulate(
+    dyn,
+    nsim = nsim,
+    init = init_set,
+    options = list(ntime = ntime, tidy_abundances = floor),
+    args = list(
+      covariates = format_covariates(xsim, names = "x", aux = 1)
+    )
+  )
+  target <- array(dim = dim(value))
+  target[, , 1] <- init_set
+  for (i in seq_along(xsim)) {
+    target[, , i + 1] <- floor(
+      target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i], 1))
+    )
+  }
+  class(target) <- c("simulation", "array")
   expect_equal(target, value)
 
 })
@@ -729,6 +769,74 @@ test_that("simulate returns correct abundances with
 
            })
 
+test_that("simulate returns correct abundances with
+           bh density dependence", {
+
+             # simulate trajectories with no uncertainty but with covariates
+             dyn <- dynamics(mat, dd_bh)
+             init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+             value <- simulate(
+               dyn,
+               nsim = nsim,
+               init = init_set,
+               options = list(ntime = ntime, tidy_abundances = floor)
+             )
+             target <- array(dim = dim(value))
+             target[, , 1] <- init_set
+             dd_manual <- function(x, n) {
+               x[1, 4:5] <- x[1, 4:5] / (1 + x[1, 4:5] * sum(n) / 100)
+               x
+             }
+             for (i in seq_len(ntime)) {
+               mat_tmp <- dyn$matrix
+               mat_tmp <- lapply(
+                 seq_len(nsim), function(x) t(dd_manual(mat_tmp, target[x, , i]))
+               )
+               target[, , i + 1] <- floor(t(
+                 mapply(
+                   `%*%`, lapply(seq_len(nsim), function(x) target[x, , i]), mat_tmp
+                 )
+               ))
+             }
+             class(target) <- c("simulation", "array")
+             expect_equal(target, value)
+
+           })
+
+test_that("simulate returns correct abundances with
+           ricker density dependence", {
+
+             # simulate trajectories with no uncertainty but with covariates
+             dyn <- dynamics(mat, dd_ricker)
+             init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+             value <- simulate(
+               dyn,
+               nsim = nsim,
+               init = init_set,
+               options = list(ntime = ntime, tidy_abundances = floor)
+             )
+             target <- array(dim = dim(value))
+             target[, , 1] <- init_set
+             dd_manual <- function(x, n) {
+               x[1, 4:5] <- x[1, 4:5] * exp(1 - sum(n) / 100) / exp(1)
+               x
+             }
+             for (i in seq_len(ntime)) {
+               mat_tmp <- dyn$matrix
+               mat_tmp <- lapply(
+                 seq_len(nsim), function(x) t(dd_manual(mat_tmp, target[x, , i]))
+               )
+               target[, , i + 1] <- floor(t(
+                 mapply(
+                   `%*%`, lapply(seq_len(nsim), function(x) target[x, , i]), mat_tmp
+                 )
+               ))
+             }
+             class(target) <- c("simulation", "array")
+             expect_equal(target, value)
+
+           })
+
 test_that("simulate returns reproducible outputs when seed is set", {
 
   # update environmental stochasticity to actually be stochastic
@@ -851,5 +959,28 @@ test_that("simulate errors informatively when dyn args have unsuitable dims", {
     ),
     "must have the same length"
   )
+
+})
+
+test_that("simulation objects can be plotted and printed", {
+
+  # basic simulation
+  dyn <- dynamics(mat, dd, demostoch)
+  init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+  value <- simulate(
+    dyn,
+    nsim = nsim,
+    init = init_set,
+    options = list(ntime = ntime, tidy_abundances = floor)
+  )
+
+  # plot it
+  expect_silent(plot(value))
+
+  # and check other outputs
+  expect_output(summary(value), "Simulated population has a")
+  expect_output(print(value), "Simulated population dynamics for a")
+  expect_true(is.simulation(value))
+  expect_false(is.simulation(1L))
 
 })

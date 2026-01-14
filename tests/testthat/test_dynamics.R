@@ -259,6 +259,19 @@ test_that("dynamics object errors informatively with unsuitable processes", {
 
 })
 
+test_that("processes error informatively with mismatched mask fn dims", {
+
+  # no matrix passed to dynamics
+  expect_error(
+    density_dependence(
+      masks = list(reproduction(mat)),
+      funs = list(\(x) x + 1, \(x) x + 2)
+    ),
+    "must be one element of funs for each element of mask"
+  )
+
+})
+
 test_that("dynamics objects can be plotted", {
 
   # create basic object
