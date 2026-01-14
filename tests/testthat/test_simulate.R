@@ -11,6 +11,7 @@ mat[transition(mat)] <- plogis(rnorm(nstage - 1))
 # add covariate effects
 ntime <- 35
 xsim <- rnorm(ntime)
+xsim2 <- rnorm(ntime)
 cov_fn <- function(mat, x) {
   mat * plogis(x)
 }
@@ -74,7 +75,7 @@ demostoch2 <- demographic_stochasticity(
 envstoch2 <- environmental_stochasticity(
   masks = reproduction(mat, dims = 4:5),
   funs = \(x) x + 2
-  )
+)
 resc2 <- density_dependence_n(
   list(rescale_mask, rescale_mask),
   list(rescale_fn, rescale_fn)
@@ -92,6 +93,10 @@ resc_post2 <- add_remove_post(
 cov_eff3 <- covariates(
   masks = survival(mat),
   funs = \(mat, x, y) mat * plogis(x + y)
+)
+cov_eff4 <- covariates(
+  masks = survival(mat),
+  funs = \(mat, x) mat * plogis(x["x"] + x["y"])
 )
 
 # set pre-cooked dd functions for testing
@@ -181,29 +186,70 @@ test_that("simulate returns correct abundances with covariates", {
 test_that("simulate returns correct abundances with named covariates
           and aux vars", {
 
-  # simulate trajectories with no uncertainty but with covariates
-  dyn <- dynamics(mat, cov_eff3)
-  init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
-  value <- simulate(
-    dyn,
-    nsim = nsim,
-    init = init_set,
-    options = list(ntime = ntime, tidy_abundances = floor),
-    args = list(
-      covariates = format_covariates(xsim, names = "x", aux = 1)
-    )
-  )
-  target <- array(dim = dim(value))
-  target[, , 1] <- init_set
-  for (i in seq_along(xsim)) {
-    target[, , i + 1] <- floor(
-      target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i], 1))
-    )
-  }
-  class(target) <- c("simulation", "array")
-  expect_equal(target, value)
+            # simulate trajectories with no uncertainty but with covariates
+            dyn <- dynamics(mat, cov_eff3)
+            init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+            value <- simulate(
+              dyn,
+              nsim = nsim,
+              init = init_set,
+              options = list(ntime = ntime, tidy_abundances = floor),
+              args = list(
+                covariates = format_covariates(xsim, names = "x", aux = 1)
+              )
+            )
+            target <- array(dim = dim(value))
+            target[, , 1] <- init_set
+            for (i in seq_along(xsim)) {
+              target[, , i + 1] <- floor(
+                target[, , i] %*% t(dyn$covariates(dyn$matrix, xsim[i], 1))
+              )
+            }
+            class(target) <- c("simulation", "array")
+            expect_equal(target, value)
 
-})
+          })
+
+test_that("simulate returns correct abundances with named covariates
+          in mixed orders", {
+
+            # simulate trajectories with no uncertainty but with covariates
+            dyn <- dynamics(mat, cov_eff4)
+            init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+            value <- simulate(
+              dyn,
+              nsim = nsim,
+              init = init_set,
+              options = list(ntime = ntime, tidy_abundances = floor),
+              args = list(
+                covariates = format_covariates(
+                  cbind(xsim, xsim2), names = c("x", "y")
+                )
+              )
+            )
+            value2 <- simulate(
+              dyn,
+              nsim = nsim,
+              init = init_set,
+              options = list(ntime = ntime, tidy_abundances = floor),
+              args = list(
+                covariates = format_covariates(
+                  cbind(xsim2, xsim), names = c("y", "x")
+                )
+              )
+            )
+            target <- array(dim = dim(value))
+            target[, , 1] <- init_set
+            for (i in seq_along(xsim)) {
+              target[, , i + 1] <- floor(
+                target[, , i] %*% t(dyn$covariates(dyn$matrix, c(x = xsim[i], y = xsim2[i])))
+              )
+            }
+            class(target) <- c("simulation", "array")
+            expect_equal(target, value)
+            expect_equal(target, value2)
+
+          })
 
 test_that("simulate returns correct abundances with list covariates", {
 
