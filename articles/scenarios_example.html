@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">aae.pop</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.1.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.1.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -150,8 +150,8 @@ processes</a> vignette:</p>
 <p>Some more-complex processes are required to simulate the scenarios
 below. One of these is the consideration of fishing regulations that
 change through time, which might be captured with a
-<code>density_dependence_n</code> function where the proportion or
-number of individuals removed changes through time:</p>
+<code>add_remove_post</code> function where the proportion or number of
+individuals removed changes through time:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># specify a function to remove a set number of adults in any given year,</span></span>
 <span><span class="co">#   with an argument that can be changed through time to incorporate</span></span>
