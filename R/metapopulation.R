@@ -300,6 +300,34 @@ metapopulation <- function(structure, dynamics, dispersal) {
     dens_depend_n <- density_dependence_n(dens_n_masks, dens_n_funs)
   }
 
+  # expand add_remove_pre if included
+  add_rem_pre <- NULL
+  if (any(dyn_check$add_remove_pre)) {
+    # pull out masks and functions for all populations
+    add_remove_pre_funs <- lapply(dynamics, function(x) x$add_remove_pre)
+
+    # pull out non-NULL elements only
+    add_remove_pre_masks <- pop_masks[dyn_check$add_remove_pre]
+    add_remove_pre_funs <- add_remove_pre_funs[dyn_check$add_remove_pre]
+
+    # create full demographic stochasticity component
+    add_rem_pre <- add_remove_pre(add_remove_pre_masks, add_remove_pre_funs)
+  }
+
+  # expand add_remove_post if included
+  add_rem_post <- NULL
+  if (any(dyn_check$add_remove_post)) {
+    # pull out masks and functions for all populations
+    add_remove_post_funs <- lapply(dynamics, function(x) x$add_remove_post)
+
+    # pull out non-NULL elements only
+    add_remove_post_masks <- pop_masks[dyn_check$add_remove_post]
+    add_remove_post_funs <- add_remove_pre_funs[dyn_check$add_remove_post]
+
+    # create full demographic stochasticity component
+    add_rem_post <- add_remove_pre(add_remove_post_masks, add_remove_post_funs)
+  }
+
   # collate metapop object with expanded dynamics
   metapop_dynamics <- list(
     nclass = dyn_check$nclass * structure$npop,
@@ -311,7 +339,9 @@ metapopulation <- function(structure, dynamics, dispersal) {
     environmental_stochasticity = envstoch,
     demographic_stochasticity = demostoch,
     density_dependence = dens_depend,
-    density_dependence_n = dens_depend_n
+    density_dependence_n = dens_depend_n,
+    add_remove_pre = add_rem_pre,
+    add_remove_post = add_rem_post
   )
 
   # return metapopulation object
