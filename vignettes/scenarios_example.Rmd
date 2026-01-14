@@ -127,7 +127,7 @@ dd <- density_dependence(
 )
 ```
 
-Some more-complex processes are required to simulate the scenarios below. One of these is the consideration of fishing regulations that change through time, which might be captured with a `density_dependence_n` function where the proportion or number of individuals removed changes through time:
+Some more-complex processes are required to simulate the scenarios below. One of these is the consideration of fishing regulations that change through time, which might be captured with a `add_remove_post` function where the proportion or number of individuals removed changes through time:
 
 ```{r}
 # specify a function to remove a set number of adults in any given year,
