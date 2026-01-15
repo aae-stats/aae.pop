@@ -2,6 +2,8 @@
 
 ## aae.pop (development version)
 
+## aae.pop 0.1.2
+
 ### Features
 
 - New process class to handle removals or additions to the population
