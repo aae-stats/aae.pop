@@ -96,6 +96,10 @@ dynamics_obj2 <- update(
     masks = transition(mat, dims = 3),
     funs = \(x, y, ...) x + y
   ),
+  replicated_covariates(
+    masks = transition(mat, dims = 4),
+    funs = \(x, y, ...) x + y
+  ),
   environmental_stochasticity(
     masks = reproduction(mat, dims = 4),
     funs = \(x, n, ...) x + 0.5
@@ -106,6 +110,14 @@ dynamics_obj2 <- update(
   ),
   density_dependence_n(
     masks = all_classes(mat, dims = 4),
+    funs = \(x, ...) x + 1
+  ),
+  add_remove_pre(
+    masks = all_classes(mat, dims = 3),
+    funs = \(x, ...) x + 1
+  ),
+  add_remove_post(
+    masks = all_classes(mat, dims = 5),
     funs = \(x, ...) x + 1
   )
 )
@@ -251,7 +263,10 @@ test_that("metapopulation objects simulate correctly with processes", {
   metapop_test <- metapopulation(structure_obj5, dynamics_list2, dispersal_list)
   value <- simulate(
     metapop_test, nsim = 1, init = init_set, options = list(ntime = 10),
-    args = list(covariates = list(y = 0.01))
+    args = list(
+      covariates = list(y = 0.01),
+      replicated_covariates = format_covariates(matrix(rep(0.02, 10), ncol = 1))
+    )
   )
 
   # simulate manually with completely re-defined matrix
@@ -269,12 +284,16 @@ test_that("metapopulation objects simulate correctly with processes", {
   metapop_matrix[1, 5] <- metapop_matrix[1, 5] - 0.1
   metapop_matrix[1, 4] <- metapop_matrix[1, 4] + 0.5
   metapop_matrix[4, 3] <- metapop_matrix[4, 3] + 0.01
+  metapop_matrix[5, 4] <- metapop_matrix[5, 4] + 0.02
   target <- array(NA, dim = c(1, 25, 11))
   target[, , 1] <- init_set
   for (i in seq_len(10)) {
-    target[1, , i + 1] <- tcrossprod(target[1, , i], metapop_matrix)
+    tmp <- target
+    tmp[1, 3, i] <- tmp[1, 3, i] + 1
+    target[1, , i + 1] <- tcrossprod(tmp[1, , i], metapop_matrix)
     target[1, 5, i + 1] <- target[1, 5, i + 1] - 1
     target[1, 4, i + 1] <- target[1, 4, i + 1] + 1
+    target[1, 5, i + 1] <- target[1, 5, i + 1] + 1
   }
   target[, , 1] <- init_set
   class(target) <- c("simulation", "array")
@@ -431,6 +450,20 @@ test_that("metapopulation errors informatively when
                "dispersal must have one element for each"
              )
 
+             # dispersal must exist
+             expect_error(
+               metapopulation(structure_obj5, dynamics_list),
+               "dispersal must be provided"
+             )
+
+             # dims of populations must all match
+             dynamics_tmp <- dynamics_list
+             dynamics_tmp[[5]] <- dynamics(mat[1:4, 1:4])
+             expect_error(
+               metapopulation(structure_obj5, dynamics_tmp, dispersal_list),
+               "all populations in dynamics must have the same"
+             )
+
              # dims of structure must match number of dynamics objects
              expect_error(
                metapopulation(structure_obj3, dynamics_list[1:5], dispersal_list),
@@ -453,4 +486,45 @@ test_that("metapopulation errors informatively when
                "structure must be a square matrix"
              )
 
+             # structure isn't a binary matrix
+             expect_error(
+               metapopulation(
+                 structure_obj3 * 0.5, dynamics_list[1:3], dispersal_list
+               ),
+               "structure must be binary"
+             )
+
+             # structure diagnonal should be overwritten
+             str_test <- structure_obj3
+             str_test[1, 1] <- TRUE
+             expect_message(
+               metapopulation(
+                 str_test, dynamics_list[1:3], dispersal_list
+               ),
+               "exceeds 1 for classe"
+             )
+
+             # should work with a single model though
+             expect_message(
+               metapopulation(
+                 structure_obj5, dynamics_list[[1]], dispersal_list
+               ),
+               "exceeds 1 for classes"
+             )
+
            })
+
+
+test_that("metapopulation S3 methods work correctly", {
+
+  # create a metapopulation
+  metapop_test <- metapopulation(structure_obj5, dynamics_list, dispersal_list4)
+
+  # print method
+  expect_output(print(metapop_test), "Metapopulation dynamics object")
+
+  # is method
+  expect_true(is.metapopulation(metapop_test))
+  expect_false(is.metapopulation("a"))
+
+})

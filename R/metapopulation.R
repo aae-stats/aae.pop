@@ -302,13 +302,13 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
   # expand add_remove_pre if included
   add_rem_pre <- NULL
-  if (any(dyn_check$add_remove_pre)) {
+  if (any(dyn_check$add_rem_pre)) {
     # pull out masks and functions for all populations
     add_remove_pre_funs <- lapply(dynamics, function(x) x$add_remove_pre)
 
     # pull out non-NULL elements only
-    add_remove_pre_masks <- pop_masks[dyn_check$add_remove_pre]
-    add_remove_pre_funs <- add_remove_pre_funs[dyn_check$add_remove_pre]
+    add_remove_pre_masks <- pop_masks[dyn_check$add_rem_pre]
+    add_remove_pre_funs <- add_remove_pre_funs[dyn_check$add_rem_pre]
 
     # create full demographic stochasticity component
     add_rem_pre <- add_remove_pre(add_remove_pre_masks, add_remove_pre_funs)
@@ -316,13 +316,13 @@ metapopulation <- function(structure, dynamics, dispersal) {
 
   # expand add_remove_post if included
   add_rem_post <- NULL
-  if (any(dyn_check$add_remove_post)) {
+  if (any(dyn_check$add_rem_post)) {
     # pull out masks and functions for all populations
     add_remove_post_funs <- lapply(dynamics, function(x) x$add_remove_post)
 
     # pull out non-NULL elements only
-    add_remove_post_masks <- pop_masks[dyn_check$add_remove_post]
-    add_remove_post_funs <- add_remove_pre_funs[dyn_check$add_remove_post]
+    add_remove_post_masks <- pop_masks[dyn_check$add_rem_post]
+    add_remove_post_funs <- add_remove_post_funs[dyn_check$add_rem_post]
 
     # create full demographic stochasticity component
     add_rem_post <- add_remove_pre(add_remove_post_masks, add_remove_post_funs)
@@ -336,6 +336,7 @@ metapopulation <- function(structure, dynamics, dispersal) {
     hex = hex_id(),
     matrix = metapop_matrix,
     covariates = covars,
+    replicated_covariates = rep_covars,
     environmental_stochasticity = envstoch,
     demographic_stochasticity = demostoch,
     density_dependence = dens_depend,
@@ -454,6 +455,12 @@ check_dynamics <- function(dyn_list) {
   # check density_dependence_n
   dens_depend_n <- check_processes(dyn_list, type = "density_dependence_n")
 
+  # check add_remove_pre
+  add_rem_pre <- check_processes(dyn_list, type = "add_remove_pre")
+
+  # check add_remove_post
+  add_rem_post <- check_processes(dyn_list, type = "add_remove_post")
+
   # return
   list(
     nclass = unique(classes),
@@ -462,7 +469,9 @@ check_dynamics <- function(dyn_list) {
     envstoch = envstoch,
     demostoch = demostoch,
     dens_depend = dens_depend,
-    dens_depend_n = dens_depend_n
+    dens_depend_n = dens_depend_n,
+    add_rem_pre = add_rem_pre,
+    add_rem_post = add_rem_post
   )
 }
 
@@ -494,6 +503,9 @@ check_processes <- function(x, type) {
 }
 
 # internal function: add dispersal elements to metapopulation matrix
+# TODO: check removing list mat option hasn't broken anything
+#   Doesn't seem possible to end up with a list here given `block_diagnoal`
+#   is used first
 add_dispersal <- function(
     mat,
     str_rows,
@@ -504,25 +516,26 @@ add_dispersal <- function(
   # and loop through all dispersals, updating metapop matrix one-by-one
   for (i in seq_along(dispersal)) {
     # loop if we have a list of matrices (i.e. if covariates are included)
-    if (is.list(mat)) {
-      # work out which cells we need to update
-      #   (all matrices should have identical dims)
-      idx <- metapop_idx(mat[[1]], nclass, from = str_cols[i], to = str_rows[i])
+    # REMOVED: cannot be a list
+    # if (is.list(mat)) {
+    #   # work out which cells we need to update
+    #   #   (all matrices should have identical dims)
+    #   idx <- metapop_idx(mat[[1]], nclass, from = str_cols[i], to = str_rows[i])
+    #
+    #   # and add in dispersal bits
+    #   mat <- lapply(
+    #     mat,
+    #     do_mask,
+    #     mask = idx,
+    #     fun = function(x) dispersal[[i]]$kernel
+    #   )
+    # } else {
+    # work out which cells we need to update
+    idx <- metapop_idx(mat, nclass, from = str_cols[i], to = str_rows[i])
 
-      # and add in dispersal bits
-      mat <- lapply(
-        mat,
-        do_mask,
-        mask = idx,
-        fun = function(x) dispersal[[i]]$kernel
-      )
-    } else {
-      # work out which cells we need to update
-      idx <- metapop_idx(mat, nclass, from = str_cols[i], to = str_rows[i])
-
-      # and add in dispersal bits
-      mat <- do_mask(mat, mask = idx, function(x) dispersal[[i]]$kernel)
-    }
+    # and add in dispersal bits
+    mat <- do_mask(mat, mask = idx, function(x) dispersal[[i]]$kernel)
+    # }
   }
 
   # rescale if needed
@@ -530,43 +543,43 @@ add_dispersal <- function(
   if (any(rescale_needed)) {
     col_sub <- str_cols[rescale_needed]
     row_sub <- str_rows[rescale_needed]
-    if (is.list(mat)) {
-      mat <- lapply(mat, rescale_dispersal, nclass, col_sub, row_sub)
-    } else {
-      mat <- rescale_dispersal(mat, nclass, col_sub, row_sub)
-    }
+    # if (is.list(mat)) {
+    #   mat <- lapply(mat, rescale_dispersal, nclass, col_sub, row_sub)
+    # } else {
+    mat <- rescale_dispersal(mat, nclass, col_sub, row_sub)
+    # }
   }
 
   # and check survival doesn't exceed 1
   for (i in seq_along(dispersal)) {
-    if (is.list(mat)) {
-      survival_issue <- lapply(
-        seq_along(mat),
-        function(j) {
-          check_survival(
-            mat[[j]], nclass, str_cols[i], idx,
-            timestep = j
-          )
-        }
+    # if (is.list(mat)) {
+    #   survival_issue <- lapply(
+    #     seq_along(mat),
+    #     function(j) {
+    #       check_survival(
+    #         mat[[j]], nclass, str_cols[i], idx,
+    #         timestep = j
+    #       )
+    #     }
+    #   )
+    #   issue <- sapply(survival_issue, function(x) x$issue)
+    #   classes <- unlist(lapply(survival_issue, function(x) x$classes))
+    #   if (any(issue)) {
+    #     message(
+    #       "Survival (including dispersal) exceeds 1 for classes ",
+    #       clean_paste(unique(classes)),
+    #       " in timesteps ", clean_paste(which(issue)),
+    #       " for population ", i
+    #     )
+    #   }
+    # } else {
+    survival_issue <- check_survival(mat, nclass, str_cols[i], idx)
+    if (survival_issue$issue) {
+      message(
+        "Survival (including dispersal) exceeds 1 for classes ",
+        clean_paste(survival_issue$classes)
       )
-      issue <- sapply(survival_issue, function(x) x$issue)
-      classes <- unlist(lapply(survival_issue, function(x) x$classes))
-      if (any(issue)) {
-        message(
-          "Survival (including dispersal) exceeds 1 for classes ",
-          clean_paste(unique(classes)),
-          " in timesteps ", clean_paste(which(issue)),
-          " for population ", i
-        )
-      }
-    } else {
-      survival_issue <- check_survival(mat, nclass, str_cols[i], idx)
-      if (survival_issue$issue) {
-        message(
-          "Survival (including dispersal) exceeds 1 for classes ",
-          clean_paste(survival_issue$classes)
-        )
-      }
+      # }
     }
   }
 
