@@ -286,7 +286,7 @@ vectors:
     ## {
     ##     tcrossprod(pop, mat)
     ## }
-    ## <bytecode: 0x55bd5de68bc8>
+    ## <bytecode: 0x563daa454638>
     ## <environment: namespace:aae.pop>
 
 The `update_binomial_leslie` function is slightly more complicated and
@@ -311,7 +311,7 @@ includes a check for integer abundances and then uses a mix of Poisson
     ##     cbind(rpois(nrow(vals), lambda = vals[, 1]), matrix(rbinom(length(probs), 
     ##         size = pop_nm1, prob = probs), nrow = nrow(pop_nm1)))
     ## }
-    ## <bytecode: 0x55bd5e82b4e0>
+    ## <bytecode: 0x563daae192e0>
     ## <environment: namespace:aae.pop>
 
 The primary reason to change the updater is speed. Although
