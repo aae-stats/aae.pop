@@ -134,17 +134,17 @@ test_that("multispecies objects simulate correctly", {
 
 test_that("multispecies objects simulate correctly with basic processes", {
 
+  # define object with processes in interactions_test4
+  mspecies_obj <- multispecies(
+    interactions_test1, interactions_test2, interactions_test4
+  )
+
   # how many replicates are we simulating?
   nsim <- 10
 
   # define initial conditions
   dims <- c(nsim, nstage, mspecies_obj$nspecies)
   init <- array(rpois(prod(dims), lambda = 10), dim = dims)
-
-  # define object with processes in interactions_test4
-  mspecies_obj <- multispecies(
-    interactions_test1, interactions_test2, interactions_test4
-  )
 
   # simulate with aae.pop
   value <- simulate(
