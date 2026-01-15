@@ -76,24 +76,24 @@ sims <- simulate(dyn, nsim = 1000)
 
 # calculate expected population size
 exps(sims)
-#> [1] 96.07437
+#> [1] 96.072
 
 # calculate expected population size for 4 and 5 year
 #   olds only
 exps(sims, subset = 4:5)
-#> [1] 4.86103
+#> [1] 4.860821
 
 # calculate expected population size but ignore first 10 years
 exps(sims, times = 11:51)
-#> [1] 79.90749
+#> [1] 79.90515
 
 # calculate expected population size based on median
 exps(sims, fun_among = median)
-#> [1] 95.4245
+#> [1] 95.3747
 
 # calculate expected maximum population size based on median
 exps(sims, fun_within = max, fun_among = median)
-#> [1] 322.55
+#> [1] 322.7
 
 # calculate exps with conflicting quantile functions, handling
 #   conflicting arguments with wrapper functions
@@ -107,6 +107,6 @@ exps(
   sims,
   fun_within = quant1, fun_among = quant2, p1 = 0.25, p2 = 0.75
 )
-#>      75% 
-#> 60.72106 
+#>     75% 
+#> 60.7253 
 ```

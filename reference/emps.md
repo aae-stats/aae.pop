@@ -61,18 +61,18 @@ sims <- simulate(dyn, nsim = 1000)
 
 # calculate expected minimum population size
 emps(sims)
-#> [1] 35.67922
+#> [1] 35.65322
 
 # calculate expected minimum population size for 4 and 5 year
 #   olds only
 emps(sims, subset = 4:5)
-#> [1] 1.31996
+#> [1] 1.320385
 
 # calculate expected minimum population size but ignore first 10 years
 emps(sims, times = 11:51)
-#> [1] 36.02284
+#> [1] 35.99845
 
 # calculate expected minimum population size based on median
 emps(sims, fun = median)
-#> [1] 35.69241
+#> [1] 35.6637
 ```

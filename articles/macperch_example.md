@@ -808,7 +808,7 @@ calculate_quasi_extinction(sims, threshold = 1000, include = TRUE)
 calculate_quasi_extinction(sims, threshold = 0, subset = 21:30, include = TRUE)
 ```
 
-    ## [1] 0.12
+    ## [1] 0.14
 
 These numbers indicate a relatively low risk of falling below threshold
 population sizes at the population level but do highlight a moderate

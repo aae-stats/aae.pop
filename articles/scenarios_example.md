@@ -387,25 +387,25 @@ The quasi-extinction estimates can be interpreted directly for each
 population under each of the nine scenarios:
 
     ##        habitat       fishing population 1 population 2 population 3
-    ## 1 restore_none regulate_none         0.97         0.97         0.92
-    ## 2  restore_one regulate_none         0.96         0.96         0.92
-    ## 3  restore_two regulate_none         0.95         0.96         0.92
-    ## 4 restore_none  regulate_two         0.00         0.00         0.93
-    ## 5  restore_one  regulate_two         0.00         0.00         0.91
-    ## 6  restore_two  regulate_two         0.00         0.00         0.92
-    ## 7 restore_none  regulate_all         0.06         0.06         0.05
-    ## 8  restore_one  regulate_all         0.08         0.04         0.05
-    ## 9  restore_two  regulate_all         0.05         0.05         0.06
+    ## 1 restore_none regulate_none         0.96         0.96         0.92
+    ## 2  restore_one regulate_none         0.96         0.96         0.91
+    ## 3  restore_two regulate_none         0.96         0.96         0.93
+    ## 4 restore_none  regulate_two         0.00         0.00         0.92
+    ## 5  restore_one  regulate_two         0.00         0.00         0.92
+    ## 6  restore_two  regulate_two         0.00         0.00         0.91
+    ## 7 restore_none  regulate_all         0.08         0.04         0.06
+    ## 8  restore_one  regulate_all         0.07         0.05         0.06
+    ## 9  restore_two  regulate_all         0.07         0.05         0.05
     ##   population 4
-    ## 1         0.94
+    ## 1         0.93
     ## 2         0.94
     ## 3         0.94
     ## 4         0.94
     ## 5         0.94
-    ## 6         0.93
-    ## 7         0.04
-    ## 8         0.04
-    ## 9         0.03
+    ## 6         0.94
+    ## 7         0.06
+    ## 8         0.06
+    ## 9         0.04
 
 These results highlight an interesting pattern. Fishing regulation
 clearly has a major impact on population trajectories, with a complete
@@ -447,25 +447,25 @@ These outputs give a more-complete picture of the relative risk under
 each of the nine scenarios:
 
     ##   Habitat action Fishing action Average risk Geometric average risk
-    ## 1   restore_none  regulate_none         0.95                   0.95
+    ## 1   restore_none  regulate_none         0.94                   0.94
     ## 2    restore_one  regulate_none         0.94                   0.94
-    ## 3    restore_two  regulate_none         0.94                   0.94
-    ## 4   restore_none   regulate_two         0.47                   0.00
+    ## 3    restore_two  regulate_none         0.95                   0.95
+    ## 4   restore_none   regulate_two         0.46                   0.02
     ## 5    restore_one   regulate_two         0.46                   0.02
     ## 6    restore_two   regulate_two         0.46                   0.03
-    ## 7   restore_none   regulate_all         0.05                   0.05
-    ## 8    restore_one   regulate_all         0.06                   0.05
+    ## 7   restore_none   regulate_all         0.06                   0.06
+    ## 8    restore_one   regulate_all         0.06                   0.06
     ## 9    restore_two   regulate_all         0.05                   0.05
     ##   Pr(at least one extinct) Pr(at least one persist) Pr(all persist)
-    ## 1                     1.00                     0.19            0.00
-    ## 2                     1.00                     0.21            0.00
-    ## 3                     1.00                     0.21            0.00
+    ## 1                     1.00                     0.21            0.00
+    ## 2                     1.00                     0.22            0.00
+    ## 3                     1.00                     0.20            0.00
     ## 4                     1.00                     1.00            0.00
     ## 5                     0.99                     1.00            0.01
     ## 6                     0.99                     1.00            0.01
-    ## 7                     0.20                     1.00            0.80
-    ## 8                     0.20                     1.00            0.80
-    ## 9                     0.17                     1.00            0.83
+    ## 7                     0.21                     1.00            0.79
+    ## 8                     0.21                     1.00            0.79
+    ## 9                     0.20                     1.00            0.80
 
 These outputs provide a clearer picture of the relative risks of the
 different scenarios, supporting decisions based on priorities for a
@@ -630,24 +630,24 @@ plan(sequential)
 This generates outputs similar to those above:
 
     ##        habitat       fishing population 1 population 2 population 3
-    ## 1 restore_none regulate_none         0.96         0.95         0.92
-    ## 2  restore_one regulate_none         0.96         0.96         0.90
-    ## 3  restore_two regulate_none         0.96         0.96         0.92
-    ## 4 restore_none  regulate_two         0.00         0.00         0.93
-    ## 5  restore_one  regulate_two         0.00         0.00         0.93
+    ## 1 restore_none regulate_none         0.97         0.96         0.93
+    ## 2  restore_one regulate_none         0.95         0.96         0.92
+    ## 3  restore_two regulate_none         0.96         0.96         0.93
+    ## 4 restore_none  regulate_two         0.00         0.00         0.91
+    ## 5  restore_one  regulate_two         0.00         0.00         0.91
     ## 6  restore_two  regulate_two         0.00         0.00         0.92
-    ## 7 restore_none  regulate_all         0.08         0.03         0.06
-    ## 8  restore_one  regulate_all         0.06         0.07         0.06
-    ## 9  restore_two  regulate_all         0.05         0.05         0.05
+    ## 7 restore_none  regulate_all         0.06         0.04         0.05
+    ## 8  restore_one  regulate_all         0.07         0.05         0.06
+    ## 9  restore_two  regulate_all         0.06         0.03         0.06
     ##   population 4
     ## 1         0.94
     ## 2         0.94
     ## 3         0.93
-    ## 4         0.93
-    ## 5         0.94
+    ## 4         0.94
+    ## 5         0.92
     ## 6         0.94
-    ## 7         0.09
-    ## 8         0.04
+    ## 7         0.04
+    ## 8         0.05
     ## 9         0.05
 
 The quasi-extinction estimates will not be identical to those above
@@ -912,23 +912,23 @@ seed.
 
     ##        habitat       fishing population 1 population 2 population 3
     ## 1 restore_none regulate_none         0.96         0.96         0.92
-    ## 2  restore_one regulate_none         0.95         0.96         0.92
-    ## 3  restore_two regulate_none         0.95         0.96         0.93
-    ## 4 restore_none  regulate_two         0.00         0.00         0.92
+    ## 2  restore_one regulate_none         0.96         0.96         0.93
+    ## 3  restore_two regulate_none         0.96         0.96         0.93
+    ## 4 restore_none  regulate_two         0.00         0.00         0.93
     ## 5  restore_one  regulate_two         0.00         0.00         0.93
     ## 6  restore_two  regulate_two         0.00         0.00         0.92
-    ## 7 restore_none  regulate_all         0.05         0.04         0.05
-    ## 8  restore_one  regulate_all         0.06         0.04         0.06
-    ## 9  restore_two  regulate_all         0.06         0.05         0.08
+    ## 7 restore_none  regulate_all         0.08         0.07         0.04
+    ## 8  restore_one  regulate_all         0.07         0.06         0.06
+    ## 9  restore_two  regulate_all         0.06         0.06         0.05
     ##   population 4
     ## 1         0.94
-    ## 2         0.94
-    ## 3         0.93
-    ## 4         0.94
-    ## 5         0.93
-    ## 6         0.95
+    ## 2         0.93
+    ## 3         0.94
+    ## 4         0.93
+    ## 5         0.94
+    ## 6         0.93
     ## 7         0.06
-    ## 8         0.07
+    ## 8         0.06
     ## 9         0.05
 
 ## References

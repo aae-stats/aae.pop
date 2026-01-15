@@ -207,7 +207,7 @@ summary(sims)
     ## 
     ## The probability of population declines below non-zero thresholds is:
     ##   n = 0  n = 28  n = 56  n = 84 n = 112 n = 140 n = 168 n = 196 n = 224 n = 252 
-    ##   0.000   0.001   0.798   1.000   1.000   1.000   1.000   1.000   1.000   1.000
+    ##   0.000   0.001   0.797   1.000   1.000   1.000   1.000   1.000   1.000   1.000
 
 The vector printed at the bottom of this summary is a basic risk curve
 calculated from ten different extinction thresholds (described below).
@@ -224,14 +224,14 @@ pr_extinct(sims)
 emps(sims)
 ```
 
-    ## [1] 50.06562
+    ## [1] 50.08462
 
 ``` r
 risk_curve(sims, n = 10)
 ```
 
     ##     0    28    56    84   112   140   168   196   224   252 
-    ## 0.000 0.001 0.798 1.000 1.000 1.000 1.000 1.000 1.000 1.000
+    ## 0.000 0.001 0.797 1.000 1.000 1.000 1.000 1.000 1.000 1.000
 
 The default settings for `pr_extinct`, `emps`, and `risk_curve` consider
 all population classes, all time steps, and define extinction as zero
@@ -250,7 +250,7 @@ pr_extinct(sims, subset = 3:5, times = 40:50)
 emps(sims, subset = 3:5, times = 40:50)
 ```
 
-    ## [1] 20.28021
+    ## [1] 20.28206
 
 ``` r
 risk_curve(sims, subset = 3:5, times = 40:50, n = 10)
@@ -285,7 +285,7 @@ risk_curve(sims, threshold = c(0, 10, 50, 100, 1000))
 ```
 
     ##     0    10    50   100  1000 
-    ## 0.000 0.000 0.476 1.000 1.000
+    ## 0.000 0.000 0.475 1.000 1.000
 
 The `emps` function extracts the minimum population size within each
 replicate trajectory and then averages these values over all
@@ -333,9 +333,9 @@ abundance <- apply(sims, c(1, 3), sum)
 apply(abundance, 2, median)
 ```
 
-    ##  [1] 19.27207 17.24090 18.36721 20.54079 19.83921 18.58626 18.49707 19.50724
-    ##  [9] 20.05605 19.31365 18.95322 19.32049 19.80666 19.74123 19.36984 19.42135
-    ## [17] 19.71964 19.84010 19.70977 19.61029 19.75668 19.92148 19.92292 19.86478
+    ##  [1] 19.27207 17.24090 18.35532 20.53396 19.84797 18.58626 18.49707 19.50011
+    ##  [9] 20.05573 19.31365 18.95322 19.31671 19.80168 19.74123 19.36984 19.42135
+    ## [17] 19.71299 19.84010 19.70977 19.61029 19.75668 19.92148 19.92292 19.86478
     ## [25] 19.89903 20.01619 20.08203 20.07402 20.08156 20.14749 20.22133 20.25135
     ## [33] 20.26481 20.30572 20.36663 20.41371 20.44123 20.47413 20.52307 20.57264
     ## [41] 20.61077
