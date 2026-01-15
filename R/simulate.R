@@ -320,6 +320,27 @@ simulate.dynamics <- function(
       )
     }
 
+    # do any species' arguments have missing replicated_covariates?
+    no_rep_covariate_args <- sapply(
+      args, \(x) is.null(x$replicated_covariates)
+    )
+
+    # do any species have missing replicated_covariates?
+    no_rep_covariate_obj <- sapply(
+      object$dynamics, \(x) is.null(x$replicated_covariates)
+    )
+
+    # combine these two
+    no_rep_covariates <- no_rep_covariate_args | no_rep_covariate_obj
+
+    # if so, fill with identity replicated_covariates
+    if (any(no_rep_covariates)) {
+      object$dynamics[no_rep_covariates] <- lapply(
+        object$dynamics[no_rep_covariates],
+        use_identity_rep_covariates
+      )
+    }
+
     # classify user args by type
     args <- lapply(args, classify_args)
 
@@ -370,6 +391,16 @@ simulate.dynamics <- function(
     # or if not covariate object exists
     if (is.null(object$covariates)) {
       object$covariates <- use_identity_covariates(object)
+    }
+
+    # do the same for replicated_covariates
+    if (is.null(args$replicated_covariates)) {
+      object <- use_identity_rep_covariates(object)
+    }
+
+    # or if not covariate object exists
+    if (is.null(object$replicated_covariates)) {
+      object$replicated_covariates <- use_identity_rep_covariates(object)
     }
 
     # classify user args by type
@@ -911,27 +942,15 @@ expand_dims <- function(init, replicates) {
 use_identity_covariates <- function(obj) {
 
   # define identity covariates function
-  identity_mask <- ifelse(
-    is.multispecies(obj),
-    obj$dynamics[[1]]$matrix,
-    obj$matrix
-  )
+  identity_mask <- obj$matrix
   identity_covariates <- covariates(
     masks = identity_mask,
     funs = identity
   )
 
-  # loop over species if multispecies, single
-  #   update otherwise
-  if (is.multispecies(obj)) {
-    obj$dynamics <- lapply(
-      obj$dynamics,
-      update,
-      identity_covariates
-    )
-  } else {
-    obj <- update(obj, identity_covariates)
-  }
+  # update dynamics object (multispecies are updated individually,
+  #   so this will always be a dynamics object)
+  obj <- update(obj, identity_covariates)
 
   # return
   obj
@@ -944,27 +963,15 @@ use_identity_covariates <- function(obj) {
 use_identity_rep_covariates <- function(obj) {
 
   # define identity covariates function
-  identity_mask <- ifelse(
-    is.multispecies(obj),
-    obj$dynamics[[1]]$matrix,
-    obj$matrix
-  )
+  identity_mask <- obj$matrix
   identity_rep_covariates <- replicated_covariates(
     masks = identity_mask,
     funs = \(x, ...) identity(x)
   )
 
-  # loop over species if multispecies, single
-  #   update otherwise
-  if (is.multispecies(obj)) {
-    obj$dynamics <- lapply(
-      obj$dynamics,
-      update,
-      identity_rep_covariates
-    )
-  } else {
-    obj <- update(obj, identity_rep_covariates)
-  }
+  # update dyn object (multispecies are updated individually, so
+  #   this will always be a dynamics object)
+  obj <- update(obj, identity_rep_covariates)
 
   # return
   obj
