@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/aae-stats/aae.pop/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/aae-stats/aae.pop/blob/v0.1.2/DESCRIPTION)
 
 c, "jdl.yen@gmail.com") e=, ) p (2026). *aae.pop: Flexible Simulation of
 Multispecies Population Dynamics*. R package version 0.1.2,
