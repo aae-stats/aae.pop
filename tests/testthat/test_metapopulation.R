@@ -3,9 +3,9 @@ context("metapopulation")
 # setup: simulate some data to test with
 nstage <- 5
 mat <- matrix(0, nrow = nstage, ncol = nstage)
-mat[reproduction(mat, dims = 4:5)] <- rpois(2, 20)
-mat[survival(mat)] <- plogis(rnorm(nstage))
-mat[transition(mat)] <- plogis(rnorm(nstage - 1))
+mat[reproduction(mat, dims = 4:5)] <- c(22, 17)
+mat[survival(mat)] <- c(0.4, 0.2, 0.6, 0.6, 0.2)
+mat[transition(mat)] <- c(0.56, 0.65, 0.42, 0.57)
 
 # define metapopulation structure (5x5 and 3x3 versions)
 structure_obj5 <- matrix(0, nrow = 5, ncol = 5)
@@ -501,7 +501,7 @@ test_that("metapopulation errors informatively when
                metapopulation(
                  str_test, dynamics_list[1:3], dispersal_list
                ),
-               "exceeds 1 for classe"
+               "exceeds 1 for classes"
              )
 
              # should work with a single model though

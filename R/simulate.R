@@ -375,7 +375,22 @@ simulate.dynamics <- function(
       #    differs from opt$ntime
       if (ndyn != opt$ntime)
         opt$ntime <- ndyn
+
     }
+
+    # add replicated args if needed
+    add_identity_rep_args <- function(x, nt, ns) {
+      x$dyn$replicated_covariates <- format_covariates(
+        matrix(1, nrow = nt, ncol = ns)
+      )
+      x
+    }
+    args[no_rep_covariates] <- lapply(
+      args[no_rep_covariates],
+      add_identity_rep_args,
+      ns = nsim,
+      nt = opt$ntime
+    )
 
     # check replicated arguments
     rep_args_ok <- unlist(lapply(args, check_replicated_args, y = nsim))
@@ -390,17 +405,20 @@ simulate.dynamics <- function(
 
     # or if not covariate object exists
     if (is.null(object$covariates)) {
-      object$covariates <- use_identity_covariates(object)
+      object <- use_identity_covariates(object)
     }
 
     # do the same for replicated_covariates
+    add_rep <- FALSE
     if (is.null(args$replicated_covariates)) {
       object <- use_identity_rep_covariates(object)
+      add_rep <- TRUE
     }
 
     # or if not covariate object exists
     if (is.null(object$replicated_covariates)) {
-      object$replicated_covariates <- use_identity_rep_covariates(object)
+      object <- use_identity_rep_covariates(object)
+      add_rep <- TRUE
     }
 
     # classify user args by type
@@ -417,6 +435,13 @@ simulate.dynamics <- function(
     #    do not agree
     if (ndyn > 0)
       opt$ntime <- ndyn
+
+    # add identity replicate args if needed
+    if (add_rep) {
+      args$dyn$replicated_covariates <- format_covariates(
+        matrix(1, ncol = nsim, nrow = opt$ntime)
+      )
+    }
 
     # check replicated arguments
     rep_args_ok <- check_replicated_args(args, nsim)
@@ -942,7 +967,7 @@ expand_dims <- function(init, replicates) {
 use_identity_covariates <- function(obj) {
 
   # define identity covariates function
-  identity_mask <- obj$matrix
+  identity_mask <- all_cells(obj$matrix)
   identity_covariates <- covariates(
     masks = identity_mask,
     funs = identity
@@ -962,8 +987,8 @@ use_identity_covariates <- function(obj) {
 #' @importFrom stats update
 use_identity_rep_covariates <- function(obj) {
 
-  # define identity covariates function
-  identity_mask <- obj$matrix
+  # define identity replicated_covariates function
+  identity_mask <- all_cells(obj$matrix)
   identity_rep_covariates <- replicated_covariates(
     masks = identity_mask,
     funs = \(x, ...) identity(x)

@@ -13,8 +13,14 @@ xsim <- rnorm(ntime)
 cov_fn <- function(mat, x) {
   mat * plogis(x)
 }
-cov_eff <- covariates(masks = survival(mat),
-                      funs = cov_fn)
+cov_eff <- covariates(
+  masks = survival(mat),
+  funs = cov_fn
+)
+rep_cov <- replicated_covariates(
+  masks = survival(mat),
+  funs = cov_fn
+)
 
 # add density dependence
 dd_masks <- list(reproduction(mat, dims = 4:5))
@@ -26,13 +32,15 @@ dd <- density_dependence(masks = dd_masks, funs = dd_fns)
 # simulate from basic model
 nsim <- 100
 dyn <- dynamics(mat, cov_eff, dd)
-init_set <- matrix(rpois(nstage * nsim, lambda = 20), ncol = nstage)
+init_set <- matrix(rpois(nstage * nsim, lambda = 5), ncol = nstage)
 sims <- simulate(
   dyn,
   nsim = nsim,
   init = init_set,
   options = list(ntime = ntime, tidy_abundances = floor),
-  args = list(covariates = format_covariates(xsim))
+  args = list(
+    covariates = format_covariates(xsim)
+  )
 )
 
 # calculate summed abundances for use in targets
