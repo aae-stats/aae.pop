@@ -12,3 +12,4 @@
 ^index\.md$
 ^todo\.md$
 ^\.github$
+^cran-comments\.md$
