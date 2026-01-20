@@ -25,9 +25,8 @@ references:
     year: 2015
 ---
 
-  ```{r setup, include=FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(aae.pop.templates)
 ```
 
 ## Background
@@ -48,7 +47,7 @@ The population matrix is the most important part of a population dynamics model.
 
 Individuals become reproductively mature at 3-4 years, and fecundity increases with age [@todd_lintermans2015]. The age-fecundity relationship can be characterised with a three-parameter function (derived in @todd_lintermans2015). This relationship is captured in the following R function:
 
-  ```{r, dev = "png"}
+```{r, dev = "png"}
 # function to simulate reproductive output of Macquarie perch
 fecundity <- function(
     age,                             # vector of ages
@@ -79,7 +78,7 @@ plot(fecundity(age_vec) ~ age_vec, las = 1, type = "l", xlab = "Age", ylab = "Fe
 
 Survival has a peaked relationship with age, increasing in individuals up to approximately 20 years of age and declining from that point onwards [@todd_lintermans2015]. This relationship is captured in the following parameters:
 
-  ```{r, dev = "png"}
+```{r, dev = "png"}
 # define survival parameters
 survival_params <- c(
   0.25, 0.44, 0.56, 0.63, 0.69, 0.72, 0.75, 0.78, 0.79,
@@ -93,7 +92,7 @@ plot(survival_params ~ c(1:29), las = 1, type = "l", xlab = "Age", ylab = "Survi
 
 These values are sufficient to construct the (mean) population matrix:
 
-  ```{r, dev = "png"}
+```{r, dev = "png"}
 # define population matrix
 nclass <- length(survival_params) + 1
 popmat <- matrix(0, nrow = nclass, ncol = nclass)
@@ -111,7 +110,7 @@ This population matrix is much more complex than the examples in the [Getting st
 
 Density dependence is introduced in the [Including processes](including_processes.html) vignette. Macquarie perch present an interesting case study, where density dependence operates on both reproduction, through an Allee effect or positive density dependence, and on survival, through a negative, top-down effect of competitive interactions for habitat [@todd_lintermans2015]. These effects can be captured with the following R functions:
 
-  ```{r}
+```{r}
 # masks: survival and reproduction of 3-30 year olds
 density_masks <- list(
   transition(popmat),
@@ -159,7 +158,7 @@ The `runit` and `rmultiunit` functions are included in `aae.pop` to handle situa
 
 The `runit` function can be used as follows:
 
-  ```{r}
+```{r}
 # generate 10 random values on the unit line (between 0 and 1) with known mean and sd
 runit(10, mean = 0.25, sd = 0.2)
 
@@ -169,7 +168,7 @@ runit(10, mean = 0.25, sd = 0.5)
 
 `rmultiunit` is similar to `runit` but generates multivariate outcomes, i.e., vectors of values. In this case, the mean and sd are vectors and the replicates determine the number of vectors to be simulated. This approach can also include correlation structure in the simulated values, although this level of detail is unusual in practice due to a lack of information on empirical correlations:
 
-  ```{r, warning = FALSE}
+```{r, warning = FALSE}
 # generate 10 random vectors of 5 values each, on the unit line
 rmultiunit(10, mean = c(0.5, 0.2, 0.1, 0.9, 0.6), sd = c(0.1, 0.05, 0.05, 0.05, 0.2))
 
@@ -191,19 +190,19 @@ unit_sims <- rmultiunit(
 
 It is easy to verify that `runit` and `rmultiunit` return values with approximately correct means, standard deviations, and correlations. For the final example above, the means are:
 
-  ```{r, echo = FALSE}
+```{r, echo = FALSE}
 round(apply(unit_sims, 2, mean), 2)
 ```
 
 and the standard deviations are:
 
-  ```{r, echo = FALSE}
+```{r, echo = FALSE}
 round(apply(unit_sims, 2, sd), 2)
 ```
 
 Last, the correlations are:
 
-  ```{r, echo = FALSE}
+```{r, echo = FALSE}
 round(cor(unit_sims), 2)
 ```
 
@@ -215,7 +214,7 @@ Forging ahead with the `rmultiunit` approach, this section will use a related fu
 
 The first step is to define functions to use within an `environmental_stochasticity` process. These functions will assume means and standard deviations are already converted to their real-line equivalents; this conversion and its use in `simulate` will be covered below. As introduced in the [Including processes](including_processes.html) vignette, the `environmental_stochasticity` process adds variation to vital rates through a combination of masks and functions:
 
-  ```{r}
+```{r}
 # define masks for environmental stochasticity
 envstoch_masks <- list(
   transition(popmat),                 # all survival estimates
@@ -275,7 +274,7 @@ The conversion of means and standard deviations from the unit interval to real-l
 
 In this example, `args.fn` requires a function that takes the survival estimates (on the unit interval) and converts these to their real-line equivalents. This conversion requires information on the standard deviations, as well as survival estimates for early life stages (eggs, larvae, young-of-year):
 
-  ```{r}
+```{r}
 transform_survival <- function(obj, pop, iter) {
 
   # pull out the population matrix in the current time step
@@ -411,7 +410,7 @@ Several of these effects relate to river discharge rather than lake conditions b
 
 These covariate effects can be captured with the following masks and functions:
 
-  ```{r}
+```{r}
 # effect 1: recruitment has peaked association with Nov/Dec discharge
 recruit_peaked <- function(mat, x, ...) {
 
