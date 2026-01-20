@@ -25,7 +25,7 @@ references:
     given: Jarod
   container-title: 'Arthur Rylah Institute for Environmental Research: Technical Report Series'
   volume: XYZ
-  URL: 'xyz'
+  URL: 'https://www.ari.vic.gov.au/__data/assets/pdf_file/0027/552681/ARI-Technical-Report-331-Using-population-models-to-estimate-expected-benefit-of-management-actions.pdf'
   type: article-journal
   issued:
     year: 2021

@@ -27,6 +27,7 @@ references:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(aae.pop)
 ```
 
 ## Background
