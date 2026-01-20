@@ -45,7 +45,9 @@ NULL
 #' dyn <- dynamics(popmat)
 #'
 #' # and plot this
-#' plot(dyn)
+#' if (rlang::is_installed("DiagrammeR")) {
+#'   plot(dyn)
+#' }
 dynamics <- function(matrix, ...) {
   # check matrix is provided
   if (missing(matrix)) {

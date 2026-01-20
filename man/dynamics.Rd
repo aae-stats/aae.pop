@@ -65,5 +65,7 @@ popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
 dyn <- dynamics(popmat)
 
 # and plot this
-plot(dyn)
+if (rlang::is_installed("DiagrammeR")) {
+  plot(dyn)
+}
 }
