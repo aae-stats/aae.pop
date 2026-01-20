@@ -70,7 +70,11 @@ NULL
 #'   used to manage updates for multispecies models (an embarrassingly
 #'   parallel problem)
 #'
-#' @details Includes plot and subset methods
+#' @details
+#'
+#' @returns \code{simulation} object containing replicate simulations from
+#'   a matrix population model. \code{plot} and \code{subset} methods are
+#'   defined for \code{simulation} objects
 #'
 #' @examples
 #' # define a population matrix (columns move to rows)
@@ -117,7 +121,6 @@ NULL
 #' # and plot again
 #' plot(sims)
 #'
-#' \dontrun{
 #' # note that there is only one trajectory now because
 #' #   this simulation is deterministic.
 #' #
@@ -235,7 +238,7 @@ NULL
 #'
 #' # and can plot these again
 #' plot(sims)
-#' }
+#'
 # nolint start
 simulate.dynamics <- function(
     object,

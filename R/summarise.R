@@ -28,6 +28,9 @@
 #'   can be specified for all population classes or for a subset
 #'   of classes.
 #'
+#' @returns a single numeric value representing the probability a population
+#'   will decline below the threshold size
+#'
 #' @examples
 #' # define a basic population
 #' nstage <- 5
@@ -109,6 +112,14 @@ pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
 #'   can be specified for all population classes or for a subset
 #'   of classes.
 #'
+#'   The \code{\link{get_cdf}} function is a much faster way to generate
+#'   risk curves for almost all use cases. The exception is when the
+#'   \code{threshold} argument is used to specify threshold values that
+#'   are not evenly spaced.
+#'
+#' @returns a named vector containing the threshold values (names) and the
+#'   probability the population will fall below these threshold values
+#'
 #' @examples
 #' # define a basic population
 #' nstage <- 5
@@ -120,19 +131,10 @@ pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
 #' dyn <- dynamics(popmat)
 #'
 #' # simulate with the default updater
-#' sims <- simulate(dyn, nsim = 1000)
+#' sims <- simulate(dyn, nsim = 100)
 #'
 #' # calculate risk curve
-#' risk_curve(sims)
-#'
-#' # calculate risk curve for multiple thresholds between 0 and 100
-#' risk_curve(sims, threshold = seq(0, 100, by = 1))
-#'
-#' # calculate risk curve for 4 and 5 year olds only
-#' risk_curve(sims, subset = 4:5)
-#'
-#' # calculate risk curve but ignore first 10 years
-#' risk_curve(sims, times = 11:51)
+#' risk_curve(sims, n = 10)
 risk_curve <- function(sims, threshold = NULL, subset = NULL, times = NULL, n = 100) {
   # check input object
   if (!"simulation" %in% class(sims)) {
@@ -214,6 +216,10 @@ risk_curve <- function(sims, threshold = NULL, subset = NULL, times = NULL, n = 
 #'   statistic over all replicate trajectories at any time step
 #'   within a set period. Abundances can be specified for all
 #'   population classes or for a subset of classes.
+#'
+#' @returns a data.frame containing a \code{prob} column that indicates
+#'   the probability the population will fall below the threshold value
+#'   in the \code{value} column
 #'
 #' @examples
 #' # define a basic population
@@ -317,6 +323,10 @@ get_cdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
 #'   within a set period. Abundances can be specified for all
 #'   population classes or for a subset of classes.
 #'
+#' @returns a data.frame containing a \code{prob} column that indicates
+#'   the probability density that abundances will be in the vicinity of
+#'   the threshold value in the \code{value} column
+#'
 #' @examples
 #' # define a basic population
 #' nstage <- 5
@@ -406,6 +416,9 @@ get_pdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
 #'   can be specified for all population classes or for a subset
 #'   of classes.
 #'
+#' @returns a single value representing the expected minimum population
+#'   size for a simulation
+#'
 #' @examples
 #' # define a basic population
 #' nstage <- 5
@@ -488,6 +501,9 @@ emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
 #'   these values over all replicates. Abundances
 #'   can be specified for all population classes or for a subset
 #'   of classes.
+#'
+#' @returns a single value representing the expected statistic applied
+#'   to the population sizes generated with \code{\link{simulate}}
 #'
 #' @examples
 #' # define a basic population

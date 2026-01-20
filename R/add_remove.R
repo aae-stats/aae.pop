@@ -41,6 +41,9 @@ NULL
 #'   Additional arguments to functions are supported and can be
 #'   passed to \code{\link{simulate}} with the \code{args} argument.
 #'
+#' @returns \code{add_remove_pre} or \code{add_remove_post} object specifying
+#'   an additions/removals process for use with \code{\link{dynamics}}
+#'
 #' @examples
 #' # define a population matrix (columns move to rows)
 #' nclass <- 5

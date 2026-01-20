@@ -24,6 +24,10 @@ NULL
 #'   \code{\link{environmental_stochasticity}} or
 #'   \code{\link{density_dependence}}.
 #'
+#' @returns a matrix containing population abundances in each stage of a
+#'   matrix population model. Contains one row for each replicate population
+#'   trajectory and one column for each population stage
+#'
 #' @examples
 #' # define a basic population
 #' nstage <- 5

@@ -41,6 +41,9 @@ NULL
 #'   on the combined metapopulation model. This approach is possible
 #'   but currently untested.
 #'
+#' @returns \code{metapopulation} object containing a matrix metapopulation
+#'   model; for use with \code{\link{simulate}}
+#'
 #' @examples
 #' # define some populations, all with identical vital rates
 #' nclass <- 5

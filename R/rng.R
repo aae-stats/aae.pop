@@ -61,6 +61,9 @@ NULL
 #'   illustrated in the Macquarie perch example on the package
 #'   [website](https://aae-stats.github.io/aae.pop/).
 #'
+#' @returns a vector or matrix of random draws from the \code{r*unit}
+#'   set of functions
+#'
 #' @examples
 #' # rmultiunit generates multivariate draws constrained to
 #' #   the unit interval, with known mean, standard deviation,

@@ -17,7 +17,8 @@ NULL
 #' @param dims a numeric value or vector identifying
 #'   subsets of cells to include in a given mask
 #'
-#' @details To be completed.
+#' @returns \code{mask} object used to define the cells affected by
+#'   a process included in \code{\link{dynamics}}
 #'
 #' @examples
 #' # define a population
