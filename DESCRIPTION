@@ -31,8 +31,6 @@ Imports:
     mc2d,
     nleqslv
 Suggests:
-    aae.pop.templates,
-    aae.pop.inference,
     knitr,
     DiagrammeR,
     testthat,
@@ -40,9 +38,6 @@ Suggests:
     rmarkdown,
     spelling,
     scales
-Remotes:
-    aae-stats/aae.pop.templates,
-    aae-stats/aae.pop.inference
 VignetteBuilder: knitr
 RoxygenNote: 7.3.2
 Language: en-GB
