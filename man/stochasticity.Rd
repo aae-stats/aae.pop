@@ -60,16 +60,6 @@ popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
 # define a dynamics object
 dyn <- dynamics(popmat)
 
-# simulate from this without any form of stochasticity
-#   (50 time steps, 100 replicates)
-sims <- simulate(dyn, nsim = 100, options = list(ntime = 50))
-
-# plot the simulated trajectories
-plot(sims)
-
-# and plot
-plot(sims)
-
 # note that there is only one trajectory now because
 #   this simulation is deterministic.
 #
@@ -80,8 +70,8 @@ envstoch <- environmental_stochasticity(
     transition(popmat)
   ),
   funs = list(
-    function(x) rpois(n = length(x), lambda = x),
-    function(x) rmultiunit(n = 1, mean = x, sd = 0.1 * x)
+    \(x) rpois(n = length(x), lambda = x),
+    \(x) runif(n = length(x), min = 0.9 * x, max = pmin(1.1 * x, 1))
   )
 )
 
@@ -91,47 +81,6 @@ sims <- simulate(
   dyn,
   init = c(50, 20, 10, 10, 5),
   nsim = 100,
-  options = list(ntime = 50),
-)
-
-# the rmultiunit draws can be slow but we can speed
-#   this up by calculating them once per generation
-#   instead of once per replicate within each generation
-envstoch <- environmental_stochasticity(
-  masks = list(
-    reproduction(popmat, dims = 4:5),
-    transition(popmat)
-  ),
-  funs = list(
-    function(x, ...) rpois(n = length(x), lambda = x),
-    function(x, mean, sd) {
-      pnorm(mean + sd * rnorm(length(x)))
-    }
-  )
-)
-
-# this requires an argument "function" that takes the
-#   current state of the population model in each
-#   iteration and calculates the correct arguments to
-#   pass to environmental_stochasticty
-envstoch_function <- function(obj, pop, iter) {
-  mat <- obj$matrix
-  if (is.list(mat)) {
-    mat <- mat[[iter]]
-  }
-  out <- aae.pop:::unit_to_real(
-    mat[transition(mat)], 0.1 * mat[transition(mat)]
-  )
-  list(mean = out[, 1], sd = out[, 2])
-}
-
-# update the dynamics object and simulate from it
-dyn <- update(dyn, envstoch)
-sims <- simulate(
-  dyn,
-  init = c(50, 20, 10, 10, 5),
-  nsim = 100,
-  args = list(environmental_stochasticity = list(envstoch_function)),
   options = list(ntime = 50),
 )
 
@@ -155,8 +104,4 @@ sims <- simulate(
     environmental_stochasticity = list(envstoch_function)
   )
 )
-
-# and can plot these again
-plot(sims)
-
 }
