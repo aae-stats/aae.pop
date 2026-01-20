@@ -84,12 +84,13 @@ NULL
 #' )
 # nolint start
 rmultiunit <- function(
-    n,
-    mean,
-    sd,
-    Sigma = NULL,
-    Omega = NULL,
-    perfect_correlation = FALSE) {
+  n,
+  mean,
+  sd,
+  Sigma = NULL,
+  Omega = NULL,
+  perfect_correlation = FALSE
+) {
   # nolint end
 
   # how many parameters are we dealing with?
@@ -159,11 +160,12 @@ rmultiunit <- function(
 #'
 # nolint start
 rmultiunit_from_real <- function(
-    n,
-    mean_real,
-    sd_real = NULL,
-    Sigma_chol = NULL,
-    perfect_correlation = FALSE) {
+  n,
+  mean_real,
+  sd_real = NULL,
+  Sigma_chol = NULL,
+  perfect_correlation = FALSE
+) {
   # nolint end
 
   # need one of sd_real or Sigma_chol

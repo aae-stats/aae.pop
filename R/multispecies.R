@@ -15,24 +15,24 @@
 #' @examples
 #' # define population matrices for three species
 #' sp1_mat <- rbind(
-#'   c(0,    0,    2,    4,    7),  # reproduction from 3-5 year olds
-#'   c(0.25, 0,    0,    0,    0),  # survival from age 1 to 2
-#'   c(0,    0.45, 0,    0,    0),  # survival from age 2 to 3
-#'   c(0,    0,    0.70, 0,    0),  # survival from age 3 to 4
-#'   c(0,    0,    0,    0.85, 0)   # survival from age 4 to 5
+#'   c(0, 0, 2, 4, 7), # reproduction from 3-5 year olds
+#'   c(0.25, 0, 0, 0, 0), # survival from age 1 to 2
+#'   c(0, 0.45, 0, 0, 0), # survival from age 2 to 3
+#'   c(0, 0, 0.70, 0, 0), # survival from age 3 to 4
+#'   c(0, 0, 0, 0.85, 0) # survival from age 4 to 5
 #' )
 #' sp2_mat <- rbind(
-#'   c(0,    0,    4),  # reproduction from 3 year olds
-#'   c(0.25, 0,    0),  # survival from age 1 to 2
-#'   c(0,    0.45, 0)   # survival from age 2 to 3
+#'   c(0, 0, 4), # reproduction from 3 year olds
+#'   c(0.25, 0, 0), # survival from age 1 to 2
+#'   c(0, 0.45, 0) # survival from age 2 to 3
 #' )
 #' sp3_mat <- rbind(
-#'   c(0,    0,    2,    4,    7,   10),  # reproduction from 3-6 year olds
-#'   c(0.25, 0,    0,    0,    0,    0),  # survival from age 1 to 2
-#'   c(0,    0.45, 0,    0,    0,    0),  # survival from age 2 to 3
-#'   c(0,    0,    0.70, 0,    0,    0),  # survival from age 3 to 4
-#'   c(0,    0,    0,    0.85, 0,    0),  # survival from age 4 to 5
-#'   c(0,    0,    0,    0,    0.75, 0)   # survival from age 5 to 6
+#'   c(0, 0, 2, 4, 7, 10), # reproduction from 3-6 year olds
+#'   c(0.25, 0, 0, 0, 0, 0), # survival from age 1 to 2
+#'   c(0, 0.45, 0, 0, 0, 0), # survival from age 2 to 3
+#'   c(0, 0, 0.70, 0, 0, 0), # survival from age 3 to 4
+#'   c(0, 0, 0, 0.85, 0, 0), # survival from age 4 to 5
+#'   c(0, 0, 0, 0, 0.75, 0) # survival from age 5 to 6
 #' )
 #'
 #' # define population dynamics objects for each species
@@ -72,7 +72,6 @@
 #' # and can plot these simulated trajectories for each species
 #' plot(sims, which = 1)
 multispecies <- function(...) {
-
   # collate dots into list
   dots <- list(...)
 
@@ -80,8 +79,8 @@ multispecies <- function(...) {
   classes <- sapply(dots, function(x) class(x)[1])
   if (!all(classes == "interaction")) {
     stop("all inputs to multispecies should be interaction ",
-         "objects created with pairwise_interaction",
-         call. = FALSE
+      "objects created with pairwise_interaction",
+      call. = FALSE
     )
   }
 
@@ -105,10 +104,10 @@ multispecies <- function(...) {
   # and collate these into a list with one element for each species
   interaction <- vector("list", length = length(dynamics))
   interaction <- lapply(dynamics,
-                        define_interaction,
-                        dots = dots,
-                        hex_list = hex_list,
-                        interaction_list = interaction_list
+    define_interaction,
+    dots = dots,
+    hex_list = hex_list,
+    interaction_list = interaction_list
   )
 
   # return
@@ -120,7 +119,6 @@ multispecies <- function(...) {
       interaction = interaction
     )
   )
-
 }
 
 #' @name pairwise_interaction
@@ -144,7 +142,6 @@ multispecies <- function(...) {
 #'   species; for use with \code{\link{multispecies}}
 #'
 pairwise_interaction <- function(target, source, masks, funs) {
-
   # force evaluation to avoid NULL functions down the line
   force(masks)
   force(funs)
@@ -171,7 +168,6 @@ pairwise_interaction <- function(target, source, masks, funs) {
       interaction = interaction
     )
   )
-
 }
 
 # internal function: extract unique dynamics objects from
@@ -200,7 +196,6 @@ get_unique_dynamics <- function(interactions) {
 
   # return all required dynamics objects
   out
-
 }
 
 # internal function: define interaction of each species with any other
