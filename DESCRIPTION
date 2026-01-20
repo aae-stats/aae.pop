@@ -1,7 +1,7 @@
 Package: aae.pop
 Type: Package
 Title: Flexible Population Dynamics Simulations
-Version: 0.1.2.9000
+Version: 0.1.2
 Date: 2026-01-20
 Author: c(
   person(given = "Jian",
@@ -31,8 +31,7 @@ Imports:
     cubature,
     future.apply,
     mc2d,
-    nleqslv,
-    rlang
+    nleqslv
 Suggests:
     knitr,
     DiagrammeR,
