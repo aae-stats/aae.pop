@@ -1,6 +1,6 @@
 Package: aae.pop
 Type: Package
-Title: Flexible Simulation of Multispecies Population Dynamics 
+Title: Flexible Population Dynamics Simulations
 Version: 0.1.2.9000
 Date: 2026-01-20
 Author: c(
@@ -12,9 +12,11 @@ Author: c(
          role = c("fnd"))
   )
 Maintainer: Jian Yen <jdl.yen@gmail.com>
-Description: Simulate multispecies population dynamics when vital rates
-    are influenced by time-varying covariates, such as environmental
-    conditions or the abundances of other species.
+Description: Simulate population dynamics from realistically complex matrix
+    population models in a plug-and-play fashion. Supports aspatial and 
+    spatially implicit models with one or more species and time-varying
+    covariates, stochasticity, density dependence, additions or removals of
+    indidivuals, interspecific interactions, and metapopulations.
 License: Apache License 2.0
 URL: https://aae-stats.github.io/aae.pop/,
     https://github.com/aae-stats/aae.pop
