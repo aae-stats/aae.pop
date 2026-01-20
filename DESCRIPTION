@@ -2,14 +2,14 @@ Package: aae.pop
 Type: Package
 Title: Flexible Simulation of Multispecies Population Dynamics 
 Version: 0.1.2.9000
-Date: 2026-01-16
+Date: 2026-01-20
 Author: c(
   person(given = "Jian",
          family = "Yen",
-         role = c("aut", "cre"),
+         role = c("aut", "cre", "cph"),
          email = "jdl.yen@gmail.com"),
   person(given = "Arthur Rylah Institute for Environmental Research",
-         role = c("cph", "fnd"))
+         role = c("fnd"))
   )
 Maintainer: Jian Yen <jdl.yen@gmail.com>
 Description: Simulate multispecies population dynamics when vital rates
