@@ -70,7 +70,6 @@ plot(sims)
 # and plot
 plot(sims)
 
-\dontrun{
 # note that there is only one trajectory now because
 #   this simulation is deterministic.
 #
@@ -159,5 +158,5 @@ sims <- simulate(
 
 # and can plot these again
 plot(sims)
-}
+
 }

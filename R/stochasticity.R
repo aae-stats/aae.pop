@@ -60,7 +60,6 @@ NULL
 #' # and plot
 #' plot(sims)
 #'
-#' \dontrun{
 #' # note that there is only one trajectory now because
 #' #   this simulation is deterministic.
 #' #
@@ -149,7 +148,7 @@ NULL
 #'
 #' # and can plot these again
 #' plot(sims)
-#' }
+#'
 environmental_stochasticity <- function(masks, funs) {
   # force evaluation to avoid NULL functions down the line
   force(masks)

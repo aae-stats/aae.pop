@@ -70,7 +70,6 @@ NULL
 #' #   and (optionally) covariance/correlation structure
 #' rmultiunit(n = 10, mean = c(0.25, 0.5, 0.75), sd = c(0.1, 0.4, 0.25))
 #'
-#' \dontrun{
 #' # add in a correlation structure
 #' omega_set <- cbind(
 #'   c(1, 0.25, 0.01),
@@ -83,7 +82,6 @@ NULL
 #'   sd = c(0.1, 0.4, 0.25),
 #'   Omega = omega_set
 #' )
-#' }
 # nolint start
 rmultiunit <- function(
     n,
