@@ -12,6 +12,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(aae.pop)
+library(scales)
 
 # set up a basic population dynamics object to demonstrate examples below
 popmat <- rbind(
@@ -139,7 +140,7 @@ sims <- simulate(
 # plot this
 plot(
   sims,
-  col = scales::alpha("#2171B5", 0.9),
+  col = alpha("#2171B5", 0.9),
   main = "Three different initial conditions"
 )
 ```
@@ -162,7 +163,7 @@ sims <- simulate(
 # plot this
 plot(
   sims,
-  col = scales::alpha("#2171B5", 0.4),
+  col = alpha("#2171B5", 0.4),
   main = "Many replicates with the same initial condition"
 )
 ```
@@ -192,7 +193,7 @@ sims <- simulate(
 # plot this
 plot(
   sims,
-  col = scales::alpha("#2171B5", 0.4),
+  col = alpha("#2171B5", 0.4),
   main = "Many replicates with stochastic, structured initial conditions"
 )
 ```

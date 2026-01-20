@@ -12,6 +12,7 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(aae.pop)
+library(scales)
 ```
 
 ## Demographic processes?
@@ -92,7 +93,7 @@ popdyn <- dynamics(popmat, demostoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 This simple example includes one mask/function pair, but the `demographic_stochasticity` function can chain together as many different mask/function pairs as required. In these cases, there should be one mask for each function, and the set of masks/functions should be passed to `demographic_stochasiticity` as a list (e.g., `masks = list(demostoch_mask1, demostoch_mask2)`).
@@ -151,7 +152,7 @@ popdyn <- dynamics(popmat, envstoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 It is easy to include both environmental and demographic stochasticity in the same model. The `dynamics` call simply needs both `envstoch` and `demostoch` objects. This is a case where the `update` function comes in handy. Rather than re-defining the population dynamics object, the existing version of `popdyn` (which included `popmat` and `envstoch`) can simply be updated to include `demostoch`:
@@ -164,7 +165,7 @@ popdyn <- update(popdyn, demostoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ### Density dependence
@@ -191,7 +192,7 @@ popdyn <- update(popdyn, dd)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 Density dependence can take many other forms. These forms may include positive density dependence (e.g., Allee effects) or may affect adult abundances as well as reproduction. An example of the former is included in the [Macquarie perch worked example](macperch_example.html). The next section introduces an example of the latter.
@@ -219,7 +220,7 @@ popdyn <- dynamics(popmat, envstoch, demostoch, dd_n)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ### Covariates
@@ -254,7 +255,7 @@ sims <- simulate(
 )
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 Specifying a `covariates` term does not automatically include covariates in the model. Note that the `nesting` variable also had to be passed to `simulate` via the `args` argument. The reason for this is that it allows a single population dynamics object (`popdyn`, above) to be used with multiple different sets of covariates, without re-compiling the `dynamics` object each time.
@@ -316,7 +317,7 @@ sims <- simulate(
 )
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 
@@ -352,7 +353,7 @@ sims <- simulate(
 )
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ## What if I don't want to use masks? {#nomask}
@@ -415,5 +416,5 @@ sims <- simulate(
 )
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```

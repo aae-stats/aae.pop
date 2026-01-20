@@ -16,15 +16,16 @@ library(aae.pop)
 
 ## Installation and setup
 
-You can install the `aae.pop` package from GitHub. To install from GitHub, you'll need the `remotes` R package, which you can install from CRAN with:
+You can install the `aae.pop` package from CRAN:
+
+```{r, eval = FALSE}
+install.packages("aae.pop")
+```
+
+The latest, development version of `aae.pop` can be installed from GitHub with the `remotes` package: 
 
 ```{r, eval = FALSE}
 install.packages("remotes")
-```
-
-You can then install the `aae.pop` package from Github with:
-
-```{r, eval = FALSE}
 remotes::install_github("aae-stats/aae.pop")
 ```
 

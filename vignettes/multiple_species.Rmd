@@ -12,6 +12,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(aae.pop)
+library(scales)
 ```
 
 ## Background
@@ -102,11 +103,11 @@ In this case, the `simulate` function returns a list with one element for each s
 
 ```{r, dev = "png"}
 # plot
-plot(sims, which = 1, col = scales::alpha("#2171B5", 0.4), main = "Species 1")
+plot(sims, which = 1, col = alpha("#2171B5", 0.4), main = "Species 1")
 
 # plot
-plot(sims, which = 2, col = scales::alpha("#2171B5", 0.4), main = "Species 2")
+plot(sims, which = 2, col = alpha("#2171B5", 0.4), main = "Species 2")
 
 # plot
-plot(sims, which = 3, col = scales::alpha("#2171B5", 0.4), main = "Species 3")
+plot(sims, which = 3, col = alpha("#2171B5", 0.4), main = "Species 3")
 ```

@@ -28,6 +28,7 @@ references:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(aae.pop)
+library(scales)
 ```
 
 ## Background
@@ -74,7 +75,7 @@ fecundity <- function(
 
 # plot mean fecundity as a function of age
 age_vec <- seq(3, 30, length = 100)
-plot(fecundity(age_vec) ~ age_vec, las = 1, type = "l", xlab = "Age", ylab = "Fecundity", bty = "l", lwd = 2, col = scales::alpha("#2171B5", 0.9))
+plot(fecundity(age_vec) ~ age_vec, las = 1, type = "l", xlab = "Age", ylab = "Fecundity", bty = "l", lwd = 2, col = alpha("#2171B5", 0.9))
 ```
 
 Survival has a peaked relationship with age, increasing in individuals up to approximately 20 years of age and declining from that point onwards [@todd_lintermans2015]. This relationship is captured in the following parameters:
@@ -88,7 +89,7 @@ survival_params <- c(
 )
 
 # plot mean survival as a function of age
-plot(survival_params ~ c(1:29), las = 1, type = "l", xlab = "Age", ylab = "Survival", bty = "l", lwd = 2, col = scales::alpha("#2171B5", 0.9))
+plot(survival_params ~ c(1:29), las = 1, type = "l", xlab = "Age", ylab = "Survival", bty = "l", lwd = 2, col = alpha("#2171B5", 0.9))
 ```
 
 These values are sufficient to construct the (mean) population matrix:
@@ -514,7 +515,7 @@ sims <- simulate(
 )
 
 # plot the simulated trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 The simulated abundances are extremely high given expected population sizes in this system. The primary reason for this is that the model assumes *ideal* conditions in each year, with covariate effects used to reduce vital rates to match actual conditions. Covariates can be added to this model with the following code, noting that the same `popdyn` object can be used with or without covariates:
@@ -542,17 +543,17 @@ sims <- simulate(
 )
 
 # plot the simulated trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 The simulated trajectories now look much more realistic. Here, large values reflect young individuals, many of which do not survive to adulthood. Plotting older classes alone highlights this effect:
 
 ```{r, dev = "png"}
 # all adults
-plot(subset(sims, subset = 3:30), col = scales::alpha("#2171B5", 0.4))
+plot(subset(sims, subset = 3:30), col = alpha("#2171B5", 0.4))
 
 # ages 5 and above
-plot(subset(sims, subset = 5:30), col = scales::alpha("#2171B5", 0.4))
+plot(subset(sims, subset = 5:30), col = alpha("#2171B5", 0.4))
 ```
 
 ## Summarising model outputs
@@ -633,7 +634,7 @@ calculate_risk <- function(popsim, min, max, n = 1000, subset = NULL, include = 
 risk_calc <- calculate_risk(sims, min = 0, max = 10000, subset = 3:30)
 
 # this can be plotted
-plot(risk ~ threshold, data = risk_calc, xlab = "Threshold population size (adult abundance)", ylab = "Quasi-extinction probability", las = 1, bty = "l", type = "l", lwd = 2, col = scales::alpha("#2171B5", 0.9), ylim = c(0, 1))
+plot(risk ~ threshold, data = risk_calc, xlab = "Threshold population size (adult abundance)", ylab = "Quasi-extinction probability", las = 1, bty = "l", type = "l", lwd = 2, col = alpha("#2171B5", 0.9), ylim = c(0, 1))
 ```
 
 A risk curve provides information on the likelihood of hitting any given population size at any point in time. This information can also be presented as the abundance that a population is likely to reach with some fixed probability. For example, it can be useful to state the abundance a population will reach with 50 %, 80 %, or 95 % probability. This information can be extracted from the risk curve with the following code:
@@ -655,7 +656,7 @@ probs <- c(0.5, 0.8, 0.95)
 thresh <- calculate_threshold(risk_calc$risk, risk_calc$threshold, prob = probs)
 
 # plot these on the risk curve
-plot(risk ~ threshold, data = risk_calc, xlab = "Threshold population size (adult abundance)", ylab = "Quasi-extinction probability", las = 1, bty = "l", type = "l", lwd = 2, col = scales::alpha("#2171B5", 0.9), ylim = c(0, 1))
+plot(risk ~ threshold, data = risk_calc, xlab = "Threshold population size (adult abundance)", ylab = "Quasi-extinction probability", las = 1, bty = "l", type = "l", lwd = 2, col = alpha("#2171B5", 0.9), ylim = c(0, 1))
 col_pal <- c("#67001F", "#D6604D", "#FDDBC7")
 for (i in seq_along(thresh)) {
   lines(c(thresh[i], thresh[i]), c(-0.2, probs[i]), col = col_pal[i], lwd = 2, lty = 2)

@@ -62,7 +62,7 @@ NULL
 #' #   e.g., a logistic function
 #' covars <- replicated_covariates(
 #'   masks = transition(popmat),
-#'   funs = function(mat, x) mat * (1 / (1 + exp(-10 * x)))
+#'   funs = \(mat, x) mat * (1 / (1 + exp(-10 * x)))
 #' )
 #'
 #' # simulate 50 random covariate values for each replicate (each
