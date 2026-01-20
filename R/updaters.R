@@ -7,6 +7,8 @@ NULL
 
 #' @rdname updaters
 #'
+#' @importFrom mc2d rmultinomial
+#'
 #' @export
 #'
 #' @param pop current state of the population
@@ -139,6 +141,6 @@ update_multinomial <- function(pop, mat) {
 
 # internal function: single multinomial draw for one replicate
 multinomial_internal <- function(n, pop, mat) {
-  out <- mc2d::rmultinomial(n = n, size = pop, prob = t(mat))
+  out <- rmultinomial(n = n, size = pop, prob = t(mat))
   apply(out[, 1:n], 2, sum)
 }

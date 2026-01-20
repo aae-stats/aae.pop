@@ -22,4 +22,13 @@ Useful links:
 }
 
 }
+\author{
+\strong{Maintainer}: Jian Yen \email{jdl.yen@gmail.com} [copyright holder]
+
+Other contributors:
+\itemize{
+  \item Arthur Rylah Institute for Environmental Research [funder]
+}
+
+}
 \keyword{internal}

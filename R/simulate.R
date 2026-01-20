@@ -7,6 +7,7 @@ NULL
 #' @rdname simulate
 #'
 #' @importFrom stats rpois rbinom runif simulate
+#' @importFrom abind abind
 #'
 #' @export
 #'
@@ -906,7 +907,7 @@ check_dims <- function(init, expected_dims) {
 #' @importFrom abind abind
 expand_dims <- function(init, replicates) {
   # expand over replicates if only one value for each class
-  abind::abind(
+  abind(
     lapply(seq_len(replicates), function(x) init),
     along = 0
   )

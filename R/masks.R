@@ -10,6 +10,8 @@ NULL
 #'
 #' @export
 #'
+#' @importFrom abind abind
+#'
 #' @param matrix a population dynamics matrix for which
 #'   a particular mask is required. Only used to determine
 #'   mask dimensions, so can be any matrix with appropriate
@@ -135,7 +137,7 @@ combine.mask <- function(...) {
   }
 
   # return combined mask if all OK
-  masks <- abind::abind(dots, along = 3)
+  masks <- abind(dots, along = 3)
   as_mask(apply(masks, c(1, 2), any))
 }
 

@@ -280,7 +280,7 @@ f_xy <- function(x, p, s) {
 solve_nl <- function(x, fn, ...) {
   init <- c(qnorm(x[1]), x[2] / dnorm(qnorm(x[1])))
 
-  nleqslv::nleqslv(
+  nleqslv(
     x = init,
     fn = fn,
     p = x[1],
@@ -306,7 +306,7 @@ rho_int <- function(x, mean_i, mean_j, sd_i, sd_j, rho, rho2) {
 # equation to solve to find correlation coefficient
 f_x <- function(x, fn, arg) {
   # integrate over wide range of values in both dimensions
-  int_value <- cubature::hcubature(
+  int_value <- hcubature(
     fn,
     lowerLimit = rep(-10, 2),
     upperLimit = rep(10, 2),
