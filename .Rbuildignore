@@ -9,3 +9,5 @@
 ^index\.md$
 ^\.github$
 ^cran-comments\.md$
+vignettes/macperch_examples.Rmd
+vignettes/scenarios_examples.Rmd
