@@ -92,12 +92,14 @@ parallel problem)}
 \item{x}{an object to pass to \code{is.simulation} or
 \code{is.simulation.list}}
 }
+\value{
+\code{simulation} object containing replicate simulations from
+  a matrix population model. \code{plot} and \code{subset} methods are
+  defined for \code{simulation} objects
+}
 \description{
 Simulate population dynamics for one or more
   species defined by \code{\link{dynamics}} objects.
-}
-\details{
-Includes plot and subset methods
 }
 \examples{
 # define a population matrix (columns move to rows)
@@ -144,7 +146,6 @@ sims <- simulate(
 # and plot again
 plot(sims)
 
-\dontrun{
 # note that there is only one trajectory now because
 #   this simulation is deterministic.
 #
@@ -262,5 +263,5 @@ sims <- simulate(
 
 # and can plot these again
 plot(sims)
-}
+
 }

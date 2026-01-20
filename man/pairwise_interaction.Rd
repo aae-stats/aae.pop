@@ -19,11 +19,12 @@ each function}
 \item{funs}{functions that take vital rates and abundances of the
 \code{source} population as inputs and return scaled vital rates}
 }
+\value{
+\code{pairwise_interaction} object specifying links between
+  species; for use with \code{\link{multispecies}}
+}
 \description{
 Define population dynamics for multiple species from
   a set of single-species \code{\link{dynamics}} objects and
   defined pairwise interactions.
-}
-\details{
-To be completed.
 }

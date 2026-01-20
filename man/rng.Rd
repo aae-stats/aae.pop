@@ -73,6 +73,10 @@ matrix converted to real-line equivalent}
 \item{unit_sd}{vector of standard deviations on the unit
 interval}
 }
+\value{
+a vector or matrix of random draws from the \code{r*unit}
+  set of functions
+}
 \description{
 Draw random numbers from unusual distributions,
   such as on the unit or non-negative real line with known

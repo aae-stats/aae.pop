@@ -26,6 +26,10 @@ a covariates function}
 \item{names}{optional vector of names for each covariate
 included in \code{x}}
 }
+\value{
+\code{covariates} object specifying covariate effects on a
+  matrix population model; for use with \code{\link{dynamics}}
+}
 \description{
 Specify relationship between a vector or matrix of covariates
   and vital rates.

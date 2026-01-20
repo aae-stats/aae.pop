@@ -10,9 +10,10 @@ NULL
 #' @export
 #'
 #' @param matrix a matrix of vital rates specifying transitions between
-#'   ages or stages. Specified in the format \eqn{n_{t+1} = A %*% n_t$}, where
-#'   $A$ is the matrix, so that values in a given column and row denote a
-#'   transition from that column to that row
+#'   ages or stages. Specified in the format ntp1 = A %*% nt, where
+#'   A is the matrix and nt is the vector of abundances, so that values
+#'   in a given column and row denote a transition from that column
+#'   to that row
 #' @param \dots additional objects used to define population dynamics.
 #'   Must be one or more of \code{\link{covariates}},
 #'   \code{\link{replicated_covariates}},

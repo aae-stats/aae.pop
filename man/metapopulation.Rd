@@ -31,6 +31,10 @@ must be ordered by links in column 1, then column 2, and so on}
 
 \item{x}{an object to pass to \code{is.metapopulation}}
 }
+\value{
+\code{metapopulation} object containing a matrix metapopulation
+  model; for use with \code{\link{simulate}}
+}
 \description{
 Define population dynamics for multiple populations of
   a single species linked by dispersal (a metapopulation).

@@ -70,8 +70,6 @@ NULL
 #'   used to manage updates for multispecies models (an embarrassingly
 #'   parallel problem)
 #'
-#' @details
-#'
 #' @returns \code{simulation} object containing replicate simulations from
 #'   a matrix population model. \code{plot} and \code{subset} methods are
 #'   defined for \code{simulation} objects

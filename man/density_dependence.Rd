@@ -23,6 +23,10 @@ mask-function pair. Intended primarily for internal
 use when scaling up processes in
 \code{\link{metapopulation}}}
 }
+\value{
+\code{density_dependence} object specifying covariate effects on
+  a matrix population model; for use with \code{\link{dynamics}}
+}
 \description{
 Specify density dependence in vital rates
   (\code{density_dependence}) and in total abundances

@@ -18,6 +18,11 @@ update_multinomial(pop, mat)
 
 \item{mat}{matrix of vital rates used to update population state}
 }
+\value{
+a matrix containing population abundances in each stage of a
+  matrix population model. Contains one row for each replicate population
+  trajectory and one column for each population stage
+}
 \description{
 Define how population abundances are updated from
   one time step to the next. Functions can take any form but will

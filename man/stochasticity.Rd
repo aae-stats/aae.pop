@@ -19,6 +19,12 @@ defining cells affected by \code{funs}. See Details and
 \item{funs}{a function or list of functions with one element
 for each element of \code{masks}. See Details}
 }
+\value{
+\code{environmental_stochasticity} or
+  \code{demographic_stochasticity} object specifying the way in which
+  stochasticity should be included in a matrix population model;
+  for use with \code{\link{dynamics}}
+}
 \description{
 Specify environmental stochasticity (random variation
   in vital rates) and demographic stochasticity (random variation
