@@ -277,6 +277,9 @@ test_that("dynamics objects can be plotted", {
   # create basic object
   dyn_obj <- dynamics(mat)
 
+  # only run if the suggested DiagrammeR package is installed
+  skip_if_not_installed("DiagrammeR")
+
   # plot it
   expect_silent(plot(dyn_obj))
 
