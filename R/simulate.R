@@ -195,14 +195,14 @@ NULL
 #'
 # nolint start
 simulate.dynamics <- function(
-    object,
-    nsim = 1,
-    seed = NULL,
-    ...,
-    init = NULL,
-    options = list(),
-    args = list(),
-    .future = FALSE
+  object,
+  nsim = 1,
+  seed = NULL,
+  ...,
+  init = NULL,
+  options = list(),
+  args = list(),
+  .future = FALSE
 ) {
   # nolint end
 
@@ -225,7 +225,7 @@ simulate.dynamics <- function(
     }
     if (any(!leslie_ok)) {
       stop("matrix must be a Leslie matrix to use update_binomial_leslie",
-           call. = FALSE
+        call. = FALSE
       )
     }
   }
@@ -246,7 +246,6 @@ simulate.dynamics <- function(
   # handle arguments differently for single and multispecies objects
   #   (arguments is a list of lists [one element per species] for multspecies)
   if (is.multispecies(object)) {
-
     # expand args if a single list is provided
     if (length(args) != object$nspecies) {
       if (length(args) == 0) {
@@ -304,7 +303,8 @@ simulate.dynamics <- function(
     # split default_args into a list with one element per species
     default_args <- lapply(
       seq_len(object$nspecies),
-      \(.x, .y) .y, .y = default_args
+      \(.x, .y) .y,
+      .y = default_args
     )
 
     # set static args here
@@ -330,9 +330,9 @@ simulate.dynamics <- function(
 
       # and overwrite opt$ntime if there is a single ndyn value and it
       #    differs from opt$ntime
-      if (ndyn != opt$ntime)
+      if (ndyn != opt$ntime) {
         opt$ntime <- ndyn
-
+      }
     }
 
     # add replicated args if needed
@@ -351,9 +351,7 @@ simulate.dynamics <- function(
 
     # check replicated arguments
     rep_args_ok <- unlist(lapply(args, check_replicated_args, y = nsim))
-
   } else {
-
     # set an identity covariates function if no covariate arguments
     #   provided
     if (is.null(args$covariates)) {
@@ -390,8 +388,9 @@ simulate.dynamics <- function(
 
     # for a single species model, overwrite opt$ntime with ndyn if they
     #    do not agree
-    if (ndyn > 0)
+    if (ndyn > 0) {
       opt$ntime <- ndyn
+    }
 
     # add identity replicate args if needed
     if (add_rep) {
@@ -402,7 +401,6 @@ simulate.dynamics <- function(
 
     # check replicated arguments
     rep_args_ok <- check_replicated_args(args, nsim)
-
   }
 
   # add nsim into options
@@ -465,10 +463,8 @@ simulate.dynamics <- function(
 
   # loop through timesteps, updating population at each timestep
   for (i in seq_len(opt$ntime)) {
-
     # split based on multispecies or single species
     if (is.multispecies(object)) {
-
       # update args if required
       args_passed <- mapply(
         update_args,
@@ -496,9 +492,7 @@ simulate.dynamics <- function(
           SIMPLIFY = FALSE
         )
       }
-
     } else {
-
       # update args if required
       args_passed <- update_args(
         args = default_args,
@@ -520,7 +514,6 @@ simulate.dynamics <- function(
       if (opt$keep_slices) {
         pop[, , i + 1] <- pop_tmp
       }
-
     }
   }
 
@@ -544,7 +537,6 @@ simulate.dynamics <- function(
 #' @importFrom future.apply future_lapply
 # internal function: update a single time step for one species
 simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
-
   # calculate covariate-altered matrix
   if (is_expanded) {
     mat <- lapply(
@@ -740,14 +732,13 @@ simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
 
 # internal function: update a single time step with interacting species
 simulate_once_multispecies <- function(
-    iter,
-    obj,
-    pop_t,
-    opt,
-    args,
-    .future
+  iter,
+  obj,
+  pop_t,
+  opt,
+  args,
+  .future
 ) {
-
   # vectorised update for all species
   if (!.future) {
     pop_tp1 <- lapply(
@@ -771,7 +762,6 @@ simulate_once_multispecies <- function(
 # internal function: update one species in a multispecies simulation
 #   (to vectorise simulate_once_multispecies)
 simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args) {
-
   # pull out relevant object and arguments
   dynamics <- obj$dynamics[[i]]
   args <- args[[i]]
@@ -807,7 +797,6 @@ simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args) {
     args,
     is_expanded = is_expanded
   )
-
 }
 
 # internal function: update single step of simulation with multiple species
@@ -922,7 +911,6 @@ expand_dims <- function(init, replicates) {
 #   are not used
 #' @importFrom stats update
 use_identity_covariates <- function(obj) {
-
   # define identity covariates function
   identity_mask <- all_cells(obj$matrix)
   identity_covariates <- covariates(
@@ -936,14 +924,12 @@ use_identity_covariates <- function(obj) {
 
   # return
   obj
-
 }
 
 # internal function: set identity replicated_covariates function if
 #   replicated_covariates are not used
 #' @importFrom stats update
 use_identity_rep_covariates <- function(obj) {
-
   # define identity replicated_covariates function
   identity_mask <- all_cells(obj$matrix)
   identity_rep_covariates <- replicated_covariates(
@@ -957,12 +943,10 @@ use_identity_rep_covariates <- function(obj) {
 
   # return
   obj
-
 }
 
 # internal function: split arguments based on type
 classify_args <- function(args) {
-
   # which arguments are static?
   static <- lapply(args, extract_args, type = "static")
 
@@ -974,13 +958,11 @@ classify_args <- function(args) {
 
   # and return list of arguments by type
   list(static = static, dyn = dyn, fn = fn)
-
 }
 
 # internal function: extract arguments by type for each
 #   process
 extract_args <- function(x, type) {
-
   # work out classes
   arg_class <- sapply(x, class)
 
@@ -1000,7 +982,6 @@ extract_args <- function(x, type) {
 
   # return
   x
-
 }
 
 # internal function: overwrite default static arguments with specified
@@ -1033,17 +1014,17 @@ check_dynamic_args <- function(x) {
 #   provided replicated_ args and check internal consistency for a single
 #   species (multispecies consistency checked in `simulate.dynamics`)
 check_replicated_args <- function(x, y) {
-
   if (!is.null(x$dyn$replicated_covariates)) {
     rep_dim <- unlist(
       lapply(x$dyn$replicated_covariates, \(.x) sapply(.x, length))
     )
     rep_dim <- unique(rep_dim)
-    if (length(rep_dim) > 1)
+    if (length(rep_dim) > 1) {
       stop(
         "replicated arguments should all have the same dimensions",
         call. = FALSE
       )
+    }
     if (rep_dim != y) {
       stop("replicated arguments should have nsim columns", call. = FALSE)
     }
@@ -1051,7 +1032,6 @@ check_replicated_args <- function(x, y) {
 
   # return
   TRUE
-
 }
 
 # internal function: update arguments based on the current generation

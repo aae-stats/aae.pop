@@ -57,8 +57,8 @@ dynamics <- function(matrix, ...) {
   # is matrix actually a matrix?
   if (length(dim(matrix)) != 2) {
     stop("matrix must be a two-dimensional array or matrix ",
-         "defining a population dynamics model",
-         call. = FALSE
+      "defining a population dynamics model",
+      call. = FALSE
     )
   }
 
@@ -87,8 +87,8 @@ dynamics <- function(matrix, ...) {
   # error if processes not supported
   if (!all(processes_supplied %in% processes_supported)) {
     stop("Additional arguments to dynamics must be one of ",
-         clean_paste(processes_supported, final_sep = "or"),
-         call. = FALSE
+      clean_paste(processes_supported, final_sep = "or"),
+      call. = FALSE
     )
   }
 
@@ -98,9 +98,9 @@ dynamics <- function(matrix, ...) {
     if (any(nproc > 1)) {
       duplicate_process <- names(nproc)[nproc > 1]
       stop("Multiple objects provided for the following processes: ",
-           clean_paste(duplicate_process, final_sep = "and"), ".\n",
-           " A dynamics object can include up to one of each process type",
-           call. = FALSE
+        clean_paste(duplicate_process, final_sep = "and"), ".\n",
+        " A dynamics object can include up to one of each process type",
+        call. = FALSE
       )
     }
   }
@@ -173,12 +173,12 @@ update.dynamics <- function(object, ...) {
 # S3 plot method
 #' @export
 plot.dynamics <- function(
-    x, y, ..., labels = NULL, cycle_first = "reproductive"
+  x, y, ..., labels = NULL, cycle_first = "reproductive"
 ) {
   if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
     stop("the DiagrammeR package must be installed to ",
-         "plot dynamics objects",
-         call. = FALSE
+      "plot dynamics objects",
+      call. = FALSE
     )
   }
 
@@ -200,8 +200,8 @@ plot.dynamics <- function(
   }
 
   gr <- DiagrammeR::from_adj_matrix(mat, # nolint
-                                    mode = "directed",
-                                    use_diag = TRUE
+    mode = "directed",
+    use_diag = TRUE
   )
 
   # how many nodes?
@@ -250,7 +250,6 @@ plot.dynamics <- function(
   if (is.null(labels)) {
     node_labels <- paste(type, seq_len(n_nodes), sep = " ")
   } else {
-
     # check that there are enough labels
     if (n_nodes != length(labels)) {
       stop(
@@ -261,7 +260,6 @@ plot.dynamics <- function(
 
     # use these if all OK
     node_labels <- labels
-
   }
 
   # if it's a Leslie matrix and to == from, we have an "age+" situation
@@ -274,8 +272,8 @@ plot.dynamics <- function(
     edge_style[from %in% which(node_type == "reprod") & to == 1] <- "dashed"
   } else {
     edge_style[from %in% which(node_type == "reprod") &
-                 !(to %in% which(node_type == "reprod")) &
-                 !(to %in% which(node_type == "post_reprod"))] <- "dashed"
+      !(to %in% which(node_type == "reprod")) &
+      !(to %in% which(node_type == "post_reprod"))] <- "dashed"
   }
 
   font_colour <- rep(col_pal[2], n_nodes)

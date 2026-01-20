@@ -145,8 +145,8 @@ metapopulation <- function(structure, dynamics, dispersal) {
   } else {
     if (length(dynamics) != structure$npop) {
       stop("dynamics must be a single dynamics object or a list of dynamics ",
-           "objects with one element for each row/col of structure",
-           call. = FALSE
+        "objects with one element for each row/col of structure",
+        call. = FALSE
       )
     }
   }
@@ -510,11 +510,11 @@ check_processes <- function(x, type) {
 #   Doesn't seem possible to end up with a list here given `block_diagnoal`
 #   is used first
 add_dispersal <- function(
-    mat,
-    str_rows,
-    str_cols,
-    dispersal,
-    nclass
+  mat,
+  str_rows,
+  str_cols,
+  dispersal,
+  nclass
 ) {
   # and loop through all dispersals, updating metapop matrix one-by-one
   for (i in seq_along(dispersal)) {
