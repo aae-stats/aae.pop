@@ -1,15 +1,11 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 
-^.lintr$
-^.travis.yml$
-
 ^README\.md$
 ^LICENSE$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^index\.md$
-^todo\.md$
 ^\.github$
 ^cran-comments\.md$
