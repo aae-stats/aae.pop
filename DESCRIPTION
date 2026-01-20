@@ -31,7 +31,8 @@ Imports:
     cubature,
     future.apply,
     mc2d,
-    nleqslv
+    nleqslv,
+    rlang
 Suggests:
     knitr,
     DiagrammeR,
