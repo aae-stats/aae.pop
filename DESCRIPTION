@@ -31,13 +31,15 @@ Imports:
     cubature,
     future.apply,
     mc2d,
-    nleqslv
+    nleqslv,
+    rlang
 Suggests:
     knitr,
     DiagrammeR,
     testthat,
     covr,
     rmarkdown,
+    remotes,
     scales
 VignetteBuilder: knitr
 RoxygenNote: 7.3.2

@@ -7,6 +7,8 @@ NULL
 
 #' @rdname dynamics
 #'
+#' @importFrom rlang is_installed
+#'
 #' @export
 #'
 #' @param matrix a matrix of vital rates specifying transitions between
