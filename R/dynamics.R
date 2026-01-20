@@ -10,7 +10,7 @@ NULL
 #' @export
 #'
 #' @param matrix a matrix of vital rates specifying transitions between
-#'   ages or stages. Specified in the format $n_{t+1} = A %*% n_t$, where
+#'   ages or stages. Specified in the format \eqn{n_{t+1} = A %*% n_t$}, where
 #'   $A$ is the matrix, so that values in a given column and row denote a
 #'   transition from that column to that row
 #' @param \dots additional objects used to define population dynamics.
@@ -29,6 +29,9 @@ NULL
 #'   trajectories with the \code{\link{simulate}} function. The \code{plot}
 #'   function is supported and will generate a general life-cycle
 #'   diagram based on the defined population dynamics.
+#'
+#' @returns \code{dynamics} object containing a matrix population model
+#'   and all associated processes
 #'
 #' @examples
 #' # define a population
