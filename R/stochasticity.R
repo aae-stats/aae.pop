@@ -89,9 +89,6 @@ NULL
 #'   options = list(
 #'     update = update_binomial_leslie,
 #'     tidy_abundances = floor
-#'   ),
-#'   args = list(
-#'     environmental_stochasticity = list(envstoch_function)
 #'   )
 #' )
 environmental_stochasticity <- function(masks, funs) {

@@ -189,10 +189,7 @@ sims <- simulate(
   dyn,
   init = c(50, 20, 10, 10, 5),
   nsim = 100,
-  args = list(
-    covariates = format_covariates(xvals),
-    environmental_stochasticity = list(envstoch_function)
-  )
+  args = list(covariates = format_covariates(xvals))
 )
 
 # a simple way to add demographic stochasticity is to change
@@ -211,10 +208,7 @@ sims <- simulate(
     update = update_binomial_leslie,
     tidy_abundances = floor
   ),
-  args = list(
-    covariates = format_covariates(xvals),
-    environmental_stochasticity = list(envstoch_function)
-  )
+  args = list(covariates = format_covariates(xvals))
 )
 
 # and can plot these again
