@@ -16,9 +16,18 @@ aae.pop supports flexible specification of population
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://aae-stats.github.io/aae.pop}
+  \item \url{https://aae-stats.github.io/aae.pop/}
   \item \url{https://github.com/aae-stats/aae.pop}
   \item Report bugs at \url{https://github.com/aae-stats/aae.pop/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Jian Yen \email{jdl.yen@gmail.com} [copyright holder]
+
+Other contributors:
+\itemize{
+  \item Arthur Rylah Institute for Environmental Research [funder]
 }
 
 }

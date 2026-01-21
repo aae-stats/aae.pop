@@ -14,9 +14,10 @@ is.dynamics(x)
 }
 \arguments{
 \item{matrix}{a matrix of vital rates specifying transitions between
-ages or stages. Specified in the format $n_{t+1} = A %*% n_t$, where
-$A$ is the matrix, so that values in a given column and row denote a
-transition from that column to that row}
+ages or stages. Specified in the format ntp1 = A %*% nt, where
+A is the matrix and nt is the vector of abundances, so that values
+in a given column and row denote a transition from that column
+to that row}
 
 \item{\dots}{additional objects used to define population dynamics.
 Must be one or more of \code{\link{covariates}},
@@ -32,6 +33,10 @@ Note that \code{\link{density_dependence_n}} is equivalent to
 \item{object}{a \code{dynamics} object}
 
 \item{x}{an object to pass to \code{is.dynamics}}
+}
+\value{
+\code{dynamics} object containing a matrix population model
+  and all associated processes
 }
 \description{
 Define population dynamics from a matrix and additional
@@ -60,5 +65,7 @@ popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
 dyn <- dynamics(popmat)
 
 # and plot this
-plot(dyn)
+if (rlang::is_installed("DiagrammeR")) {
+  plot(dyn)
+}
 }

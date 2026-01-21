@@ -1,48 +1,46 @@
 Package: aae.pop
 Type: Package
-Title: Flexible Simulation of Multispecies Population Dynamics 
+Title: Flexible Population Dynamics Simulations
 Version: 0.1.2
-Date: 2026-01-16
-Author: c(
+Date: 2026-01-20
+Authors@R: c(
   person(given = "Jian",
          family = "Yen",
-         role = c("aut", "cre"),
+         role = c("aut", "cre", "cph"),
          email = "jdl.yen@gmail.com"),
   person(given = "Arthur Rylah Institute for Environmental Research",
-         role = c("cph", "fnd"))
+         role = c("fnd"))
   )
 Maintainer: Jian Yen <jdl.yen@gmail.com>
-Description: Simulate multispecies population dynamics when vital rates
-    are influenced by time-varying covariates, such as environmental
-    conditions or the abundances of other species.
+Description: Simulate population dynamics from realistically complex matrix
+    population models in a plug-and-play fashion. Supports aspatial and 
+    spatially implicit models with one or more species and time-varying
+    covariates, stochasticity, density dependence, additions or removals of
+    indidivuals, interspecific interactions, and metapopulations.
 License: Apache License 2.0
-URL: https://aae-stats.github.io/aae.pop,
+URL: https://aae-stats.github.io/aae.pop/,
     https://github.com/aae-stats/aae.pop
 BugReports: https://github.com/aae-stats/aae.pop/issues
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.0)
+    R (>= 4.1.0)
 Imports:
     stats,
     abind,
     cubature,
     future.apply,
     mc2d,
-    nleqslv
+    nleqslv,
+    rlang
 Suggests:
-    aae.pop.templates,
-    aae.pop.inference,
     knitr,
     DiagrammeR,
     testthat,
     covr,
     rmarkdown,
-    spelling,
+    remotes,
     scales
-Remotes:
-    aae-stats/aae.pop.templates,
-    aae-stats/aae.pop.inference
 VignetteBuilder: knitr
 RoxygenNote: 7.3.2
 Language: en-GB

@@ -4,10 +4,9 @@
 
 ## Features
 
-- New process class to handle removals or additions to the population vector
-    prior to or following the update step: `add_remove_pre`, `add_remove_post`
-- Allow custom labels on plotted dynamics objects with `labels` argument
-- Update vignettes/website to include newer processes
+- `add_remove_pre` and `add_remove_post` added to handle removals or additions
+    to the population vector prior to or following the update step
+- `plot` function for `dynamics` objects updated to allow custom labels
 
 ## Fixes
 
@@ -27,14 +26,15 @@
 
 ## Features
 
-- New process class to handle covariates applied separately to each replicate
-    trajectory: `replicated_covariates`
+- `replicated_covariates` process class added to handle covariates
+    applied separately to each replicate trajectory
 
 # aae.pop 0.1.0
 
 ## Features
 
-- New methods to summarise simulated population trajectories: `get_cdf`, `get_pdf`, `emps`, `exps`
+- `get_cdf`, `get_pdf`, `emps`, `exps` methods added to summarise
+    simulated population trajectories: 
 
 ## Fixes
 

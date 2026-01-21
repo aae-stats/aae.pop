@@ -75,7 +75,9 @@ test_that("pr_extinct works with multiple settings", {
   expect_equal(value, target)
 
   # combine all
-  value <- pr_extinct(sims = sims, threshold = 42000, subset = 3:5, times = 20:35)
+  value <- pr_extinct(
+    sims = sims, threshold = 42000, subset = 3:5, times = 20:35
+  )
   target <- mean(apply(abund_sub[, 20:35], 1, function(x) any(x < 42000)))
   expect_equal(value, target)
 

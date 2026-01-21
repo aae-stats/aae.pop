@@ -37,6 +37,10 @@ might include \code{median} or \code{min}}
 \code{fun_among}. If these conflict, a wrapper function could
 be used to define expected arguments for each function}
 }
+\value{
+a single value representing the expected statistic applied
+  to the population sizes generated with \code{\link{simulate}}
+}
 \description{
 Calculate expected population size for a
   \code{\link{simulate}} object based on

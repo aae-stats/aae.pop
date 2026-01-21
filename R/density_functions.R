@@ -20,6 +20,9 @@ NULL
 #'   are the Ricker model and Beverton-Holt model, both with
 #'   a single parameter \code{k}.
 #'
+#' @returns functions that can be used with \code{\link{density_dependence}}
+#'   to specify common models of density dependence
+#'
 #' @examples
 #' # define a population matrix (columns move to rows)
 #' nclass <- 5

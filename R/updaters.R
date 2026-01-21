@@ -7,6 +7,8 @@ NULL
 
 #' @rdname updaters
 #'
+#' @importFrom mc2d rmultinomial
+#'
 #' @export
 #'
 #' @param pop current state of the population
@@ -23,6 +25,10 @@ NULL
 #'   across replicates if the population matrix is not expanded by
 #'   \code{\link{environmental_stochasticity}} or
 #'   \code{\link{density_dependence}}.
+#'
+#' @returns a matrix containing population abundances in each stage of a
+#'   matrix population model. Contains one row for each replicate population
+#'   trajectory and one column for each population stage
 #'
 #' @examples
 #' # define a basic population
@@ -135,6 +141,6 @@ update_multinomial <- function(pop, mat) {
 
 # internal function: single multinomial draw for one replicate
 multinomial_internal <- function(n, pop, mat) {
-  out <- mc2d::rmultinomial(n = n, size = pop, prob = t(mat))
+  out <- rmultinomial(n = n, size = pop, prob = t(mat))
   apply(out[, 1:n], 2, sum)
 }

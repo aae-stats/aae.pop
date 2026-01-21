@@ -15,6 +15,11 @@ defining cells affected by \code{funs}. See Details and
 \item{funs}{a function or list of functions with one element
 for each element of \code{masks}. See Details}
 }
+\value{
+\code{replicated_covariates} object specifying replicate-specific
+  covariate effects on a matrix population model; for use with
+  \code{\link{dynamics}}
+}
 \description{
 Specify relationship between a vector or matrix of covariates
   and vital rates, but with a different covariate value for each replicate
@@ -63,7 +68,7 @@ dyn <- dynamics(popmat)
 #   e.g., a logistic function
 covars <- replicated_covariates(
   masks = transition(popmat),
-  funs = function(mat, x) mat * (1 / (1 + exp(-10 * x)))
+  funs = \(mat, x) mat * (1 / (1 + exp(-10 * x)))
 )
 
 # simulate 50 random covariate values for each replicate (each

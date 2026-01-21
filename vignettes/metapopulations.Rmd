@@ -12,6 +12,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(aae.pop)
+library(scales)
 ```
 
 ## Background
@@ -76,7 +77,7 @@ metapop_simple[4, 4] <- metapop_simple[4, 4] - metapop_simple[2, 4]
 
 # what happens if we simulate from this?
 sims <- simulate(dynamics(metapop_simple), nsim = 100)
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 This plot sums over both populations, which is often of interest when considering species- or metapopulation-level abundances. `aae.pop` has a built-in `subset` method, which means it's possible to separate the two populations, recalling that population 1 is classes 1 and 2 and population 2 is classes 3 and 4 in the population vector:
@@ -84,8 +85,8 @@ This plot sums over both populations, which is often of interest when considerin
 ```{r, dev = "png"}
 pop1_sims <- subset(sims, 1:2)
 pop2_sims <- subset(sims, 3:4)
-plot(pop1_sims, col = scales::alpha("#2171B5", 0.4))
-plot(pop2_sims, col = scales::alpha("#2171B5", 0.4))
+plot(pop1_sims, col = alpha("#2171B5", 0.4))
+plot(pop2_sims, col = alpha("#2171B5", 0.4))
 ```
 
 This illustrates a highly simplified metapopulation model, highlighting the main steps in its construction: define population dynamics of each separate population, define dispersal among populations, and account for the effects of dispersal on within-population vital rates. The following sections outline how these steps are generalised in `aae.pop` to deal with realistically complex models.
@@ -171,8 +172,8 @@ With `metapopulation_simple` defined in this way, simulating population dynamics
 
 ```{r, dev = "png"}
 sims <- simulate(metapopulation_simple, nsim = 100)
-plot(subset(sims, 1:2), col = scales::alpha("#2171B5", 0.4), main = "Population 1")
-plot(subset(sims, 3:4), col = scales::alpha("#2171B5", 0.4), main = "Population 2")
+plot(subset(sims, 1:2), col = alpha("#2171B5", 0.4), main = "Population 1")
+plot(subset(sims, 3:4), col = alpha("#2171B5", 0.4), main = "Population 2")
 ```
 
 A more complicated metapopulation structure might consider the population introduced in the [Getting started](get_started.html) vignette, which had five age classes. Coupling this with the five-population `structure` shown above demonstrates a more realistic metapopulation. Note that specifying this metapopulation manually would require a matrix with 25 rows and 25 columns, with each dispersal and proportional change in survival calculated individually. Using `aae.pop` still takes a few lines of code but many of the calculations are now handled automatically:
@@ -207,14 +208,14 @@ mp <- metapopulation(
 sims <- simulate(mp, nsim = 100)
 
 # plot
-plot(sims, col = scales::alpha("#2171B5", 0.4), main = "All populations")
+plot(sims, col = alpha("#2171B5", 0.4), main = "All populations")
 ```
 
 With five populations, each with five classes, the simulated values now have 25 total classes. These are stored in order of the five populations defined in the `dynamics` argument to `metapopulation`, so classes 1 to 5 are the first population, 6 to 10 are the second population, and so on. These can be extracted and plotted with the `subset` function:
 
 ```{r, dev = "png"}
-plot(subset(sims, 1:5), col = scales::alpha("#2171B5", 0.4), main = "Population 1")
-plot(subset(sims, 21:25), col = scales::alpha("#2171B5", 0.4), main = "Population 5")
+plot(subset(sims, 1:5), col = alpha("#2171B5", 0.4), main = "Population 1")
+plot(subset(sims, 21:25), col = alpha("#2171B5", 0.4), main = "Population 5")
 ```
 
 These plots illustrate the effects of metapopulation dynamics: population 1 loses more individuals than it gains and is in decline, whereas population 5 only gains individuals and is on an upward trajectory as a result.
@@ -271,7 +272,7 @@ sims <- simulate(
 )
 
 # plot
-plot(sims, col = scales::alpha("#2171B5", 0.4), main = "Population-specific covariates")
+plot(sims, col = alpha("#2171B5", 0.4), main = "Population-specific covariates")
 ```
 
 This example uses a named `data.frame` to store the covariate sequences for both populations but this approach could use any number of covariates and any form of subsetting or indexing of covariates within the covariate functions.
@@ -315,7 +316,7 @@ metapopulation_simple <- metapopulation(
 sims <- simulate(metapopulation_simple, nsim = 100)
 
 # plot
-plot(sims, col = scales::alpha("#2171B5", 0.4), main = "Stochastic dispersal")
+plot(sims, col = alpha("#2171B5", 0.4), main = "Stochastic dispersal")
 ```
 
 ### Density dependence
@@ -372,5 +373,5 @@ metapopulation_simple <- metapopulation(
 sims <- simulate(metapopulation_simple, nsim = 100)
 
 # plot
-plot(sims, col = scales::alpha("#2171B5", 0.4), main = "Density-dependent dispersal")
+plot(sims, col = alpha("#2171B5", 0.4), main = "Density-dependent dispersal")
 ```

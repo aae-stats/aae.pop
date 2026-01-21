@@ -18,6 +18,10 @@ defining cells affected by \code{funs}. See Details and
 \item{funs}{a function or list of functions with one element
 for each element of \code{masks}. See Details}
 }
+\value{
+\code{add_remove_pre} or \code{add_remove_post} object specifying
+  an additions/removals process for use with \code{\link{dynamics}}
+}
 \description{
 Specify additions or removals from the population vector
   that occur before (\code{add_remove_pre}) or after the update step

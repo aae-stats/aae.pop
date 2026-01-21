@@ -10,6 +10,8 @@ NULL
 #'
 #' @export
 #'
+#' @importFrom abind abind
+#'
 #' @param matrix a population dynamics matrix for which
 #'   a particular mask is required. Only used to determine
 #'   mask dimensions, so can be any matrix with appropriate
@@ -17,7 +19,8 @@ NULL
 #' @param dims a numeric value or vector identifying
 #'   subsets of cells to include in a given mask
 #'
-#' @details To be completed.
+#' @returns \code{mask} object used to define the cells affected by
+#'   a process included in \code{\link{dynamics}}
 #'
 #' @examples
 #' # define a population
@@ -134,7 +137,7 @@ combine.mask <- function(...) {
   }
 
   # return combined mask if all OK
-  masks <- abind::abind(dots, along = 3)
+  masks <- abind(dots, along = 3)
   as_mask(apply(masks, c(1, 2), any))
 }
 

@@ -58,6 +58,9 @@ NULL
 #'   passed to \code{\link{simulate}} with the \code{args},
 #'   \code{args.dyn}, or \code{args.fn} arguments.
 #'
+#' @returns \code{density_dependence} object specifying covariate effects on
+#'   a matrix population model; for use with \code{\link{dynamics}}
+#'
 #' @examples
 #' # define a population matrix (columns move to rows)
 #' nclass <- 5

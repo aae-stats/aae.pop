@@ -5,7 +5,7 @@ development:
 
 template:
   bootstrap: 5
-  bootswatch: flatly
+bootswatch: flatly
 
 authors:
   Jian Yen:
@@ -65,37 +65,35 @@ navbar:
   structure:
     left: [get_started, functions, vignettes, examples]
     right: [github]
-  components:
-    home: ~
-    reference: ~
-    articles: ~
-    news: ~
-    get_started:
-      text: get started
-      href: articles/get_started.html
-    vignettes:
-      text: vignettes
-      menu:
-      - text: "Including processes"
-        href: articles/including_processes.html
-      - text: "Beyond defaults"
-        href: articles/beyond_defaults.html
-      - text: "Metapopulations"
-        href: articles/metapopulations.html
-      - text: "Multiple species"
-        href: articles/multiple_species.html
-      - text: "Species templates"
-        href: articles/templates.html
-    examples:
-      text: examples
-      menu:
-      - text: "Macquarie perch"
-        href: articles/macperch_example.html
-      - text: "Comparing scenarios"
-        href: articles/scenarios_example.html
-    documentation:
-      text: documentation
-      href: reference/index.html
-    github:
-      icon: fab fa-github
-      href: https://github.com/aae-stats/aae.pop
+components:
+  home: ~
+  reference: ~
+  articles: ~
+  news: ~
+  get_started:
+    text: get started
+    href: articles/get_started.html
+  vignettes:
+    text: vignettes
+    menu:
+    - text: "Including processes"
+      href: articles/including_processes.html
+    - text: "Beyond defaults"
+      href: articles/beyond_defaults.html
+    - text: "Metapopulations"
+      href: articles/metapopulations.html
+    - text: "Multiple species"
+      href: articles/multiple_species.html
+  examples:
+    text: examples
+    menu:
+    - text: "Macquarie perch"
+      href: articles/macperch_example.html
+    - text: "Comparing scenarios"
+      href: articles/scenarios_example.html
+  documentation:
+    text: documentation
+    href: reference/index.html
+  github:
+    icon: fab fa-github
+    href: https://github.com/aae-stats/aae.pop
