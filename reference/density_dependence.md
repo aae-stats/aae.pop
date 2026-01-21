@@ -31,6 +31,12 @@ density_dependence_n(masks, funs)
   internal use when scaling up processes in
   [`metapopulation`](https://aae-stats.github.io/aae.pop/reference/metapopulation.md)
 
+## Value
+
+`density_dependence` object specifying covariate effects on a matrix
+population model; for use with
+[`dynamics`](https://aae-stats.github.io/aae.pop/reference/dynamics.md)
+
 ## Details
 
 `density_dependence` specifies standard density dependence on vital

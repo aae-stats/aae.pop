@@ -30,6 +30,8 @@ pairwise_interaction(target, source, masks, funs)
   functions that take vital rates and abundances of the `source`
   population as inputs and return scaled vital rates
 
-## Details
+## Value
 
-To be completed.
+`pairwise_interaction` object specifying links between species; for use
+with
+[`multispecies`](https://aae-stats.github.io/aae.pop/reference/multispecies.md)

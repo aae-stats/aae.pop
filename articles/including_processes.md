@@ -139,7 +139,7 @@ popdyn <- dynamics(popmat, demostoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](including_processes_files/figure-html/unnamed-chunk-4-1.png)
@@ -220,7 +220,7 @@ popdyn <- dynamics(popmat, envstoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](including_processes_files/figure-html/unnamed-chunk-8-1.png)
@@ -240,7 +240,7 @@ popdyn <- update(popdyn, demostoch)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](including_processes_files/figure-html/unnamed-chunk-9-1.png)
@@ -297,17 +297,15 @@ popdyn <- update(popdyn, dd)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](including_processes_files/figure-html/unnamed-chunk-10-1.png)
 
 Density dependence can take many other forms. These forms may include
 positive density dependence (e.g., Allee effects) or may affect adult
-abundances as well as reproduction. An example of the former is included
-in the [Macquarie perch worked
-example](https://aae-stats.github.io/aae.pop/articles/macperch_example.md).
-The next section introduces an example of the latter.
+abundances as well as reproduction. The next section introduces an
+example of the latter.
 
 ### A different form of density dependence
 
@@ -348,7 +346,7 @@ popdyn <- dynamics(popmat, envstoch, demostoch, dd_n)
 sims <- simulate(popdyn, nsim = 100)
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](including_processes_files/figure-html/unnamed-chunk-11-1.png)
@@ -390,7 +388,7 @@ sims <- simulate(
 )
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](including_processes_files/figure-html/unnamed-chunk-12-1.png)
@@ -488,7 +486,7 @@ sims <- simulate(
 )
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](including_processes_files/figure-html/unnamed-chunk-14-1.png)
@@ -538,7 +536,7 @@ sims <- simulate(
 )
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](including_processes_files/figure-html/unnamed-chunk-15-1.png)
@@ -624,7 +622,7 @@ sims <- simulate(
 )
 
 # plot the population trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](including_processes_files/figure-html/unnamed-chunk-19-1.png)

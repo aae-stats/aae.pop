@@ -5,7 +5,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">aae.pop</a>
 
@@ -17,21 +17,7 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/get_started.html">get started</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">vignettes</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes"><li><a class="dropdown-item" href="../articles/including_processes.html">Including processes</a></li>
-    <li><a class="dropdown-item" href="../articles/beyond_defaults.html">Beyond defaults</a></li>
-    <li><a class="dropdown-item" href="../articles/metapopulations.html">Metapopulations</a></li>
-    <li><a class="dropdown-item" href="../articles/multiple_species.html">Multiple species</a></li>
-    <li><a class="dropdown-item" href="../articles/templates.html">Species templates</a></li>
-  </ul></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples"><li><a class="dropdown-item" href="../articles/macperch_example.html">Macquarie perch</a></li>
-    <li><a class="dropdown-item" href="../articles/scenarios_example.html">Comparing scenarios</a></li>
-  </ul></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop"><span class="fa fab fa-github"></span></a></li>
+      <ul class="navbar-nav me-auto"></ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -41,7 +27,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Specify dispersal between populations in a metapopulation model</h1>
-      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/v0.1.2/R/dispersal.R" class="external-link"><code>R/dispersal.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/main/R/dispersal.R" class="external-link"><code>R/dispersal.R</code></a></small>
       <div class="d-none name"><code>dispersal.Rd</code></div>
     </div>
 
@@ -110,8 +96,10 @@ exits that class at any given time step</p></dd>
 
 </dl></div>
     <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>To be completed.</p>
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p><code>dispersal</code> object specifying probabilities of movement
+  between populations in a metapopulation matrix model; for use with
+  <code><a href="metapopulation.html">metapopulation</a></code></p>
     </div>
 
     <div class="section level2">
@@ -157,7 +145,7 @@ exits that class at any given time step</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jian Yen.</p>
+  <p>Developed by Jian Yen, Arthur Rylah Institute for Environmental Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">

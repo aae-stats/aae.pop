@@ -16,7 +16,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">aae.pop</a>
 
@@ -28,28 +28,9 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/get_started.html">get started</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">vignettes</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
-<li><a class="dropdown-item" href="../articles/including_processes.html">Including processes</a></li>
-    <li><a class="dropdown-item" href="../articles/beyond_defaults.html">Beyond defaults</a></li>
-    <li><a class="dropdown-item" href="../articles/metapopulations.html">Metapopulations</a></li>
-    <li><a class="dropdown-item" href="../articles/multiple_species.html">Multiple species</a></li>
-    <li><a class="dropdown-item" href="../articles/templates.html">Species templates</a></li>
-  </ul>
-</li>
-<li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="../articles/macperch_example.html">Macquarie perch</a></li>
-    <li><a class="dropdown-item" href="../articles/scenarios_example.html">Comparing scenarios</a></li>
-  </ul>
-</li>
-      </ul>
+      <ul class="navbar-nav me-auto"></ul>
 <ul class="navbar-nav">
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop"><span class="fa fab fa-github"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -67,9 +48,9 @@
       <h1>Population dynamics of Macquarie perch</h1>
                         <h4 data-toc-skip class="author">Jian Yen</h4>
             
-            <h4 data-toc-skip class="date">01/07/2021</h4>
+            <h4 data-toc-skip class="date">20/01/2026</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/v0.1.2/vignettes/macperch_example.Rmd" class="external-link"><code>vignettes/macperch_example.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/main/vignettes/macperch_example.Rmd" class="external-link"><code>vignettes/macperch_example.Rmd</code></a></small>
       <div class="d-none name"><code>macperch_example.Rmd</code></div>
     </div>
 
@@ -89,9 +70,7 @@ time step.</p>
 that has since been updated with new information. The updated template
 is included in the <code>aae.pop.templates</code> package, which can be
 installed from Github with
-<code>remotes::install_github("aae-stats/aae.pop.templates")</code>. See
-<a href="templates.html">Templates</a> for available templates or
-additional details on using or defining population model templates.</p>
+<code>remotes::install_github("aae-stats/aae.pop.templates")</code>.</p>
 <p>Macquarie perch is a freshwater fish species native to the
 Murray-Darling Basin in south-eastern Australia. Macquarie perch is a
 large (up to 46 cm and 3.5 kg), long-lived (up to 30 years) species, and
@@ -128,16 +107,16 @@ following R function:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># function to simulate reproductive output of Macquarie perch</span></span>
 <span><span class="va">fecundity</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
-<span>  <span class="va">age</span>,                             <span class="co"># vector of ages</span></span>
-<span>  <span class="va">mean</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.68</span>, <span class="op">-</span><span class="fl">0.302</span>, <span class="fl">2.886</span><span class="op">)</span>,   <span class="co"># mean parameters for fecundity function</span></span>
-<span>  <span class="va">early_surv</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.013</span>, <span class="fl">0.13</span><span class="op">)</span> <span class="co"># estimates of early life survival (eggs, larvae, young-of-year)</span></span>
+<span>    <span class="va">age</span>,                             <span class="co"># vector of ages</span></span>
+<span>    <span class="va">mean</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.68</span>, <span class="op">-</span><span class="fl">0.302</span>, <span class="fl">2.886</span><span class="op">)</span>,   <span class="co"># mean parameters for fecundity function</span></span>
+<span>    <span class="va">early_surv</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.013</span>, <span class="fl">0.13</span><span class="op">)</span> <span class="co"># estimates of early life survival (eggs, larvae, young-of-year)</span></span>
 <span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># mean estimates of three model parameters</span></span>
 <span>  <span class="va">y1</span> <span class="op">&lt;-</span> <span class="va">mean</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span>  <span class="va">y2</span> <span class="op">&lt;-</span> <span class="va">mean</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
 <span>  <span class="va">y3</span> <span class="op">&lt;-</span> <span class="va">mean</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># calculate fecundity</span></span>
 <span>  <span class="va">y2_term</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">y2</span> <span class="op">*</span> <span class="va">age</span><span class="op">)</span></span>
 <span>  <span class="va">y1_y2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">43.15</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span> <span class="va">y1</span> <span class="op">*</span> <span class="va">y2_term</span><span class="op">)</span><span class="op">)</span></span>
@@ -146,12 +125,12 @@ following R function:</p>
 <span>  <span class="co"># add early life survival and muliply by 0.5</span></span>
 <span>  <span class="co">#   to account for a 50:50 sex ratio</span></span>
 <span>  <span class="fl">0.5</span> <span class="op">*</span> <span class="va">fec</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/prod.html" class="external-link">prod</a></span><span class="op">(</span><span class="va">early_surv</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># plot mean fecundity as a function of age</span></span>
 <span><span class="va">age_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">30</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">fecundity</span><span class="op">(</span><span class="va">age_vec</span><span class="op">)</span> <span class="op">~</span> <span class="va">age_vec</span>, las <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"l"</span>, xlab <span class="op">=</span> <span class="st">"Age"</span>, ylab <span class="op">=</span> <span class="st">"Fecundity"</span>, bty <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">fecundity</span><span class="op">(</span><span class="va">age_vec</span><span class="op">)</span> <span class="op">~</span> <span class="va">age_vec</span>, las <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"l"</span>, xlab <span class="op">=</span> <span class="st">"Age"</span>, ylab <span class="op">=</span> <span class="st">"Fecundity"</span>, bty <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fu">alpha</span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="macperch_example_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" alt="" width="700"></p>
 <p>Survival has a peaked relationship with age, increasing in
 individuals up to approximately 20 years of age and declining from that
@@ -166,7 +145,7 @@ This relationship is captured in the following parameters:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot mean survival as a function of age</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">survival_params</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">29</span><span class="op">)</span>, las <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"l"</span>, xlab <span class="op">=</span> <span class="st">"Age"</span>, ylab <span class="op">=</span> <span class="st">"Survival"</span>, bty <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">survival_params</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">29</span><span class="op">)</span>, las <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"l"</span>, xlab <span class="op">=</span> <span class="st">"Age"</span>, ylab <span class="op">=</span> <span class="st">"Survival"</span>, bty <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fu">alpha</span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="macperch_example_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="700"></p>
 <p>These values are sufficient to construct the (mean) population
 matrix:</p>
@@ -314,9 +293,9 @@ correlations:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0.25</span>, <span class="fl">0</span>,    <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">unit_sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rng.html">rmultiunit</a></span><span class="op">(</span></span>
-<span>  <span class="fl">10000</span>, </span>
-<span>  mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.6</span><span class="op">)</span>, </span>
-<span>  sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.05</span>, <span class="fl">0.05</span>, <span class="fl">0.05</span>, <span class="fl">0.2</span><span class="op">)</span>, </span>
+<span>  <span class="fl">10000</span>,</span>
+<span>  mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.6</span><span class="op">)</span>,</span>
+<span>  sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.05</span>, <span class="fl">0.05</span>, <span class="fl">0.05</span>, <span class="fl">0.2</span><span class="op">)</span>,</span>
 <span>  Omega <span class="op">=</span> <span class="va">omega_est</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>It is easy to verify that <code>runit</code> and
@@ -374,25 +353,25 @@ rates through a combination of masks and functions:</p>
 <span><span class="co">#   with any arguments in survival_gen, which would then require multiple different</span></span>
 <span><span class="co">#   arguments with the same name in simulate</span></span>
 <span><span class="va">reproduction_gen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
-<span>  <span class="va">mat</span>,</span>
-<span>  <span class="va">fec_mean</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.68</span>, <span class="op">-</span><span class="fl">0.302</span>, <span class="fl">2.886</span><span class="op">)</span>,</span>
-<span>  <span class="va">fec_sd</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.05</span>, <span class="fl">0.15</span><span class="op">)</span>,</span>
-<span>  <span class="va">early_mean</span>,</span>
-<span>  <span class="va">early_sd</span>, </span>
-<span>  <span class="va">...</span></span>
+<span>    <span class="va">mat</span>,</span>
+<span>    <span class="va">fec_mean</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.68</span>, <span class="op">-</span><span class="fl">0.302</span>, <span class="fl">2.886</span><span class="op">)</span>,</span>
+<span>    <span class="va">fec_sd</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.05</span>, <span class="fl">0.15</span><span class="op">)</span>,</span>
+<span>    <span class="va">early_mean</span>,</span>
+<span>    <span class="va">early_sd</span>,</span>
+<span>    <span class="va">...</span></span>
 <span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># need a vector of ages, hard coded here (could be an argument)</span></span>
 <span>  <span class="va">age</span> <span class="op">&lt;-</span> <span class="fl">3</span><span class="op">:</span><span class="fl">30</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># generate stochastic values for early life survival (eggs, larvae, young-of-year)</span></span>
 <span>  <span class="va">early_real</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rng.html">rmultiunit_from_real</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, mean <span class="op">=</span> <span class="va">early_mean</span>, sd <span class="op">=</span> <span class="va">early_sd</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># otherwise draw random variates for the three model parameters</span></span>
 <span>  <span class="va">y1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, mean <span class="op">=</span> <span class="va">fec_mean</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, sd <span class="op">=</span> <span class="va">fec_sd</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">y2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, mean <span class="op">=</span> <span class="va">fec_mean</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, sd <span class="op">=</span> <span class="va">fec_sd</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">y3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, mean <span class="op">=</span> <span class="va">fec_mean</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, sd <span class="op">=</span> <span class="va">fec_sd</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># generate reproduction estimates for all adult age classes, incorporating</span></span>
 <span>  <span class="co">#   stochastic early life estimates</span></span>
 <span>  <span class="va">y2_term</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">y2</span> <span class="op"><a href="https://rdrr.io/r/base/outer.html" class="external-link">%o%</a></span> <span class="va">age</span><span class="op">)</span></span>
@@ -400,7 +379,7 @@ rates through a combination of masks and functions:</p>
 <span>    <span class="fl">43.15</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sweep.html" class="external-link">sweep</a></span><span class="op">(</span><span class="va">y2_term</span>, <span class="fl">1</span>, <span class="op">-</span><span class="va">y1</span>, <span class="st">"*"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span>  <span class="va">reprod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sweep.html" class="external-link">sweep</a></span><span class="op">(</span><span class="fl">2.295</span> <span class="op">*</span> <span class="va">y1_y2</span>, <span class="fl">1</span>, <span class="va">y3</span>, <span class="st">"+"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># add early life survival and muliply by 0.5</span></span>
 <span>  <span class="co">#   to account for a 50:50 sex ratio</span></span>
 <span>  <span class="fl">0.5</span> <span class="op">*</span> <span class="va">reprod</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/prod.html" class="external-link">prod</a></span><span class="op">(</span><span class="va">early_real</span><span class="op">)</span></span>
@@ -453,7 +432,7 @@ standard deviations, as well as survival estimates for early life stages
 <span>    unit_mean <span class="op">=</span> <span class="va">survival_mean</span>,</span>
 <span>    unit_sd <span class="op">=</span> <span class="va">survival_sd</span></span>
 <span>  <span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># separate early life from other estimates</span></span>
 <span>  <span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">3</span></span>
 <span></span>
@@ -463,7 +442,7 @@ standard deviations, as well as survival estimates for early life stages
 <span>       early_mean <span class="op">=</span> <span class="va">out</span><span class="op">[</span><span class="op">!</span><span class="va">idx</span>, <span class="fl">1</span><span class="op">]</span>,  <span class="co"># for reproduction_gen</span></span>
 <span>       early_sd <span class="op">=</span> <span class="va">out</span><span class="op">[</span><span class="op">!</span><span class="va">idx</span>, <span class="fl">2</span><span class="op">]</span>     <span class="co"># for reproduction_gen</span></span>
 <span>  <span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
@@ -484,10 +463,10 @@ that determines how population abundances are altered.</p>
 <code class="sourceCode R"><span><span class="co"># take a population vector and update it to add or remove n individuals</span></span>
 <span><span class="co">#   split into two stages (juveniles, adults)</span></span>
 <span><span class="va">dd_n</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pop</span>, <span class="va">n</span>, <span class="va">add</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># are we removing individuals?</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">add</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    </span>
+<span></span>
 <span>    <span class="co"># check that there are enough juveniles</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="va">n</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">pop</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">n</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">pop</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
@@ -495,7 +474,7 @@ that determines how population abundances are altered.</p>
 <span>              <span class="st">" total removals reduced to "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">pop</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>              call. <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
-<span>    </span>
+<span></span>
 <span>    <span class="co"># check that there are enough adults</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="va">n</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">pop</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">30</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">n</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">pop</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">30</span><span class="op">]</span><span class="op">)</span></span>
@@ -503,7 +482,7 @@ that determines how population abundances are altered.</p>
 <span>              <span class="st">" total removals reduced to "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">pop</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">30</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>              call. <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
-<span>    </span>
+<span></span>
 <span>    <span class="co"># expand n to remove from random age classes</span></span>
 <span>    <span class="va">n_juvenile_by_age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, times <span class="op">=</span> <span class="va">pop</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="va">juvenile_idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span></span>
@@ -515,9 +494,9 @@ that determines how population abundances are altered.</p>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">n_adult_by_age</span><span class="op">)</span>, size <span class="op">=</span> <span class="va">n</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, replace <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>    <span class="op">)</span></span>
 <span>    <span class="va">n_adult</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">n_adult_by_age</span><span class="op">[</span><span class="va">adult_idx</span><span class="op">]</span><span class="op">)</span></span>
-<span>    </span>
+<span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>    </span>
+<span></span>
 <span>    <span class="co"># sample random classes to add individuals</span></span>
 <span>    <span class="va">n_juvenile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, size <span class="op">=</span> <span class="va">n</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -525,9 +504,9 @@ that determines how population abundances are altered.</p>
 <span>    <span class="va">n_adult</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">3</span><span class="op">:</span><span class="fl">30</span>, size <span class="op">=</span> <span class="va">n</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
-<span>    </span>
+<span></span>
 <span>  <span class="op">}</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># convert from a vector of classes to a count for each class</span></span>
 <span>  <span class="va">n_juvenile_expanded</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">n_juvenile_expanded</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
@@ -540,10 +519,10 @@ that determines how population abundances are altered.</p>
 <span>  <span class="co"># adding is the opposite of removing</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">add</span><span class="op">)</span></span>
 <span>    <span class="va">n</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="va">n</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># update pop abundances and return</span></span>
 <span>  <span class="va">pop</span> <span class="op">-</span> <span class="va">n</span></span>
-<span>  </span>
+<span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># wrap this up in a add_remove_post object (formerly density_dependence_n)</span></span>
@@ -561,8 +540,9 @@ time-varying value of <code>n</code>, or the <code>dd_n</code> function
 could use <code>pop</code> (actual abundances) to define a
 density-dependent addition or removal scenario. These extensions are not
 shown here but an example of a function argument is included in the
-<code>macquarie_perch</code> template to simulate changes in fishing
-regulations or stocking through time.</p>
+<code>macquarie_perch</code> template in the
+<code>aae.pop.templates</code> package, where it is used to simulate
+changes in fishing regulations and stocking through time.</p>
 </div>
 <div class="section level3">
 <h3 id="covariate-effects">Covariate effects<a class="anchor" aria-label="anchor" href="#covariate-effects"></a>
@@ -593,15 +573,15 @@ functions:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># effect 1: recruitment has peaked association with Nov/Dec discharge</span></span>
 <span><span class="va">recruit_peaked</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mat</span>, <span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># define a quadratic association with log-transformed discharge</span></span>
 <span>  <span class="va">log_discharge</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">spawning_discharge</span> <span class="op">+</span> <span class="fl">0.01</span><span class="op">)</span></span>
 <span>  <span class="va">scale_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.1</span> <span class="op">*</span> <span class="va">log_discharge</span> <span class="op">-</span> <span class="fl">0.1</span> <span class="op">*</span> <span class="op">(</span><span class="va">log_discharge</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># make sure values are in the [0, 1] range</span></span>
 <span>  <span class="va">scale_factor</span><span class="op">[</span><span class="va">scale_factor</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span>  <span class="va">scale_factor</span><span class="op">[</span><span class="va">scale_factor</span> <span class="op">&lt;</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># return re-scaled recruitment values</span></span>
 <span>  <span class="va">mat</span> <span class="op">*</span> <span class="va">scale_factor</span></span>
 <span></span>
@@ -620,14 +600,14 @@ functions:</p>
 <span><span class="co"># effect 4: adult survival reduced by low-discharge conditions</span></span>
 <span><span class="va">adult_low</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mat</span>, <span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
-<span>  <span class="co"># define a quadratic association with log-transformed discharge  </span></span>
+<span>  <span class="co"># define a quadratic association with log-transformed discharge</span></span>
 <span>  <span class="va">log_discharge</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">average_daily_discharge</span> <span class="op">+</span> <span class="fl">0.01</span><span class="op">)</span></span>
 <span>  <span class="va">scale_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">0.3</span> <span class="op">*</span> <span class="va">log_discharge</span> <span class="op">-</span> <span class="fl">0.3</span> <span class="op">*</span> <span class="op">(</span><span class="va">log_discharge</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># make sure values are in the [0, 1] range</span></span>
 <span>  <span class="va">scale_factor</span><span class="op">[</span><span class="va">scale_factor</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span>  <span class="va">scale_factor</span><span class="op">[</span><span class="va">scale_factor</span> <span class="op">&lt;</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># return re-scaled survival values</span></span>
 <span>  <span class="va">mat</span> <span class="op">*</span> <span class="va">scale_factor</span></span>
 <span></span>
@@ -704,7 +684,7 @@ equivalents:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the simulated trajectories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">alpha</span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="macperch_example_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="700"></p>
 <p>The simulated abundances are extremely high given expected population
 sizes in this system. The primary reason for this is that the model
@@ -725,8 +705,8 @@ added to this model with the following code, noting that the same
 <span></span>
 <span><span class="co"># simulate</span></span>
 <span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate.html">simulate</a></span><span class="op">(</span></span>
-<span>  <span class="va">popdyn</span>, </span>
-<span>  nsim <span class="op">=</span> <span class="fl">100</span>, </span>
+<span>  <span class="va">popdyn</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    add_remove_post <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,         <span class="co"># remove no individuals this time</span></span>
 <span>    covariates <span class="op">=</span> <span class="fu"><a href="../reference/covariates.html">format_covariates</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">covar_values</span><span class="op">)</span>, <span class="co"># pass formatted covariate values</span></span>
@@ -735,18 +715,18 @@ added to this model with the following code, noting that the same
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot the simulated trajectories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, col <span class="op">=</span> <span class="fu">alpha</span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="macperch_example_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="700"></p>
 <p>The simulated trajectories now look much more realistic. Here, large
 values reflect young individuals, many of which do not survive to
 adulthood. Plotting older classes alone highlights this effect:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># all adults</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu">alpha</span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="macperch_example_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ages 5 and above</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">sims</span>, subset <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu">alpha</span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="macperch_example_files/figure-html/unnamed-chunk-17-2.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
@@ -787,25 +767,25 @@ calculated with the following function:</p>
 <span><span class="co">#   in any time step. By default, all population classes are included</span></span>
 <span><span class="co">#   but `subset` can be used to select specific classes</span></span>
 <span><span class="va">calculate_quasi_extinction</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">popsim</span>, <span class="va">threshold</span>, <span class="va">subset</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">include</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># is a subset required?</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">subset</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="va">popsim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">popsim</span>, subset <span class="op">=</span> <span class="va">subset</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># sum population abundances over all remaining classes</span></span>
 <span>  <span class="va">popsim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">popsim</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, <span class="va">sum</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># do we want to include the threshold value in the check?</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">include</span><span class="op">)</span></span>
 <span>    <span class="va">threshold</span> <span class="op">&lt;-</span> <span class="va">threshold</span> <span class="op">+</span> <span class="fl">1e-5</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># is a trajectory below a threshold?</span></span>
 <span>  <span class="va">threshold_check</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">popsim</span>, <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;</span> <span class="va">threshold</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># return proportion below threshold</span></span>
 <span>  <span class="co">#   (mean of binary values is the proportion equal to 1)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">threshold_check</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>This function can be used to explore many different outputs:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -850,14 +830,14 @@ different values of <code>threshold</code>:</p>
 <span>      include <span class="op">=</span> <span class="va">include</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># calculate risk curve for thresholds from 0 to 10000</span></span>
 <span><span class="va">risk_calc</span> <span class="op">&lt;-</span> <span class="fu">calculate_risk</span><span class="op">(</span><span class="va">sims</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">10000</span>, subset <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># this can be plotted</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">risk</span> <span class="op">~</span> <span class="va">threshold</span>, data <span class="op">=</span> <span class="va">risk_calc</span>, xlab <span class="op">=</span> <span class="st">"Threshold population size (adult abundance)"</span>, ylab <span class="op">=</span> <span class="st">"Quasi-extinction probability"</span>, las <span class="op">=</span> <span class="fl">1</span>, bty <span class="op">=</span> <span class="st">"l"</span>, type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">risk</span> <span class="op">~</span> <span class="va">threshold</span>, data <span class="op">=</span> <span class="va">risk_calc</span>, xlab <span class="op">=</span> <span class="st">"Threshold population size (adult abundance)"</span>, ylab <span class="op">=</span> <span class="st">"Quasi-extinction probability"</span>, las <span class="op">=</span> <span class="fl">1</span>, bty <span class="op">=</span> <span class="st">"l"</span>, type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fu">alpha</span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="macperch_example_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="" width="700"></p>
 <p>A risk curve provides information on the likelihood of hitting any
 given population size at any point in time. This information can also be
@@ -872,7 +852,7 @@ code:</p>
 <span></span>
 <span>  <span class="co"># find the rows in risk nearest to prob</span></span>
 <span>  <span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">prob</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">risk</span> <span class="op">-</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># then pull out and return these threshold values</span></span>
 <span>  <span class="va">threshold</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span></span>
 <span></span>
@@ -883,7 +863,7 @@ code:</p>
 <span><span class="va">thresh</span> <span class="op">&lt;-</span> <span class="fu">calculate_threshold</span><span class="op">(</span><span class="va">risk_calc</span><span class="op">$</span><span class="va">risk</span>, <span class="va">risk_calc</span><span class="op">$</span><span class="va">threshold</span>, prob <span class="op">=</span> <span class="va">probs</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot these on the risk curve</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">risk</span> <span class="op">~</span> <span class="va">threshold</span>, data <span class="op">=</span> <span class="va">risk_calc</span>, xlab <span class="op">=</span> <span class="st">"Threshold population size (adult abundance)"</span>, ylab <span class="op">=</span> <span class="st">"Quasi-extinction probability"</span>, las <span class="op">=</span> <span class="fl">1</span>, bty <span class="op">=</span> <span class="st">"l"</span>, type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">risk</span> <span class="op">~</span> <span class="va">threshold</span>, data <span class="op">=</span> <span class="va">risk_calc</span>, xlab <span class="op">=</span> <span class="st">"Threshold population size (adult abundance)"</span>, ylab <span class="op">=</span> <span class="st">"Quasi-extinction probability"</span>, las <span class="op">=</span> <span class="fl">1</span>, bty <span class="op">=</span> <span class="st">"l"</span>, type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="fu">alpha</span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">col_pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#67001F"</span>, <span class="st">"#D6604D"</span>, <span class="st">"#FDDBC7"</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">thresh</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">thresh</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">thresh</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.2</span>, <span class="va">probs</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">col_pal</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -911,7 +891,7 @@ Endangered Freshwater Fish in South-Eastern Australia.”</span>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jian Yen.</p>
+  <p>Developed by Jian Yen, Arthur Rylah Institute for Environmental Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">

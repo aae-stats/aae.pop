@@ -23,6 +23,12 @@ ricker(k, exclude = NULL)
   vector of classes to exclude from calculation of total population
   density. Defaults to NULL, in which case all classes are used
 
+## Value
+
+functions that can be used with
+[`density_dependence`](https://aae-stats.github.io/aae.pop/reference/density_dependence.md)
+to specify common models of density dependence
+
 ## Details
 
 Additional functions are provided to define common forms of density

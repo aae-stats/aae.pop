@@ -141,21 +141,21 @@ species to plot:
 
 ``` r
 # plot
-plot(sims, which = 1, col = scales::alpha("#2171B5", 0.4), main = "Species 1")
+plot(sims, which = 1, col = alpha("#2171B5", 0.4), main = "Species 1")
 ```
 
 ![](multiple_species_files/figure-html/unnamed-chunk-4-1.png)
 
 ``` r
 # plot
-plot(sims, which = 2, col = scales::alpha("#2171B5", 0.4), main = "Species 2")
+plot(sims, which = 2, col = alpha("#2171B5", 0.4), main = "Species 2")
 ```
 
 ![](multiple_species_files/figure-html/unnamed-chunk-4-2.png)
 
 ``` r
 # plot
-plot(sims, which = 3, col = scales::alpha("#2171B5", 0.4), main = "Species 3")
+plot(sims, which = 3, col = alpha("#2171B5", 0.4), main = "Species 3")
 ```
 
 ![](multiple_species_files/figure-html/unnamed-chunk-4-3.png)

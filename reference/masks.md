@@ -39,9 +39,10 @@ combine(...)
   a set of masks or masking functions to be combined into a single mask
   by one of the `combine` methods
 
-## Details
+## Value
 
-To be completed.
+`mask` object used to define the cells affected by a process included in
+[`dynamics`](https://aae-stats.github.io/aae.pop/reference/dynamics.md)
 
 ## Examples
 

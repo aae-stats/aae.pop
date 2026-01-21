@@ -57,9 +57,11 @@ dispersal(
   of the total probability an individual exits that class at any given
   time step
 
-## Details
+## Value
 
-To be completed.
+`dispersal` object specifying probabilities of movement between
+populations in a metapopulation matrix model; for use with
+[`metapopulation`](https://aae-stats.github.io/aae.pop/reference/metapopulation.md)
 
 ## Examples
 

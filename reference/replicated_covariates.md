@@ -24,6 +24,12 @@ replicated_covariates(masks, funs)
   a function or list of functions with one element for each element of
   `masks`. See Details
 
+## Value
+
+`replicated_covariates` object specifying replicate-specific covariate
+effects on a matrix population model; for use with
+[`dynamics`](https://aae-stats.github.io/aae.pop/reference/dynamics.md)
+
 ## Details
 
 Masks must be of the same dimension as the population dynamics matrix
@@ -68,7 +74,7 @@ dyn <- dynamics(popmat)
 #   e.g., a logistic function
 covars <- replicated_covariates(
   masks = transition(popmat),
-  funs = function(mat, x) mat * (1 / (1 + exp(-10 * x)))
+  funs = \(mat, x) mat * (1 / (1 + exp(-10 * x)))
 )
 
 # simulate 50 random covariate values for each replicate (each

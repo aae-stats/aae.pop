@@ -20,9 +20,9 @@ is.dynamics(x)
 - matrix:
 
   a matrix of vital rates specifying transitions between ages or stages.
-  Specified in the format \$n_t+1 = A \$A\$ is the matrix, so that
-  values in a given column and row denote a transition from that column
-  to that row
+  Specified in the format ntp1 = A A is the matrix and nt is the vector
+  of abundances, so that values in a given column and row denote a
+  transition from that column to that row
 
 - ...:
 
@@ -49,6 +49,11 @@ is.dynamics(x)
 
   an object to pass to `is.dynamics`
 
+## Value
+
+`dynamics` object containing a matrix population model and all
+associated processes
+
 ## Details
 
 A call to `dynamics` defines an object of class `dynamics`, which can be
@@ -73,7 +78,9 @@ popmat[transition(popmat)] <- c(0.25, 0.3, 0.5, 0.65)
 dyn <- dynamics(popmat)
 
 # and plot this
-plot(dyn)
+if (rlang::is_installed("DiagrammeR")) {
+  plot(dyn)
+}
 
 {"x":{"diagram":"digraph {\n\ngraph [layout = \"dot\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       rankdir = \"LR\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Age 1\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", fillcolor = \"#4F794250\", width = \"0.9\", height = \"0.72\"] \n  \"2\" [label = \"Age 2\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", fillcolor = \"#4F794250\", width = \"0.9\", height = \"0.72\"] \n  \"3\" [label = \"Age 3\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", fillcolor = \"#4F794250\", width = \"0.9\", height = \"0.72\"] \n  \"4\" [label = \"Age 4\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", fillcolor = \"#0E4D9250\", width = \"0.9\", height = \"0.72\"] \n  \"5\" [label = \"Age 5\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", fillcolor = \"#0E4D9250\", width = \"0.9\", height = \"0.72\"] \n\"1\"->\"2\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"2\"->\"3\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"3\"->\"4\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"4\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"reproduction\", style = \"dashed\"] \n\"4\"->\"5\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"5\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"reproduction\", style = \"dashed\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}
 ```

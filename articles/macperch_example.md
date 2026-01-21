@@ -13,10 +13,6 @@ The Macquarie perch model presented here is an early implementation that
 has since been updated with new information. The updated template is
 included in the `aae.pop.templates` package, which can be installed from
 Github with `remotes::install_github("aae-stats/aae.pop.templates")`.
-See
-[Templates](https://aae-stats.github.io/aae.pop/articles/templates.md)
-for available templates or additional details on using or defining
-population model templates.
 
 Macquarie perch is a freshwater fish species native to the
 Murray-Darling Basin in south-eastern Australia. Macquarie perch is a
@@ -54,16 +50,16 @@ in the following R function:
 ``` r
 # function to simulate reproductive output of Macquarie perch
 fecundity <- function(
-  age,                             # vector of ages
-  mean = c(1.68, -0.302, 2.886),   # mean parameters for fecundity function
-  early_surv = c(0.5, 0.013, 0.13) # estimates of early life survival (eggs, larvae, young-of-year)
+    age,                             # vector of ages
+    mean = c(1.68, -0.302, 2.886),   # mean parameters for fecundity function
+    early_surv = c(0.5, 0.013, 0.13) # estimates of early life survival (eggs, larvae, young-of-year)
 ) {
-  
+
   # mean estimates of three model parameters
   y1 <- mean[1]
   y2 <- mean[2]
   y3 <- mean[3]
-  
+
   # calculate fecundity
   y2_term <- exp(y2 * age)
   y1_y2 <- log(43.15 * exp(- y1 * y2_term))
@@ -72,12 +68,12 @@ fecundity <- function(
   # add early life survival and muliply by 0.5
   #   to account for a 50:50 sex ratio
   0.5 * fec * prod(early_surv)
-  
+
 }
 
 # plot mean fecundity as a function of age
 age_vec <- seq(3, 30, length = 100)
-plot(fecundity(age_vec) ~ age_vec, las = 1, type = "l", xlab = "Age", ylab = "Fecundity", bty = "l", lwd = 2, col = scales::alpha("#2171B5", 0.9))
+plot(fecundity(age_vec) ~ age_vec, las = 1, type = "l", xlab = "Age", ylab = "Fecundity", bty = "l", lwd = 2, col = alpha("#2171B5", 0.9))
 ```
 
 ![](macperch_example_files/figure-html/unnamed-chunk-1-1.png)
@@ -96,7 +92,7 @@ survival_params <- c(
 )
 
 # plot mean survival as a function of age
-plot(survival_params ~ c(1:29), las = 1, type = "l", xlab = "Age", ylab = "Survival", bty = "l", lwd = 2, col = scales::alpha("#2171B5", 0.9))
+plot(survival_params ~ c(1:29), las = 1, type = "l", xlab = "Age", ylab = "Survival", bty = "l", lwd = 2, col = alpha("#2171B5", 0.9))
 ```
 
 ![](macperch_example_files/figure-html/unnamed-chunk-2-1.png)
@@ -258,9 +254,9 @@ omega_est <- rbind(
   c(0,    0,    0.25, 0,    1)
 )
 unit_sims <- rmultiunit(
-  10000, 
-  mean = c(0.5, 0.2, 0.1, 0.9, 0.6), 
-  sd = c(0.1, 0.05, 0.05, 0.05, 0.2), 
+  10000,
+  mean = c(0.5, 0.2, 0.1, 0.9, 0.6),
+  sd = c(0.1, 0.05, 0.05, 0.05, 0.2),
   Omega = omega_est
 )
 ```
@@ -326,25 +322,25 @@ survival_gen <- function(mat, mean_real, sd_real, ...) {
 #   with any arguments in survival_gen, which would then require multiple different
 #   arguments with the same name in simulate
 reproduction_gen <- function(
-  mat,
-  fec_mean = c(1.68, -0.302, 2.886),
-  fec_sd = c(0.3, 0.05, 0.15),
-  early_mean,
-  early_sd, 
-  ...
+    mat,
+    fec_mean = c(1.68, -0.302, 2.886),
+    fec_sd = c(0.3, 0.05, 0.15),
+    early_mean,
+    early_sd,
+    ...
 ) {
-  
+
   # need a vector of ages, hard coded here (could be an argument)
   age <- 3:30
-  
+
   # generate stochastic values for early life survival (eggs, larvae, young-of-year)
   early_real <- rmultiunit_from_real(n = 1, mean = early_mean, sd = early_sd)
-  
+
   # otherwise draw random variates for the three model parameters
   y1 <- rnorm(n = 1, mean = fec_mean[1], sd = fec_sd[1])
   y2 <- rnorm(n = 1, mean = fec_mean[2], sd = fec_sd[2])
   y3 <- rnorm(n = 1, mean = fec_mean[3], sd = fec_sd[3])
-  
+
   # generate reproduction estimates for all adult age classes, incorporating
   #   stochastic early life estimates
   y2_term <- exp(y2 %o% age)
@@ -352,7 +348,7 @@ reproduction_gen <- function(
     43.15 * exp(sweep(y2_term, 1, -y1, "*"))
   )
   reprod <- exp(sweep(2.295 * y1_y2, 1, y3, "+"))
-  
+
   # add early life survival and muliply by 0.5
   #   to account for a 50:50 sex ratio
   0.5 * reprod * prod(early_real)
@@ -408,7 +404,7 @@ transform_survival <- function(obj, pop, iter) {
     unit_mean = survival_mean,
     unit_sd = survival_sd
   )
-  
+
   # separate early life from other estimates
   idx <- seq_len(nrow(out)) > 3
 
@@ -418,7 +414,7 @@ transform_survival <- function(obj, pop, iter) {
        early_mean = out[!idx, 1],  # for reproduction_gen
        early_sd = out[!idx, 2]     # for reproduction_gen
   )
-  
+
 }
 ```
 
@@ -439,10 +435,10 @@ population abundances are altered.
 # take a population vector and update it to add or remove n individuals
 #   split into two stages (juveniles, adults)
 dd_n <- function(pop, n, add = TRUE) {
-  
+
   # are we removing individuals?
   if (!add) {
-    
+
     # check that there are enough juveniles
     if (n[1] > sum(pop[1:2])) {
       n[1] <- sum(pop[1:2])
@@ -450,7 +446,7 @@ dd_n <- function(pop, n, add = TRUE) {
               " total removals reduced to ", sum(pop[1:2]),
               call. = FALSE)
     }
-    
+
     # check that there are enough adults
     if (n[2] > sum(pop[3:30])) {
       n[2] <- sum(pop[3:30])
@@ -458,7 +454,7 @@ dd_n <- function(pop, n, add = TRUE) {
               " total removals reduced to ", sum(pop[3:30]),
               call. = FALSE)
     }
-    
+
     # expand n to remove from random age classes
     n_juvenile_by_age <- rep(1:2, times = pop[1:2])
     juvenile_idx <- sample.int(
@@ -470,9 +466,9 @@ dd_n <- function(pop, n, add = TRUE) {
       length(n_adult_by_age), size = n[2], replace = FALSE
     )
     n_adult <- table(n_adult_by_age[adult_idx])
-    
+
   } else {
-    
+
     # sample random classes to add individuals
     n_juvenile <- table(
       sample(1:2, size = n[1], replace = TRUE)
@@ -480,9 +476,9 @@ dd_n <- function(pop, n, add = TRUE) {
     n_adult <- table(
       sample(3:30, size = n[2], replace = TRUE)
     )
-    
+
   }
-  
+
   # convert from a vector of classes to a count for each class
   n_juvenile_expanded <- rep(0, 2)
   names(n_juvenile_expanded) <- as.character(1:2)
@@ -495,10 +491,10 @@ dd_n <- function(pop, n, add = TRUE) {
   # adding is the opposite of removing
   if (add)
     n <- -n
-  
+
   # update pop abundances and return
   pop - n
-  
+
 }
 
 # wrap this up in a add_remove_post object (formerly density_dependence_n)
@@ -517,8 +513,9 @@ argument to `simulate` could include a time-varying value of `n`, or the
 `dd_n` function could use `pop` (actual abundances) to define a
 density-dependent addition or removal scenario. These extensions are not
 shown here but an example of a function argument is included in the
-`macquarie_perch` template to simulate changes in fishing regulations or
-stocking through time.
+`macquarie_perch` template in the `aae.pop.templates` package, where it
+is used to simulate changes in fishing regulations and stocking through
+time.
 
 ### Covariate effects
 
@@ -553,15 +550,15 @@ functions:
 ``` r
 # effect 1: recruitment has peaked association with Nov/Dec discharge
 recruit_peaked <- function(mat, x, ...) {
-  
+
   # define a quadratic association with log-transformed discharge
   log_discharge <- log(x$spawning_discharge + 0.01)
   scale_factor <- exp(-0.1 * log_discharge - 0.1 * (log_discharge ^ 2))
-  
+
   # make sure values are in the [0, 1] range
   scale_factor[scale_factor > 1] <- 1
   scale_factor[scale_factor < 0] <- 0
-  
+
   # return re-scaled recruitment values
   mat * scale_factor
 
@@ -580,14 +577,14 @@ recruit_level <- function(mat, x, ...) {
 # effect 4: adult survival reduced by low-discharge conditions
 adult_low <- function(mat, x, ...) {
 
-  # define a quadratic association with log-transformed discharge  
+  # define a quadratic association with log-transformed discharge
   log_discharge <- log(x$average_daily_discharge + 0.01)
   scale_factor <- exp(0.3 * log_discharge - 0.3 * (log_discharge ^ 2))
-  
+
   # make sure values are in the [0, 1] range
   scale_factor[scale_factor > 1] <- 1
   scale_factor[scale_factor < 0] <- 0
-  
+
   # return re-scaled survival values
   mat * scale_factor
 
@@ -667,7 +664,7 @@ sims <- simulate(
 )
 
 # plot the simulated trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](macperch_example_files/figure-html/unnamed-chunk-15-1.png)
@@ -692,8 +689,8 @@ covar_values <- data.frame(
 
 # simulate
 sims <- simulate(
-  popdyn, 
-  nsim = 100, 
+  popdyn,
+  nsim = 100,
   args = list(
     add_remove_post = list(n = c(0, 0)),         # remove no individuals this time
     covariates = format_covariates(x = covar_values), # pass formatted covariate values
@@ -702,7 +699,7 @@ sims <- simulate(
 )
 
 # plot the simulated trajectories
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](macperch_example_files/figure-html/unnamed-chunk-16-1.png)
@@ -713,14 +710,14 @@ adulthood. Plotting older classes alone highlights this effect:
 
 ``` r
 # all adults
-plot(subset(sims, subset = 3:30), col = scales::alpha("#2171B5", 0.4))
+plot(subset(sims, subset = 3:30), col = alpha("#2171B5", 0.4))
 ```
 
 ![](macperch_example_files/figure-html/unnamed-chunk-17-1.png)
 
 ``` r
 # ages 5 and above
-plot(subset(sims, subset = 5:30), col = scales::alpha("#2171B5", 0.4))
+plot(subset(sims, subset = 5:30), col = alpha("#2171B5", 0.4))
 ```
 
 ![](macperch_example_files/figure-html/unnamed-chunk-17-2.png)
@@ -765,25 +762,25 @@ calculated with the following function:
 #   in any time step. By default, all population classes are included
 #   but `subset` can be used to select specific classes
 calculate_quasi_extinction <- function(popsim, threshold, subset = NULL, include = FALSE) {
-  
+
   # is a subset required?
   if (!is.null(subset))
     popsim <- subset(popsim, subset = subset)
-  
+
   # sum population abundances over all remaining classes
   popsim <- apply(popsim, c(1, 3), sum)
-  
+
   # do we want to include the threshold value in the check?
   if (include)
     threshold <- threshold + 1e-5
-  
+
   # is a trajectory below a threshold?
   threshold_check <- apply(popsim, 1, function(x) any(x < threshold))
-  
+
   # return proportion below threshold
   #   (mean of binary values is the proportion equal to 1)
   mean(threshold_check)
-  
+
 }
 ```
 
@@ -842,14 +839,14 @@ calculate_risk <- function(popsim, min, max, n = 1000, subset = NULL, include = 
       include = include
     )
   )
-  
+
 }
 
 # calculate risk curve for thresholds from 0 to 10000
 risk_calc <- calculate_risk(sims, min = 0, max = 10000, subset = 3:30)
 
 # this can be plotted
-plot(risk ~ threshold, data = risk_calc, xlab = "Threshold population size (adult abundance)", ylab = "Quasi-extinction probability", las = 1, bty = "l", type = "l", lwd = 2, col = scales::alpha("#2171B5", 0.9), ylim = c(0, 1))
+plot(risk ~ threshold, data = risk_calc, xlab = "Threshold population size (adult abundance)", ylab = "Quasi-extinction probability", las = 1, bty = "l", type = "l", lwd = 2, col = alpha("#2171B5", 0.9), ylim = c(0, 1))
 ```
 
 ![](macperch_example_files/figure-html/unnamed-chunk-20-1.png)
@@ -868,7 +865,7 @@ calculate_threshold <- function(risk, threshold, prob = 0.8) {
 
   # find the rows in risk nearest to prob
   idx <- sapply(prob, function(x) which.min(abs(risk - x)))
-  
+
   # then pull out and return these threshold values
   threshold[idx]
 
@@ -879,7 +876,7 @@ probs <- c(0.5, 0.8, 0.95)
 thresh <- calculate_threshold(risk_calc$risk, risk_calc$threshold, prob = probs)
 
 # plot these on the risk curve
-plot(risk ~ threshold, data = risk_calc, xlab = "Threshold population size (adult abundance)", ylab = "Quasi-extinction probability", las = 1, bty = "l", type = "l", lwd = 2, col = scales::alpha("#2171B5", 0.9), ylim = c(0, 1))
+plot(risk ~ threshold, data = risk_calc, xlab = "Threshold population size (adult abundance)", ylab = "Quasi-extinction probability", las = 1, bty = "l", type = "l", lwd = 2, col = alpha("#2171B5", 0.9), ylim = c(0, 1))
 col_pal <- c("#67001F", "#D6604D", "#FDDBC7")
 for (i in seq_along(thresh)) {
   lines(c(thresh[i], thresh[i]), c(-0.2, probs[i]), col = col_pal[i], lwd = 2, lty = 2)

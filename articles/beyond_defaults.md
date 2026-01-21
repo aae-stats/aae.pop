@@ -160,7 +160,7 @@ sims <- simulate(
 # plot this
 plot(
   sims,
-  col = scales::alpha("#2171B5", 0.9),
+  col = alpha("#2171B5", 0.9),
   main = "Three different initial conditions"
 )
 ```
@@ -186,7 +186,7 @@ sims <- simulate(
 # plot this
 plot(
   sims,
-  col = scales::alpha("#2171B5", 0.4),
+  col = alpha("#2171B5", 0.4),
   main = "Many replicates with the same initial condition"
 )
 ```
@@ -220,7 +220,7 @@ sims <- simulate(
 # plot this
 plot(
   sims,
-  col = scales::alpha("#2171B5", 0.4),
+  col = alpha("#2171B5", 0.4),
   main = "Many replicates with stochastic, structured initial conditions"
 )
 ```
@@ -262,10 +262,7 @@ The `aae.pop` package includes two alternatives, which incorporate
 demographic stochasticity using Binomial draws
 (`update_binomial_leslie`, for Leslie matrices) or multinomial draws
 (`update_multinomial`, for all other matrices). These approaches are not
-as fast as the default cross product method. The
-`update_binomial_leslie` method is demonstrated in the [Macquarie perch
-example
-model](https://aae-stats.github.io/aae.pop/articles/macperch_example.md).
+as fast as the default cross product method.
 
 ### Roll your own updater
 
@@ -286,7 +283,7 @@ vectors:
     ## {
     ##     tcrossprod(pop, mat)
     ## }
-    ## <bytecode: 0x55ea58483368>
+    ## <bytecode: 0x563fed56c0c8>
     ## <environment: namespace:aae.pop>
 
 The `update_binomial_leslie` function is slightly more complicated and
@@ -311,7 +308,7 @@ includes a check for integer abundances and then uses a mix of Poisson
     ##     cbind(rpois(nrow(vals), lambda = vals[, 1]), matrix(rbinom(length(probs), 
     ##         size = pop_nm1, prob = probs), nrow = nrow(pop_nm1)))
     ## }
-    ## <bytecode: 0x55ea58e47bd0>
+    ## <bytecode: 0x563fee01b7c8>
     ## <environment: namespace:aae.pop>
 
 The primary reason to change the updater is speed. Although

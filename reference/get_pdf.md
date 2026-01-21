@@ -41,6 +41,12 @@ get_pdf(sims, subset = NULL, times = NULL, n = 100, fn = min, ...)
 
   additional arguments passed to `fn`
 
+## Value
+
+a data.frame containing a `prob` column that indicates the probability
+density that abundances will be in the vicinity of the threshold value
+in the `value` column
+
 ## Details
 
 `get_pdf` and `get_cdf` are faster and more general alternatives to the

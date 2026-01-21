@@ -24,6 +24,12 @@ update_multinomial(pop, mat)
 
   matrix of vital rates used to update population state
 
+## Value
+
+a matrix containing population abundances in each stage of a matrix
+population model. Contains one row for each replicate population
+trajectory and one column for each population stage
+
 ## Details
 
 Updaters can be changed through the `options` argument to `simulate` and

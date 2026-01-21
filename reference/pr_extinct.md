@@ -32,6 +32,11 @@ pr_extinct(sims, threshold = 0, subset = NULL, times = NULL)
   `integer` vector specifying generations to include in calculation of
   extinction risk. Defaults to all simulated generations
 
+## Value
+
+a single numeric value representing the probability a population will
+decline below the threshold size
+
 ## Details
 
 Quasi-extinction risk is the probability of decline below some specified

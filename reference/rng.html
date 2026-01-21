@@ -7,7 +7,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">aae.pop</a>
 
@@ -19,21 +19,7 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/get_started.html">get started</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">vignettes</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes"><li><a class="dropdown-item" href="../articles/including_processes.html">Including processes</a></li>
-    <li><a class="dropdown-item" href="../articles/beyond_defaults.html">Beyond defaults</a></li>
-    <li><a class="dropdown-item" href="../articles/metapopulations.html">Metapopulations</a></li>
-    <li><a class="dropdown-item" href="../articles/multiple_species.html">Multiple species</a></li>
-    <li><a class="dropdown-item" href="../articles/templates.html">Species templates</a></li>
-  </ul></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples"><li><a class="dropdown-item" href="../articles/macperch_example.html">Macquarie perch</a></li>
-    <li><a class="dropdown-item" href="../articles/scenarios_example.html">Comparing scenarios</a></li>
-  </ul></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop"><span class="fa fab fa-github"></span></a></li>
+      <ul class="navbar-nav me-auto"></ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -43,7 +29,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Random number generators not available in existing R packages</h1>
-      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/v0.1.2/R/rng.R" class="external-link"><code>R/rng.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/main/R/rng.R" class="external-link"><code>R/rng.R</code></a></small>
       <div class="d-none name"><code>rng.Rd</code></div>
     </div>
 
@@ -145,6 +131,11 @@ interval</p></dd>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>a vector or matrix of random draws from the <code>r*unit</code>
+  set of functions</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The r*unit family of functions support simulation of values
   on the unit interval based on a known mean, sd, and correlation
@@ -177,19 +168,18 @@ interval</p></dd>
 <span class="r-in"><span><span class="co">#   the unit interval, with known mean, standard deviation,</span></span></span>
 <span class="r-in"><span><span class="co">#   and (optionally) covariance/correlation structure</span></span></span>
 <span class="r-in"><span><span class="fu">rmultiunit</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]         [,2]      [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.3258284 7.109279e-01 0.7253066</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.3147578 7.873457e-02 0.7816593</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.3254525 3.666655e-04 0.6590754</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.1735401 8.574929e-01 0.1742375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 0.2198729 7.748146e-08 0.9541984</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.2834658 8.614973e-05 0.5670721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.2843562 4.763717e-01 0.9420337</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 0.3666019 9.007615e-02 0.8181540</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.1918320 3.397002e-03 0.4181535</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.2054899 9.985405e-01 0.8860253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]       [,2]      [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.1575853 0.01761254 0.9445593</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.4276270 0.52709738 0.9603336</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.3186457 0.62405500 0.8450844</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.2722320 0.54031791 0.9504178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 0.3991552 0.54087440 0.9689834</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.1838829 0.01500115 0.9838706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.2273197 0.39881780 0.9967373</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 0.3448995 0.99999743 0.8872065</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.3162860 0.52977018 0.8180310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.2871536 0.96621961 0.8767448</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># add in a correlation structure</span></span></span>
 <span class="r-in"><span><span class="va">omega_set</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.25</span>, <span class="fl">0.01</span><span class="op">)</span>,</span></span>
@@ -202,7 +192,19 @@ interval</p></dd>
 <span class="r-in"><span>  sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.25</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  Omega <span class="op">=</span> <span class="va">omega_set</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NaNs produced</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NaNs produced</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]         [,2]       [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.1390801 8.584424e-01 0.88133202</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.2980836 9.850293e-01 0.92972847</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.2346260 9.989593e-01 0.99084645</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.1048095 2.155613e-04 0.09527154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 0.3132903 9.935197e-01 0.99884698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.2815907 1.366113e-06 0.13019641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.4289172 9.999996e-01 0.97808043</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 0.1296939 6.571871e-01 0.53406620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.2944634 5.203511e-04 0.36741513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.2610939 3.688165e-02 0.93892145</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -210,7 +212,7 @@ interval</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jian Yen.</p>
+  <p>Developed by Jian Yen, Arthur Rylah Institute for Environmental Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">

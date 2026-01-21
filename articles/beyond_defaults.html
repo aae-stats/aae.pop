@@ -16,7 +16,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">aae.pop</a>
 
@@ -28,28 +28,9 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/get_started.html">get started</a></li>
-<li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">vignettes</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
-<li><a class="dropdown-item" href="../articles/including_processes.html">Including processes</a></li>
-    <li><a class="dropdown-item" href="../articles/beyond_defaults.html">Beyond defaults</a></li>
-    <li><a class="dropdown-item" href="../articles/metapopulations.html">Metapopulations</a></li>
-    <li><a class="dropdown-item" href="../articles/multiple_species.html">Multiple species</a></li>
-    <li><a class="dropdown-item" href="../articles/templates.html">Species templates</a></li>
-  </ul>
-</li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="../articles/macperch_example.html">Macquarie perch</a></li>
-    <li><a class="dropdown-item" href="../articles/scenarios_example.html">Comparing scenarios</a></li>
-  </ul>
-</li>
-      </ul>
+      <ul class="navbar-nav me-auto"></ul>
 <ul class="navbar-nav">
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop"><span class="fa fab fa-github"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -68,7 +49,7 @@
             
             <h4 data-toc-skip class="date">07/01/2026</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/v0.1.2/vignettes/beyond_defaults.Rmd" class="external-link"><code>vignettes/beyond_defaults.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/main/vignettes/beyond_defaults.Rmd" class="external-link"><code>vignettes/beyond_defaults.Rmd</code></a></small>
       <div class="d-none name"><code>beyond_defaults.Rmd</code></div>
     </div>
 
@@ -222,7 +203,7 @@ conditions with any amount of structure or detail:</p>
 <span><span class="co"># plot this</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">sims</span>,</span>
-<span>  col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
+<span>  col <span class="op">=</span> <span class="fu">alpha</span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">"Three different initial conditions"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="beyond_defaults_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="700"></p>
@@ -244,7 +225,7 @@ which case a single vector can be passed to simulate:</p>
 <span><span class="co"># plot this</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">sims</span>,</span>
-<span>  col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span>,</span>
+<span>  col <span class="op">=</span> <span class="fu">alpha</span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">"Many replicates with the same initial condition"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="beyond_defaults_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="700"></p>
@@ -274,7 +255,7 @@ previous examples:</p>
 <span><span class="co"># plot this</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">sims</span>,</span>
-<span>  col <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span>,</span>
+<span>  col <span class="op">=</span> <span class="fu">alpha</span><span class="op">(</span><span class="st">"#2171B5"</span>, <span class="fl">0.4</span><span class="op">)</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">"Many replicates with stochastic, structured initial conditions"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="beyond_defaults_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700"></p>
@@ -312,9 +293,7 @@ incorporate demographic stochasticity using Binomial draws
 (<code>update_binomial_leslie</code>, for Leslie matrices) or
 multinomial draws (<code>update_multinomial</code>, for all other
 matrices). These approaches are not as fast as the default cross product
-method. The <code>update_binomial_leslie</code> method is demonstrated
-in the <a href="macperch_example.html">Macquarie perch example
-model</a>.</p>
+method.</p>
 </div>
 <div class="section level3">
 <h3 id="roll-your-own-updater">Roll your own updater<a class="anchor" aria-label="anchor" href="#roll-your-own-updater"></a>
@@ -334,7 +313,7 @@ function to handle the matrix of replicate population vectors:</p>
 <span><span class="co">## {</span></span>
 <span><span class="co">##     tcrossprod(pop, mat)</span></span>
 <span><span class="co">## }</span></span>
-<span><span class="co">## &lt;bytecode: 0x55ea58483368&gt;</span></span>
+<span><span class="co">## &lt;bytecode: 0x563fed56c0c8&gt;</span></span>
 <span><span class="co">## &lt;environment: namespace:aae.pop&gt;</span></span></code></pre>
 <p>The <code>update_binomial_leslie</code> function is slightly more
 complicated and includes a check for integer abundances and then uses a
@@ -357,7 +336,7 @@ mix of Poisson (for reproduction) and Binomial draws (for survival):</p>
 <span><span class="co">##     cbind(rpois(nrow(vals), lambda = vals[, 1]), matrix(rbinom(length(probs), </span></span>
 <span><span class="co">##         size = pop_nm1, prob = probs), nrow = nrow(pop_nm1)))</span></span>
 <span><span class="co">## }</span></span>
-<span><span class="co">## &lt;bytecode: 0x55ea58e47bd0&gt;</span></span>
+<span><span class="co">## &lt;bytecode: 0x563fee01b7c8&gt;</span></span>
 <span><span class="co">## &lt;environment: namespace:aae.pop&gt;</span></span></code></pre>
 <p>The primary reason to change the updater is speed. Although
 <code>update_crossprod</code> is relatively fast compared to other R
@@ -378,7 +357,7 @@ involve coding the entire simulation process in C++ or similar.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jian Yen.</p>
+  <p>Developed by Jian Yen, Arthur Rylah Institute for Environmental Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">

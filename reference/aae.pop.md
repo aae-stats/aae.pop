@@ -14,8 +14,16 @@ for detailed examples of model definition and simulation.
 
 Useful links:
 
-- <https://aae-stats.github.io/aae.pop>
+- <https://aae-stats.github.io/aae.pop/>
 
 - <https://github.com/aae-stats/aae.pop>
 
 - Report bugs at <https://github.com/aae-stats/aae.pop/issues>
+
+## Author
+
+**Maintainer**: Jian Yen <jdl.yen@gmail.com> \[copyright holder\]
+
+Other contributors:
+
+- Arthur Rylah Institute for Environmental Research \[funder\]

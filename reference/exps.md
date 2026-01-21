@@ -50,6 +50,12 @@ exps(
   conflict, a wrapper function could be used to define expected
   arguments for each function
 
+## Value
+
+a single value representing the expected statistic applied to the
+population sizes generated with
+[`simulate`](https://aae-stats.github.io/aae.pop/reference/simulate.md)
+
 ## Details
 
 Expected population size (ExPS) is a highly flexible generalisation of

@@ -944,4 +944,5 @@ Yen, Jian D.L., Zeb Tonkin, Charles Todd, Daniel Stoessel, Tarmo A.
 Raadik, and Jarod Lyon. 2021. “Using Population Models to Estimate
 Expected Benefit of Management Actions: Case Studies on Six Aquatic
 Species.” *Arthur Rylah Institute for Environmental Research: Technical
-Report Series* XYZ. [xyz](https://xyz).
+Report Series* XYZ.
+<https://www.ari.vic.gov.au/__data/assets/pdf_file/0027/552681/ARI-Technical-Report-331-Using-population-models-to-estimate-expected-benefit-of-management-actions.pdf>.

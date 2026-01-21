@@ -7,7 +7,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">aae.pop</a>
 
@@ -19,21 +19,7 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/get_started.html">get started</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">vignettes</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes"><li><a class="dropdown-item" href="../articles/including_processes.html">Including processes</a></li>
-    <li><a class="dropdown-item" href="../articles/beyond_defaults.html">Beyond defaults</a></li>
-    <li><a class="dropdown-item" href="../articles/metapopulations.html">Metapopulations</a></li>
-    <li><a class="dropdown-item" href="../articles/multiple_species.html">Multiple species</a></li>
-    <li><a class="dropdown-item" href="../articles/templates.html">Species templates</a></li>
-  </ul></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples"><li><a class="dropdown-item" href="../articles/macperch_example.html">Macquarie perch</a></li>
-    <li><a class="dropdown-item" href="../articles/scenarios_example.html">Comparing scenarios</a></li>
-  </ul></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop"><span class="fa fab fa-github"></span></a></li>
+      <ul class="navbar-nav me-auto"></ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -43,7 +29,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Create and update population dynamics objects</h1>
-      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/v0.1.2/R/dynamics.R" class="external-link"><code>R/dynamics.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/main/R/dynamics.R" class="external-link"><code>R/dynamics.R</code></a></small>
       <div class="d-none name"><code>dynamics.Rd</code></div>
     </div>
 
@@ -69,9 +55,10 @@
 
 <dl><dt id="arg-matrix">matrix<a class="anchor" aria-label="anchor" href="#arg-matrix"></a></dt>
 <dd><p>a matrix of vital rates specifying transitions between
-ages or stages. Specified in the format $n_t+1 = A <!-- %*% n_t$, where -->
-$A$ is the matrix, so that values in a given column and row denote a
-transition from that column to that row</p></dd>
+ages or stages. Specified in the format ntp1 = A <!-- %*% nt, where -->
+A is the matrix and nt is the vector of abundances, so that values
+in a given column and row denote a transition from that column
+to that row</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -96,6 +83,11 @@ Note that <code><a href="density_dependence.html">density_dependence_n</a></code
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p><code>dynamics</code> object containing a matrix population model
+  and all associated processes</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>A call to <code>dynamics</code> defines an object of class
   <code>dynamics</code>, which can be used to simulate population
@@ -119,7 +111,9 @@ Note that <code><a href="density_dependence.html">density_dependence_n</a></code
 <span class="r-in"><span><span class="va">dyn</span> <span class="op">&lt;-</span> <span class="fu">dynamics</span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># and plot this</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dyn</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/is_installed.html" class="external-link">is_installed</a></span><span class="op">(</span><span class="st">"DiagrammeR"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dyn</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:700px;height:432.632880098888px;" class="grViz html-widget"></div>
 <script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"diagram":"digraph {\n\ngraph [layout = \"dot\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       rankdir = \"LR\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Age 1\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", fillcolor = \"#4F794250\", width = \"0.9\", height = \"0.72\"] \n  \"2\" [label = \"Age 2\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", fillcolor = \"#4F794250\", width = \"0.9\", height = \"0.72\"] \n  \"3\" [label = \"Age 3\", fontcolor = \"#4F7942\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#4F7942\", fillcolor = \"#4F794250\", width = \"0.9\", height = \"0.72\"] \n  \"4\" [label = \"Age 4\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", fillcolor = \"#0E4D9250\", width = \"0.9\", height = \"0.72\"] \n  \"5\" [label = \"Age 5\", fontcolor = \"#0E4D92\", fontsize = \"12\", penwidth = \"2\", shape = \"circle\", color = \"#0E4D92\", fillcolor = \"#0E4D9250\", width = \"0.9\", height = \"0.72\"] \n\"1\"->\"2\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"2\"->\"3\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"3\"->\"4\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"4\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"reproduction\", style = \"dashed\"] \n\"4\"->\"5\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"transition\", style = \"solid\"] \n\"5\"->\"1\" [color = \"Gainsboro\", fontname = \"Avenir\", fontcolor = \"LightGray\", fontsize = \"14\", penwidth = \"4\", label = \"reproduction\", style = \"dashed\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script></code></pre></div>
     </div>
@@ -128,7 +122,7 @@ Note that <code><a href="density_dependence.html">density_dependence_n</a></code
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jian Yen.</p>
+  <p>Developed by Jian Yen, Arthur Rylah Institute for Environmental Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">

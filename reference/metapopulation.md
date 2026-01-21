@@ -42,6 +42,12 @@ is.metapopulation(x)
 
   an object to pass to `is.metapopulation`
 
+## Value
+
+`metapopulation` object containing a matrix metapopulation model; for
+use with
+[`simulate`](https://aae-stats.github.io/aae.pop/reference/simulate.md)
+
 ## Details
 
 The `metapopulation` function connects multiple populations through

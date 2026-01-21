@@ -92,7 +92,7 @@ metapop_simple[4, 4] <- metapop_simple[4, 4] - metapop_simple[2, 4]
 
 # what happens if we simulate from this?
 sims <- simulate(dynamics(metapop_simple), nsim = 100)
-plot(sims, col = scales::alpha("#2171B5", 0.4))
+plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](metapopulations_files/figure-html/unnamed-chunk-4-1.png)
@@ -106,13 +106,13 @@ population 2 is classes 3 and 4 in the population vector:
 ``` r
 pop1_sims <- subset(sims, 1:2)
 pop2_sims <- subset(sims, 3:4)
-plot(pop1_sims, col = scales::alpha("#2171B5", 0.4))
+plot(pop1_sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](metapopulations_files/figure-html/unnamed-chunk-5-1.png)
 
 ``` r
-plot(pop2_sims, col = scales::alpha("#2171B5", 0.4))
+plot(pop2_sims, col = alpha("#2171B5", 0.4))
 ```
 
 ![](metapopulations_files/figure-html/unnamed-chunk-5-2.png)
@@ -256,13 +256,13 @@ dynamics is identical to any other population model in `aae.pop`:
 
 ``` r
 sims <- simulate(metapopulation_simple, nsim = 100)
-plot(subset(sims, 1:2), col = scales::alpha("#2171B5", 0.4), main = "Population 1")
+plot(subset(sims, 1:2), col = alpha("#2171B5", 0.4), main = "Population 1")
 ```
 
 ![](metapopulations_files/figure-html/unnamed-chunk-14-1.png)
 
 ``` r
-plot(subset(sims, 3:4), col = scales::alpha("#2171B5", 0.4), main = "Population 2")
+plot(subset(sims, 3:4), col = alpha("#2171B5", 0.4), main = "Population 2")
 ```
 
 ![](metapopulations_files/figure-html/unnamed-chunk-14-2.png)
@@ -308,7 +308,7 @@ mp <- metapopulation(
 sims <- simulate(mp, nsim = 100)
 
 # plot
-plot(sims, col = scales::alpha("#2171B5", 0.4), main = "All populations")
+plot(sims, col = alpha("#2171B5", 0.4), main = "All populations")
 ```
 
 ![](metapopulations_files/figure-html/unnamed-chunk-15-1.png)
@@ -320,13 +320,13 @@ defined in the `dynamics` argument to `metapopulation`, so classes 1 to
 on. These can be extracted and plotted with the `subset` function:
 
 ``` r
-plot(subset(sims, 1:5), col = scales::alpha("#2171B5", 0.4), main = "Population 1")
+plot(subset(sims, 1:5), col = alpha("#2171B5", 0.4), main = "Population 1")
 ```
 
 ![](metapopulations_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
-plot(subset(sims, 21:25), col = scales::alpha("#2171B5", 0.4), main = "Population 5")
+plot(subset(sims, 21:25), col = alpha("#2171B5", 0.4), main = "Population 5")
 ```
 
 ![](metapopulations_files/figure-html/unnamed-chunk-16-2.png)
@@ -423,7 +423,7 @@ sims <- simulate(
 )
 
 # plot
-plot(sims, col = scales::alpha("#2171B5", 0.4), main = "Population-specific covariates")
+plot(sims, col = alpha("#2171B5", 0.4), main = "Population-specific covariates")
 ```
 
 ![](metapopulations_files/figure-html/unnamed-chunk-17-1.png)
@@ -487,7 +487,7 @@ metapopulation_simple <- metapopulation(
 sims <- simulate(metapopulation_simple, nsim = 100)
 
 # plot
-plot(sims, col = scales::alpha("#2171B5", 0.4), main = "Stochastic dispersal")
+plot(sims, col = alpha("#2171B5", 0.4), main = "Stochastic dispersal")
 ```
 
 ![](metapopulations_files/figure-html/unnamed-chunk-18-1.png)
@@ -561,7 +561,7 @@ metapopulation_simple <- metapopulation(
 sims <- simulate(metapopulation_simple, nsim = 100)
 
 # plot
-plot(sims, col = scales::alpha("#2171B5", 0.4), main = "Density-dependent dispersal")
+plot(sims, col = alpha("#2171B5", 0.4), main = "Density-dependent dispersal")
 ```
 
 ![](metapopulations_files/figure-html/unnamed-chunk-19-1.png)

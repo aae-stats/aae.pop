@@ -41,6 +41,11 @@ get_cdf(sims, subset = NULL, times = NULL, n = 100, fn = min, ...)
 
   additional arguments passed to `fn`
 
+## Value
+
+a data.frame containing a `prob` column that indicates the probability
+the population will fall below the threshold value in the `value` column
+
 ## Details
 
 `get_cdf` is a faster and more general alternative to the `risk_curve`

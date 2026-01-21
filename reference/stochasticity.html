@@ -7,7 +7,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">aae.pop</a>
 
@@ -19,21 +19,7 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/get_started.html">get started</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">vignettes</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes"><li><a class="dropdown-item" href="../articles/including_processes.html">Including processes</a></li>
-    <li><a class="dropdown-item" href="../articles/beyond_defaults.html">Beyond defaults</a></li>
-    <li><a class="dropdown-item" href="../articles/metapopulations.html">Metapopulations</a></li>
-    <li><a class="dropdown-item" href="../articles/multiple_species.html">Multiple species</a></li>
-    <li><a class="dropdown-item" href="../articles/templates.html">Species templates</a></li>
-  </ul></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples"><li><a class="dropdown-item" href="../articles/macperch_example.html">Macquarie perch</a></li>
-    <li><a class="dropdown-item" href="../articles/scenarios_example.html">Comparing scenarios</a></li>
-  </ul></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop"><span class="fa fab fa-github"></span></a></li>
+      <ul class="navbar-nav me-auto"></ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -43,7 +29,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Specify environmental and demographic stochasticity in models of population dynamics</h1>
-      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/v0.1.2/R/stochasticity.R" class="external-link"><code>R/stochasticity.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/main/R/stochasticity.R" class="external-link"><code>R/stochasticity.R</code></a></small>
       <div class="d-none name"><code>stochasticity.Rd</code></div>
     </div>
 
@@ -76,6 +62,13 @@ for each element of <code>masks</code>. See Details</p></dd>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p><code>environmental_stochasticity</code> or
+  <code>demographic_stochasticity</code> object specifying the way in which
+  stochasticity should be included in a matrix population model;
+  for use with <code><a href="dynamics.html">dynamics</a></code></p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Masks must be of the same dimension as the population
   dynamics matrix (in the case of environmental stochasticity)
@@ -106,18 +99,6 @@ for each element of <code>masks</code>. See Details</p></dd>
 <span class="r-in"><span><span class="co"># define a dynamics object</span></span></span>
 <span class="r-in"><span><span class="va">dyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># simulate from this without any form of stochasticity</span></span></span>
-<span class="r-in"><span><span class="co">#   (50 time steps, 100 replicates)</span></span></span>
-<span class="r-in"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate.html">simulate</a></span><span class="op">(</span><span class="va">dyn</span>, nsim <span class="op">=</span> <span class="fl">100</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ntime <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># plot the simulated trajectories</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="stochasticity-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># and plot</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># note that there is only one trajectory now because</span></span></span>
 <span class="r-in"><span><span class="co">#   this simulation is deterministic.</span></span></span>
 <span class="r-in"><span><span class="co">#</span></span></span>
@@ -128,8 +109,8 @@ for each element of <code>masks</code>. See Details</p></dd>
 <span class="r-in"><span>    <span class="fu"><a href="masks.html">transition</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  funs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, lambda <span class="op">=</span> <span class="va">x</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="rng.html">rmultiunit</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, mean <span class="op">=</span> <span class="va">x</span>, sd <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, lambda <span class="op">=</span> <span class="va">x</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, min <span class="op">=</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="va">x</span>, max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="fl">1.1</span> <span class="op">*</span> <span class="va">x</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -139,47 +120,6 @@ for each element of <code>masks</code>. See Details</p></dd>
 <span class="r-in"><span>  <span class="va">dyn</span>,</span></span>
 <span class="r-in"><span>  init <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  nsim <span class="op">=</span> <span class="fl">100</span>,</span></span>
-<span class="r-in"><span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ntime <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># the rmultiunit draws can be slow but we can speed</span></span></span>
-<span class="r-in"><span><span class="co">#   this up by calculating them once per generation</span></span></span>
-<span class="r-in"><span><span class="co">#   instead of once per replicate within each generation</span></span></span>
-<span class="r-in"><span><span class="va">envstoch</span> <span class="op">&lt;-</span> <span class="fu">environmental_stochasticity</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  masks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="masks.html">reproduction</a></span><span class="op">(</span><span class="va">popmat</span>, dims <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="masks.html">transition</a></span><span class="op">(</span><span class="va">popmat</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  funs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, lambda <span class="op">=</span> <span class="va">x</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="op">}</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># this requires an argument "function" that takes the</span></span></span>
-<span class="r-in"><span><span class="co">#   current state of the population model in each</span></span></span>
-<span class="r-in"><span><span class="co">#   iteration and calculates the correct arguments to</span></span></span>
-<span class="r-in"><span><span class="co">#   pass to environmental_stochasticty</span></span></span>
-<span class="r-in"><span><span class="va">envstoch_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">obj</span>, <span class="va">pop</span>, <span class="va">iter</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">mat</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="va">matrix</span></span></span>
-<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">is.list</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="va">mat</span> <span class="op">&lt;-</span> <span class="va">mat</span><span class="op">[[</span><span class="va">iter</span><span class="op">]</span><span class="op">]</span></span></span>
-<span class="r-in"><span>  <span class="op">}</span></span></span>
-<span class="r-in"><span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">aae.pop</span><span class="fu">:::</span><span class="fu"><a href="rng.html">unit_to_real</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">mat</span><span class="op">[</span><span class="fu"><a href="masks.html">transition</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span><span class="op">]</span>, <span class="fl">0.1</span> <span class="op">*</span> <span class="va">mat</span><span class="op">[</span><span class="fu"><a href="masks.html">transition</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="va">out</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, sd <span class="op">=</span> <span class="va">out</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># update the dynamics object and simulate from it</span></span></span>
-<span class="r-in"><span><span class="va">dyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">dyn</span>, <span class="va">envstoch</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate.html">simulate</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dyn</span>,</span></span>
-<span class="r-in"><span>  init <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  nsim <span class="op">=</span> <span class="fl">100</span>,</span></span>
-<span class="r-in"><span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>environmental_stochasticity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">envstoch_function</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ntime <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -198,15 +138,8 @@ for each element of <code>masks</code>. See Details</p></dd>
 <span class="r-in"><span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    update <span class="op">=</span> <span class="va">update_binomial_leslie</span>,</span></span>
 <span class="r-in"><span>    tidy_abundances <span class="op">=</span> <span class="va">floor</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    environmental_stochasticity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">envstoch_function</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># and can plot these again</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -214,7 +147,7 @@ for each element of <code>masks</code>. See Details</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jian Yen.</p>
+  <p>Developed by Jian Yen, Arthur Rylah Institute for Environmental Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -24,6 +24,12 @@ add_remove_post(masks, funs)
   a function or list of functions with one element for each element of
   `masks`. See Details
 
+## Value
+
+`add_remove_pre` or `add_remove_post` object specifying an
+additions/removals process for use with
+[`dynamics`](https://aae-stats.github.io/aae.pop/reference/dynamics.md)
+
 ## Details
 
 `add_remove_pre` specifies a function that operates on the population

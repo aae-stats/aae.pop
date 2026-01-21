@@ -7,7 +7,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">aae.pop</a>
 
@@ -19,21 +19,7 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/get_started.html">get started</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">vignettes</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes"><li><a class="dropdown-item" href="../articles/including_processes.html">Including processes</a></li>
-    <li><a class="dropdown-item" href="../articles/beyond_defaults.html">Beyond defaults</a></li>
-    <li><a class="dropdown-item" href="../articles/metapopulations.html">Metapopulations</a></li>
-    <li><a class="dropdown-item" href="../articles/multiple_species.html">Multiple species</a></li>
-    <li><a class="dropdown-item" href="../articles/templates.html">Species templates</a></li>
-  </ul></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples"><li><a class="dropdown-item" href="../articles/macperch_example.html">Macquarie perch</a></li>
-    <li><a class="dropdown-item" href="../articles/scenarios_example.html">Comparing scenarios</a></li>
-  </ul></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop"><span class="fa fab fa-github"></span></a></li>
+      <ul class="navbar-nav me-auto"></ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -43,7 +29,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Create a population dynamics object with multiple species</h1>
-      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/v0.1.2/R/multispecies.R" class="external-link"><code>R/multispecies.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/aae-stats/aae.pop/blob/main/R/multispecies.R" class="external-link"><code>R/multispecies.R</code></a></small>
       <div class="d-none name"><code>multispecies.Rd</code></div>
     </div>
 
@@ -75,13 +61,81 @@ a set of pairwise interactions between species</p></dd>
 <dd><p>an object to pass to <code>is.multispecies</code></p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p><code>multispecies</code> object containing a multispecies matrix
+  population model; for use with <code><a href="simulate.html">simulate</a></code></p>
+    </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># define population matrices for three species</span></span></span>
+<span class="r-in"><span><span class="va">sp1_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">2</span>,    <span class="fl">4</span>,    <span class="fl">7</span><span class="op">)</span>,  <span class="co"># reproduction from 3-5 year olds</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 1 to 2</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0.45</span>, <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 2 to 3</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0.70</span>, <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 3 to 4</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0.85</span>, <span class="fl">0</span><span class="op">)</span>   <span class="co"># survival from age 4 to 5</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp2_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">4</span><span class="op">)</span>,  <span class="co"># reproduction from 3 year olds</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 1 to 2</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0.45</span>, <span class="fl">0</span><span class="op">)</span>   <span class="co"># survival from age 2 to 3</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp3_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">2</span>,    <span class="fl">4</span>,    <span class="fl">7</span>,   <span class="fl">10</span><span class="op">)</span>,  <span class="co"># reproduction from 3-6 year olds</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 1 to 2</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0.45</span>, <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 2 to 3</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0.70</span>, <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 3 to 4</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0.85</span>, <span class="fl">0</span>,    <span class="fl">0</span><span class="op">)</span>,  <span class="co"># survival from age 4 to 5</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0.75</span>, <span class="fl">0</span><span class="op">)</span>   <span class="co"># survival from age 5 to 6</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># define population dynamics objects for each species</span></span></span>
+<span class="r-in"><span><span class="va">sp1_dyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">sp1_mat</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp2_dyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">sp2_mat</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp3_dyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="dynamics.html">dynamics</a></span><span class="op">(</span><span class="va">sp3_mat</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># define multispecies interactions as masks/functions</span></span></span>
+<span class="r-in"><span><span class="co"># - species 1 influencing transition probabilities of species 3</span></span></span>
+<span class="r-in"><span><span class="va">mask_1v3</span> <span class="op">&lt;-</span> <span class="fu"><a href="masks.html">transition</a></span><span class="op">(</span><span class="va">sp3_mat</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># basic Beverton-Holt function</span></span></span>
+<span class="r-in"><span><span class="va">fun_1v3</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">n</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># n is the population vector of the source population (sp 1)</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">x</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="co"># focus on adults</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># - species 3 influencing reproduction of species 2</span></span></span>
+<span class="r-in"><span><span class="va">mask_3v2</span> <span class="op">&lt;-</span> <span class="fu"><a href="masks.html">reproduction</a></span><span class="op">(</span><span class="va">sp2_mat</span>, dims <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># basic Ricker function</span></span></span>
+<span class="r-in"><span><span class="va">fun_3v2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">n</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># n is the population vector of the source population (sp 3)</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">50</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="co"># focus on juveniles</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># combine masks and functions into pairwise_interaction objects</span></span></span>
+<span class="r-in"><span><span class="va">sp_int1v3</span> <span class="op">&lt;-</span> <span class="fu"><a href="pairwise_interaction.html">pairwise_interaction</a></span><span class="op">(</span><span class="va">sp3_dyn</span>, <span class="va">sp1_dyn</span>, <span class="va">mask_1v3</span>, <span class="va">fun_1v3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp_int3v2</span> <span class="op">&lt;-</span> <span class="fu"><a href="pairwise_interaction.html">pairwise_interaction</a></span><span class="op">(</span><span class="va">sp2_dyn</span>, <span class="va">sp3_dyn</span>, <span class="va">mask_3v2</span>, <span class="va">fun_3v2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compile a multispecies dynamics object</span></span></span>
+<span class="r-in"><span><span class="va">multisp_dyn</span> <span class="op">&lt;-</span> <span class="fu">multispecies</span><span class="op">(</span><span class="va">sp_int1v3</span>, <span class="va">sp_int3v2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># simulate</span></span></span>
+<span class="r-in"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate.html">simulate</a></span><span class="op">(</span><span class="va">multisp_dyn</span>, nsim <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># and can plot these simulated trajectories for each species</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sims</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="multispecies-1.png" alt="" width="700" height="433"></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jian Yen.</p>
+  <p>Developed by Jian Yen, Arthur Rylah Institute for Environmental Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">

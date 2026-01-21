@@ -37,6 +37,12 @@ format_covariates(x, aux = NULL, names = NULL)
 
   optional vector of names for each covariate included in `x`
 
+## Value
+
+`covariates` object specifying covariate effects on a matrix population
+model; for use with
+[`dynamics`](https://aae-stats.github.io/aae.pop/reference/dynamics.md)
+
 ## Details
 
 Masks must be of the same dimension as the population dynamics matrix

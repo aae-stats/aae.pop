@@ -3,7 +3,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">aae.pop</a>
 
@@ -15,21 +15,7 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/get_started.html">get started</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">vignettes</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes"><li><a class="dropdown-item" href="../articles/including_processes.html">Including processes</a></li>
-    <li><a class="dropdown-item" href="../articles/beyond_defaults.html">Beyond defaults</a></li>
-    <li><a class="dropdown-item" href="../articles/metapopulations.html">Metapopulations</a></li>
-    <li><a class="dropdown-item" href="../articles/multiple_species.html">Multiple species</a></li>
-    <li><a class="dropdown-item" href="../articles/templates.html">Species templates</a></li>
-  </ul></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples"><li><a class="dropdown-item" href="../articles/macperch_example.html">Macquarie perch</a></li>
-    <li><a class="dropdown-item" href="../articles/scenarios_example.html">Comparing scenarios</a></li>
-  </ul></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop"><span class="fa fab fa-github"></span></a></li>
+      <ul class="navbar-nav me-auto"></ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -39,7 +25,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/aae-stats/aae.pop/blob/v0.1.2/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/aae-stats/aae.pop/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
@@ -49,10 +35,10 @@
 <h2 class="pkg-version" data-toc-text="0.1.2" id="aaepop-012">aae.pop 0.1.2<a class="anchor" aria-label="anchor" href="#aaepop-012"></a></h2>
 <div class="section level3">
 <h3 id="features-0-1-2">Features<a class="anchor" aria-label="anchor" href="#features-0-1-2"></a></h3>
-<ul><li>New process class to handle removals or additions to the population vector prior to or following the update step: <code>add_remove_pre</code>, <code>add_remove_post</code>
-</li>
-<li>Allow custom labels on plotted dynamics objects with <code>labels</code> argument</li>
-<li>Update vignettes/website to include newer processes</li>
+<ul><li>
+<code>add_remove_pre</code> and <code>add_remove_post</code> added to handle removals or additions to the population vector prior to or following the update step</li>
+<li>
+<code>plot</code> function for <code>dynamics</code> objects updated to allow custom labels</li>
 </ul></div>
 <div class="section level3">
 <h3 id="fixes-0-1-2">Fixes<a class="anchor" aria-label="anchor" href="#fixes-0-1-2"></a></h3>
@@ -68,16 +54,16 @@
 <h2 class="pkg-version" data-toc-text="0.1.1" id="aaepop-011">aae.pop 0.1.1<a class="anchor" aria-label="anchor" href="#aaepop-011"></a></h2>
 <div class="section level3">
 <h3 id="features-0-1-1">Features<a class="anchor" aria-label="anchor" href="#features-0-1-1"></a></h3>
-<ul><li>New process class to handle covariates applied separately to each replicate trajectory: <code>replicated_covariates</code>
-</li>
+<ul><li>
+<code>replicated_covariates</code> process class added to handle covariates applied separately to each replicate trajectory</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="aaepop-010">aae.pop 0.1.0<a class="anchor" aria-label="anchor" href="#aaepop-010"></a></h2>
 <div class="section level3">
 <h3 id="features-0-1-0">Features<a class="anchor" aria-label="anchor" href="#features-0-1-0"></a></h3>
-<ul><li>New methods to summarise simulated population trajectories: <code>get_cdf</code>, <code>get_pdf</code>, <code>emps</code>, <code>exps</code>
-</li>
+<ul><li>
+<code>get_cdf</code>, <code>get_pdf</code>, <code>emps</code>, <code>exps</code> methods added to summarise simulated population trajectories:</li>
 </ul></div>
 <div class="section level3">
 <h3 id="fixes-0-1-0">Fixes<a class="anchor" aria-label="anchor" href="#fixes-0-1-0"></a></h3>
@@ -95,7 +81,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jian Yen.</p>
+  <p>Developed by Jian Yen, Arthur Rylah Institute for Environmental Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">

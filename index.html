@@ -5,20 +5,20 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Flexible Simulation of Multispecies Population Dynamics • aae.pop</title>
+<title>Flexible Population Dynamics Simulations • aae.pop</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Flexible Simulation of Multispecies Population Dynamics">
-<meta name="description" content="Simulate multispecies population dynamics when vital rates are influenced by time-varying covariates, such as environmental conditions or the abundances of other species.">
-<meta property="og:description" content="Simulate multispecies population dynamics when vital rates are influenced by time-varying covariates, such as environmental conditions or the abundances of other species.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Flexible Population Dynamics Simulations">
+<meta name="description" content="Simulate population dynamics from realistically complex matrix population models in a plug-and-play fashion. Supports aspatial and spatially implicit models with one or more species and time-varying covariates, stochasticity, density dependence, additions or removals of indidivuals, interspecific interactions, and metapopulations.">
+<meta property="og:description" content="Simulate population dynamics from realistically complex matrix population models in a plug-and-play fashion. Supports aspatial and spatially implicit models with one or more species and time-varying covariates, stochasticity, density dependence, additions or removals of indidivuals, interspecific interactions, and metapopulations.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">aae.pop</a>
 
@@ -30,28 +30,9 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="articles/get_started.html">get started</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">vignettes</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
-<li><a class="dropdown-item" href="articles/including_processes.html">Including processes</a></li>
-    <li><a class="dropdown-item" href="articles/beyond_defaults.html">Beyond defaults</a></li>
-    <li><a class="dropdown-item" href="articles/metapopulations.html">Metapopulations</a></li>
-    <li><a class="dropdown-item" href="articles/multiple_species.html">Multiple species</a></li>
-    <li><a class="dropdown-item" href="articles/templates.html">Species templates</a></li>
-  </ul>
-</li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="articles/macperch_example.html">Macquarie perch</a></li>
-    <li><a class="dropdown-item" href="articles/scenarios_example.html">Comparing scenarios</a></li>
-  </ul>
-</li>
-      </ul>
+      <ul class="navbar-nav me-auto"></ul>
 <ul class="navbar-nav">
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop"><span class="fa fab fa-github"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/aae-stats/aae.pop/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -66,10 +47,10 @@
 <p>This website includes a <a href="articles/get_started.html">quick start guide</a>, examples, vignettes, and <a href="reference/index.html">package documentation</a>. Template models have been developed for several species. These are included in the <code>aae.pop.templates</code> package and are described <a href="articles/templates.html">here</a>.</p>
 <p>You can install the current version of the package from Github:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"aae-stats/aae.pop"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"aae-stats/aae.pop"</span><span class="op">)</span></span></code></pre></div>
 <p>aae.pop is designed as a general package for population models. Several existing models are included in the aae.pop.templates package, which can be installed from Github:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"aae-stats/aae.pop.templates"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"aae-stats/aae.pop.templates"</span><span class="op">)</span></span></code></pre></div>
 <!-- badges: start -->
 
 </div>
@@ -99,7 +80,8 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Jian Yen <br><small class="roles"> Maintainer </small>   </li>
+<li>Jian Yen <br><small class="roles"> Author, maintainer, copyright holder </small>   </li>
+<li>Arthur Rylah Institute for Environmental Research <br><small class="roles"> Funder </small>   </li>
 </ul>
 </div>
 
@@ -110,7 +92,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jian Yen.</p>
+  <p>Developed by Jian Yen, Arthur Rylah Institute for Environmental Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -36,6 +36,11 @@ emps(sims, subset = NULL, times = NULL, fun = mean, ...)
 
   additional arguments passed to `fun`
 
+## Value
+
+a single value representing the expected minimum population size for a
+simulation
+
 ## Details
 
 Expected minimum population size (EMPS) is the average minimum value of
