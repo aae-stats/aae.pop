@@ -345,7 +345,9 @@ simulate.dynamics <- function(
     )
 
     # check replicated arguments
+    # nolint start
     rep_args_ok <- unlist(lapply(args, check_replicated_args, y = nsim))
+    # nolint end
   } else {
     # set an identity covariates function if no covariate arguments
     #   provided
@@ -402,6 +404,7 @@ simulate.dynamics <- function(
   opt$replicates <- nsim
 
   # if seed is provided, use it but reset random seed afterwards
+  # nolint start
   if (!is.null(seed)) {
     if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
       runif(1)
@@ -411,6 +414,7 @@ simulate.dynamics <- function(
     on.exit(assign(".Random.seed", r_seed, envir = .GlobalEnv))
     set.seed(seed)
   }
+  # nolint end
 
   # initalise the population with init if provided, following
   #   options()$aae.pop_initialisation otherwise

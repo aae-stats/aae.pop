@@ -436,84 +436,87 @@ test_that("metapopulation density dependence simulates correctly", {
 test_that("metapopulation errors informatively when
            structure or dispersal are inappropriate", {
 
-             # dispersal must have one element for each dispersal marked in structure
-             expect_error(
-               metapopulation(
-                 structure_obj5, dynamics_list, dispersal_list[1:4]
-               ),
-               "dispersal must have one element for each"
-             )
+            # dispersal must have one element for each dispersal marked
+            #   in structure
+            expect_error(
+              metapopulation(
+                structure_obj5, dynamics_list, dispersal_list[1:4]
+              ),
+              "dispersal must have one element for each"
+            )
 
-             # dispersal must have one element for each dispersal marked in structure
-             expect_error(
-               metapopulation(structure_obj5, dynamics_list, dispersal_list[1]),
-               "dispersal must have one element for each"
-             )
+            # dispersal must have one element for each dispersal marked in
+            #  structure
+            expect_error(
+              metapopulation(structure_obj5, dynamics_list, dispersal_list[1]),
+              "dispersal must have one element for each"
+            )
 
-             # dispersal must exist
-             expect_error(
-               metapopulation(structure_obj5, dynamics_list),
-               "dispersal must be provided"
-             )
+            # dispersal must exist
+            expect_error(
+              metapopulation(structure_obj5, dynamics_list),
+              "dispersal must be provided"
+            )
 
-             # dims of populations must all match
-             dynamics_tmp <- dynamics_list
-             dynamics_tmp[[5]] <- dynamics(mat[1:4, 1:4])
-             expect_error(
-               metapopulation(structure_obj5, dynamics_tmp, dispersal_list),
-               "all populations in dynamics must have the same"
-             )
+            # dims of populations must all match
+            dynamics_tmp <- dynamics_list
+            dynamics_tmp[[5]] <- dynamics(mat[1:4, 1:4])
+            expect_error(
+              metapopulation(structure_obj5, dynamics_tmp, dispersal_list),
+              "all populations in dynamics must have the same"
+            )
 
-             # dims of structure must match number of dynamics objects
-             expect_error(
-               metapopulation(structure_obj3, dynamics_list[1:5], dispersal_list),
-               "dynamics must be a single dynamics object or a list of dynamics"
-             )
+            # dims of structure must match number of dynamics objects
+            expect_error(
+              metapopulation(
+                structure_obj3, dynamics_list[1:5], dispersal_list
+              ),
+              "dynamics must be a single dynamics object or a list of dynamics"
+            )
 
-             # structure isn't a matrix
-             expect_error(
-               metapopulation(
-                 list(structure_obj3), dynamics_list[1:3], dispersal_list
-               ),
-               "structure must be a matrix"
-             )
+            # structure isn't a matrix
+            expect_error(
+              metapopulation(
+                list(structure_obj3), dynamics_list[1:3], dispersal_list
+              ),
+              "structure must be a matrix"
+            )
 
-             # structure isn't a square matrix
-             expect_error(
-               metapopulation(
-                 structure_obj3[1:2, ], dynamics_list[1:3], dispersal_list
-               ),
-               "structure must be a square matrix"
-             )
+            # structure isn't a square matrix
+            expect_error(
+              metapopulation(
+                structure_obj3[1:2, ], dynamics_list[1:3], dispersal_list
+              ),
+              "structure must be a square matrix"
+            )
 
-             # structure isn't a binary matrix
-             expect_error(
-               metapopulation(
-                 structure_obj3 * 0.5, dynamics_list[1:3], dispersal_list
-               ),
-               "structure must be binary"
-             )
+            # structure isn't a binary matrix
+            expect_error(
+              metapopulation(
+                structure_obj3 * 0.5, dynamics_list[1:3], dispersal_list
+              ),
+              "structure must be binary"
+            )
 
-             # structure diagnonal should be overwritten
-             str_test <- structure_obj3
-             str_test[1, 1] <- TRUE
-             expect_message(
-               metapopulation(
-                 str_test, dynamics_list[1:3], dispersal_list
-               ),
-               "exceeds 1 for classes"
-             )
+            # structure diagnonal should be overwritten
+            str_test <- structure_obj3
+            str_test[1, 1] <- TRUE
+            expect_message(
+              metapopulation(
+                str_test, dynamics_list[1:3], dispersal_list
+              ),
+              "exceeds 1 for classes"
+            )
 
-             # should work with a single model though
-             expect_message(
-               metapopulation(
-                 structure_obj5, dynamics_list[[1]], dispersal_list
-               ),
-               "exceeds 1 for classes"
-             )
+            # should work with a single model though
+            expect_message(
+              metapopulation(
+                structure_obj5, dynamics_list[[1]], dispersal_list
+              ),
+              "exceeds 1 for classes"
+            )
 
-           })
-
+          })
 
 test_that("metapopulation S3 methods work correctly", {
 

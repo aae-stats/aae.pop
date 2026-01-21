@@ -135,7 +135,9 @@ pr_extinct <- function(sims, threshold = 0, subset = NULL, times = NULL) {
 #'
 #' # calculate risk curve
 #' risk_curve(sims, n = 10)
-risk_curve <- function(sims, threshold = NULL, subset = NULL, times = NULL, n = 100) {
+risk_curve <- function(
+  sims, threshold = NULL, subset = NULL, times = NULL, n = 100
+) {
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("risk_curve is defined for simulation objects", call. = FALSE)
@@ -353,7 +355,9 @@ get_cdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
 #' # calculate distribution of minimum population sizes
 #' #   but ignore first 10 years
 #' get_pdf(sims, fn = max, times = 11:51)
-get_pdf <- function(sims, subset = NULL, times = NULL, n = 100, fn = min, ...) {
+get_pdf <- function(
+  sims, subset = NULL, times = NULL, n = 100, fn = min, ...
+) {
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("risk_curve is defined for simulation objects", call. = FALSE)
@@ -546,7 +550,14 @@ emps <- function(sims, subset = NULL, times = NULL, fun = mean, ...) {
 #'   sims,
 #'   fun_within = quant1, fun_among = quant2, p1 = 0.25, p2 = 0.75
 #' )
-exps <- function(sims, subset = NULL, times = NULL, fun_within = mean, fun_among = mean, ...) {
+exps <- function(
+  sims,
+  subset = NULL,
+  times = NULL,
+  fun_within = mean,
+  fun_among = mean,
+  ...
+) {
   # check input object
   if (!"simulation" %in% class(sims)) {
     stop("exps is defined for simulation objects", call. = FALSE)
