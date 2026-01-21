@@ -10,18 +10,18 @@ bootswatch: flatly
 authors:
   Jian Yen:
   href: https://scholar.google.com.au/citations?user=oEmm1CMAAAAJ&hl=en
-  Applied Aquatic Ecology, Arthur Rylah Institute for Environmental Research:
+Applied Aquatic Ecology, Arthur Rylah Institute for Environmental Research:
   href: https://github.com/aae-stats
 
 reference:
-  - title: Defining population dynamics models
-contents:
+- title: Defining population dynamics models
+  contents:
   - dynamics
 - title: Simulating population dynamics
-contents:
+  contents:
   - simulate
 - title: Summarising population dynamics
-contents:
+  contents:
   - pr_extinct
   - emps
   - risk_curve
@@ -29,36 +29,36 @@ contents:
   - get_pdf
   - get_cdf
 - title: Adding density dependence
-contents:
+  contents:
   - density_dependence
   - density_functions
 - title: Altering the population vector
-contents:
+  contents:
   - add_remove_pre
   - add_remove_post
 - title: Adding stochasticity
-contents:
+  contents:
   - stochasticity
 - title: Adding covariates
-contents:
+  contents:
   - covariates
   - replicated_covariates
 - title: Subsetting population matrices
-contents:
+  contents:
   - masks
 - title: Updating population abundances
-contents:
+  contents:
   - updaters
 - title: Adding metapopulation structure
-contents:
+  contents:
   - metapopulation
   - dispersal
 - title: Modelling multiple species
-contents:
+  contents:
   - multispecies
   - pairwise_interaction
 - title: Helpers
-contents:
+  contents:
   - rng
 
 navbar:
@@ -71,29 +71,29 @@ components:
   articles: ~
   news: ~
   get_started:
-  text: get started
-href: articles/get_started.html
-vignettes:
-  text: vignettes
-menu:
-  - text: "Including processes"
-href: articles/including_processes.html
-  - text: "Beyond defaults"
-href: articles/beyond_defaults.html
-  - text: "Metapopulations"
-href: articles/metapopulations.html
-  - text: "Multiple species"
-href: articles/multiple_species.html
-examples:
-  text: examples
-menu:
-  - text: "Macquarie perch"
-href: articles/macperch_example.html
-  - text: "Comparing scenarios"
-href: articles/scenarios_example.html
-documentation:
-  text: documentation
-href: reference/index.html
-github:
-  icon: fab fa-github
-href: https://github.com/aae-stats/aae.pop
+    text: get started
+    href: articles/get_started.html
+  vignettes:
+    text: vignettes
+    menu:
+    - text: "Including processes"
+      href: articles/including_processes.html
+    - text: "Beyond defaults"
+      href: articles/beyond_defaults.html
+    - text: "Metapopulations"
+      href: articles/metapopulations.html
+    - text: "Multiple species"
+      href: articles/multiple_species.html
+  examples:
+    text: examples
+    menu:
+    - text: "Macquarie perch"
+      href: articles/macperch_example.html
+    - text: "Comparing scenarios"
+      href: articles/scenarios_example.html
+  documentation:
+    text: documentation
+    href: reference/index.html
+  github:
+    icon: fab fa-github
+    href: https://github.com/aae-stats/aae.pop
