@@ -274,8 +274,8 @@ plot.dynamics <- function(
     edge_style[from %in% which(node_type == "reprod") & to == 1] <- "dashed"
   } else {
     edge_style[from %in% which(node_type == "reprod") &
-                 !(to %in% which(node_type == "reprod")) &
-                 !(to %in% which(node_type == "post_reprod"))] <- "dashed"
+      !(to %in% which(node_type == "reprod")) &
+      !(to %in% which(node_type == "post_reprod"))] <- "dashed"
   }
 
   font_colour <- rep(col_pal[2], n_nodes)
