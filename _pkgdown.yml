@@ -10,7 +10,7 @@ bootswatch: flatly
 authors:
   Jian Yen:
   href: https://scholar.google.com.au/citations?user=oEmm1CMAAAAJ&hl=en
-Applied Aquatic Ecology, Arthur Rylah Institute for Environmental Research:
+  Applied Aquatic Ecology, Arthur Rylah Institute for Environmental Research:
   href: https://github.com/aae-stats
 
 reference:
@@ -78,18 +78,18 @@ vignettes:
 menu:
   - text: "Including processes"
 href: articles/including_processes.html
-- text: "Beyond defaults"
+  - text: "Beyond defaults"
 href: articles/beyond_defaults.html
-- text: "Metapopulations"
+  - text: "Metapopulations"
 href: articles/metapopulations.html
-- text: "Multiple species"
+  - text: "Multiple species"
 href: articles/multiple_species.html
 examples:
   text: examples
 menu:
   - text: "Macquarie perch"
 href: articles/macperch_example.html
-- text: "Comparing scenarios"
+  - text: "Comparing scenarios"
 href: articles/scenarios_example.html
 documentation:
   text: documentation

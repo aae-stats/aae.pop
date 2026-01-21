@@ -334,7 +334,7 @@ test_that("simulate returns correct abundances with replicated_covariates", {
 
 test_that(
           "simulate returns correct abundances with list replicated_covariates",
-  {
+          {
 
             # simulate trajectories with no uncertainty but with covariates
             dyn <- dynamics(mat, rep_cov_eff2)
