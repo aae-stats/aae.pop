@@ -195,7 +195,7 @@ sims <- simulate(popdyn, nsim = 100)
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-Density dependence can take many other forms. These forms may include positive density dependence (e.g., Allee effects) or may affect adult abundances as well as reproduction. An example of the former is included in the [Macquarie perch worked example](macperch_example.html). The next section introduces an example of the latter.
+Density dependence can take many other forms. These forms may include positive density dependence (e.g., Allee effects) or may affect adult abundances as well as reproduction. The next section introduces an example of the latter.
 
 ### A different form of density dependence
 

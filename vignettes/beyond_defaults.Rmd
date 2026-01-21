@@ -218,7 +218,7 @@ The updater can be changed at a global level through the `options` function:
 options(aae.pop_update = update_my_way)
 ```
 
-The `aae.pop` package includes two alternatives, which incorporate demographic stochasticity using Binomial draws (`update_binomial_leslie`, for Leslie matrices) or multinomial draws (`update_multinomial`, for all other matrices). These approaches are not as fast as the default cross product method. The `update_binomial_leslie` method is demonstrated in the [Macquarie perch example model](macperch_example.html).
+The `aae.pop` package includes two alternatives, which incorporate demographic stochasticity using Binomial draws (`update_binomial_leslie`, for Leslie matrices) or multinomial draws (`update_multinomial`, for all other matrices). These approaches are not as fast as the default cross product method.
 
 ### Roll your own updater
 
