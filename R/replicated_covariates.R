@@ -44,6 +44,10 @@ NULL
 #'   dynamics in environmental stochasticity and correlated uncertainty
 #'   in vital rates.
 #'
+#' @returns \code{replicated_covariates} object specifying replicate-specific
+#'   covariate effects on a matrix population model; for use with
+#'   \code{\link{dynamics}}
+#'
 #' @examples
 #' # define a population matrix (columns move to rows)
 #' nclass <- 5
@@ -58,7 +62,7 @@ NULL
 #' #   e.g., a logistic function
 #' covars <- replicated_covariates(
 #'   masks = transition(popmat),
-#'   funs = function(mat, x) mat * (1 / (1 + exp(-10 * x)))
+#'   funs = \(mat, x) mat * (1 / (1 + exp(-10 * x)))
 #' )
 #'
 #' # simulate 50 random covariate values for each replicate (each

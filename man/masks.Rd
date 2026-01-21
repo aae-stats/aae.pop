@@ -35,14 +35,15 @@ subsets of cells to include in a given mask}
 to be combined into a single mask by one of the
 \code{combine} methods}
 }
+\value{
+\code{mask} object used to define the cells affected by
+  a process included in \code{\link{dynamics}}
+}
 \description{
 Helper functions to isolate particular components
   of a population dynamics model, such as the reproduction terms,
   transition/growth terms, or particular life stages from an
   abundance vector, such as pre- or post-reproductive stages.
-}
-\details{
-To be completed.
 }
 \examples{
 # define a population

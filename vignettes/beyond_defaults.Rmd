@@ -12,6 +12,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(aae.pop)
+library(scales)
 
 # set up a basic population dynamics object to demonstrate examples below
 popmat <- rbind(
@@ -139,7 +140,7 @@ sims <- simulate(
 # plot this
 plot(
   sims,
-  col = scales::alpha("#2171B5", 0.9),
+  col = alpha("#2171B5", 0.9),
   main = "Three different initial conditions"
 )
 ```
@@ -162,7 +163,7 @@ sims <- simulate(
 # plot this
 plot(
   sims,
-  col = scales::alpha("#2171B5", 0.4),
+  col = alpha("#2171B5", 0.4),
   main = "Many replicates with the same initial condition"
 )
 ```
@@ -192,7 +193,7 @@ sims <- simulate(
 # plot this
 plot(
   sims,
-  col = scales::alpha("#2171B5", 0.4),
+  col = alpha("#2171B5", 0.4),
   main = "Many replicates with stochastic, structured initial conditions"
 )
 ```
@@ -217,7 +218,7 @@ The updater can be changed at a global level through the `options` function:
 options(aae.pop_update = update_my_way)
 ```
 
-The `aae.pop` package includes two alternatives, which incorporate demographic stochasticity using Binomial draws (`update_binomial_leslie`, for Leslie matrices) or multinomial draws (`update_multinomial`, for all other matrices). These approaches are not as fast as the default cross product method. The `update_binomial_leslie` method is demonstrated in the [Macquarie perch example model](macperch_example.html).
+The `aae.pop` package includes two alternatives, which incorporate demographic stochasticity using Binomial draws (`update_binomial_leslie`, for Leslie matrices) or multinomial draws (`update_multinomial`, for all other matrices). These approaches are not as fast as the default cross product method.
 
 ### Roll your own updater
 

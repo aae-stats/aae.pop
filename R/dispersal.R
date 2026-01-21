@@ -34,7 +34,9 @@ NULL
 #'   a proportion of the total probability an individual
 #'   exits that class at any given time step
 #'
-#' @details To be completed.
+#' @returns \code{dispersal} object specifying probabilities of movement
+#'   between populations in a metapopulation matrix model; for use with
+#'   \code{\link{metapopulation}}
 #'
 #' @examples
 #' # define some populations, all with identical vital rates

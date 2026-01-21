@@ -22,6 +22,10 @@ all classes}
 include in calculation of extinction risk. Defaults to all
 simulated generations}
 }
+\value{
+a single numeric value representing the probability a population
+  will decline below the threshold size
+}
 \description{
 Calculate (quasi-)extinction risk for a \code{\link{simulate}}
   object

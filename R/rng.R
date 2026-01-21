@@ -61,13 +61,15 @@ NULL
 #'   illustrated in the Macquarie perch example on the package
 #'   [website](https://aae-stats.github.io/aae.pop/).
 #'
+#' @returns a vector or matrix of random draws from the \code{r*unit}
+#'   set of functions
+#'
 #' @examples
 #' # rmultiunit generates multivariate draws constrained to
 #' #   the unit interval, with known mean, standard deviation,
 #' #   and (optionally) covariance/correlation structure
 #' rmultiunit(n = 10, mean = c(0.25, 0.5, 0.75), sd = c(0.1, 0.4, 0.25))
 #'
-#' \dontrun{
 #' # add in a correlation structure
 #' omega_set <- cbind(
 #'   c(1, 0.25, 0.01),
@@ -80,15 +82,15 @@ NULL
 #'   sd = c(0.1, 0.4, 0.25),
 #'   Omega = omega_set
 #' )
-#' }
 # nolint start
 rmultiunit <- function(
-    n,
-    mean,
-    sd,
-    Sigma = NULL,
-    Omega = NULL,
-    perfect_correlation = FALSE) {
+  n,
+  mean,
+  sd,
+  Sigma = NULL,
+  Omega = NULL,
+  perfect_correlation = FALSE
+) {
   # nolint end
 
   # how many parameters are we dealing with?
@@ -158,11 +160,12 @@ rmultiunit <- function(
 #'
 # nolint start
 rmultiunit_from_real <- function(
-    n,
-    mean_real,
-    sd_real = NULL,
-    Sigma_chol = NULL,
-    perfect_correlation = FALSE) {
+  n,
+  mean_real,
+  sd_real = NULL,
+  Sigma_chol = NULL,
+  perfect_correlation = FALSE
+) {
   # nolint end
 
   # need one of sd_real or Sigma_chol
@@ -279,7 +282,7 @@ f_xy <- function(x, p, s) {
 solve_nl <- function(x, fn, ...) {
   init <- c(qnorm(x[1]), x[2] / dnorm(qnorm(x[1])))
 
-  nleqslv::nleqslv(
+  nleqslv(
     x = init,
     fn = fn,
     p = x[1],
@@ -305,7 +308,7 @@ rho_int <- function(x, mean_i, mean_j, sd_i, sd_j, rho, rho2) {
 # equation to solve to find correlation coefficient
 f_x <- function(x, fn, arg) {
   # integrate over wide range of values in both dimensions
-  int_value <- cubature::hcubature(
+  int_value <- hcubature(
     fn,
     lowerLimit = rep(-10, 2),
     upperLimit = rep(10, 2),

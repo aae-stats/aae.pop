@@ -27,6 +27,11 @@ Defaults to 100}
 
 \item{\dots}{additional arguments passed to \code{fn}}
 }
+\value{
+a data.frame containing a \code{prob} column that indicates
+  the probability the population will fall below the threshold value
+  in the \code{value} column
+}
 \description{
 Calculate the cumulative distribution function
   of a summary statistic across all iterations of a

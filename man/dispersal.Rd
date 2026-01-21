@@ -45,12 +45,14 @@ If \code{TRUE}, values in \code{kernel} are calculated as
 a proportion of the total probability an individual
 exits that class at any given time step}
 }
+\value{
+\code{dispersal} object specifying probabilities of movement
+  between populations in a metapopulation matrix model; for use with
+  \code{\link{metapopulation}}
+}
 \description{
 Specify dispersal between populations, including stochasticity
   and density dependence in dispersal parameters
-}
-\details{
-To be completed.
 }
 \examples{
 # define some populations, all with identical vital rates

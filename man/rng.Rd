@@ -73,6 +73,10 @@ matrix converted to real-line equivalent}
 \item{unit_sd}{vector of standard deviations on the unit
 interval}
 }
+\value{
+a vector or matrix of random draws from the \code{r*unit}
+  set of functions
+}
 \description{
 Draw random numbers from unusual distributions,
   such as on the unit or non-negative real line with known
@@ -112,7 +116,6 @@ The r*unit family of functions support simulation of values
 #   and (optionally) covariance/correlation structure
 rmultiunit(n = 10, mean = c(0.25, 0.5, 0.75), sd = c(0.1, 0.4, 0.25))
 
-\dontrun{
 # add in a correlation structure
 omega_set <- cbind(
   c(1, 0.25, 0.01),
@@ -125,5 +128,4 @@ rmultiunit(
   sd = c(0.1, 0.4, 0.25),
   Omega = omega_set
 )
-}
 }

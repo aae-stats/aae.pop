@@ -7,6 +7,7 @@ NULL
 #' @rdname simulate
 #'
 #' @importFrom stats rpois rbinom runif simulate
+#' @importFrom abind abind
 #'
 #' @export
 #'
@@ -70,7 +71,9 @@ NULL
 #'   used to manage updates for multispecies models (an embarrassingly
 #'   parallel problem)
 #'
-#' @details Includes plot and subset methods
+#' @returns \code{simulation} object containing replicate simulations from
+#'   a matrix population model. \code{plot} and \code{subset} methods are
+#'   defined for \code{simulation} objects
 #'
 #' @examples
 #' # define a population matrix (columns move to rows)
@@ -117,7 +120,6 @@ NULL
 #' # and plot again
 #' plot(sims)
 #'
-#' \dontrun{
 #' # note that there is only one trajectory now because
 #' #   this simulation is deterministic.
 #' #
@@ -128,8 +130,8 @@ NULL
 #'     transition(popmat)
 #'   ),
 #'   funs = list(
-#'     function(x) rpois(n = length(x), lambda = x),
-#'     function(x) rmultiunit(n = 1, mean = x, sd = 0.1 * x)
+#'     \(x) rpois(n = length(x), lambda = x),
+#'     \(x) runif(n = length(x), min = 0.9 * x, max = pmin(1.1 * x, 1))
 #'   )
 #' )
 #'
@@ -139,47 +141,6 @@ NULL
 #'   dyn,
 #'   init = c(50, 20, 10, 10, 5),
 #'   nsim = 100,
-#'   options = list(ntime = 50),
-#' )
-#'
-#' # the rmultiunit draws can be slow but we can speed
-#' #   this up by calculating them once per generation
-#' #   instead of once per replicate within each generation
-#' envstoch <- environmental_stochasticity(
-#'   masks = list(
-#'     reproduction(popmat, dims = 4:5),
-#'     transition(popmat)
-#'   ),
-#'   funs = list(
-#'     function(x, ...) rpois(n = length(x), lambda = x),
-#'     function(x, mean, sd) {
-#'       pnorm(mean + sd * rnorm(length(x)))
-#'     }
-#'   )
-#' )
-#'
-#' # this requires an argument "function" that takes the
-#' #   current state of the population model in each
-#' #   iteration and calculates the correct arguments to
-#' #   pass to environmental_stochasticty
-#' envstoch_function <- function(obj, pop, iter) {
-#'   mat <- obj$matrix
-#'   if (is.list(mat)) {
-#'     mat <- mat[[iter]]
-#'   }
-#'   out <- aae.pop:::unit_to_real(
-#'     mat[transition(mat)], 0.1 * mat[transition(mat)]
-#'   )
-#'   list(mean = out[, 1], sd = out[, 2])
-#' }
-#'
-#' # update the dynamics object and simulate from it
-#' dyn <- update(dyn, envstoch)
-#' sims <- simulate(
-#'   dyn,
-#'   init = c(50, 20, 10, 10, 5),
-#'   nsim = 100,
-#'   args = list(environmental_stochasticity = list(envstoch_function)),
 #'   options = list(ntime = 50),
 #' )
 #'
@@ -187,7 +148,7 @@ NULL
 #' #   e.g., a logistic function
 #' covars <- covariates(
 #'   masks = transition(popmat),
-#'   funs = function(mat, x) mat * (1 / (1 + exp(-10 * x)))
+#'   funs = \(mat, x) mat * (1 / (1 + exp(-10 * x)))
 #' )
 #'
 #' # simulate 50 random covariate values
@@ -202,14 +163,8 @@ NULL
 #'   dyn,
 #'   init = c(50, 20, 10, 10, 5),
 #'   nsim = 100,
-#'   args = list(
-#'     covariates = format_covariates(xvals),
-#'     environmental_stochasticity = list(envstoch_function)
-#'   )
+#'   args = list(covariates = format_covariates(xvals))
 #' )
-#'
-#' # and can plot these again
-#' plot(sims)
 #'
 #' # a simple way to add demographic stochasticity is to change
 #' #   the "updater" that converts the population at time t
@@ -227,25 +182,22 @@ NULL
 #'     update = update_binomial_leslie,
 #'     tidy_abundances = floor
 #'   ),
-#'   args = list(
-#'     covariates = format_covariates(xvals),
-#'     environmental_stochasticity = list(envstoch_function)
-#'   )
+#'   args = list(covariates = format_covariates(xvals))
 #' )
 #'
 #' # and can plot these again
 #' plot(sims)
-#' }
+#'
 # nolint start
 simulate.dynamics <- function(
-    object,
-    nsim = 1,
-    seed = NULL,
-    ...,
-    init = NULL,
-    options = list(),
-    args = list(),
-    .future = FALSE
+  object,
+  nsim = 1,
+  seed = NULL,
+  ...,
+  init = NULL,
+  options = list(),
+  args = list(),
+  .future = FALSE
 ) {
   # nolint end
 
@@ -268,7 +220,7 @@ simulate.dynamics <- function(
     }
     if (any(!leslie_ok)) {
       stop("matrix must be a Leslie matrix to use update_binomial_leslie",
-           call. = FALSE
+        call. = FALSE
       )
     }
   }
@@ -289,7 +241,6 @@ simulate.dynamics <- function(
   # handle arguments differently for single and multispecies objects
   #   (arguments is a list of lists [one element per species] for multspecies)
   if (is.multispecies(object)) {
-
     # expand args if a single list is provided
     if (length(args) != object$nspecies) {
       if (length(args) == 0) {
@@ -347,7 +298,8 @@ simulate.dynamics <- function(
     # split default_args into a list with one element per species
     default_args <- lapply(
       seq_len(object$nspecies),
-      \(.x, .y) .y, .y = default_args
+      \(.x, .y) .y,
+      .y = default_args
     )
 
     # set static args here
@@ -373,9 +325,9 @@ simulate.dynamics <- function(
 
       # and overwrite opt$ntime if there is a single ndyn value and it
       #    differs from opt$ntime
-      if (ndyn != opt$ntime)
+      if (ndyn != opt$ntime) {
         opt$ntime <- ndyn
-
+      }
     }
 
     # add replicated args if needed
@@ -393,10 +345,10 @@ simulate.dynamics <- function(
     )
 
     # check replicated arguments
+    # nolint start
     rep_args_ok <- unlist(lapply(args, check_replicated_args, y = nsim))
-
+    # nolint end
   } else {
-
     # set an identity covariates function if no covariate arguments
     #   provided
     if (is.null(args$covariates)) {
@@ -433,8 +385,9 @@ simulate.dynamics <- function(
 
     # for a single species model, overwrite opt$ntime with ndyn if they
     #    do not agree
-    if (ndyn > 0)
+    if (ndyn > 0) {
       opt$ntime <- ndyn
+    }
 
     # add identity replicate args if needed
     if (add_rep) {
@@ -445,13 +398,13 @@ simulate.dynamics <- function(
 
     # check replicated arguments
     rep_args_ok <- check_replicated_args(args, nsim)
-
   }
 
   # add nsim into options
   opt$replicates <- nsim
 
   # if seed is provided, use it but reset random seed afterwards
+  # nolint start
   if (!is.null(seed)) {
     if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
       runif(1)
@@ -461,6 +414,7 @@ simulate.dynamics <- function(
     on.exit(assign(".Random.seed", r_seed, envir = .GlobalEnv))
     set.seed(seed)
   }
+  # nolint end
 
   # initalise the population with init if provided, following
   #   options()$aae.pop_initialisation otherwise
@@ -508,10 +462,8 @@ simulate.dynamics <- function(
 
   # loop through timesteps, updating population at each timestep
   for (i in seq_len(opt$ntime)) {
-
     # split based on multispecies or single species
     if (is.multispecies(object)) {
-
       # update args if required
       args_passed <- mapply(
         update_args,
@@ -539,9 +491,7 @@ simulate.dynamics <- function(
           SIMPLIFY = FALSE
         )
       }
-
     } else {
-
       # update args if required
       args_passed <- update_args(
         args = default_args,
@@ -563,7 +513,6 @@ simulate.dynamics <- function(
       if (opt$keep_slices) {
         pop[, , i + 1] <- pop_tmp
       }
-
     }
   }
 
@@ -587,7 +536,6 @@ simulate.dynamics <- function(
 #' @importFrom future.apply future_lapply
 # internal function: update a single time step for one species
 simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
-
   # calculate covariate-altered matrix
   if (is_expanded) {
     mat <- lapply(
@@ -783,14 +731,13 @@ simulate_once <- function(iter, obj, pop_t, opt, args, is_expanded = FALSE) {
 
 # internal function: update a single time step with interacting species
 simulate_once_multispecies <- function(
-    iter,
-    obj,
-    pop_t,
-    opt,
-    args,
-    .future
+  iter,
+  obj,
+  pop_t,
+  opt,
+  args,
+  .future
 ) {
-
   # vectorised update for all species
   if (!.future) {
     pop_tp1 <- lapply(
@@ -814,7 +761,6 @@ simulate_once_multispecies <- function(
 # internal function: update one species in a multispecies simulation
 #   (to vectorise simulate_once_multispecies)
 simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args) {
-
   # pull out relevant object and arguments
   dynamics <- obj$dynamics[[i]]
   args <- args[[i]]
@@ -850,7 +796,6 @@ simulate_multispecies_internal <- function(i, iter, obj, pop_t, opt, args) {
     args,
     is_expanded = is_expanded
   )
-
 }
 
 # internal function: update single step of simulation with multiple species
@@ -955,7 +900,7 @@ check_dims <- function(init, expected_dims) {
 #' @importFrom abind abind
 expand_dims <- function(init, replicates) {
   # expand over replicates if only one value for each class
-  abind::abind(
+  abind(
     lapply(seq_len(replicates), function(x) init),
     along = 0
   )
@@ -965,7 +910,6 @@ expand_dims <- function(init, replicates) {
 #   are not used
 #' @importFrom stats update
 use_identity_covariates <- function(obj) {
-
   # define identity covariates function
   identity_mask <- all_cells(obj$matrix)
   identity_covariates <- covariates(
@@ -979,14 +923,12 @@ use_identity_covariates <- function(obj) {
 
   # return
   obj
-
 }
 
 # internal function: set identity replicated_covariates function if
 #   replicated_covariates are not used
 #' @importFrom stats update
 use_identity_rep_covariates <- function(obj) {
-
   # define identity replicated_covariates function
   identity_mask <- all_cells(obj$matrix)
   identity_rep_covariates <- replicated_covariates(
@@ -1000,12 +942,10 @@ use_identity_rep_covariates <- function(obj) {
 
   # return
   obj
-
 }
 
 # internal function: split arguments based on type
 classify_args <- function(args) {
-
   # which arguments are static?
   static <- lapply(args, extract_args, type = "static")
 
@@ -1017,13 +957,11 @@ classify_args <- function(args) {
 
   # and return list of arguments by type
   list(static = static, dyn = dyn, fn = fn)
-
 }
 
 # internal function: extract arguments by type for each
 #   process
 extract_args <- function(x, type) {
-
   # work out classes
   arg_class <- sapply(x, class)
 
@@ -1043,7 +981,6 @@ extract_args <- function(x, type) {
 
   # return
   x
-
 }
 
 # internal function: overwrite default static arguments with specified
@@ -1076,17 +1013,17 @@ check_dynamic_args <- function(x) {
 #   provided replicated_ args and check internal consistency for a single
 #   species (multispecies consistency checked in `simulate.dynamics`)
 check_replicated_args <- function(x, y) {
-
   if (!is.null(x$dyn$replicated_covariates)) {
     rep_dim <- unlist(
       lapply(x$dyn$replicated_covariates, \(.x) sapply(.x, length))
     )
     rep_dim <- unique(rep_dim)
-    if (length(rep_dim) > 1)
+    if (length(rep_dim) > 1) {
       stop(
         "replicated arguments should all have the same dimensions",
         call. = FALSE
       )
+    }
     if (rep_dim != y) {
       stop("replicated arguments should have nsim columns", call. = FALSE)
     }
@@ -1094,7 +1031,6 @@ check_replicated_args <- function(x, y) {
 
   # return
   TRUE
-
 }
 
 # internal function: update arguments based on the current generation

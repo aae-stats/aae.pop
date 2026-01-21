@@ -35,6 +35,9 @@ NULL
 #'   returns a correctly formatted list that can be passed
 #'   as \code{args} to \code{simulate}.
 #'
+#' @returns \code{covariates} object specifying covariate effects on a
+#'   matrix population model; for use with \code{\link{dynamics}}
+#'
 #' @examples
 #' # define a population matrix (columns move to rows)
 #' nclass <- 5

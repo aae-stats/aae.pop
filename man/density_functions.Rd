@@ -19,6 +19,10 @@ currently implemented models and their parameters.}
 of total population density. Defaults to NULL, in which
 case all classes are used}
 }
+\value{
+functions that can be used with \code{\link{density_dependence}}
+  to specify common models of density dependence
+}
 \description{
 Use pre-defined forms of density dependence
   based on common density-dependence functions.

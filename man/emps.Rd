@@ -24,6 +24,10 @@ might include \code{median} or \code{min}}
 
 \item{\dots}{additional arguments passed to \code{fun}}
 }
+\value{
+a single value representing the expected minimum population
+  size for a simulation
+}
 \description{
 Calculate expected minimum population size (EMPS)
   for a \code{\link{simulate}} object
