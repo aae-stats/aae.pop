@@ -459,14 +459,13 @@ specifying covariates is that the vector/matrix of covariates determines
 the number of simulated time steps (<code>n_time</code>). In the above
 example, there were 20 values of <code>nesting</code>, which translates
 to 21 time steps (initial condition plus 20 updates).</p>
-<p>It is assumed that covariates can be passed as a vector, matrix, or
-data.frame, with one element or row for each time step. More complex
-<code>covariate</code> terms are possible, such as dynamic arguments
-that change through time or functions that specify arguments based on
-the current state of the population. These terms can be passed to
-<code>simulate</code> via the <code>args</code> argument but must follow
-specific rules described in the <a href="passing_arguments.html">Passing
-arguments</a> vignette.</p>
+<p>It is assumed that covariates will be passed as a list with one
+element for each time step. More complex <code>covariate</code> terms
+are possible, such as a combination of static and dynamic arguments or
+functions that specify arguments based on the current state of the
+population. These terms can be passed to <code>simulate</code> via the
+<code>args</code> argument (see help files for
+<code>format_covariates</code> for examples).</p>
 </div>
 <div class="section level3">
 <h3 id="fine-grained-control-of-covariate-effects">Fine-grained control of covariate effects<a class="anchor" aria-label="anchor" href="#fine-grained-control-of-covariate-effects"></a>
@@ -538,9 +537,8 @@ can be modified before reproduction.</p>
 <p>Examples of additions include fish stocking and releases of
 captive-bred individuals. Examples of removals include angling or
 predation of individuals, noting that both could also be applied as
-covariates acting on survival rates. The <a href="macperch_example.html">Macquarie perch worked example</a> includes
-examples of both additions and removals.</p>
-<p>A simple example can illustrate the general approach.</p>
+covariates acting on survival rates. A simple example can illustrate the
+general approach.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># set up a release of 10 individuals each year into the first age class,</span></span>
 <span><span class="co">#   occurring after reproduction</span></span>

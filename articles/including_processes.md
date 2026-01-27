@@ -449,14 +449,12 @@ steps (`n_time`). In the above example, there were 20 values of
 `nesting`, which translates to 21 time steps (initial condition plus 20
 updates).
 
-It is assumed that covariates can be passed as a vector, matrix, or
-data.frame, with one element or row for each time step. More complex
-`covariate` terms are possible, such as dynamic arguments that change
-through time or functions that specify arguments based on the current
-state of the population. These terms can be passed to `simulate` via the
-`args` argument but must follow specific rules described in the [Passing
-arguments](https://aae-stats.github.io/aae.pop/articles/passing_arguments.md)
-vignette.
+It is assumed that covariates will be passed as a list with one element
+for each time step. More complex `covariate` terms are possible, such as
+a combination of static and dynamic arguments or functions that specify
+arguments based on the current state of the population. These terms can
+be passed to `simulate` via the `args` argument (see help files for
+`format_covariates` for examples).
 
 ### Fine-grained control of covariate effects
 
@@ -533,11 +531,7 @@ modified before reproduction.
 Examples of additions include fish stocking and releases of captive-bred
 individuals. Examples of removals include angling or predation of
 individuals, noting that both could also be applied as covariates acting
-on survival rates. The [Macquarie perch worked
-example](https://aae-stats.github.io/aae.pop/articles/macperch_example.md)
-includes examples of both additions and removals.
-
-A simple example can illustrate the general approach.
+on survival rates. A simple example can illustrate the general approach.
 
 ``` r
 # set up a release of 10 individuals each year into the first age class,
