@@ -1,6 +1,15 @@
 # Changelog
 
-## aae.pop (development version)
+## aae.pop 0.2.0
+
+### Features
+
+- consistent handling of processes for all model types
+- isolate extension packages and remove vignettes that depend on these
+
+### Fixes
+
+- address all checks for pre-CRAN submission
 
 ## aae.pop 0.1.2
 
