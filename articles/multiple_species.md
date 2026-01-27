@@ -144,18 +144,30 @@ species to plot:
 plot(sims, which = 1, col = alpha("#2171B5", 0.4), main = "Species 1")
 ```
 
-![](multiple_species_files/figure-html/unnamed-chunk-4-1.png)
+![Line plots showing 100 simulated population trajectories for each
+species. Lines show Species 1 ranging from slight declines to slight
+increases, rapid extinction of Species 2, and stable abundances of
+Species 3 through
+time.](multiple_species_files/figure-html/unnamed-chunk-4-1.png)
 
 ``` r
 # plot
 plot(sims, which = 2, col = alpha("#2171B5", 0.4), main = "Species 2")
 ```
 
-![](multiple_species_files/figure-html/unnamed-chunk-4-2.png)
+![Line plots showing 100 simulated population trajectories for each
+species. Lines show Species 1 ranging from slight declines to slight
+increases, rapid extinction of Species 2, and stable abundances of
+Species 3 through
+time.](multiple_species_files/figure-html/unnamed-chunk-4-2.png)
 
 ``` r
 # plot
 plot(sims, which = 3, col = alpha("#2171B5", 0.4), main = "Species 3")
 ```
 
-![](multiple_species_files/figure-html/unnamed-chunk-4-3.png)
+![Line plots showing 100 simulated population trajectories for each
+species. Lines show Species 1 ranging from slight declines to slight
+increases, rapid extinction of Species 2, and stable abundances of
+Species 3 through
+time.](multiple_species_files/figure-html/unnamed-chunk-4-3.png)

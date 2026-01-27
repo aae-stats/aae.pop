@@ -37,24 +37,24 @@ for use with
 ``` r
 # define population matrices for three species
 sp1_mat <- rbind(
-  c(0,    0,    2,    4,    7),  # reproduction from 3-5 year olds
-  c(0.25, 0,    0,    0,    0),  # survival from age 1 to 2
-  c(0,    0.45, 0,    0,    0),  # survival from age 2 to 3
-  c(0,    0,    0.70, 0,    0),  # survival from age 3 to 4
-  c(0,    0,    0,    0.85, 0)   # survival from age 4 to 5
+  c(0, 0, 2, 4, 7), # reproduction from 3-5 year olds
+  c(0.25, 0, 0, 0, 0), # survival from age 1 to 2
+  c(0, 0.45, 0, 0, 0), # survival from age 2 to 3
+  c(0, 0, 0.70, 0, 0), # survival from age 3 to 4
+  c(0, 0, 0, 0.85, 0) # survival from age 4 to 5
 )
 sp2_mat <- rbind(
-  c(0,    0,    4),  # reproduction from 3 year olds
-  c(0.25, 0,    0),  # survival from age 1 to 2
-  c(0,    0.45, 0)   # survival from age 2 to 3
+  c(0, 0, 4), # reproduction from 3 year olds
+  c(0.25, 0, 0), # survival from age 1 to 2
+  c(0, 0.45, 0) # survival from age 2 to 3
 )
 sp3_mat <- rbind(
-  c(0,    0,    2,    4,    7,   10),  # reproduction from 3-6 year olds
-  c(0.25, 0,    0,    0,    0,    0),  # survival from age 1 to 2
-  c(0,    0.45, 0,    0,    0,    0),  # survival from age 2 to 3
-  c(0,    0,    0.70, 0,    0,    0),  # survival from age 3 to 4
-  c(0,    0,    0,    0.85, 0,    0),  # survival from age 4 to 5
-  c(0,    0,    0,    0,    0.75, 0)   # survival from age 5 to 6
+  c(0, 0, 2, 4, 7, 10), # reproduction from 3-6 year olds
+  c(0.25, 0, 0, 0, 0, 0), # survival from age 1 to 2
+  c(0, 0.45, 0, 0, 0, 0), # survival from age 2 to 3
+  c(0, 0, 0.70, 0, 0, 0), # survival from age 3 to 4
+  c(0, 0, 0, 0.85, 0, 0), # survival from age 4 to 5
+  c(0, 0, 0, 0, 0.75, 0) # survival from age 5 to 6
 )
 
 # define population dynamics objects for each species

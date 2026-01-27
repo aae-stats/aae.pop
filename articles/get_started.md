@@ -159,7 +159,10 @@ in R. This example sets the colour to a medium shade of blue:
 plot(sims, col = "#2171B5")
 ```
 
-![](get_started_files/figure-html/unnamed-chunk-8-1.png)
+![Line plot showing a single simulated trajectory initialised with a
+random initial condition. A single blue line shows deterministic changes
+in population abundance through
+time.](get_started_files/figure-html/unnamed-chunk-8-1.png)
 
 ### Changing default settings
 

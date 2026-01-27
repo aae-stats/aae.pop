@@ -165,7 +165,10 @@ plot(
 )
 ```
 
-![](beyond_defaults_files/figure-html/unnamed-chunk-6-1.png)
+![Line plot showing simulated trajectories through time with three
+different initial conditions. Larger initial population sizes correspond
+with higher population
+trajectories.](beyond_defaults_files/figure-html/unnamed-chunk-6-1.png)
 
 The previous example might be a bit unwieldy with many replicates, in
 which case a single vector can be passed to simulate:
@@ -191,7 +194,9 @@ plot(
 )
 ```
 
-![](beyond_defaults_files/figure-html/unnamed-chunk-7-1.png)
+![Line plot showing 100 simulated trajectories initialised with the same
+initial conditions. Lines are variable around a central
+average.](beyond_defaults_files/figure-html/unnamed-chunk-7-1.png)
 
 Alternatively, this approach could be modified to add stochasticity to
 initial conditions while retaining some of the structure from the
@@ -225,7 +230,10 @@ plot(
 )
 ```
 
-![](beyond_defaults_files/figure-html/unnamed-chunk-8-1.png)
+![Line plot showing 100 simulated trajectories initialised with
+stochastic initial conditions. Lines are variable around a central
+average with additional variation due to different initial
+conditions.](beyond_defaults_files/figure-html/unnamed-chunk-8-1.png)
 
 ## Updaters
 
@@ -283,7 +291,7 @@ vectors:
     ## {
     ##     tcrossprod(pop, mat)
     ## }
-    ## <bytecode: 0x565526d5d698>
+    ## <bytecode: 0x5598e7e3e460>
     ## <environment: namespace:aae.pop>
 
 The `update_binomial_leslie` function is slightly more complicated and
@@ -308,7 +316,7 @@ includes a check for integer abundances and then uses a mix of Poisson
     ##     cbind(rpois(nrow(vals), lambda = vals[, 1]), matrix(rbinom(length(probs), 
     ##         size = pop_nm1, prob = probs), nrow = nrow(pop_nm1)))
     ## }
-    ## <bytecode: 0x56552780cd48>
+    ## <bytecode: 0x5598e88f7ae0>
     ## <environment: namespace:aae.pop>
 
 The primary reason to change the updater is speed. Although

@@ -142,7 +142,10 @@ sims <- simulate(popdyn, nsim = 100)
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](including_processes_files/figure-html/unnamed-chunk-4-1.png)
+![Line plot showing 100 simulated trajectories initialised with the same
+initial conditions. Lines are variable due to demographic stochasticity
+and range from slightly increasing trajectories to complete
+extinction.](including_processes_files/figure-html/unnamed-chunk-4-1.png)
 
 This simple example includes one mask/function pair, but the
 `demographic_stochasticity` function can chain together as many
@@ -223,7 +226,11 @@ sims <- simulate(popdyn, nsim = 100)
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](including_processes_files/figure-html/unnamed-chunk-8-1.png)
+![Line plot showing 100 simulated trajectories initialised with the same
+initial conditions. Lines are variable due to environmental
+stochasticity and range from slightly increasing trajectories to
+slightly
+decreasing.](including_processes_files/figure-html/unnamed-chunk-8-1.png)
 
 It is easy to include both environmental and demographic stochasticity
 in the same model. The `dynamics` call simply needs both `envstoch` and
@@ -243,7 +250,11 @@ sims <- simulate(popdyn, nsim = 100)
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](including_processes_files/figure-html/unnamed-chunk-9-1.png)
+![Line plot showing 100 simulated trajectories initialised with the same
+initial conditions. Lines are variable due to environmental and
+demographic stochasticity and range from slightly increasing
+trajectories to complete
+extinction.](including_processes_files/figure-html/unnamed-chunk-9-1.png)
 
 ### Density dependence
 
@@ -300,7 +311,11 @@ sims <- simulate(popdyn, nsim = 100)
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](including_processes_files/figure-html/unnamed-chunk-10-1.png)
+![Line plot showing 100 simulated trajectories initialised with the same
+initial conditions. Lines are variable due to density dependence and
+environmental and demographic stochasticity and range from slightly
+decreasing trajectories to complete
+extinction.](including_processes_files/figure-html/unnamed-chunk-10-1.png)
 
 Density dependence can take many other forms. These forms may include
 positive density dependence (e.g., Allee effects) or may affect adult
@@ -349,7 +364,11 @@ sims <- simulate(popdyn, nsim = 100)
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](including_processes_files/figure-html/unnamed-chunk-11-1.png)
+![Line plot showing 100 simulated trajectories initialised with the same
+initial conditions. Lines are variable due to environmental and
+demographic stochasticity and removals from the population and range
+from slightly decreasing trajectories to complete
+extinction.](including_processes_files/figure-html/unnamed-chunk-11-1.png)
 
 ### Covariates
 
@@ -391,7 +410,11 @@ sims <- simulate(
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](including_processes_files/figure-html/unnamed-chunk-12-1.png)
+![Line plot showing 100 simulated trajectories initialised with the same
+initial conditions. Lines are variable due to environmental and
+demographic stochasticity and a nesting covariate and range from
+slightly decreasing trajectories to complete
+extinction.](including_processes_files/figure-html/unnamed-chunk-12-1.png)
 
 Specifying a `covariates` term does not automatically include covariates
 in the model. Note that the `nesting` variable also had to be passed to
@@ -489,7 +512,11 @@ sims <- simulate(
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](including_processes_files/figure-html/unnamed-chunk-14-1.png)
+![Line plot showing 100 simulated trajectories initialised with the same
+initial conditions. Lines are variable due to environmental and
+demographic stochasticity and replicate-specific covariates and range
+from slightly increasing trajectories to complete
+extinction.](including_processes_files/figure-html/unnamed-chunk-14-1.png)
 
 ### Adding or removing individuals from a population
 
@@ -539,7 +566,11 @@ sims <- simulate(
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](including_processes_files/figure-html/unnamed-chunk-15-1.png)
+![Line plot showing 100 simulated trajectories initialised with the same
+initial conditions. Lines are variable due to environmental and
+demographic stochasticity and additions to and removals from the
+population and range from slightly increasing trajectories to slightly
+decreasing.](including_processes_files/figure-html/unnamed-chunk-15-1.png)
 
 ## What if I don’t want to use masks?
 
@@ -625,4 +656,7 @@ sims <- simulate(
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](including_processes_files/figure-html/unnamed-chunk-19-1.png)
+![Line plot showing 100 simulated trajectories initialised with the same
+initial conditions. Lines are variable due to environmental
+stochasticity and all decline consistently towards
+zero.](including_processes_files/figure-html/unnamed-chunk-19-1.png)

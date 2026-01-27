@@ -76,7 +76,10 @@ age_vec <- seq(3, 30, length = 100)
 plot(fecundity(age_vec) ~ age_vec, las = 1, type = "l", xlab = "Age", ylab = "Fecundity", bty = "l", lwd = 2, col = alpha("#2171B5", 0.9))
 ```
 
-![](macperch_example_files/figure-html/unnamed-chunk-1-1.png)
+![Line plot showing estimated Macquarie perch reproductive output as a
+function of age. At age 3, reproductive output is near 10 and then
+increases rapidly to an asymptote near 40 as individuals approach 15
+years of age.](macperch_example_files/figure-html/unnamed-chunk-1-1.png)
 
 Survival has a peaked relationship with age, increasing in individuals
 up to approximately 20 years of age and declining from that point
@@ -95,7 +98,10 @@ survival_params <- c(
 plot(survival_params ~ c(1:29), las = 1, type = "l", xlab = "Age", ylab = "Survival", bty = "l", lwd = 2, col = alpha("#2171B5", 0.9))
 ```
 
-![](macperch_example_files/figure-html/unnamed-chunk-2-1.png)
+![Line plot showing estimated Macquarie perch survival as a function of
+age. Survival is a concave downward function with a peak at 0.85 and
+sharp declines below 5 years and above 25
+years.](macperch_example_files/figure-html/unnamed-chunk-2-1.png)
 
 These values are sufficient to construct the (mean) population matrix:
 
@@ -658,16 +664,20 @@ sims <- simulate(
   popdyn,
   nsim = 100,
   args = list(
-    add_remove_post = list(n = c(100, 10), add = FALSE),
+    add_remove_post = list(n = c(100, 20), add = FALSE),
     environmental_stochasticity = list(transform_survival)
   )
 )
 
-# plot the simulated trajectories
+# plot the simulated trajectories, removing some really large values
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](macperch_example_files/figure-html/unnamed-chunk-15-1.png)
+![Line plot showing 100 replicate trajectories from a simulated
+Macquarie perch population. Most trajectories remain below 100000
+individuals but several large peaks in some years push population sizes
+above 3.5 million
+individuals.](macperch_example_files/figure-html/unnamed-chunk-15-1.png)
 
 The simulated abundances are extremely high given expected population
 sizes in this system. The primary reason for this is that the model
@@ -702,7 +712,11 @@ sims <- simulate(
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](macperch_example_files/figure-html/unnamed-chunk-16-1.png)
+![Line plot showing 100 replicate trajectories from a simulated
+Macquarie perch population with realistic covariate values. Most
+trajectories remain below 100000 individuals but several large peaks in
+some years push population sizes above half a million
+individuals.](macperch_example_files/figure-html/unnamed-chunk-16-1.png)
 
 The simulated trajectories now look much more realistic. Here, large
 values reflect young individuals, many of which do not survive to
@@ -713,14 +727,22 @@ adulthood. Plotting older classes alone highlights this effect:
 plot(subset(sims, subset = 3:30), col = alpha("#2171B5", 0.4))
 ```
 
-![](macperch_example_files/figure-html/unnamed-chunk-17-1.png)
+![Line plots showing 100 replicate trajectories from a simulated
+Macquarie perch population, focusing on 3-30 year olds and 5-30 year
+olds. Most trajectories for 3-30 years olds are below 10000 individuals
+and all trajectories for 5-30 year olds remain below 600
+individuals.](macperch_example_files/figure-html/unnamed-chunk-17-1.png)
 
 ``` r
 # ages 5 and above
 plot(subset(sims, subset = 5:30), col = alpha("#2171B5", 0.4))
 ```
 
-![](macperch_example_files/figure-html/unnamed-chunk-17-2.png)
+![Line plots showing 100 replicate trajectories from a simulated
+Macquarie perch population, focusing on 3-30 year olds and 5-30 year
+olds. Most trajectories for 3-30 years olds are below 10000 individuals
+and all trajectories for 5-30 year olds remain below 600
+individuals.](macperch_example_files/figure-html/unnamed-chunk-17-2.png)
 
 ## Summarising model outputs
 
@@ -805,7 +827,7 @@ calculate_quasi_extinction(sims, threshold = 1000, include = TRUE)
 calculate_quasi_extinction(sims, threshold = 0, subset = 21:30, include = TRUE)
 ```
 
-    ## [1] 0.14
+    ## [1] 0.1
 
 These numbers indicate a relatively low risk of falling below threshold
 population sizes at the population level but do highlight a moderate
@@ -843,13 +865,17 @@ calculate_risk <- function(popsim, min, max, n = 1000, subset = NULL, include = 
 }
 
 # calculate risk curve for thresholds from 0 to 10000
-risk_calc <- calculate_risk(sims, min = 0, max = 10000, subset = 3:30)
+risk_calc <- calculate_risk(sims, min = 0, max = 1000, subset = 3:30)
 
 # this can be plotted
 plot(risk ~ threshold, data = risk_calc, xlab = "Threshold population size (adult abundance)", ylab = "Quasi-extinction probability", las = 1, bty = "l", type = "l", lwd = 2, col = alpha("#2171B5", 0.9), ylim = c(0, 1))
 ```
 
-![](macperch_example_files/figure-html/unnamed-chunk-20-1.png)
+![Line plot showing the risk of population quasi-extinction at
+thresholds from 0 to 1000 adult individuals (ages 3 and older). The
+curve starts at zero and rapidly increases to 1 at a threshold just
+below 200
+individuals.](macperch_example_files/figure-html/unnamed-chunk-20-1.png)
 
 A risk curve provides information on the likelihood of hitting any given
 population size at any point in time. This information can also be
@@ -885,7 +911,13 @@ for (i in seq_along(thresh)) {
 }
 ```
 
-![](macperch_example_files/figure-html/unnamed-chunk-21-1.png)
+![Line plot showing the risk of population quasi-extinction at
+thresholds from 0 to 1000 adult individuals (ages 3 and older). The
+curve starts at zero and rapidly increases to 1 at a threshold just
+below 200 individuals. Dashed lines are added to demonstrate that there
+is a 50% probability of falling below 161 individuals, 80% at 171
+individuals, and 95% at 181
+individuals.](macperch_example_files/figure-html/unnamed-chunk-21-1.png)
 
 ## References
 

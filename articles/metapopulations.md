@@ -95,7 +95,12 @@ sims <- simulate(dynamics(metapop_simple), nsim = 100)
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](metapopulations_files/figure-html/unnamed-chunk-4-1.png)
+![Line plot showing 100 simulated population trajectories for a
+metapopulation (combined abundances of all sub-populations shown). Lines
+show a population increasing from below 50 individuals to above 100
+individuals, with minimal variation among lines due to differences in
+initial
+conditions.](metapopulations_files/figure-html/unnamed-chunk-4-1.png)
 
 This plot sums over both populations, which is often of interest when
 considering species- or metapopulation-level abundances. `aae.pop` has a
@@ -109,13 +114,23 @@ pop2_sims <- subset(sims, 3:4)
 plot(pop1_sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](metapopulations_files/figure-html/unnamed-chunk-5-1.png)
+![Line plots showing 100 simulated population trajectories for a
+metapopulation (sub-populations 1 and 2 shown separately from
+sub-populations 3 and 4). Lines show populations increasing from below
+20 individuals to above 50 individuals, with minimal variation among
+lines due to differences in initial
+conditions.](metapopulations_files/figure-html/unnamed-chunk-5-1.png)
 
 ``` r
 plot(pop2_sims, col = alpha("#2171B5", 0.4))
 ```
 
-![](metapopulations_files/figure-html/unnamed-chunk-5-2.png)
+![Line plots showing 100 simulated population trajectories for a
+metapopulation (sub-populations 1 and 2 shown separately from
+sub-populations 3 and 4). Lines show populations increasing from below
+20 individuals to above 50 individuals, with minimal variation among
+lines due to differences in initial
+conditions.](metapopulations_files/figure-html/unnamed-chunk-5-2.png)
 
 This illustrates a highly simplified metapopulation model, highlighting
 the main steps in its construction: define population dynamics of each
@@ -259,13 +274,23 @@ sims <- simulate(metapopulation_simple, nsim = 100)
 plot(subset(sims, 1:2), col = alpha("#2171B5", 0.4), main = "Population 1")
 ```
 
-![](metapopulations_files/figure-html/unnamed-chunk-14-1.png)
+![Line plots showing 100 simulated population trajectories for a
+metapopulation (sub-populations 1 and 2 shown separately from
+sub-populations 3 and 4). Lines show populations increasing from below
+20 individuals to above 50 individuals, with minimal variation among
+lines due to differences in initial
+conditions.](metapopulations_files/figure-html/unnamed-chunk-14-1.png)
 
 ``` r
 plot(subset(sims, 3:4), col = alpha("#2171B5", 0.4), main = "Population 2")
 ```
 
-![](metapopulations_files/figure-html/unnamed-chunk-14-2.png)
+![Line plots showing 100 simulated population trajectories for a
+metapopulation (sub-populations 1 and 2 shown separately from
+sub-populations 3 and 4). Lines show populations increasing from below
+20 individuals to above 50 individuals, with minimal variation among
+lines due to differences in initial
+conditions.](metapopulations_files/figure-html/unnamed-chunk-14-2.png)
 
 A more complicated metapopulation structure might consider the
 population introduced in the [Getting
@@ -311,7 +336,12 @@ sims <- simulate(mp, nsim = 100)
 plot(sims, col = alpha("#2171B5", 0.4), main = "All populations")
 ```
 
-![](metapopulations_files/figure-html/unnamed-chunk-15-1.png)
+![Line plots showing 100 simulated population trajectories for a
+metapopulation (summed abundance of all sub-populations). Lines show
+populations increasing from approximately 200 individuals with rapid
+fluctuations in early years, stabilising to a slightly increasing
+population near 700 individuals at 50
+years.](metapopulations_files/figure-html/unnamed-chunk-15-1.png)
 
 With five populations, each with five classes, the simulated values now
 have 25 total classes. These are stored in order of the five populations
@@ -323,13 +353,23 @@ on. These can be extracted and plotted with the `subset` function:
 plot(subset(sims, 1:5), col = alpha("#2171B5", 0.4), main = "Population 1")
 ```
 
-![](metapopulations_files/figure-html/unnamed-chunk-16-1.png)
+![Line plots showing 100 simulated population trajectories for
+sub-populations 1 and 5 of the modelled metapopulation. Lines show
+population 1 rapidly increasing but then gradually declining back to its
+initial values at 50 years. Population 5 fluctuates strongly in early
+years but then gradually increases to 200 individuals at year
+50.](metapopulations_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
 plot(subset(sims, 21:25), col = alpha("#2171B5", 0.4), main = "Population 5")
 ```
 
-![](metapopulations_files/figure-html/unnamed-chunk-16-2.png)
+![Line plots showing 100 simulated population trajectories for
+sub-populations 1 and 5 of the modelled metapopulation. Lines show
+population 1 rapidly increasing but then gradually declining back to its
+initial values at 50 years. Population 5 fluctuates strongly in early
+years but then gradually increases to 200 individuals at year
+50.](metapopulations_files/figure-html/unnamed-chunk-16-2.png)
 
 These plots illustrate the effects of metapopulation dynamics:
 population 1 loses more individuals than it gains and is in decline,
@@ -426,7 +466,11 @@ sims <- simulate(
 plot(sims, col = alpha("#2171B5", 0.4), main = "Population-specific covariates")
 ```
 
-![](metapopulations_files/figure-html/unnamed-chunk-17-1.png)
+![Line plots showing 100 simulated population trajectories for a
+metapopulation with covariate-driven dispersal. Lines show the total
+population fluctuating in early years but then decreasing to below 20
+individuals at 50
+years.](metapopulations_files/figure-html/unnamed-chunk-17-1.png)
 
 This example uses a named `data.frame` to store the covariate sequences
 for both populations but this approach could use any number of
@@ -490,7 +534,10 @@ sims <- simulate(metapopulation_simple, nsim = 100)
 plot(sims, col = alpha("#2171B5", 0.4), main = "Stochastic dispersal")
 ```
 
-![](metapopulations_files/figure-html/unnamed-chunk-18-1.png)
+![Line plots showing 100 simulated population trajectories for a
+metapopulation with stochastic dispersal. Lines show the total
+population increasing steadily from 50 to approximately 150 individuals
+at 50 years.](metapopulations_files/figure-html/unnamed-chunk-18-1.png)
 
 ### Density dependence
 
@@ -564,4 +611,8 @@ sims <- simulate(metapopulation_simple, nsim = 100)
 plot(sims, col = alpha("#2171B5", 0.4), main = "Density-dependent dispersal")
 ```
 
-![](metapopulations_files/figure-html/unnamed-chunk-19-1.png)
+![Line plots showing 100 simulated population trajectories for a
+metapopulation with density-dependent dispersal. Lines show the total
+population fluctuating for approximately 20 years but then gradually
+increasing to 50-70 individuals at 50
+years.](metapopulations_files/figure-html/unnamed-chunk-19-1.png)
