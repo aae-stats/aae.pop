@@ -69,7 +69,7 @@ follows:
 
 - survival: surviving one time step and remaining in the same class.
 
-- transition: surviving one time stpe and moving to the next age class
+- transition: surviving one time step and moving to the next age class
   or life stage.
 
 With these terms, a Leslie matrix has reproduction and transition
