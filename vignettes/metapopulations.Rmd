@@ -63,7 +63,7 @@ metapop_simple
 
 Adding dispersal, or movement between the two populations, requires transitions from class 1 or 2 to class 3 or 4, and vice versa. For example, dispersal might be a feature of the second class only (adults), in which case individuals would move between class 2 and class 4. These movements will be defined by cells `[2, 4]` and `[4, 2]` in `metapop_simple`:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated population trajectories for a metapopulation (combined abundances of all sub-populations shown). Lines show a population increasing from below 50 individuals to above 100 individuals, with minimal variation among lines due to differences in initial conditions."}
 # allow 30 % of surviving adults to move between populations
 #   (columns move to rows, so population 1 to 2 is in [4, 2] and
 #    population 2 to 1 is in [2, 4])
@@ -82,7 +82,7 @@ plot(sims, col = alpha("#2171B5", 0.4))
 
 This plot sums over both populations, which is often of interest when considering species- or metapopulation-level abundances. `aae.pop` has a built-in `subset` method, which means it's possible to separate the two populations, recalling that population 1 is classes 1 and 2 and population 2 is classes 3 and 4 in the population vector:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plots showing 100 simulated population trajectories for a metapopulation (sub-populations 1 and 2 shown separately from sub-populations 3 and 4). Lines show populations increasing from below 20 individuals to above 50 individuals, with minimal variation among lines due to differences in initial conditions."}
 pop1_sims <- subset(sims, 1:2)
 pop2_sims <- subset(sims, 3:4)
 plot(pop1_sims, col = alpha("#2171B5", 0.4))
@@ -170,7 +170,7 @@ all.equal(metapop_simple, metapopulation_simple$matrix)
 
 With `metapopulation_simple` defined in this way, simulating population dynamics is identical to any other population model in `aae.pop`:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plots showing 100 simulated population trajectories for a metapopulation (sub-populations 1 and 2 shown separately from sub-populations 3 and 4). Lines show populations increasing from below 20 individuals to above 50 individuals, with minimal variation among lines due to differences in initial conditions."}
 sims <- simulate(metapopulation_simple, nsim = 100)
 plot(subset(sims, 1:2), col = alpha("#2171B5", 0.4), main = "Population 1")
 plot(subset(sims, 3:4), col = alpha("#2171B5", 0.4), main = "Population 2")
@@ -178,7 +178,7 @@ plot(subset(sims, 3:4), col = alpha("#2171B5", 0.4), main = "Population 2")
 
 A more complicated metapopulation structure might consider the population introduced in the [Getting started](get_started.html) vignette, which had five age classes. Coupling this with the five-population `structure` shown above demonstrates a more realistic metapopulation. Note that specifying this metapopulation manually would require a matrix with 25 rows and 25 columns, with each dispersal and proportional change in survival calculated individually. Using `aae.pop` still takes a few lines of code but many of the calculations are now handled automatically:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plots showing 100 simulated population trajectories for a metapopulation (summed abundance of all sub-populations). Lines show populations increasing from approximately 200 individuals with rapid fluctuations in early years, stabilising to a slightly increasing population near 700 individuals at 50 years."}
 # define population matrix
 popmat <- rbind(
   c(0,    0,    2,    4,    7),  # reproduction from 3-5 year olds
@@ -213,7 +213,7 @@ plot(sims, col = alpha("#2171B5", 0.4), main = "All populations")
 
 With five populations, each with five classes, the simulated values now have 25 total classes. These are stored in order of the five populations defined in the `dynamics` argument to `metapopulation`, so classes 1 to 5 are the first population, 6 to 10 are the second population, and so on. These can be extracted and plotted with the `subset` function:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plots showing 100 simulated population trajectories for sub-populations 1 and 5 of the modelled metapopulation. Lines show population 1 rapidly increasing but then gradually declining back to its initial values at 50 years. Population 5 fluctuates strongly in early years but then gradually increases to 200 individuals at year 50."}
 plot(subset(sims, 1:5), col = alpha("#2171B5", 0.4), main = "Population 1")
 plot(subset(sims, 21:25), col = alpha("#2171B5", 0.4), main = "Population 5")
 ```
@@ -234,7 +234,7 @@ The `metapopulation` function is designed to make metapopulation dynamics as sim
 
 Using the simplified, two-population example above, this workaround involves combining two sequences of covariates into a single `matrix` (or `data.frame`), then subsetting this combined `matrix` within the `covariates` functions for each individual population.
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plots showing 100 simulated population trajectories for a metapopulation with covariate-driven dispersal. Lines show the total population fluctuating in early years but then decreasing to below 20 individuals at 50 years."}
 # define two covariate sequences and combine them into a data.frame
 covar_seq1 <- runif(20, min = 0.5, max = 1.0)
 covar_seq2 <- runif(20, min = 0.75, max = 1.0)
@@ -285,7 +285,7 @@ The `dispersal` function, used above to define class-specific movements between 
 
 It is highly likely that dispersal outcomes are stochastic due to unpredictable movements by individuals and increased mortality during and following dispersal. Stochasticity is supported in the definition of `dispersal` objects with a `mask`/`function` pair that identifies the relevant classes and form of stochasticity. Extending the simplified example from above, this might look like:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plots showing 100 simulated population trajectories for a metapopulation with stochastic dispersal. Lines show the total population increasing steadily from 50 to approximately 150 individuals at 50 years."}
 # define a mask that is TRUE whenever the dispersal kernel is non-zero
 stoch_mask <- kern > 0
 
@@ -325,7 +325,7 @@ Density dependence might influence dispersal through individual decisions to mov
 
 The current implementation of density-dependent dispersal is linked the entire metapopulation vector, so can depend on the abundances of any or all of the sub-populations. The downside of this approach is that indexing of this vector has to be done manually in the definition of `density_funs`. This indexing depends on the order of populations within the metapopulation (as defined by the `dynamics` argument to `metapopulation`), recalling that each population has one element for each class. An example might illustrate the inclusion of density-dependent dispersal most clearly:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plots showing 100 simulated population trajectories for a metapopulation with density-dependent dispersal. Lines show the total population fluctuating for approximately 20 years but then gradually increasing to 50-70 individuals at 50 years."}
 # define a mask that is TRUE whenever the dispersal kernel is non-zero
 #   (this is the same as for stochasticity and this mask 
 #    could be used for both)

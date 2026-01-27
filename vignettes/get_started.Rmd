@@ -115,7 +115,7 @@ sims <- simulate(popdyn)
 
 Simulated trajectories can be plotted using the standard `plot` function in R. This example sets the colour to a medium shade of blue:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing a single simulated trajectory initialised with a random initial condition. A single blue line shows deterministic changes in population abundance through time."}
 plot(sims, col = "#2171B5")
 ```
 

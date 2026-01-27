@@ -85,7 +85,7 @@ demostoch <- demographic_stochasticity(
 
 The resulting `demostoch` object can be passed directly to `dynamics`, along with the population matrix. In turn, this creates a `dynamics` object that can be used in `simulate`.
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated trajectories initialised with the same initial conditions. Lines are variable due to demographic stochasticity and range from slightly increasing trajectories to complete extinction."}
 # create population dynamics object
 popdyn <- dynamics(popmat, demostoch)
 
@@ -144,7 +144,7 @@ envstoch <- environmental_stochasticity(
 
 The resulting `envstoch` object can be passed directly to `dynamics`, along with the population matrix. In turn, this creates a `dynamics` object that can be used in `simulate`.
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated trajectories initialised with the same initial conditions. Lines are variable due to environmental stochasticity and range from slightly increasing trajectories to slightly decreasing."}
 # create population dynamics object
 popdyn <- dynamics(popmat, envstoch)
 
@@ -157,7 +157,7 @@ plot(sims, col = alpha("#2171B5", 0.4))
 
 It is easy to include both environmental and demographic stochasticity in the same model. The `dynamics` call simply needs both `envstoch` and `demostoch` objects. This is a case where the `update` function comes in handy. Rather than re-defining the population dynamics object, the existing version of `popdyn` (which included `popmat` and `envstoch`) can simply be updated to include `demostoch`:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated trajectories initialised with the same initial conditions. Lines are variable due to environmental and demographic stochasticity and range from slightly increasing trajectories to complete extinction."}
 # update population dynamics object
 popdyn <- update(popdyn, demostoch)
 
@@ -178,7 +178,7 @@ Density dependence can be included in exactly the same way as environmental stoc
 
 In `aae.pop`, both models are specified with two parameters: `k`, that represents the *carrying capacity* of the population; and `theta`, which represents the strength of density dependence. `theta` re-scales population sizes, so is mathematically equivalent to adjusting `k` (e.g., `theta = 0.5; k = k` and `theta = 1; k = 2 * k` will give the same outcome). Both functions include one extra argument, `exclude`, which allows estimates of carrying capacity to be defined for a subset of population classes (e.g., adult abundances only). A Ricker model can be specified as follows:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated trajectories initialised with the same initial conditions. Lines are variable due to density dependence and environmental and demographic stochasticity and range from slightly decreasing trajectories to complete extinction."}
 # specify a Ricker model for density dependence
 dd <- density_dependence(
   masks = reproduction(popmat, dims = 3:5), # only adults reproduce
@@ -205,7 +205,7 @@ An alternative approach is to model density dependence through its direct effect
 
 The `add_remove_pre` and `add_remove_post` functions can be used to define this form of density dependence (`_pre`: before reproduction; `_post`: after reproduction). These functions are described in more detail below and replace the now-deprecated `density_dependence_n` function. In this case, the `mask` needs to select the relevant classes in the population, and the `function` takes only one argument, the vector of population abundances. This approach can be implemented as follows:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated trajectories initialised with the same initial conditions. Lines are variable due to environmental and demographic stochasticity and removals from the population and range from slightly decreasing trajectories to complete extinction."}
 # specify density dependence that removes 10 % of adults in each generation
 dd_n <- add_remove_post(
   masks = all_classes(popmat, dims = 3:5), # want to focus on adults
@@ -227,7 +227,7 @@ plot(sims, col = alpha("#2171B5", 0.4))
 
 Population dynamics often depend on external factors (`covariates`, here). `aae.pop` uses the `mask`/`function` approach described above to include the effects of covariates on vital rates. The `function` takes the vital rates as the first argument, followed by any arguments required to specify covariate values or their effects. An example illustrates this most clearly:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated trajectories initialised with the same initial conditions. Lines are variable due to environmental and demographic stochasticity and a nesting covariate and range from slightly decreasing trajectories to complete extinction."}
 # set up 20 years of covariates, such as proportion of available nesting sites
 nesting <- runif(20, min = 0.5, max = 1.0)    # 50 % to 100 % of total sites available in each year
 
@@ -288,7 +288,7 @@ The simplest way to set up (and visualise) a `replicated_covariates` term is to 
 
 One application of `replicated_covariates` (and the reason this approach was developed) is to allow both variation and uncertainty in vital rates in a single simulation. With this structure, the input matrix can be defined with variation (e.g., representing environmental variability) around different mean values (representing uncertainty), without having to run multiple simulations.
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated trajectories initialised with the same initial conditions. Lines are variable due to environmental and demographic stochasticity and replicate-specific covariates and range from slightly increasing trajectories to complete extinction."}
 # set up 20 years of covariates, such as proportion of available nesting sites,
 #   but now with a different minimum (and, therefore, mean) value for each replicate
 nesting <- do.call(cbind, lapply(runif(100, min = 0.5, max = 0.8), \(x) runif(20, min = x, max = 1.0)))
@@ -329,7 +329,7 @@ Examples of additions include fish stocking and releases of captive-bred individ
 
 A simple example can illustrate the general approach.
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated trajectories initialised with the same initial conditions. Lines are variable due to environmental and demographic stochasticity and additions to and removals from the population and range from slightly increasing trajectories to slightly decreasing."}
 # set up a release of 10 individuals each year into the first age class,
 #   occurring after reproduction
 captives <- add_remove_post(
@@ -383,7 +383,7 @@ popmat[all_cells(popmat)]
 
 If it's essential to use `[i, j]` subsetting inside a function, a workaround is to reconstruct the matrix within the function by passing the dimensions through the `args` argument in `simulate`. This might look a bit like:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated trajectories initialised with the same initial conditions. Lines are variable due to environmental stochasticity and all decline consistently towards zero."}
 # define a function
 no_mask_fn <- function(x, dim) {
   
