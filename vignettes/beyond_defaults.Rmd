@@ -114,7 +114,7 @@ The form of the wrapper function is restricted and must include two arguments: `
 
 More complex initial conditions can be passed to `simulate` with the `init` argument. Initial conditions can be specified as a vector with one element per population class or as a matrix (or array) with one row per replicate and one column per population class. If specified as a vector and `nsim` is greater than 1, the initial conditions are assumed to be the same in all replicates. This approach allows initial conditions with any amount of structure or detail:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing simulated trajectories through time with three different initial conditions. Larger initial population sizes correspond with higher population trajectories."}
 # need a matrix/array with one row per replicate and one column
 #    per class (5 age classes in this example)
 my_initials <- matrix(
@@ -147,7 +147,7 @@ plot(
 
 The previous example might be a bit unwieldy with many replicates, in which case a single vector can be passed to simulate:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated trajectories initialised with the same initial conditions. Lines are variable around a central average."}
 # need a vector with one value per class (5 age classes, here)
 my_initials <- c(100, 50, 25, 15, 5)
 
@@ -170,7 +170,7 @@ plot(
 
 Alternatively, this approach could be modified to add stochasticity to initial conditions while retaining some of the structure from the previous examples:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 simulated trajectories initialised with stochastic initial conditions. Lines are variable around a central average with additional variation due to different initial conditions."}
 # generate a matrix with one row per replicate and one column
 #   per class (5 classes, 100 replicates), setting a different 
 #   mean (lambda) in each column

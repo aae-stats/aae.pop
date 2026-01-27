@@ -101,7 +101,7 @@ sims <- simulate(multisp_dyn, nsim = 100)
 
 In this case, the `simulate` function returns a list with one element for each species. These individual elements can be handled in the same way as single-species models, but `aae.pop` can also work directly with the multispecies output. For example, the `plot` function for a multispecies `simulation` object will plot all species in separate plots by default, and takes an optional `which` argument that specifies which species to plot:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plots showing 100 simulated population trajectories for each species. Lines show Species 1 ranging from slight declines to slight increases, rapid extinction of Species 2, and stable abundances of Species 3 through time."}
 # plot
 plot(sims, which = 1, col = alpha("#2171B5", 0.4), main = "Species 1")
 

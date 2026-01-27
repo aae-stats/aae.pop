@@ -49,7 +49,7 @@ The population matrix is the most important part of a population dynamics model.
 
 Individuals become reproductively mature at 3-4 years, and fecundity increases with age [@todd_lintermans2015]. The age-fecundity relationship can be characterised with a three-parameter function (derived in @todd_lintermans2015). This relationship is captured in the following R function:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing estimated Macquarie perch reproductive output as a function of age. At age 3, reproductive output is near 10 and then increases rapidly to an asymptote near 40 as individuals approach 15 years of age."}
 # function to simulate reproductive output of Macquarie perch
 fecundity <- function(
     age,                             # vector of ages
@@ -80,7 +80,7 @@ plot(fecundity(age_vec) ~ age_vec, las = 1, type = "l", xlab = "Age", ylab = "Fe
 
 Survival has a peaked relationship with age, increasing in individuals up to approximately 20 years of age and declining from that point onwards [@todd_lintermans2015]. This relationship is captured in the following parameters:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing estimated Macquarie perch survival as a function of age. Survival is a concave downward function with a peak at 0.85 and sharp declines below 5 years and above 25 years."}
 # define survival parameters
 survival_params <- c(
   0.25, 0.44, 0.56, 0.63, 0.69, 0.72, 0.75, 0.78, 0.79,
@@ -94,7 +94,7 @@ plot(survival_params ~ c(1:29), las = 1, type = "l", xlab = "Age", ylab = "Survi
 
 These values are sufficient to construct the (mean) population matrix:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Diagram illustrating the structure of the Macquarie perch population model. Circles representing age classes are connected by lines representing vital rates (reproduction or survival)."}
 # define population matrix
 nclass <- length(survival_params) + 1
 popmat <- matrix(0, nrow = nclass, ncol = nclass)
@@ -500,7 +500,7 @@ popdyn <- update(
 
 Simulating from this object requires a call to `simulate`, also recalling that at least one function argument is required here to transform survival values from the unit interval to their real-line equivalents:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 replicate trajectories from a simulated Macquarie perch population. Most trajectories remain below 100000 individuals but several large peaks in some years push population sizes above 3.5 million individuals."}
 # simulate, using the transform_survival function defined above
 #   to update arguments passed to environmental_stochasticity and
 #   adding arguments to specify 100 juveniles and 10 adults
@@ -509,18 +509,18 @@ sims <- simulate(
   popdyn,
   nsim = 100,
   args = list(
-    add_remove_post = list(n = c(100, 10), add = FALSE),
+    add_remove_post = list(n = c(100, 20), add = FALSE),
     environmental_stochasticity = list(transform_survival)
   )
 )
 
-# plot the simulated trajectories
+# plot the simulated trajectories, removing some really large values
 plot(sims, col = alpha("#2171B5", 0.4))
 ```
 
 The simulated abundances are extremely high given expected population sizes in this system. The primary reason for this is that the model assumes *ideal* conditions in each year, with covariate effects used to reduce vital rates to match actual conditions. Covariates can be added to this model with the following code, noting that the same `popdyn` object can be used with or without covariates:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing 100 replicate trajectories from a simulated Macquarie perch population with realistic covariate values. Most trajectories remain below 100000 individuals but several large peaks in some years push population sizes above half a million individuals."}
 # simulate 30 years of covariate values based on ranges in
 #   actual discharge data (covariates and functions
 #   are defined based on standardised flow values)
@@ -548,7 +548,7 @@ plot(sims, col = alpha("#2171B5", 0.4))
 
 The simulated trajectories now look much more realistic. Here, large values reflect young individuals, many of which do not survive to adulthood. Plotting older classes alone highlights this effect:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plots showing 100 replicate trajectories from a simulated Macquarie perch population, focusing on 3-30 year olds and 5-30 year olds. Most trajectories for 3-30 years olds are below 10000 individuals and all trajectories for 5-30 year olds remain below 600 individuals."}
 # all adults
 plot(subset(sims, subset = 3:30), col = alpha("#2171B5", 0.4))
 
@@ -608,7 +608,7 @@ These numbers indicate a relatively low risk of falling below threshold populati
 
 A more general output builds on the concept of quasi-extinction but extends this to consider a range of thresholds. This information can be captured in a risk curve that presents the probability of falling below any given threshold during the simulated time period. This output can be calculated with the following function, which uses the `calculate_quasi_extinction` function repeatedly with different values of `threshold`:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing the risk of population quasi-extinction at thresholds from 0 to 1000 adult individuals (ages 3 and older). The curve starts at zero and rapidly increases to 1 at a threshold just below 200 individuals."}
 # function to calculate quasi-extinction risk for multiple thresholds
 calculate_risk <- function(popsim, min, max, n = 1000, subset = NULL, include = TRUE) {
 
@@ -631,7 +631,7 @@ calculate_risk <- function(popsim, min, max, n = 1000, subset = NULL, include = 
 }
 
 # calculate risk curve for thresholds from 0 to 10000
-risk_calc <- calculate_risk(sims, min = 0, max = 10000, subset = 3:30)
+risk_calc <- calculate_risk(sims, min = 0, max = 1000, subset = 3:30)
 
 # this can be plotted
 plot(risk ~ threshold, data = risk_calc, xlab = "Threshold population size (adult abundance)", ylab = "Quasi-extinction probability", las = 1, bty = "l", type = "l", lwd = 2, col = alpha("#2171B5", 0.9), ylim = c(0, 1))
@@ -639,7 +639,7 @@ plot(risk ~ threshold, data = risk_calc, xlab = "Threshold population size (adul
 
 A risk curve provides information on the likelihood of hitting any given population size at any point in time. This information can also be presented as the abundance that a population is likely to reach with some fixed probability. For example, it can be useful to state the abundance a population will reach with 50 %, 80 %, or 95 % probability. This information can be extracted from the risk curve with the following code:
 
-```{r, dev = "png"}
+```{r, dev = "png", fig.alt = "Line plot showing the risk of population quasi-extinction at thresholds from 0 to 1000 adult individuals (ages 3 and older). The curve starts at zero and rapidly increases to 1 at a threshold just below 200 individuals. Dashed lines are added to demonstrate that there is a 50% probability of falling below 161 individuals, 80% at 171 individuals, and 95% at 181 individuals."}
 # function to calculate threshold abundance reached with probability = prob
 calculate_threshold <- function(risk, threshold, prob = 0.8) {
 
