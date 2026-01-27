@@ -63,37 +63,41 @@ reference:
 
 navbar:
   structure:
-    left: [get_started, functions, vignettes, examples]
+    left: [get_started, functions, vignettes, examples, code_of_conduct]
     right: [github]
-components:
-  home: ~
-  reference: ~
-  articles: ~
-  news: ~
-  get_started:
-    text: get started
-    href: articles/get_started.html
-  vignettes:
-    text: vignettes
-    menu:
-    - text: "Including processes"
-      href: articles/including_processes.html
-    - text: "Beyond defaults"
-      href: articles/beyond_defaults.html
-    - text: "Metapopulations"
-      href: articles/metapopulations.html
-    - text: "Multiple species"
-      href: articles/multiple_species.html
-  examples:
-    text: examples
-    menu:
-    - text: "Macquarie perch"
-      href: articles/macperch_example.html
-    - text: "Comparing scenarios"
-      href: articles/scenarios_example.html
-  documentation:
-    text: documentation
-    href: reference/index.html
-  github:
-    icon: fab fa-github
-    href: https://github.com/aae-stats/aae.pop
+  components:
+    home: ~
+    reference: ~
+    articles: ~
+    news: ~
+    get_started:
+      text: get started
+      href: articles/get_started.html
+    vignettes:
+      text: vignettes
+      menu:
+      - text: "Including processes"
+        href: articles/including_processes.html
+      - text: "Beyond defaults"
+        href: articles/beyond_defaults.html
+      - text: "Metapopulations"
+        href: articles/metapopulations.html
+      - text: "Multiple species"
+        href: articles/multiple_species.html
+    examples:
+      text: examples
+      menu:
+      - text: "Macquarie perch"
+        href: articles/macperch_example.html
+      - text: "Comparing scenarios"
+        href: articles/scenarios_example.html
+    documentation:
+      text: documentation
+      href: index.html
+    code_of_conduct:
+      text: code of conduct
+      href: CODE_OF_CONDUCT.html
+    github:
+      icon: fab fa-github
+      href: https://github.com/aae-stats/aae.pop
+      aria-label: View source of GitHub

@@ -20,3 +20,8 @@ or you can install the latest development version from GitHub:
 ``` r
 remotes::install_github("aae-stats/aae.pop")
 ```
+
+## Code of Conduct
+  
+Please note that the aae.pop project is released with a [Contributor Code of Conduct](https://aae-stats.github.io/aae.pop/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+  
