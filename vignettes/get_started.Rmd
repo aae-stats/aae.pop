@@ -52,7 +52,7 @@ There are two population structures used frequently in population ecology: the *
 
 - survival: surviving one time step and remaining in the same class.
 
-- transition: surviving one time stpe and moving to the next age class or life stage.
+- transition: surviving one time step and moving to the next age class or life stage.
 
 With these terms, a Leslie matrix has reproduction and transition elements, whereas a Lefkovitch matrix has reproduction, transition, and survival elements.
 
