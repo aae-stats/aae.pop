@@ -9,15 +9,15 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/aae-stats/aae.pop/blob/v0.2.0/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/aae-stats/aae.pop/blob/main/DESCRIPTION)
 
 Yen J (2026). *aae.pop: Flexible Population Dynamics Simulations*. R
-package version 0.2.0, <https://aae-stats.github.io/aae.pop/>.
+package version 0.2.0.9000, <https://aae-stats.github.io/aae.pop/>.
 
     @Manual{,
       title = {aae.pop: Flexible Population Dynamics Simulations},
       author = {Jian Yen},
       year = {2026},
-      note = {R package version 0.2.0},
+      note = {R package version 0.2.0.9000},
       url = {https://aae-stats.github.io/aae.pop/},
     }

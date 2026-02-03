@@ -16,7 +16,14 @@ Template models have been developed for several species. These are
 included in the `aae.pop.templates` package and are described
 [here](https://aae-stats.github.io/aae.pop/articles/templates.md).
 
-You can install the current version of the package from Github:
+You can install the current version of the package from CRAN
+
+``` r
+install.packages("aae.pop")
+```
+
+The latest, development version of `aae.pop` can be installed from
+Github with the `remotes` package:
 
 ``` r
 remotes::install_github("aae-stats/aae.pop")

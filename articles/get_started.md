@@ -82,6 +82,32 @@ matrix. This flexibility is important because some populations might
 require complex structures to deal with things like metapopulations,
 dormant stages, or size-based models with shrinkage as well as growth.
 
+### Design principles
+
+`aae.pop` draws inspiration from the
+[`steps`](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13354)
+and [`pop`](https://cran.r-project.org/web/packages/pop/index.html) R
+packages, which split population modelling into objects and functions to
+specify ‘dynamics’ and separate objects and functions for ‘simulation’.
+`aae.pop` differs from the spatially explicit `steps` package by
+focusing on highly dynamic but aspatial or spatially implicit models.
+`aae.pop` differs from the `pop` package by focusing on [demographic
+processes](https://aae-stats.github.io/aae.pop/articles/including_processes.md)
+as the core objects rather than transitions among classes.
+
+These differences in package design are deliberate. `aae.pop` is
+intended primarily for models with many classes, high levels of temporal
+variability in vital rates or processes, and where there is a need to
+simulate repeatedly from the same model but with different inputs or
+parameters (e.g., as in Population Viability Analysis). To enable this,
+the ‘dynamics’ objects and functions in `aae.pop` are intended to be
+created once and then modified either via an `update` function or with
+arguments passed to `aae.pop`‘s ’simulation’ approach. `masks` are
+introduced as a way to apply processes to multiple classes
+simultaneously (see [Including
+processes](https://aae-stats.github.io/aae.pop/articles/including_processes.md)
+for details of masks).
+
 ## Building a basic population model
 
 The central functions in `aae.pop` are `dynamics` and `simulate`. The
