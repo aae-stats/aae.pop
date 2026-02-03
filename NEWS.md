@@ -1,3 +1,13 @@
+# aae.pop (development version)
+
+## Features
+
+- Add preliminary design principles section to website
+
+## Fixes
+
+- correct install instructions in website and GH readme
+
 # aae.pop 0.2.0
 
 ## Features
