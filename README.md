@@ -1,8 +1,10 @@
 ## aae.pop: population dynamics models in R
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/aae.pop)](https://CRAN.R-project.org/package=aae.pop)
 ![R-CMD-check](https://github.com/aae-stats/aae.pop/actions/workflows/check-standard.yaml/badge.svg)
 [![Codecov test coverage](https://codecov.io/github/aae-stats/aae.pop/main/graph/badge.svg)](https://app.codecov.io/github/aae-stats/aae.pop/)
+[![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 <!-- badges: end -->
 
 
