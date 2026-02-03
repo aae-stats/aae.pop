@@ -1,8 +1,8 @@
 Package: aae.pop
 Type: Package
 Title: Flexible Population Dynamics Simulations
-Version: 0.2.0.9000
-Date: 2026-01-27
+Version: 0.2.0.9001
+Date: 2026-02-03
 Authors@R: c(
   person(given = "Jian",
          family = "Yen",

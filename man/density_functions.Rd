@@ -4,11 +4,26 @@
 \alias{density_functions}
 \alias{beverton_holt}
 \alias{ricker}
+\alias{theta_logistic}
+\alias{ceiling_density}
+\alias{beverton_holt2}
+\alias{ricker2}
+\alias{plot_density_functions}
 \title{Common forms of density dependence}
 \usage{
 beverton_holt(k, exclude = NULL)
 
 ricker(k, exclude = NULL)
+
+theta_logistic(k, exclude = NULL)
+
+ceiling_density(k, exclude = NULL)
+
+beverton_holt2(k, exclude = NULL)
+
+ricker2(k, exclude = NULL)
+
+plot_density_functions(type = "rate", ...)
 }
 \arguments{
 \item{k}{carrying capacity used to define models of
@@ -18,10 +33,48 @@ currently implemented models and their parameters.}
 \item{exclude}{vector of classes to exclude from calculation
 of total population density. Defaults to NULL, in which
 case all classes are used}
+
+\item{type}{one of \code{rate} or \code{population}, specifying whether
+\code{plot_density_functions} displays the scaling factor for a single
+vital rate or the change in population size from one time step to the
+next}
+
+\item{\dots}{ignored}
 }
 \value{
 functions that can be used with \code{\link{density_dependence}}
-  to specify common models of density dependence
+  to specify common models of density dependence. The carrying capacity
+  \code{k} is specified in the initial function call, but density functions
+  also take parameters specific to each model.
+
+  The \code{ceiling} model function takes no additional parameters.
+
+  The \code{ricker} and \code{beverton_holt} model functions each take a
+  parameter \code{theta}, used to scale the population size in density
+  calculations (or, alternatively, to inversely scale the carrying
+  capacity). This parameter is largely redundant but can be used to adjust
+  \code{k} as an argument to \code{\link{simulate}} rather than define a
+  new density dependence model.
+
+  The \code{ricker2} model function takes a parameter \code{r},
+  specifying the magnitude of effect when the population is at zero.
+  This parameter defaults to a value of 1, which multiplies vital
+  rates by \code{exp(1)} when the population is at zero.
+
+  The \code{beverton_holt2} model function takes a parameter \code{alpha},
+  specifying the magnitude of effect when the population is at carrying
+  capacity. This parameter defaults to a value of 2, which sets vital
+  rates to their baseline value when at carrying capacity.
+
+  The \code{theta_logistic} model function takes up to three parameters:
+  \code{s0}, \code{sk}, and (optionally) \code{theta}. The parameter
+  \code{s0} specifies the scaling of the vital rate when the population
+  is at zero, \code{sk} specifies this scaling at carrying capacity, and
+  \code{theta} specifies the strength of density dependence. The default
+  value of \code{theta} is 1, which is equivalent to a Beverton-Holt
+  model (with intercepts determined by \code{s0} and \code{sk}). Increasing
+  \code{theta} generates larger declines in vital rates as a population
+  increases.
 }
 \description{
 Use pre-defined forms of density dependence
@@ -30,8 +83,18 @@ Use pre-defined forms of density dependence
 \details{
 Additional functions are provided to define common
   forms of density dependence. Currently implemented models
-  are the Ricker model and Beverton-Holt model, both with
-  a single parameter \code{k}.
+  are the Ricker model, Beverton-Holt model, a proportional ceiling
+  model, a theta-logistic model, and alternative parameterisations
+  of the Ricker and Beverton-Holt models. The functions listed here take
+  an input \code{k} (the carrying capacity) and an optional parameter
+  \code{exclude} specifying any classes to exclude from the summed
+  population size used in density-dependence calculations. However,
+  these functions return functions, which take a different set of
+  parameters (see \code{returns}, below).
+
+  The \code{plot_density_functions} function produces a basic plot
+  illustrating the effects of each density dependence model on vital
+  rates.
 }
 \examples{
 # define a population matrix (columns move to rows)
@@ -54,6 +117,26 @@ dyn <- update(dyn, dd)
 
 # simulate trajectories
 sims <- simulate(dyn, nsim = 100, options = list(ntime = 50))
+
+# and plot
+plot(sims)
+
+# replace with a theta-logistic model
+dd <- density_dependence(
+  masks = reproduction(popmat, dims = 4:5),
+  funs = theta_logistic(1000)
+)
+
+# update the dynamics object
+dyn <- update(dyn, dd)
+
+# simulate trajectories with args passed to theta_logistic
+sims <- simulate(
+  dyn,
+  nsim = 100,
+  args = list(density_dependence = list(s0 = 1.5, sk = 1, theta = 1.5)),
+  options = list(ntime = 50)
+)
 
 # and plot
 plot(sims)

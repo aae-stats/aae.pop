@@ -3,6 +3,10 @@
 ## Features
 
 - Add preliminary design principles section to website
+- `ceiling_density`, `theta_logistic`, `ricker2`, and `beverton_holt2`
+    included as density function options
+- `plot_density_functions` included to visualise density function options
+- tests of new functions added
 
 ## Fixes
 
