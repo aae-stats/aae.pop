@@ -12,3 +12,4 @@
 vignettes/macperch_example.Rmd
 vignettes/scenarios_example.Rmd
 ^CODE_OF_CONDUCT\.md$
+^CRAN-SUBMISSION$
