@@ -2,6 +2,8 @@
 
 ## aae.pop 0.2.0
 
+CRAN release: 2026-01-31
+
 ### Features
 
 - consistent handling of processes for all model types

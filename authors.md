@@ -9,7 +9,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/aae-stats/aae.pop/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/aae-stats/aae.pop/blob/v0.2.0/DESCRIPTION)
 
 Yen J (2026). *aae.pop: Flexible Population Dynamics Simulations*. R
 package version 0.2.0, <https://aae-stats.github.io/aae.pop/>.
